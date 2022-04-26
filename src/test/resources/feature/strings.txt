@@ -1,0 +1,9034 @@
+building
+source
+addr:housenumber
+highway
+addr:street
+addr:postcode
+addr:city
+name
+addr:country
+wall
+yes
+surface
+natural
+landuse
+house
+amenity
+source:date
+ref
+tracktype
+maxspeed
+service
+addr:suburb
+outer
+power
+access
+oneway
+height
+barrier
+start_date
+waterway
+operator
+no
+bicycle
+foot
+ref:bag
+type
+layer
+lanes
+leisure
+leaf_type
+lit
+building:levels
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2010
+railway
+nycdoitt:bin
+platform
+stop
+created_by
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2011
+wheelchair
+place
+roof:shape
+public_transport
+inner
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2012
+at_bev:addr_date
+entrance
+width
+shop
+man_made
+note
+forward
+bridge
+crossing
+tunnel
+leaf_cycle
+description
+residential
+tourism
+network
+bus
+addr:place
+website
+emergency
+source:maxspeed
+denotation
+track
+parking
+street
+gauge
+smoothness
+opening_hours
+tiger:cfcc
+fire_hydrant:type
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014
+tiger:county
+sidewalk
+voltage
+postal_code
+footway
+sport
+phone
+electrified
+boundary
+tiger:reviewed
+historic
+motor_vehicle
+roof:colour
+ele
+ref:FR:FANTOIR
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2013
+tiger:name_base
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015
+admin_level
+BAG
+frequency
+shelter
+tiger:name_type
+traffic_sign
+species
+information
+level
+roof:levels
+tree
+direction
+from
+to
+DE
+cycleway
+asphalt
+fire_hydrant:diameter
+fire_hydrant:position
+circumference
+fixme
+backrest
+usage
+wikidata
+capacity
+source:geometry
+material
+url
+wikipedia
+water
+segregated
+bench
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2013
+building:use
+crossing_ref
+horse
+noexit
+incline
+building:part
+roof:material
+route
+tiger:zip_left
+CLC:code
+CLC:year
+CLC:id
+building:colour
+lanes:backward
+via
+restriction
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2017
+extraction vectorielle v1 cadastre-dgi-fr source : Direction Générale des Impôts - Cadas. Mise à jour : 2010
+Bing
+tactile_paving
+sac_scale
+survey:date
+tiger:zip_right
+mtb:scale
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2016
+source:addr
+species:de
+religion
+fee
+path
+backward
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2009
+area
+motorcar
+garage
+source:outline
+genus
+diameter_crown
+roof:orientation
+passenger_lines
+cuisine
+private
+covered
+lanes:forward
+trail_visibility
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2009
+tree:ref
+unclassified
+pole
+taxon
+is_in
+colour
+driveway
+denomination
+building:material
+main_stream
+destination
+junction
+motorcycle
+contact:phone
+hiking
+meadow
+addr:state
+railway:signal:direction
+railway:pzb
+railway:signal:position
+intermittent
+railway:traffic_mode
+seats
+turn:lanes
+maxspeed:type
+broadleaved
+email
+alt_name
+farmland
+office
+indoor
+forest
+tiger:source
+tiger:tlid
+contact:website
+grass
+vehicle
+cables
+int_ref
+recycling_type
+generator:source
+seamark:type
+zone:traffic
+hgv
+source:addr:housenumber:ref
+ref:IFOPT
+stream
+tiger:upload_uuid
+site
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2018
+bmo:type
+bicycle_parking
+source:addr:version
+bing
+wood
+roof:height
+tertiary
+brand
+old_ref
+zone:maxspeed
+golf
+parking_aisle
+lcn
+population
+substation
+ref:INSEE
+addr:housename
+heritage
+maxweight
+vending
+railway:radio
+designated
+grade3
+secondary
+toilets:wheelchair
+generator:method
+turn:lanes:forward
+grade2
+traffic_calming
+geoimage.at
+lamp_type
+operator:type
+cycleway:right
+turn:lanes:backward
+JOSM
+heritage:operator
+image
+fax
+ref:opendataparis:domanialit
+ref:opendataparis:adresse
+taxon:species
+scrub
+ref:sandre
+location
+workrules
+tower
+bin
+tiger:separated
+FIXME
+route_ref
+public_transport:version
+source:name
+grade4
+bdouble
+deciduous
+support
+traffic_signals
+importance
+maxheight
+railway:lzb
+motorroad
+genus:de
+apartments
+survey
+de:strassenschluessel
+piste:type
+hazmat
+grade1
+bus_stop
+admin_centre
+railway:etcs
+supervised
+fence_type
+line
+railway:track_ref
+paved
+contact:email
+boat
+old_name
+cycleway:both
+railway:bidirectional
+gabled
+railway:position
+toll
+generator:type
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2008
+recycling:glass
+ref_name
+name:br
+mtb:scale:uphill
+ditch
+generator:output:electricity
+swimming_pool
+main
+park_ride
+agricultural
+distance
+tracks
+primary
+kerb
+fire_hydrant
+AT
+tiger:name_base_1
+shelter_type
+grade5
+construction
+railway:preferred_direction
+multipolygon
+aeroway
+train
+wetland
+embankment
+guidepost
+aerialway
+sign
+tower:type
+craft
+collection_times
+destination:ref
+piste:difficulty
+gravel
+rail
+atm
+step_count
+local_ref
+check_date
+building:use:residential
+lamp_mount
+wheelchair:description
+ground
+contact:fax
+hedge
+source:position
+school:FR
+tmc
+maxspeed:forward
+board_type
+osmc:symbol
+fence
+uic_ref
+TMC:cid_58:tabcd_1:LocationCode
+placement
+TMC:cid_58:tabcd_1:Class
+maxspeed:backward
+TMC:cid_58:tabcd_1:LCLversion
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2014
+street_lamp
+traffic_signals:direction
+lamp_operator
+urban
+crop
+smoking
+capacity:disabled
+source:population
+wires
+oneway:bicycle
+ref:mhs
+building:height
+recycling:clothes
+gate
+surveillance
+name:de
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2019
+outdoor_seating
+culvert
+paving_stones
+addr:hamlet
+light_source
+recycling:glass_bottles
+ref:UAI
+brand:wikidata
+operator:wikidata
+A41
+railway:position:exact
+note:de
+mhs:inscription_date
+railway:milestone:catenary_mast
+underground
+administrative
+zebra
+light:method
+pitch
+internet_access
+name_1
+advertising
+locality
+ref:FR:Grenoble:trees
+door
+psv
+recycling:paper
+stop_position
+mapillary
+brand:wikipedia
+railway:track_type
+healthcare
+payment:coins
+gnis:feature_id
+railway:gnt
+dispensing
+railway:local_operated
+playground
+light:colour
+tram
+railway:signal:main
+railway:signal:main:form
+steps
+railway:track_class
+symbol
+min_height
+crossing:barrier
+source:heritage
+name:fr
+ref:FR:STIF
+industrial
+highspeed
+railway:ref
+source:ele
+TMC:cid_58:tabcd_1:NextLocationCode
+TMC:cid_58:tabcd_1:PrevLocationCode
+cycleway:left
+switch
+STIF:zone
+turning_circle
+mtb
+species:fr
+ref:FR:bordeaux:tree
+flat
+area:highway
+priority_road
+FID
+Maps4BW, LGL, www.lgl-bw.de
+bollard
+ref:FR:STIF:stop_id
+HiRes aerial imagery
+TMC:cid_58:tabcd_1:Direction
+ref:FR:SIREN
+hamlet
+addr:unit
+railway:signal:main:states
+detail
+part
+ele:accuracy
+railway:signal:main:height
+source:ref
+gnis:created
+object:street
+good
+takeaway
+disused
+source:addr:postcode
+name:oc
+railway:signal:main:function
+piste:grooming
+border_type
+contact_line
+water_source
+both
+Geoportal Berlin / Hauskoordinaten
+railway:signal:speed_limit
+railway:signal:speed_limit:form
+light:lit
+kvl_hro:type
+gnis:state_id
+gnis:county_id
+pipeline
+associatedStreet
+seamark:mooring:category
+subarea
+lamp_flames
+memorial:type
+railway:switch
+location:accuracy
+source:lit
+farmyard
+©IGN 2010 dans le cadre de la cartographie réglementaire
+shed
+detached
+surveillance:type
+taxon:cultivar
+railway:signal:distant
+railway:signal:distant:form
+garages
+railway:signal:speed_limit:speed
+memorial
+lamp_ref
+tree_row
+object:city
+tree:ref_area
+parking:lane:both
+DE:urban
+lamp_model:de
+toll:N3
+parking:lane:right
+restaurant
+short_name
+VRS:gemeinde
+VRS:ortsteil
+uic_name
+Union européenne - SOeS, CORINE Land Cover, 2006.
+colour:text
+transformer
+VRS:ref
+room
+ref:FR:FINESS
+ford
+colour:back
+waste_basket
+name:hsb
+reg_name
+parking_space
+unpaved
+street_cabinet
+loc_name
+lane
+building:roof:shape
+3dShapes
+camera:type
+name:en
+source:name:br
+change:lanes:forward
+military
+addr:inclusion
+building:type
+fuel:diesel
+change:lanes:backward
+roundtrip
+addr:district
+healthcare:speciality
+memorial:addr
+crossing:light
+cutting
+object:country
+railway:signal:minor:form
+artwork_type
+object:postcode
+change:lanes
+source:address
+light:tilt
+railway:signal:minor
+school
+christian
+building:fireproof
+addr:source
+overtaking
+inscription
+social_facility
+official_name
+camera:mount
+railway:signal:speed_limit:height
+allotments
+traffic
+uncontrolled
+colour:arrow
+passenger_information_display
+addr:interpolation
+grassland
+structure_gauge
+object:suburb
+handrail
+railway:signal:distant:states
+parking:lane:left
+right
+white
+living_street
+railway:signal:distant:height
+ruins
+roof
+terrace
+permissive
+tiger:name_direction_prefix
+ski
+substance
+destination:forward
+object:citydistrict
+noname
+destination:lanes
+LGL, www.lgl-bw.de
+commercial
+railway:signal:main:substitute_signal
+map_size
+railway:kvb
+lamp_ref_swd
+memorial:text
+map_type
+NYSTL:PRINTKEY
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2010
+drain
+building:min_level
+kvl_hro:amenity
+place_of_worship
+recycling:cans
+abandoned
+survey_point
+Nantes Métropole 11/2011
+route_master
+basin
+DOP_LVA_BY_01
+concrete
+destination:backward
+snowmobile
+geoimage.at MaxRes
+railway:turnout_side
+description:de
+note:name
+railway:switch:electric
+delivery
+limited
+hgv:state_network
+payment:cash
+source:hgv:state_network
+history
+manufacturer
+isolated_dwelling
+across
+light:shape
+fire_hydrant:pressure
+openGeoDB:loc_id
+signal
+Kreis_Viersen_Katasteramt_2012_06
+seamark:name
+button_operated
+Geoimage.at MaxRes
+mixed
+railway:milestone:emergency_brake_override
+building:roof
+openGeoDB:community_identification_number
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2018
+tiger:name_type_1
+fuel:octane_95
+roof_tiles
+fuel:octane_98
+moped
+source:name:oc
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2015
+ref:NUM_ILOT
+stars
+Direction Générale des Finances Publiques - Cadastre ; mise à jour : 2010
+give_way
+hazard
+de:regionalschluessel
+shoulder
+end_date
+16.7
+artist_name
+vending_machine
+pillar
+side_stream
+internet_access:fee
+cutline
+de:amtlicher_gemeindeschluessel
+traffic_sign:forward
+vineyard
+intersection
+Amsterdam
+recycling
+roof:direction
+alley
+Yahoo
+motorway
+mofa
+OGD Vienna
+orchard
+buildingpart
+city_limit
+species:FR
+tiger:zip_left_1
+intermediate
+social_facility:for
+opendata.paris.fr
+attraction
+proposed
+openGeoDB:postal_codes
+network:guid
+taxon:species:varietas
+toilets
+openGeoDB:layer
+surveillance:zone
+excellent
+site_type
+roundabout
+owner
+forward_stop
+payment:notes
+rcn_ref
+payment:credit_cards
+openGeoDB:is_in_loc_id
+content
+basemap.at
+rcn
+light:count
+ref:FR:LaPoste
+motorboat
+platform_exit_only
+level_crossing
+compacted
+customers
+seamark:buoy_lateral:colour
+source_ref
+name:ru
+waterway:sign
+is_in:city
+clothes
+openGeoDB:auto_update
+generator
+odbl
+network:short
+ramp
+maxspeed:conditional
+designation
+openGeoDB:name
+red
+minor_line
+person:date_of_birth
+railway:signal:minor:height
+seamark:buoy_lateral:shape
+openGeoDB:version
+todo
+est_width
+seamark:topmark:shape
+BDOrtho IGN
+seamark:buoy_lateral:category
+openGeoDB:sort_name
+drive_through
+ref:FR:commune
+seamark:notice:category
+manhole
+railway:signal:shunting
+pedestrian
+railway:signal:shunting:form
+seamark:topmark:colour
+name:etymology:wikidata
+pond
+drinking_water
+openGeoDB:is_in
+Direction Générale des Finances Publiques - cadastre. Mise à jour : 2015
+seamark:notice:function
+cemetery
+forestry
+format
+none
+architect
+fuel:e10
+backward_stop
+sidewalk:both:surface
+stop_exit_only
+railway:ballastless
+light
+green
+location:transition
+sloped_curb
+roof:ridge
+hide
+openGeoDB:type
+railway:signal:shunting:height
+up
+building:facade:colour
+stop_area
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2008
+CEMT
+disused:railway
+PGS
+post_box
+Berlin
+source:url
+traffic_signals:sound
+ref:fgkz
+dirt
+yard
+ref:FR:prix-carburants
+railway:tilting
+maxwidth
+building:levels:underground
+positive
+roof:orientation:compass
+railway:signal:minor:states
+lit_by_gaslight
+building:architecture
+building:use:parking
+old_railway_operator
+maxspeed:variable
+circuits
+sand
+Grand Lyon - 10/2011
+openGeoDB:population
+Rennes Métropole
+negative
+hunting_stand
+converted_by
+platform_entry_only
+protect_class
+soccer
+source:housenumber
+crossing:saltire
+cobblestone
+Bing Sat
+VRS:name
+ref:FR:RTE
+year_of_construction
+addr:conscriptionnumber
+Rd
+marker
+left
+openGeoDB:location
+openGeoDB:license_plate_code
+village
+abandoned:railway
+Kreis_Viersen_Katasteramt_2012_03
+container
+postal_code_level
+source:version
+enforcement
+vitality
+Direction Générale des Finances Publiques - cadastre
+comment
+tennis
+axle_load
+camera:direction
+railway:signal:speed_limit_distant
+2.5
+manufacturer:type
+railway:signal:speed_limit_distant:form
+tiger_import_dch_v0.6_20070829
+voltage:secondary
+in_service
+voltage:primary
+source:wheelchair
+currency:EUR
+FR
+contact:facebook
+roof:edge
+lift_gate
+traffic_sign:backward
+maxspeed:source
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadas. Mise à jour : 2010
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2007
+capacity:women
+4C:PK_UID
+4C:TYPE_VOIE
+cliff
+catholic
+Maps4BW ( LGL, www.lgl-bw.de) / Bing
+capacity:parent
+normal
+source:addr:housenumber
+grey
+lastcheck
+stop_entry_only
+waste
+organic
+maxstay
+communication:mobile_phone
+destination:symbol
+motorway_link
+subway
+D
+protection_title
+emergency_telephone_code
+ref:ruian:building
+milestone
+station
+railway:signal:shunting:states
+bad
+handrail:left
+seamark
+building:ruian:type
+goods
+outline
+sidewalk:right:surface
+handrail:right
+design
+Bing 2012
+Direction Générale des Finances Publiques - Cadastre ; mise à jour : 2011
+mooring
+tree_location:city
+parking:condition:right
+riverbank
+strassen-nrw:abs
+public
+avenue
+park
+DE:zone30
+political_division
+river
+railway:signal:distant:repeated
+ref:La
+tree_location:full
+plan.at 2009
+fire_hydrant:water_source
+buoy
+openGeoDB:telephone_area_code
+species:en
+ref:BVG
+railway:signal:speed_limit_distant:speed
+board
+Direction Générale des Finances Publiques - cadastre. Mise à jour : 2016
+fuel:lpg
+maps4bw (LGL, www.lgl-bw.de); Mapbox Satellite
+landcover
+recycling:plastic
+visibility
+seamark:notice:impact
+brown
+geodesic
+payment:debit_cards
+device
+destination:ref:lanes
+lwn
+Direction Générale des Finances Publiques - cadastre. Mise à jour : 2012
+hut
+trees
+branch
+Orthophoto: www.geoimage.at (c)
+onkz
+DE:rural
+church
+GPS
+needleleaved
+asb
+1.5
+telecom
+retail
+seamark:beacon_lateral:category
+wiki:symbol
+crossing:bell
+address
+along
+4C:ID_VOIE
+4C:ID_TRON
+seamark:beacon_lateral:shape
+payment:visa
+nat_ref
+BDOrtho IGN; Cadastre MàJ 2015
+floating
+river:waterway_distance
+railway:signal:speed_limit_distant:height
+railway:signal:snowplow:form
+railway:signal:snowplow
+railway:signal:snowplow:type
+sidewalk:left:surface
+generator:place
+Hauptstraße
+car
+payment:electronic_purses
+metal
+cadastre-dgi-fr source : PaysDeBrest - 20100331
+meter_load
+shoulder:right
+start_date:FR:plantation
+conveying
+ref:FR:fantoir
+garden
+parking:condition:left
+wayside_cross
+name:uk
+payment:mastercard
+black
+gnis:id
+gnis:County
+gnis:ST_alpha
+down
+gnis:County_num
+gnis:ST_num
+rooms
+import_uuid
+name:ca
+castle_type
+payment:telephone_cards
+operator:short
+cycleway:right:bicycle
+mtb:type
+lockable
+source:building
+supermarket
+zone
+vrr:wabe
+disused:amenity
+gnis:Class
+bakery
+Orthophotographie CRAIG/TopoGEODIS 2009
+contact:housenumber
+tributary
+fuel
+seamark:buoy_lateral:system
+stop_id
+side
+railway:signal:combined:form
+fast_food
+railway:signal:combined
+fee_zone
+trunk
+only_straight_on
+dibavod:id
+St
+peak
+structure
+building:flats
+lamp:power
+dog
+maps4bw (LGL, www.lgl-bw.de)
+recycling:shoes
+openGeoDB:combination_of_public_administration
+cycleway:right:oneway
+parking:condition:both
+contact:street
+seamark:distance_mark:distance
+pier
+west
+seamark:distance_mark:units
+seamark:distance_mark:category
+hi-res aerial imagery
+Geoportal Berlin / Hausumringe
+source:imagery
+east
+cafe
+fire_hydrant:couplings
+ref:FR:CEF
+display
+use_sidepath
+fire_hydrant:coupling_type
+Hamburg
+loading_gauge
+ref:ProRailID
+surface:colour
+length
+ref:ProRailSpoortak
+buoy:colour
+railway:atb
+seamark:source
+toilets:disposal
+Direction Générale des Finances Publiques - cadastre. Mise à jour : 2014
+plaster
+raba:id
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2016
+diet:vegetarian
+gsm-r
+hotel
+railway:signal:combined:height
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2011
+club
+source:maxspeed:forward
+cycleway:right:surface
+colour:cap
+sports_centre
+north
+note:deplacer4mE
+south
+communication
+source:ref:sandre
+recycling:scrap_metal
+maxspeed:hgv:conditional
+farm
+access:N3
+hazmat:water
+recycling:cardboard
+loc_ref
+kindergarten
+DE:EBO
+yahoo
+hipped
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2017
+minor_distribution
+wikimedia_commons
+class:bicycle
+tracktype:bing
+NHS
+spur
+message
+gnis:county_name
+colour:bonnet
+electric
+recycling:plastic_bottles
+3.5
+ref:FR:SIRET
+ref:ruian:addr
+source:maxspeed:backward
+Merkaartor 0.12
+barn
+unisex
+is_in:country_code
+compressed_air
+name:prefix
+rack
+bare_rock
+bunker
+tiger:name_base_2
+highway:cycle
+heath
+tiger:zip_right_1
+railway:signal:combined:states
+solar
+payment:girocard
+seamark:light:colour
+cadastre-dgi-fr source : Direction Generale des Impots - Cadastre. Mise a jour : 2014
+cabin
+overtaking:hgv
+fireplace
+mountain_hiking
+building_passage
+regional
+reservoir_type
+stands
+bank
+megalith_type
+attribution
+hgv:conditional
+alternate
+disused:shop
+hairdresser
+demolished:building
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour :2008
+Communauté Urbaine de Bordeaux - 09/2014
+photovoltaic
+fire_hydrant:flow_capacity
+seamark:light:character
+tiger:name_direction_suffix
+produce
+DE:30
+seamark:notice:addition
+label
+seamark:beacon_lateral:colour
+Acer platanoides
+navigationaid
+overtaking:hgv:conditional
+snowplowing:category
+fine_gravel
+railway:signal:combined:function
+greenhouse
+resource
+mountain_pass
+fence:function
+disused:boundary
+contact:postcode
+RTE
+0.5
+addr:city:simc
+police:FR
+garden:type
+roof:angle
+siding
+recycling:batteries
+seamark:notice:orientation
+format:top
+heritage:ref
+time
+Ave
+island
+no_u_turn
+source:hgv
+maxweight:conditional
+phases
+cityracks.street
+cityracks.small
+cityracks.housenum
+cityracks.rackid
+cityracks.large
+interval
+link
+seasonal
+cycleway:right:segregated
+ref:FR:TCL
+Maps4BW
+heritage:website
+Maps4BW ( LGL, www.lgl-bw.de) / Mapbox Satellitenbild
+payment:maestro
+light:direction
+traffic_signals:vibration
+sides
+post_office:type
+picnic_site
+A74
+light_rail
+mtb:scale:imba
+contact:city
+couplings
+community_centre
+semidetached_house
+second_hand
+rotor:diameter
+Potlatch 0.10f
+gray
+telephone
+lamp_model
+lines
+osmc:status
+pharmacy
+service_times
+Merkaartor 0.13
+adfc_hl_net
+left|through
+telecom:medium
+recycling:green_waste
+cycle_barrier
+placement:forward
+destination:symbol:lanes
+source:geometry:date
+turn
+obstacle
+diet:vegan
+Direction Générale des Finances Publiques - Cadastre ; mise à jour : 2009
+canal
+cycle_network
+railway:station_category
+name:gsw
+storage_tank
+Köln
+luminous
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2019
+access:conditional
+source:geometry:entity
+source:geometry:uidn
+source:geometry:oidn
+fire_hydrant:count
+source:updated
+bus_routes
+railway:signal:stop:form
+railway:signal:stop
+ToulouseMetropole
+lock
+seamark:bridge:category
+farm_auxiliary
+pillar:type
+Wien
+contains
+bridge:structure
+Communauté Urbaine de Bordeaux - 09/2013
+bunker_type
+retaining_wall
+disused:admin_level
+24/7
+wind
+socket:type2
+ref:ruian
+genus:fr
+viewpoint
+railway:tvm
+road
+name:nl
+trailblazed
+7.5
+name:it
+male
+building:roof:colour
+recycling:waste
+class:bicycle:mtb
+boules
+source:tracer
+class:bicycle:commute
+building:roof:orientation
+admin_type:FR
+railway:signal:distant:shortened
+Editop
+source:zoomlevel
+piste:name
+water_well
+RPG 2012-91 par l'Agence de services et de paiement
+table
+ref:VBB
+ref:FR:RTE_nom
+trunk_link
+Brest Metropole Oceane, 2009
+3dr:type
+building:source
+source:ref:FR:FANTOIR
+FR:urban
+access:lanes
+contact:mobile
+gnis:import_uuid
+person:date_of_death
+tidal
+is_in:country
+female
+waterway_category:NDS
+ref:lda
+unsigned_ref
+Platanus
+abandoned:highway
+gps
+townhall
+faces
+opposite
+unmarked
+gnis:reviewed
+lda:criteria
+hgv:lanes
+animated
+primary_link
+wheelchair:description:de
+kvl_hro:desc
+source:modif
+Ne pas déplacer ce point, cf. - Do not move this node, see - http://wiki.openstreetmap.org/wiki/WikiProject_France/Repères_Géodésiques#Permanence_des_rep.C3.A8res
+addr:full
+government
+addr:street:sym_ul
+doctors
+seamark:landmark:category
+seamark:notice:information
+Métropole de Lyon 2018
+seamark:buoy_lateral:reflectivity
+railway:signal:crossing_distant:form
+railway:signal:crossing_distant
+stone
+detour
+buffer_stop
+is_in:state
+http://wiki.openstreetmap.org/wiki/Import/Catalogue/Strassen_NRW
+regular
+number_of_apartments
+light:aviation
+charcoal_pile
+fountain
+winter_service
+addr2:housenumber
+sett
+bus_stop:category
+brewery
+ALK NRW
+BDOrtho IGN Hydrographie
+couplings:diameters
+railway:signal:electricity:form
+cave:ref
+removed:building
+lowered
+genus:en
+railway:signal:electricity
+destination:lanes:forward
+post_box:type
+source:created
+canoe
+fire_station
+recycling:plastic_packaging
+national
+disused:political_division
+lcn_ref
+ref:FR:GendarmerieNationale
+seamark:small_craft_facility:category
+railway:switch:resetting
+ref:BLfD
+cadastre-dgi-fr source : Direction Generale des Impots - Cadastre. Mise a jour : 2013
+ref:lfd
+land_property
+under
+railway:signal:whistle:form
+München
+map
+parking:lane:right:parallel
+name:es
+bridge:name
+Aesculus hippocastanum
+plan.at 2009,geoimage.at
+stream:type
+addr:flats
+railway:signal:electricity:type
+marked
+tiger:zip_left_2
+fenced
+single
+cycleway:left:bicycle
+railway:signal:whistle
+crossing:activation
+material:de
+maxspeed:hgv
+minspeed
+no_left_turn
+ref:RVF
+addr2:street
+direction_east
+maps4bw, LGL, www.lgl-bw.de
+tower:construction
+extraction vectorielle: cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2010
+reservoir
+cycleway:left:oneway
+maxlength
+ALKIS NRW
+technology
+direction_south
+taxi
+ref:at:gkz
+ref:highway
+direction_north
+crossing:supervision
+trolley_wire
+par
+waterway_category:WGF
+beds
+waterway_ref:WGF
+car_repair
+direction_west
+crossing:bollard
+left|through;right
+INSEE 2013
+brick
+population:date
+solar_photovoltaic_panel
+addr:door
+railway:signal:stop:height
+name:cs
+Dr
+orientation
+lock_name
+exit_to
+9.00
+multi
+artwork
+stamping_machine
+tee
+railway:switch:heated
+company
+evergreen
+seamark:light:period
+abandoned:power
+GeoImage.at High-Res
+seamark:buoy_special_purpose:colour
+AT:urban
+isced:level
+power_supply
+fuel:cng
+Dorfstraße
+destination:colour
+road:separated
+Bahnhofstraße
+diaper
+bar
+outdoor
+Bing ; DGFiP - Cadastre 2014
+light:mount
+building:use:retail
+bicycle_road
+name:botanical
+payment:ep_geldkarte
+building:type:de
+cycleway:surface
+information:public_transport
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2012
+last_checked
+ramp:wheelchair
+seamark:beacon_lateral:colour_pattern
+default
+beauty
+motor_vehicle:conditional
+Point
+fire_hydrant:style
+lfd:criteria
+seamark:buoy_special_purpose:shape
+couplings:type
+cycleway:right:smoothness
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2011
+name:zh
+destination:lanes:backward
+name:eu
+date
+name_2
+aerialway:access
+busway
+8.0
+passenger
+block
+cycleway:right:foot
+name:pl
+GeoImage.at MaxRes
+payment:american_express
+fixme:wikipedia
+camera:angle
+pond_use
+tree_lined
+Bremen
+railway:signal:crossing:form
+camp_site
+lantern
+start
+recycling:newspaper
+railway:signal:crossing
+name:nds
+min_age
+aerialway:occupancy
+D4
+CCPRO 2016
+pub
+GeoImage.at
+opening_date
+kerb:height
+by_night
+disused:highway
+Dortmund
+int_name
+hinge
+Maps4BW (LGL-BW, www.lgl-bw.de)
+seamark:bridge:clearance_height
+Datenquelle: LGL, www.lgl-bw.de
+ref:FR:STIF:direction_id
+start_date:railway
+DE:zone:30
+is_sidepath
+Düsseldorf
+animal
+seamark:beacon_lateral:reflectivity
+parking:lane:left:parallel
+crossing:chicane
+maxspeed:bus:conditional
+position
+HZBGEW
+railway:preserved
+GEW_ID
+official
+plant:output:electricity
+seamark:landmark:conspicuity
+speisebezirk
+railway:signal:crossing:states
+destination_sign
+recycling:cartons
+narrow
+NYSTL:PARCELS_ID
+state
+NYSTL:PARCELS_
+ref:NîmesMétropole
+Ville de Bordeaux - 09/2012
+addr:floor
+ramp:stroller
+max_age
+spring
+postal_code:country
+curve_geometry
+post_office
+horse_scale
+construction_year
+destination:ref:backward
+suburb
+name:prefix:at
+pole:type
+village_green
+source:location
+fire_hydrant:location
+cycleway:left:surface
+except
+b:type
+source:height
+GEW_NAME_A
+currency:others
+flow_rate
+destination:to
+yellow
+Hi-res aerial imagery (Aerowest)
+Bing ; DGFiP - Cadastre 2013
+railway:radius
+service:bicycle:repair
+20000;400
+scree
+network:type
+elevator
+parish
+emergency_access_point
+ft_link
+destination:ref:forward
+junction:ref
+is_in:state_code
+ft_symbol
+GrandNancy
+works
+cycleway:left:segregated
+recycling:magazines
+DB Netz AG
+Aerowest - local Geoserver
+extrapolation
+ref:FR:CG71
+picnic_table
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour :2012
+self_service
+source:width
+downhill
+railway:signal:main_repeated
+building:levels:aboveground
+ramp:bicycle
+Bing ; cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2012
+piste:oneway
+razed:railway
+ref:ERDF:gdo
+chapel
+boundary_stone
+ref:SIREN
+railway:signal:main_repeated:form
+Rosskastanie
+convenience
+healthcare:speciality:de
+silo
+wayside_shrine
+wien.at
+railway:maxspeed:diverging
+building:use:office
+ref:svhl
+railway:signal:electricity:height
+mtb:description
+ref:FR:STAR
+electrified:rail
+toilets:position
+maxspeed:tilting
+seamark:harbour:category
+very_bad
+3dshapes:note
+grande_circulation
+camera
+ownership
+static_caravan
+bus_stop:type
+tunnel:name
+model
+Ln
+Acer pseudoplatanus
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2012
+addr:subdistrict
+fuel:HGV_diesel
+insurance
+source:ref:FR:STIF
+route:status
+guest_house
+railway:signal:combined:substitute_signal
+name:dsb
+Orthophotos 2011 du SITG (Système d'Information du Territoire Genevois)
+height:hub
+ref:vatin
+pylon
+timetable
+levelpart
+facebook
+GDI.SW
+version
+OpenData CAPP 2014-04-01
+Bing, Maps4BW, LGL, www.lgl-bw.de
+exit
+NRW Geobasis ALK
+Aesculus
+university
+osmc:name
+voltage-high
+destination:ref:to
+school:de
+tents
+note:fr
+ref:FR:RATP
+b5m:urlOrto
+b5m:id
+b5m:url
+Haarlem
+GrandToulouse
+payment:none
+wlan
+diocese
+3.3
+8.5
+destination:colour:lanes
+abutters
+deanery
+Frankfurt am Main
+service:bicycle:retail
+dusk-dawn
+traffic_signals:arrow
+automated
+copy_facility
+KVL HRO
+seamark:mooring:water_level
+OGD-Stmk:OBJECTID
+heritage:since
+FR:30
+equestrian
+OGD-Stmk:ARZTNR
+note:mapping_status
+recycling:paper_packaging
+opengeodb:lon
+opengeodb:lat
+BMO2009
+waterway:kilometer
+freight
+Duisburg
+NRW Atlas
+butcher
+description:en
+addr:streetnumber
+stairwell
+8.2
+nordic
+depth
+direction_northeast
+3.2
+direction_southwest
+Stuttgart
+Enedis
+end_date:railway
+cover
+ref:dsa
+7.8
+moved
+note:time
+passing_places
+distribution
+DE:240
+iof
+analogue
+7.7
+tiger:name_direction_prefix_1
+pump
+usability:skate
+shared_taxi
+8.3
+easy
+Essen
+guard_rail
+8.1
+7.9
+bicycle:lanes
+geoimage.at hires
+entrance_marker:subway
+lock_ref
+source:traffic_sign
+OpenData.HRO
+motorway_junction
+disabled
+ref:shop:num
+Bing, LGL, www.lgl-bw.de
+diameter
+type:FR:FINESS
+Tilia
+stolperstein
+building:levels:top
+pebblestone
+only_right_turn
+8.4
+icao
+DE:motorway
+http://www.autobahn-bilder.de
+level:ref
+glass
+object:housenumber
+Tilia cordata
+castle
+NY
+direction_northwest
+Spitzahorn
+cityracks.installed
+levels
+surface:de
+window
+direction_southeast
+swing_gate:type
+busway:right
+TODO
+horrible
+maxspeed:advisory
+7.6
+lit_by_led
+wind_turbine
+Direction Générale des Finances Publiques - cadastre. Mise à jour : 2017
+basemap.at Ortho
+memorial:addr:city
+brand:website
+informal
+fuel:octane_91
+memorial:addr:street
+year
+weir
+noaddress
+change_machine
+Enedis - 06/2018
+parallel
+LA-KA
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2007
+seamark:notice:distance_down
+operator:wikipedia
+obstacle_name
+whitewater
+railway:maxspeed:straight
+health_facility:type
+kiosk
+drink:coffee
+ref:ibnr
+political
+seamark:topmark:colour_pattern
+knowledge
+seamark:notice:distance_up
+endpoint:busbar
+placement:backward
+Orthophotos 2012 du SITG (Système d'Information du Territoire Genevois)
+railway:signal:main_repeated:states
+Direction Générale des Finances Publiques - cadastre. Mise à jour : 2013
+FR:zone30
+8.6
+ref:clochers.org
+7.4
+GrandNancy Orthophotographie 2012
+mast
+gas
+bic
+hospital
+BDOrtho IGN 2016
+end
+place_numbers
+recycling:small_appliances
+hinged
+bridge:ref
+site_ownership
+size
+1.0
+road_lcd
+wastewater_plant
+name:ar
+trolleybus
+NRW-Atlas
+raised
+8.7
+GC
+seamark:daymark:shape
+biergarten
+Yahoo / YWMS
+abandoned:building
+toll:hgv
+ship
+cycleway:right:traffic_sign
+fuel:GTL_diesel
+kind
+3.1
+recycling:electrical_appliances
+addr:municipality
+width:lanes
+Bielefeld
+osak:identifier
+drink:wine
+cadastre-dgi-fr source : PaysDeBrest - 20100329
+overtaking:trailer:conditional
+museum
+8.8
+addr:province
+disused:name
+lanes:both_ways
+7.3
+ref:bldam
+cycleway:left:foot
+Deutsche Post
+XTRID
+ref:Wuppertal
+cigarettes
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour :2010
+caravans
+secondary_link
+railway:switch:movable_frog
+railway:platform_height
+railway:platform_length
+7.2
+community_centre:for
+operator:abbr
+amperage
+railway:derail
+railway:maximum_current
+GIS
+wpt_description
+swimming
+bldam:criteria
+vehicle:conditional
+name:ja
+seamark:daymark:colour
+tobacco
+osmuid
+ascent
+Microsoft Bing satellite 2012
+boundary_name
+Städt. Baumkataster
+dwarf
+skillion
+name:sr
+Schulstraße
+Hannover
+country
+razed
+notice
+railway:signal:stop:caption
+voltage-low
+hedge_bank
+plan.at 2009,bing
+departures_board
+opening_hours:lastcheck
+ref:FR:PTT
+authoritative
+building:facade:material
+cxx:code
+noref
+socket:schuko
+right_of:1
+access:lanes:forward
+network:area
+florist
+internet_access:operator
+payment:contactless
+proposed:electrified
+fixed
+sub_station
+heritage:operator:short
+carriage
+Dresden
+connection
+fuel:e85
+breast
+grave_yard
+Gartenstraße
+tar_paper
+cxx:id
+lit:indirect
+related_law
+building:parts
+NYSTL:VILLAGE
+parking_entrance
+fuel:octane_100
+4.5
+Fraxinus excelsior
+note:destination
+handicap
+bike_ride
+xmas:feature
+member
+30 mph
+maxaxleload
+drink:beer
+historic:railway
+parking:condition:right:time_interval
+Bonn
+8.9
+9.0
+bus_lines
+quarry
+topmark
+archaeological_site
+gnis:edited
+sidepath
+source:URL
+data.gouv.fr, Ministère de la Culture - 2016
+sanitary_dump_station
+defibrillator:location
+dentist
+alcohol
+tourist_bus
+data.gouv.fr:RTE - 04/2017
+microbrewery
+note:maxspeed
+handrail:center
+gaslight
+summit:cross
+Wuppertal
+3.4
+townhall:type
+flag:type
+plant
+proposed:voltage
+proposed:frequency
+Bochum
+NYSDOT https://www.dot.ny.gov/divisions/operating/oom/transportation-systems/repository/2010%20trk%20access%20bk.pdf
+Merkaartor 0.11
+bridge:support
+dsa:criteria
+Münster
+monitoring:water_level
+sidewalk:right:bicycle
+7.1
+unknown
+3.6
+St. Lawrence County
+protection_object
+source:contact
+landmark
+terminal
+source:access
+neighbourhood
+DGFiP Cadastre 2010
+authentication:membership_card
+car_wash
+2.50
+ref:FR:CRTA
+roman_catholic
+gps, photos and survey
+ele:nn
+ele:source
+Orthophotos 2009 du SITG (Système d'Information du Territoire Genevois)
+name:hu
+mini_roundabout
+medical_system:western
+via_ferrata_scale
+seamark:light:reference
+capacity:charging
+name:sl
+NRCan-CanVec-10.0
+Bergstraße
+piste:ref
+destination:country
+seamark:landmark:name
+plan.at 2008
+share_taxi
+coastline
+BDOrtho IGN 2017
+GURS
+maps4bw (LGL, www.lgl-be.de); Mapbox Satellite
+bulk_purchase
+gnis:feature_type
+recycling:books
+transformer_tower
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2012
+9.1
+census
+payment:account_cards
+residential;industrial
+cycleway:bicycle
+7.0
+HiRes aerial imagery 2009
+shoes
+crossing:on_demand
+recycling:wood
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2017
+facility
+admin_centre:postal_code
+9.2
+parking_lane
+seamark:beacon_special_purpose:colour
+portal
+civic
+railway:signal:wrong_road:form
+ref:FR:NAF
+railway:signal:wrong_road
+parking:lane:both:parallel
+access:lanes:backward
+seamark:restricted_area:restriction
+positive:parking
+zoo
+razed:building
+source:hgv:national_network
+water_tank:volume
+Q3764
+entrance_marker:s-train
+hgv:national_network
+class
+crossover
+name:la
+osmarender:nameDirection
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre;mise à jour : 2009
+governance
+Leipzig
+tiger:zip_right_2
+3.8
+dolphin
+wifi
+3.7
+railway:signal:station_distant:form
+railway:signal:station_distant
+overtaking:forward
+negative:parking
+is_in:continent
+italian
+landsat
+A31
+proposed:building
+v2 ; cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2009
+taxiway
+Mönchengladbach
+basketball
+horizontal_axis
+no|no
+change:backward
+Nürnberg
+bus:lanes
+inline_skates
+1a
+seamark:beacon_lateral:system
+pyramidal
+cadastre-dgi-fr source : DGFiP - 20091221
+sidewalk:right:foot
+plant:source
+permanent
+Kassel
+cycleway:left:smoothness
+siren:type
+building:roof:type
+tram_stop
+water_park
+communication:gsm-r
+last_renovation
+capacity:note
+9.3
+castle_type:de
+roof:ridge:direction
+NYSTL:DEKALB_
+NYSTL:DEKALB_ID
+ref:AVV
+monument
+9.5
+tiger:name_type_2
+water_tower
+socket:type2:output
+no_right_turn
+Tilia platyphyllos
+bing_imagery
+hump
+ref:FR:STIF:ExternalCode_Line
+indoor:level
+destination:symbol:forward
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2006
+parking_tickets
+protestant
+rental
+Bing 2016
+product
+type:RATP
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à  jour : 2010
+entrance_marker:train
+dogs
+mount
+bay
+half-hipped
+note:qadastre
+name:lt
+DE:274.1[30]
+priority
+6.9
+data.gouv.fr:Ministère de l'Éducation nationale, de la Jeunesse et de la Vie associative - 05/2012
+CCLD/DGFiP dec2010
+destination:colour:forward
+overground
+cable
+Lindenstraße
+alternative
+pizza
+local_authority:FR
+collection_times:lastcheck
+lot
+complete
+ref:avf
+fishing
+highway:note
+3.0
+Bing / Maps4BW, LGL, www.lgl-bw.de
+removed:power
+no_stopping
+payment:cryptocurrencies
+local_knowledge
+flagpole
+lcd
+local knowledge
+Alkmaar
+level_crossing:type:RFF
+emergency_service
+straight mast
+ramp:luggage
+stone_type
+library
+2a
+section
+area_lcd
+maxspeed:practical
+restriction:bicycle
+sidewalk:right:smoothness
+bridleway
+long_name
+not_left|yes
+road_ref
+food
+construction_date
+4.0
+railway:signal:departure
+railway:signal:departure:form
+red_turn:right
+9.4
+road_marking
+no_parking
+seamark:light:height
+free
+recreation_ground
+destination:to:lanes
+bunker_silo
+pipeline:ref
+5.5
+perimeter
+ref:gkz
+Bing 2013
+ref:FR:ARCEP
+8.00
+nature
+DE-ESO:ks
+toll:special
+overtaking:backward
+source:bicycle
+Graz
+ref:FR:uic8
+headframe
+Amstelveen
+destination:symbol:backward
+seamark:light:group
+parking:condition:right:maxstay
+animal_keeping
+Karlsruhe
+hov
+ref:IBNR
+tomb
+blue
+official_ref
+Direction general des finances publiques cadastre 2010
+legal_type:FR
+optician
+E
+commuting
+addr:provisionalnumber
+type:IIBSN
+towards
+groyne
+AGIS 2011
+outside
+ferry
+LGL-BW
+Krefeld
+pos_offset
+shower
+Hilversum
+Ct
+ref:RFF:ligne
+neg_offset
+charging_station
+region
+parking:condition:left:time_interval
+Bing Aerial
+abandoned:man_made
+NRW Atlas ALK
+insulator
+BDOrtho IGN Hydroghaphie
+historic:period
+source:destination
+Potlatch 0.10b
+Braunschweig
+Ringstraße
+ele:dhhn92
+bungalow
+Lübeck
+protected_area
+ref:saarbahn_sms
+disused:local_authority:FR
+railway:signal:train_protection
+display_surface
+sms
+Geoimage.at
+railway:signal:train_protection:form
+expressway
+chalet
+Stadtverwaltung Marl
+warehouse
+pump:type
+opening_hours:url
+parking:condition
+possible
+agricultural;forestry
+cycleway:right:width
+seamark:light:range
+3.9
+is_in:iso_3166_2
+lamp_status
+doctor
+contact:google_plus
+sculpture
+athletics
+separate
+seamark:mooring:colour
+1.2
+contact:twitter
+import
+seamark:mooring:shape
+AT:rural
+9.6
+Acer
+building:roof:height
+offenedaten.moers.de
+6.8
+railway:signal:route
+bag:bronwoonplaats
+excrement_bags
+wall_loops
+hole
+collection
+support:function
+expected_rcn_route_relations
+bicycle:backward
+Linde
+police
+railway:signal:route:form
+WSV
+2.8
+plot
+width:lanes:backward
+public_building
+width:lanes:forward
+source of postcode is from osm nodes
+planned:ref
+bicycle:conditional
+surface:middle
+german
+Bing;DGFiP 2015/BANO
+catenary_mast
+pump:style
+buoy_lateral
+payment:diners_club
+clean
+maxspeed:note
+siren:purpose
+Wohnhaus (allgemein)
+railway:signal:departure:states
+10.0
+charge
+beacon
+DE-ESO:hp
+name:be
+width:average
+Yahoo Imagery
+gantry:type
+grape
+crossing:island
+N
+Waldstraße
+seamark:notice:1:function
+seamark:notice:2:function
+BDOrtho IGN;BD Carthage
+name:pt
+seamark:notice:system
+classic
+stm
+seamark:bridge:clearance_width
+seamark:notice:1:category
+seamark:notice:2:category
+Augsburg
+reservoir_covered
+NRW-Atlas (ALK)
+Deutsche Telekom AG
+9.7
+dismount
+sidewalk:left:smoothness
+BLfD:criteria
+Aachen
+DGFIP:type
+Bing 2012; Maps4BW, www.lgl-bw.de
+chain_link
+data.tirol.gv.at
+SNCF Réseau
+basemap.at 2016
+ref:EEG
+de:place
+Grande Rue
+memorial:addr:postcode
+billboard
+Mapbox
+BD Carthage
+public_transport_tickets
+Schillerstraße
+aerialway:capacity
+stairs
+beach
+destination:colour:backward
+city
+furniture
+xmas:name
+bicycle:lanes:forward
+primaire
+6.5
+branch:type
+fortification_type
+traffic_signals:minimap
+repeat_on
+insurance:KFAG
+0.2.6.11 / 2007-12-04 / http://fa-technik.adfc.de/code/opengeodb/dump/
+golf_cart
+seamark:beacon_special_purpose:shape
+SNCF:stop_name
+Platanus x hispanica
+step.condition
+maxspeed:lanes
+Robinia pseudoacacia
+Quercus robur
+legal
+seamark:rock:water_level
+seamark:buoy_lateral:colour_pattern
+ref:at:bda
+tiger:zip_left_3
+doityourself
+fairway
+mapping_status
+bicycle:lanes:backward
+memorial:ref
+Pl
+estate_agent
+cave_entrance
+destination:street
+cycleway:segregated
+wien.gv.at
+railway:signal_box
+0.3
+Bing;DGFiP 2014/BANO
+railway:signal:minor:substitute_signal
+tertiary_link
+books
+L
+census:population
+earth
+9.8
+historic:civilization
+communication:microwave
+data.gouv.fr:Le ministère des droits des femmes, de la ville, de la jeunesse et des sports - 2014
+NRW Atlas (ALK)
+ref:FR:geofer
+cadastre-dgi-fr -  - PTscript
+Bing;extrapolation
+seamark:buoy_special_purpose:category
+payment:dkv
+seg_lcd
+steel
+dome
+Purmerend
+text_colour
+home
+hangar
+monitoring:weather
+ski:nordic
+Kirchstraße
+ref:isil
+building:demolished
+seamark:signal_station_traffic:category
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 1983
+contact:country
+beacon:type
+Platanus x acerifolia
+Cadastre MàJ 2015; Bano
+ref:Stan
+TMC:Segment
+Hamm
+ÖBB-Infrastruktur AG
+animal_keeping:type
+Goethestraße
+Mulhouse Alsace Agglomération - 09/2013
+destination:ref:to:lanes
+lamp:type
+drive-through
+seamark:landmark:function
+animal_crossing
+only
+removed:highway
+dwelling_house
+Celtipharm - 10/2014
+climbing
+ways
+railway:signal:train_protection:type
+Gelsenkirchen
+name:el
+entry
+subway_entrance
+ref:FR:SDIS29
+railway:signal:speed_limit:deactivated
+http://wiki.openstreetmap.org/wiki/Import/Catalogue/Kreisgrenzen_Deutschland_2005
+ice_cream
+nature_reserve
+Carpinus betulus
+common
+Zaandam
+surface_material
+name:ko
+polyshp2osm
+toll:operator
+source:addr:date
+name:right
+6.7
+subject:wikidata
+xmas:day_date
+maps4bw, LGL, www.lgl-bw.de; Bing Aerial
+on_demand
+greenhouse_horticulture
+legal_type
+bump
+9.9
+4.2
+seamark:notice:distance_start
+railway:signal:whistle:only_transit
+stile
+demanding_mountain_hiking
+AT-V2:ersatzsignal
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2016
+bicycle:forward
+milestone_type
+canton
+sidewalk:left:bicycle
+name:left
+4.1
+lamp:shape
+building:loc
+addr:place_1
+destination:int_ref
+basemap.at Orthofoto
+RPG_2010_091
+Mannheim
+sidewalk:right
+horizontal
+building:use:gastronomy
+network:wikidata
+railway:vacancy_detection
+railway:signal:catenary_mast
+left|right
+parking:lane
+name:sk
+bent mast
+WDPA_ID:ref
+Saarbrücken
+cadastre-dgi-fr/PTscript
+fuel:biodiesel
+Kiel
+abandoned:gauge
+power_1
+traffic_sign:direction
+light:height
+nudism
+name:lb
+fire_hydrant:ref
+Solingen
+narrow_gauge
+Cadastre MàJ 2015
+column
+larochelle_id
+natural_protection
+insurance:SVA
+name:fa
+ProRail
+internet_access:ssid
+change:forward
+A
+http://wiki.openstreetmap.org/wiki/Import/Catalogue/Postleitzahlen_Deutschland_2010
+ref:section
+W
+route:category
+water_slide
+jewelry
+signals
+seamark:information
+genus:wikidata
+demolished
+embedded_rails
+count
+3dr:height1
+source:maxspeed:conditional
+rural
+railway:signal:crossing_info
+DE-ESO:vr
+corridor
+ref:FR:RGP
+local
+name:he
+opposite_lane
+railway:signal:crossing_info:form
+zone:TEC
+recording:manually
+disused:aeroway
+parking:condition:left:maxstay
+building:roof:material
+seamark:notice:distance_end
+stable
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2013 + Bing
+electrical
+none|none|merge_to_left
+harbour
+2.0
+FR:rural
+Potlatch 0.9c
+Winterlinde
+maternelle
+source:architect
+pathtype
+Stadt Iserlohn (Hausnummer)
+minor
+oneway:moped
+note:en
+DGFiP2010
+removed:operator
+short_protection_title
+Hoofddorp
+Bing ; cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2013
+source:offset
+wet_meadow
+overtaking:trailer
+railway:signal:main:deactivated
+shooting
+ladder
+election:year
+railway:name
+Suffolk, NY
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour :2009
+payment:uta
+information:timetable
+fair_trade
+zone:Montenbus
+note:surface
+interzone:Montenbus
+duration
+insurance:BVA
+NTF-4
+tiger:PCICBSA
+wpt_symbol
+data.gouv.fr:LaPoste - 06/2015
+bus_bay
+tiger:PLACEFP
+railway:signal:route:states
+tiger:STATEFP
+tiger:CPI
+tiger:CLASSFP
+tiger:LSAD
+tiger:NAME
+tiger:PLACENS
+tiger:PLCIDFP
+tiger:NAMELSAD
+tiger:PCINECTA
+tiger:FUNCSTAT
+tiger:MTFCC
+diplomatic
+design:de
+maroon
+LED
+DB Netz
+Hagen
+10.5
+Paderborn
+through
+addr:county
+insurance:VA
+vacant
+memorial:website
+massif
+Grand Lyon-Smart Data
+islet
+amenity_1
+storage
+ref:FR:TransGironde
+species:wikidata
+information:map
+4.00
+transit:lanes
+memorial:name
+wikipedia:de
+AT-V2:hauptsignal
+10.1
+massage
+insurance:GKK
+Hansestadt Lübeck, Bereich Naturschutz
+Platanus acerifolia
+straight_mast
+none|none|slight_right
+lake
+last_check
+note:highway
+monument:natural
+seamark:pipeline_submarine:category
+Direction Générale des Finances Publiques - Cadastre ; mise à  jour : 2010
+bing sat
+topmark:colour
+3a
+insurance:KFAW
+slate
+brownfield
+very_horrible
+cycleway:left:traffic_sign
+beverages
+baseball
+-1;0
+Bergahorn
+hoops
+whitewater:section_grade
+cuzk:ruian
+motorway_link:name
+Mainz
+continue
+railway:signal:crossing_info:caption
+sidewalk:surface
+transition
+source:course
+interpolation
+building:shape
+recording
+xmas:location
+sidewalk:right:width
+22.5
+building:cullis:height
+0.8
+automatic_door
+xmas:opening_hours
+cycleway:right:lane
+Bing 2011
+tile
+through|right
+centre
+source:tracktype
+scenic
+mhs
+railway:historic
+La Poste
+2.9
+psv:lanes
+passing_place
+fitness_station
+solitary
+4.3
+DE:205
+was:name
+6.6
+4a
+source:2
+left|none
+video
+level_crossing:RFF:type
+lutheran
+orange
+scooter
+10.2
+Mülheim an der Ruhr
+phone:mobile
+plant_nursery
+grit_bin
+halt
+multi-storey
+NRW Atlas DOP40
+Bayerische Vermessungsverwaltung - www.geodaten.bayern.de
+building:use:education
+removed:ref
+seamark:notice:national_information
+Halle (Saale)
+addr:houselink
+NYSTL:HERMON_
+NYSTL:HERMON_ID
+condo
+dry_barrel
+Concarneau Cornouaille - 12/2010
+Mitte
+DGFiP - Cadastre - 2008
+Cnes/Spot Image
+draft
+planned
+DE-ESO:lf7
+élémentaire
+emergency_access
+swing_gate
+ref:FR:Orange:NRO
+defibrillator
+election:parliament
+bus:lanes:forward
+Betula pendula
+railway:milestone:emergency_brake_override:direction
+Direction Générale des Finances Publiques - cadastre. Mise à jour : 2010
+water_point
+election:part
+speed_camera
+A 7
+apartment
+platforms
+estimated
+type:ccda
+maxspeed:wet
+place node at building entry
+railway:signal:crossing:repeated
+seamark:notice:2:impact
+seamark:buoy_cardinal:category
+_waypoint_
+proper translation
+lock_gate
+stroller
+B11
+Leverkusen
+service:bicycle:pump
+building:color
+frida
+data.gouv.fr:Ministère de la Culture - 04/2015
+sti
+kerb:start
+fuel:adblue
+addr3:housenumber
+sidewalk:left:foot
+10.3
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre;mise à jour : 2010
+source_date
+senior
+seamark:notice:1:impact
+ref:FR:Orange
+Track2osm
+Birkenweg
+S
+ref:FR:Paris:DSP
+Chemnitz
+almien_coastlines
+CIMETIERE
+addr3:street
+DE-ESO:sh
+mown
+directed
+access:role
+authentication:nfc
+destination:ref:lanes:forward
+0.4
+reedbed
+0.2
+A63
+town
+tree:cut:de
+tree:cut
+pos
+seamark:buoy_cardinal:colour
+associated
+hop
+bus:lanes:backward
+waste_basket:excrement_bags
+french
+name:bg
+beacon:colour
+Rennes
+10.4
+flush
+LMCU:OBJECTID
+5a
+memorial:note
+parking:fee
+edge
+destination:ref:lanes:backward
+addr:street_1
+abandoned:ref
+cadastre dgfip 2018
+bench:type
+service:bicycle:rental
+slipway
+dance:teaching
+services
+kerb:end
+Bing 2012 (locally calibrated by GPS tracks)
+seamark:cable_submarine:category
+Jahnstraße
+waste_disposal
+table_tennis
+chemist
+CCPA/DGFiP dec2010
+ieo-bdtopoc
+removable
+check_date:opening_hours
+seamark:buoy_cardinal:shape
+Storz
+railway:end_date
+est_height
+ref:pt_id
+destination:ref:to:backward
+sac_scale_ref
+seamark:light:1:colour
+Gemeine Esche
+alkisservices.krzn.de: FlurkarteWMS0500 von Verband KRZN
+2.7
+maps4bw (LGL, www.lgl-bw.de); Bing Aerial
+population,place,name,is_in
+AT-V2:verschubsignal
+Berliner Straße
+seamark:buoy_cardinal:colour_pattern
+lawyer
+LGL-BW, www.lgl-bw.de
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2011;Bing
+destination:url
+busbar
+climbing:sport
+destination:1
+demolished:highway
+drink:club-mate
+trailer
+note:access
+Platane
+basemap ortho
+Magdeburg
+driving_school
+railway:signal:main_repeated:substitute_signal
+boundary_name:de
+destination:ref:to:forward
+carpenter
+climbing:rock
+Oldenburg
+reservation
+Quercus
+ridge
+city_wall
+air_conditioning
+turnstile
+modern
+6a
+repair
+language:de
+class:bicycle:roadcycling
+left|through|through
+bing 2015
+Apfel
+Neuss
+surface.material
+cycleway:smoothness
+name:da
+monitoring_station:position
+seamark:light:1:character
+busway:left
+beacon_lateral
+electronics
+BDOrtho IGN; Cadastre MàJ 2018
+community
+aerialway:bubble
+Kein Kasseler Bord
+seamark:pile:category
+monitoring_station:type
+DE-BY-AVV
+payment
+cocktails
+Rue Principale
+mineshaft_type
+vine_row_orientation
+is_in:county
+is_in:region
+burger
+sidewalk:right:traffic_sign
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre;mise à jour : 2008
+railway:platform:section
+half
+concrete:plates
+wastewater
+LVA Bayern Luftbild 0.8m
+it:fvg:ctrn:revision
+it:fvg:ctrn:code
+bike_handle
+BING
+bing aerial
+C
+recording:automated
+kebab
+oneway:foot
+abandoned:amenity
+railway:signal:crossing_info:height
+removed:emergency
+disc_golf
+2012/10/04
+overtaking:bus
+description:fr
+4.4
+motorcycle:conditional
+ref:at:okz
+destination:country:lanes
+import_tools
+was:addr:place
+railway:signal:electricity:turn_direction
+building:roof:angle
+removed:amenity
+shop_1
+descent
+recycling:beverage_cartons
+toll:N2
+ofis publik ar brezhoneg
+arrondissement
+2.6
+maps4bw (LGL, www.lgl-bw.de); Digital Globe; Esri, Bing
+piste:lit
+clock
+aerial imagery
+shared_lane
+name:ro
+vehicle:lanes
+Aerowest
+Oberhausen
+TMC
+historic:power
+Talstraße
+GPSBabel-1.3.5
+lanes:psv
+drinkable
+Celtis australis
+Microsoft Bing orbital imagery
+disconnector
+B
+payment:bitcoin
+drink:liquor
+socket:type2_combo
+fuel:1_50
+separated
+3.00
+maxweight:hgv
+tracktype:mapbox
+ref:hafas
+masonry
+opening_hours:signed
+BDOrtho IGN; Cadastre MàJ 2018; BD Carthage; Bano
+seamark:light:1:sector_end
+railway:signal:combined:shortened
+sidewalk:left:width
+source:opening_hours
+Heerhugowaard
+seamark:light:1:sector_start
+7a
+destination:symbol:lanes:backward
+CCLD juillet 2010
+mtb:name
+maps4bw, LGL, www.lgl-bw.de; Bing
+Ahornblättrige Platane
+trade
+sidepath:cycleway:right
+construction:railway
+travel_agency
+10.6
+communication:bos
+ref:FR:Paris:arbre
+cylindrical
+recycling:organic
+5.0
+dam
+1.8
+pile
+socket:chademo
+Feldstraße
+is_in:town
+Blvd
+destination:symbol:lanes:forward
+free_flying:site
+bicycle_rental
+lottery
+summit:register
+track_class
+name:source
+land_area
+cycleway:width
+parking:condition:both:time_interval
+Hoorn
+sports
+Siegen
+8a
+B 3
+Lange Straße
+eddy_current_brake
+hour_off
+building:ref
+greenfield
+DE:zone
+marina
+contact:instagram
+thw:ov
+source:boundary
+DE-ESO:zs3
+rwn_ref
+aerialway:duration
+Reutlingen
+MDF
+aerialway:heating
+obstacle:blind
+saddle
+Baudenkmal
+name:hr
+electrified:start_date
+fuel:1_25
+4.6
+Heilbronn
+Mozartstraße
+sidewalk:both:foot
+Den Helder
+Nassau, NY
+veterinary
+ele:DHHN92
+ticket
+screen
+timeo
+data.gouv.fr:RTE - 12/2017
+rock
+La Poste - 11/2014
+Ingolstadt
+basemap.at 2013
+trash
+studio
+name:pfl
+ref:mvb
+noise_barrier
+seamark:notice:status
+apple
+Rostock
+VRR
+JARDIN
+light:lit:note
+footway:right
+Communauté Urbaine de Strasbourg
+building_1
+negative:exit
+Tilia tomentosa
+nysdot_ref
+bing; survey
+ArcGIS Exporter
+oneway:psv
+navigable
+seamark:light:1:range
+addr:village
+2.2
+VOR
+Direction Générale des Finances Publiques - cadastre. Mise à jour : 2011
+stake
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour :2011
+Mühlenstraße
+abandoned:name
+survey 2015
+Bing Map
+iala-a
+geoimage.at, basemap.at
+place:locality
+admin_title
+source:highway
+landfill
+Gütersloh
+name:kk
+10.7
+hour_on
+seamark:light:1:height
+beachvolleyball
+whc:inscription_date
+source:shape
+bing;bayern(80cm)
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2015
+6.4
+dormitory
+construction_start_expected
+DE-ESO:hp0;DE-ESO:sh1
+railway:ref:DB
+Acer campestre
+name:eo
+ref:whc
+winter_service:priority
+sidepath:refname
+Aufsatzleuchte
+source:metrics
+ref:FR:INPN
+railway:signal:snowplow:deactivated
+positive:exit
+positive:entry
+silver
+Bing 2017
+CCLD/Sig2010
+Wiesenstraße
+generator:output:hot_water
+conspicuous
+kursbuchstrecke
+building:type:pl
+new_ref
+Linz
+cable_distribution_cabinet
+stadium
+Beethovenstraße
+lift_gate:type
+turning_loop
+name:language
+sidewalk:left
+cadastre-dgfip-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2016
+GrandNancy Orthophotographie 2016
+AT:zone:30
+fuel:electricity
+proposed:highway
+Dunkerque
+perpendicular
+tiger_import_dch_v0.7_20071117
+Salzburg
+Moers
+footway:right:surface
+bb7269ee-502a-5391-8056-e3ce0e66489c
+Bing;survey
+Bano
+railway:switch:configuration
+destination:colour:lanes:forward
+10.8
+fr.ign.bdortho
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2018
+Erfurt
+building:waterproof_bulk
+parking:condition:right:capacity
+Bing, survey
+4.8
+swamp
+data.graz.gv.at
+Bottrop
+0;1
+0.25
+low
+A 1
+clay
+disused:operator
+access:disabled
+group_home
+thermometer
+Bergisch Gladbach
+BDOrtho IGN 2018
+opening_hours:kitchen
+Römerstraße
+rtc_rate
+left|through|right
+pelican
+grade
+mobile_phone
+abandoned:electrified
+Recklinghausen
+9a
+coin:design_count
+height:source
+4.7
+bridge:movable
+Populated Place
+seamark:notice:2:addition
+theatre
+incline:across
+beacon:uuid
+indoormark
+ref:street
+gift
+departement
+coin:type
+oneway:bus
+5.00
+name:mk
+disused:power
+service:bicycle:second_hand
+raceway
+Stieleiche
+pilgrimage
+Rosenstraße
+10.00
+negative:entry
+carport
+Maps4BW, LGL, www.lgl-bw.de; Bing
+dist:red
+10a
+ref:VRS
+authentication:none
+hunting
+light:source
+tiger:name_base_3
+statue
+Bing 2014
+Gemeinde
+seamark:notice:2:information
+usability
+war_memorial
+disused:public_transport
+beacon:minor
+beacon:major
+construction:railway:etcs
+AT-V2:vorsignal
+Paris
+addr:housenumber:ref
+railway:atc
+diet:gluten_free
+Herne
+note:import-bati
+sewer
+ref:FR:CG22
+skateboard
+payment:others
+ref:fr:illenoo
+10.9
+canvec:CODE
+parking:condition:right:residents
+subject:wikipedia
+ohne Schäden
+N-S
+Bing 2015
+ref:hiking
+seamark:pipeline_submarine:product
+Pinus nigra
+incomplete
+Bachstraße
+Sommerlinde
+55 mph
+parking:condition:right:default
+middle_of:2
+coniferous
+RMV
+railway:start_date
+step.length
+Survey
+railway:signal:distant:deactivated
+avalanche
+cadastre-dgfip-fr 2017
+abandoned:place
+grass_paver
+2015-03
+ref_old
+origin
+architect:wikipedia
+seamark:status
+roller_coaster
+NRW-Atlas: ALKIS
+tiger:zip_right_3
+railway:zub122
+v1 cadastre-dgi-fr: 2010
+step.height
+destination:colour:lanes:backward
+info
+Fraxinus
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014-02-21
+name:sv
+ms_fis_id
+Landsat
+A 4
+neg_lcd
+pos_lcd
+distance_mark
+building:underground
+Orange
+AT:motorway
+0.6
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 31/04/2007
+DE:BOStrab
+photography
+Erlangen
+houseboat
+survey 2016
+Rheine
+dry
+drinking_water:legal
+toilets:access
+natural_monument
+power_source
+tickets:public_transport
+Locale
+DE:239
+pitched
+truck
+Ville de Montpellier - 01/2013
+cycleway:oneway
+marsh
+Bing Aerial Map
+Blumenstraße
+seamark:notice:1:addition
+water_works
+railway:signal:shunting:deactivated
+sidewalk:both:width
+5.2
+6.0
+garden_centre
+collège
+6.3
+building:basement_opening
+railway:atb-ng
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 02/10/2007
+dav_scale
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2013
+caravan
+Parken (allgemein)
+architect:wikidata
+safety_rope
+Friedrichstraße
+vhf
+lock:height
+full_name
+payment:discover_card
+GeoDaten Kanton Basel-Stadt
+concrete:lanes
+Viersen
+building:first_level_height
+BDOrtho IGN - available 2018
+Brest
+11.0
+11a
+seamark:notice:1:information
+public_bookcase:type
+highway_1
+source:postal_code
+ref:TAN
+license_plate_code
+fixme:lamp_model
+disused:building
+Direction Générale des Finances Publiques - Cadastre ; Mise à jour : 2011
+4.9
+color
+seamark:berth:name
+2.4
+geoimage.at HighQuality
+Potsdam
+Minden
+railway:atb-eg
+Westchester, NY
+Breslauer Straße
+topmark:colour_pattern
+ref:FR:RPG
+basemap.at MaxRes 2016
+Sophora japonica
+25 mph
+fence:type
+construction:start_date
+6.00
+bbq
+source:website
+left|through|through;right
+Sophora
+Bocholt
+train_station
+polling_station:ref
+name:als
+SIG CCDA 2010
+RABA-KGZ
+Ville de Mont de Marsan
+seamark:signal_station_warning:category
+3dr:length1
+sidewalk:both:bicycle
+12a
+weather_shelter
+aquaculture
+education
+Beverwijk
+seamark:beacon_special_purpose:colour_pattern
+suction_point
+monitoring:groundwater
+parking:condition:both:residents
+VBB
+BD Ortho IGN
+Corylus colurna
+chimney
+dry_stone
+6.2
+language:en
+guidepost:bicycle
+A 3
+Direction Générale des Impôts - Cadastre. Mise à jour : 2012
+not_installed
+parking_lot
+ref_trips
+gpxicon
+Mapillary Traffic Signs - 10/2018
+Klagenfurt am Wörthersee
+ref:operator_inventory
+Trier
+dist:yellow
+name:RATP
+ref:FR:CUB
+E-mégalis Bretagne et collectivités territoriales bretonnes - 2012
+building:condition
+groundcheck
+sidewalk:both:wheelchair
+source:reg_name
+gate:type
+ref:ubb:bench
+Route500
+Maps4BW ( LGL, www.lgl-bw.de) / DigitalGlobe Standard Luftbilder
+bing aerial imagery
+Quimper
+seamark:pipeline_submarine:name
+CNES/SPOT
+railway:signal:minor:deactivated
+xmas:url
+since
+seamark:light:sequence
+AT-V2:verschubverbot;AT-V2:verschubverbot_aufgehoben
+ViennaGIS
+Amselweg
+radio
+cycleway:foot
+building:apartments
+kilometres
+5.1
+plastic
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2014 + Bing
+sidepath:cycleway:left
+grooved
+waterway:maxspeed
+Rue de l'Église
+general
+Arnsberg
+Deutsche Post AG
+asian
+cushion
+Maps4BW (LGL, www.lgl-bw.de)
+runway
+sewage
+Wilhelmstraße
+disused:landuse
+Hansestadt Rostock
+DOP 40 NRW
+choker
+Huizen
+Witten
+Heemskerk
+greek
+pumping_station
+Populus nigra
+grave
+cycleway:both:bicycle
+tree:storm:status
+tree:storm:date
+tree:storm:name
+10%
+poster_box
+taxon:de
+old_name:de
+?
+I
+parking:condition:left:capacity
+source_1
+have_riverbank
+GoeVB:id
+prohibition
+Schloßstraße
+nursing_home
+note:railway
+newsagent
+destination:2
+footway:left:surface
+Bergheim
+abandoned:military
+crown_type
+Mo-Sa 08:00-20:00
+Friedrich-Ebert-Straße
+gas_insulated
+turnlanes:turns
+Area
+source:date:ref:aec31
+seamark:light:1:period
+smoking:outside
+ref:FR:aec31
+Worms
+topo
+variety_store
+geoimage.at maxres
+indoor_seating
+seamark:mooring:construction
+was:addr:housenumber
+ref:manufacturer_inventory
+community:gender
+Montpellier Mediterranée Métropole 2018-11-19
+Euskirchen
+1b
+offshore
+bing 2010
+building:name
+authentication:app
+Friedhofstraße
+preserved
+drive_in
+cargo
+11.5
+Marl
+SNCF
+yahoo sat
+guidepost:lastcheck
+GPS and Videomapping
+NHD:ComID
+ref:2
+NHD:RESOLUTION
+artist
+NHD:FCode
+artist:wikidata
+Darmstadt
+Brunnenstraße
+Burgstraße
+species:nl
+Heidelberg
+D 1
+lanes:extra
+ncn_ref
+Dorsten
+role
+5.3
+running
+Buchenweg
+heavy
+0%
+cycling
+railway_crossing
+fut_ref
+parking:condition:left:residents
+junction_ref
+US
+Celle
+port
+chicane
+high res aerial images
+iata
+wire
+Kaiserslautern
+parking:condition:left:default
+Neunkirchen
+Ratingen
+WMS - DOP2m Bayerische Vermessungsverwaltung
+Uhlandstraße
+payment:v_pay
+STIF 2018-07
+bent_mast
+D 2
+laundry
+ref:FR:TRANSDOME:CODE_COMMUNE
+ref:FR:TRANSDOME:IDENTIFIANT
+ref:FR:TRANSDOME:CODE_ARRET
+buoy:shape
+Pforzheim
+allotment_house
+holding_position:type
+Königsberger Straße
+wheat
+tumulus
+BingSat
+generator:output
+NHD:ReachCode
+surface_state
+geometry:source
+BDOrtho IGN Photo
+11.1
+classic;skating
+Mittelstraße
+railway:gauge
+IJmuiden
+A 6
+bulk_upload.pl-75496730-bfd6-4220-adbe-99f2f12afc29
+Cnes/SPOT image
+megalith
+breakfast
+Aalen
+building:levels:mezzanin
+A 8
+bing2014
+share_busway
+geoimage
+data.gouv.fr:Le ministère des droits des femmes, de la ville, de la jeunesse et des sports - 11/2015
+high_pressure_sodium
+GeoImage
+class:bicycle:touring
+ref:RNV:RBL
+wrong_sign
+nat_name
+railway:signal:crossing:shortened
+D 3
+weather_protection
+seamark:light:category
+seamark:berth:information
+HiRes Aerial Image
+target
+natural_1
+0.75
+Bussum
+BANO
+bottle
+hiking_scale:valbg
+survey, Bing
+Salzgitter
+symbol:de
+lanes:bus
+caravan_site
+2.3
+5.4
+Ahornweg
+Schützenstraße
+blind:description:de
+telephone_area_code
+construction_end_expected
+NRW Atlas (ALK,DOP40)
+rest_area
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre
+Bing aerial imagery
+A 2
+parking:condition:both:maxstay
+kindergarten:FR
+chinese
+accessto
+passage_time
+at_bev:addr_date_last_checked
+Marktstraße
+memorial:addr:housenumber
+political_structure
+OBJECTID
+facade_height
+scheme
+airmark
+14a
+disused:tourism
+5.6
+Wolfsburg
+crane:type
+apartment_building
+13a
+Geoportal ORKa MV: http://www.orka-mv.de/
+building:use:infrastructure
+Bing;Aeroview
+Aesculus x carnea
+oldref
+old_operator
+Troisdorf
+0.7
+Lessingstraße
+mtb:difficulty
+Göttingen
+Betula
+Ort
+railway:signal:whistle:twice
+power_limit
+BDOrtho IGN;SNCF Réseau
+5.8
+bing;survey
+pk
+sidewalk:left:traffic_sign
+cycleway:left:lane
+plan.at 2008,geoimage.at
+11.2
+survey 2014
+Arles Crau Camargue Montagnette - 02/2013
+Freiburg im Breisgau
+Industriestraße
+valid_from
+Bayern 2m
+greengrocer
+flood_prone
+payment:jcb
+Malus
+fell
+checkpoint
+Lüneburg
+MCC
+contact:yelp
+college
+building:first_floor_high
+6.1
+Poststraße
+health_specialty:physiotherapy
+car_sharing
+Villingen-Schwenningen
+source:addr:housenumber:version
+bing 2016
+hollow_way
+name:vi
+maxstay:conditional
+incline:traffic_sign
+ref:FR:RPG_2012
+full
+Castrop-Rauxel
+river:category_distance
+name:BVG
+Diemen
+railing
+name:an
+salt
+UntereDenkmalbehörde:inscription_date
+turn:forward
+Luftbilder Stuttgart
+pet
+B 6
+gambling
+1.6
+Bing Aerial Imagery
+Bing (USGS Earthstar)
+Bing Sat (2012) + own video
+AT-V2:geschwindigkeitstafel
+left_of:1
+Direction Générale des Finances Publiques - cadastre.  Mise à jour : 2012
+stub
+footway:left
+parking:condition:time_interval
+windmill:vanes
+seamark:light:2:colour
+Lo Congrès
+E 45
+cadastre-dgi-fr source : Direction GÃ©nÃ©rale des ImpÃ´ts - Cadastre. Mise Ã jour : 2012
+railway:ref:DBAG
+tilting_technology
+Iserlohn
+trail_blaze
+D 7
+management_region
+Eiche
+5.7
+Lippstadt
+A 9
+name:lv
+payment:cheque
+rating
+aerial gutau
+Grevenbroich
+2.1
+BVG
+ref:TECH
+generator:plant
+sidewalk:right:oneway
+route_ref:TECH
+HiRes aerial imagery (Aerowest)
+15a
+fitness_centre
+source:ref:aec31
+survey_date
+parking:lane:right:perpendicular
+maps4bw, LGL, ww-lgl-bw.de
+Parkstraße
+on_street
+2b
+bayern(80cm);bing
+Stadt Radolfzell
+parking:lane:left:perpendicular
+tiger_import_dch_v0.7_20071115
+wikipedia:en
+name:ka
+place_of_worship:type
+wheelchair:access
+dyke
+border
+seamark:light:2:character
+right:suburb
+Direction Générale des Finances Publiques – cadastre. Mise à jour : 2012
+D 4
+data.gouv.fr:Éducation Nationale - 05/2016
+cycleway:left:width
+B 27
+stationery
+Geoatlas NRW, ALK
+abandoned:usage
+fuel:biogas
+DE-ESO:db:zs1
+highway_link
+Bismarckstraße
+D 5
+name:no
+geological
+foot:conditional
+description:entrance
+Yahoo! Images
+Zwickau
+Eichenweg
+seamark:beacon_lateral:impact
+deli
+Finkenweg
+A15
+name:hy
+ele:NHN
+railway:ref:count
+Prunus serrulata
+Mühlenweg
+darkgrey
+NL
+CC-BY-3.0: Land Steiermark - data.steiermark.gv.at
+squared_stone
+Prunus
+arts_centre
+source:wiki
+seamark:cable_overhead:vertical_clearance_safe
+cycleway:both:segregated
+Rules of the City of New York Title 34 §4-13 http://24.97.137.100/nyc/rcny/Title34_4-13.asp
+data.gouv.fr:LaPoste - 05/2016
+A21
+data.gouv.fr:Ministère de la Culture - 08/2011
+turn:backward
+SYTRAL 12/2016
+16a
+fluorescent
+Velbert
+license_classes
+footway:right:smoothness
+looks_like
+classic+skating
+downstream
+upstream
+PGS(could be inacurately)
+Ministère de l'Education nationale, de la Jeunesse et de la Vie associative
+right_of:2
+Wesel
+Lünen
+capacity:hgv
+ref:SDIS91
+ref:source
+Kerpen
+marketplace
+wine
+2.00
+bicycle:oneway
+Mo-Sa 08:00
+Gleditsia triacanthos
+Wiesenweg
+Platane à feuilles d'érable
+Rheinstraße
+Mo-Sa 09:00
+phone_1
+disused:leisure
+Orthophotographie CRAIG/TopoGEODIS 2010
+crosscountry
+drink:tea
+copper
+Naturschutzgebiet
+ref:PIZ
+11.3
+guidepost:status
+Herford
+Tübingen
+sidewalk:foot
+D 6
+Alt-Düsseldorfer
+manufacture
+bing 2011
+Der reg_name, sowie ggf. der loc_name sind dem zugehörigen Wikipediaartikel entnommen.
+horse_riding
+HVV
+tenant
+light:character
+maxheight_referencelevel
+square
+Danziger Straße
+Gronau
+Stop
+sauna
+sidewalk:bicycle
+lattice
+source:segregated
+water_system
+MVV
+estimation
+Crédit Agricole
+E 60
+Pulheim
+barrier:turnstile
+A2
+5.9
+first
+Lindenweg
+Sorgues
+last
+Karlstraße
+Marktplatz
+toucan
+monitoring_station
+Rue du Moulin
+BD Ortho IGN 2016
+note:lanes
+B 2
+way
+left;through|right
+operator:contact_line
+Bing Maps
+DE-ESO:zs3v
+excursion
+cycleway:both:surface
+seamark:light:2:sector_start
+ref:wmo
+D 13
+communication:radio
+parking:ticket:zone
+seamark:light:2:range
+Jena
+#FFFFFF
+Markt
+Luftbilder Stadt Lauf
+11.4
+fishing_domain
+highway:historic
+fishing_water_type
+seamark:light:2:sector_end
+bad-ischl.ooe.gv.at/Umpostung_von_PLZ_5351_Aigen-Voglhub_auf_PLZ_4820_Bad_Ischl_ab_26_Februar_2018
+helipad
+valve
+DE:239,1022-10
+baby
+Raiffeisenstraße
+DE-ESO:hp0;DE-ESO:ks1;DE-ESO:ks2
+Bing;cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2016
+bridge_ref
+bing imagery
+Fürth
+source:circumference
+source:old_name
+Potlatch 0.10e
+Ahorn
+cyclability
+abandoned:aeroway
+seamark:light:2:height
+seamark:beacon_special_purpose:category
+dry_cleaning
+seamark:restricted_area:information
+city:left
+only_left_turn
+ALK NRW-Atlas
+impassable
+avalanche_protection
+fare_zone
+salt_pond
+railway:signal:crossing_hint:form
+socket:type2_combo:output
+ref:woonplaatscode
+railway:signal:crossing_hint
+traffic:zone
+cast steel mast
+interior_decoration
+Ludwigsburg
+Prunus avium
+proposed:maxspeed
+aerodrome
+maxweight:agricultural
+grade_of_track
+ANLP from SIE Adour-Garonne
+cinema
+Ulm
+DE:Luftbilder_Witten
+highway_class
+operating_procedure
+Erlenweg
+GRB
+walk
+kudish
+backcountry
+pin
+spar
+Düren
+Unna
+Queens, NY
+overtaking:conditional
+demolished:power
+roof:lines
+TIGER/Line® 2008 Place Shapefiles (http://www.census.gov/geo/www/tiger/)
+Bing-2012-Nov
+DE:274[70]
+recycling:aluminium
+railway:electrified
+ref:witten
+Willich
+9c7870
+BMO mars2012
+cattle_grid
+wholesale
+destination:symbol:to
+seamark:construction
+source:alt_name
+source:amenity
+collapsed
+Esslingen am Neckar
+double
+left:suburb
+governance_type
+protect_id
+proposed:railway
+language:others
+disused:man_made
+addr:street:old
+Seestraße
+09
+17a
+Stadtwerke Düsseldorf
+association
+Dinslaken
+Erie, NY
+E 50
+D 10
+line:SNCF
+B 1
+Lüdenscheid
+13.0
+reg_ref
+parking:lane:right:capacity
+photo
+Bing-DOP, 2m-DOP der BVV
+Dormagen
+maritime
+is_in:suburb
+Ibbenbüren
+maxweight:hgv:conditional
+seamark:light:exhibition
+destination:int_ref:lanes
+recycling:garden_waste
+barometer
+conical
+kilometer
+Herten
+kbs
+Gbg
+7.00
+D 8
+DE-ESO:sh1
+BDOrtho IGN;cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2016
+Birkenstraße
+name:th
+cone, point up
+Innsbruck
+starboard
+D 14
+trapping
+toys
+website:map
+url:official
+left:country
+NYSDEC:wildlife_management_unit
+NYCDEP:town
+Frankenthal (Pfalz)
+basemap.at Ortho 2014
+small_installation
+tiger:name_direction_suffix_1
+seamark:daymark:colour_pattern
+insurance:OEDA
+climbing:bolted
+SGD-ID:ref
+old_shop
+Marienstraße
+Schwäbisch Gmünd
+NYCDEP:last_modified
+18a
+mud
+cylinder
+mineshaft
+DGK5
+sidewalk:right:incline
+right:country
+wheelchair:entrance_width
+CCLD/juil2010
+Gladbeck
+through|slight_right
+Scheinakazie
+D 20
+recycling:operator
+cash_in
+Sankt Augustin
+quality
+overhead
+socket:chademo:output
+alt_name_1
+Neue Straße
+sidewalk:both:smoothness
+old_addr:housenumber
+access:note
+2 MW
+lycée
+motorcycle_parking
+03
+two_sided
+turn:lanes:both_ways
+A 5
+computer
+dibavod
+Bad Salzuflen
+kneipp_water_cure
+E-W
+tailor
+CEMT:disused
+alt_ref
+sorting_name
+building:cladding
+0.9
+1.50
+NYC
+Heemstede
+name:tr
+construction:electrified
+Mairie d'Orange 2013
+addr2:postcode
+0.0
+mall
+aviation
+addr2:city
+maxweight:destination
+Bamberg
+Eichendorffstraße
+defensive
+D 12
+Gemeinde Neunkirchen am Sand
+survey 2018
+ref:FR:MemorialGenWeb
+hazard:backward
+authentication:short_message
+railway:signal:combined:deactivated
+Rue de la Gare
+tartan
+traffic_zone
+beige
+A1
+name:co
+ref:AST
+recording:remote
+region:left
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2014
+bulk_upload.pl-0ce6086e-22e7-4f99-bed9-be0276d8abd9
+stay
+scanaerial
+A51
+physiotherapist
+Microsoft Bing satellite imagery 2012
+no_entry
+razed:highway
+railway:signal:crossing_hint:caption
+kissing_gate
+through|through;right
+semaphore
+asl
+ref:QUB
+psv:lanes:backward
+construction:voltage
+building:min_height
+wall_mounted
+B 8
+Erftstadt
+addr:housenumber:old
+construction:frequency
+D 15
+Hochstraße
+school_type
+cadastre
+Microsoft Bing orbital imagery 2013
+observation
+automatic
+BDOrtho IGN - available 2019 at the latest
+Gießen
+buildingpart:verticalpassage
+parking:condition:area
+railway:rail
+roof_shape
+was:shop
+parking_position
+Nordstraße
+Stadt Witten
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2016
+D 9
+1.9
+lit:mount
+alt_network
+source:maxpseed
+ref:FR:Montpellier
+Pky
+Meerbusch
+Fagus sylvatica
+1.00
+operator:hiking
+language:tr
+apple_trees
+Gunter Demnig
+chain
+Rosenweg
+Hainbuche
+psv:lanes:forward
+hygrometer
+Ministère de l'Economie, de l'Industrie et du Numérique - 22/10/2016
+Passau
+addr2:country
+entrance:step:height
+removed:natural
+WMS_NW_ALK_VEKTOR
+NRW Gewässerstationierungskarte
+survey;bing
+number
+survey:create
+hazmat:forward
+antenna:type
+language:fr
+weinmobil:ref
+maintainer
+weinmobil:note
+seamark:berth:class
+E 40
+nightclub
+01
+57871b70-0100-4405-bb30-88b2e001a944
+1.3
+remotely_controllable
+road_name
+D 19
+Leipziger Straße
+xmas:lastcheck
+Bad Oeynhausen
+Wiesbaden
+Enercon
+polling_station
+lamp_note
+timetable_box
+Tannenweg
+artist:wikipedia
+parking:condition:maxstay
+railway:ref:parent
+route:a
+D 11
+Drosselweg
+19a
+Onondaga, NY
+middle_of:1
+Schubertstraße
+1.4
+ref:INSEE:ILOT
+USGS Geonames
+D 17
+Hürth
+Ahlen
+can
+min_level
+Monroe, NY
+railway:etcs:start_date
+ref:FR:SDIS:GRPT
+parking:lane:left:capacity
+Lerchenweg
+Bayern (2m)
+Nieuw-Vennep
+DE-ESO:ne5
+desc
+DE-ESO:ks1;DE-ESO:ks2
+inscription:fr
+name:frr
+circuit_breaker
+piste:priority
+is_in:municipality
+addr:street:hsb
+Bayreuth
+Bing, Survey
+Brühl
+capital
+English oak
+NRCan-CanVec-7.0
+ref:uai
+tactile_writing:braille:de
+payment:visa_debit
+railway:signal:whistle:deactivated
+name:bar
+semi_deciduous
+Apidae (2017-11-21), in Opendata PACA
+11.6
+N 6
+estimate; extrapolate; survey
+happy_hours
+province:left
+armrest
+motorcycle:parts
+Tilia sp.
+sandstone
+source of postcode is from galichon.com/INSEE
+Rottenburg am Neckar
+D 25
+seamark:light:2:period
+climbing:boulder
+ref:INSEE:city
+parking:area
+toilets:unisex
+condition
+Albstadt
+Buchholz in der Nordheide
+car_rental
+Falkensee
+watermill
+K 1
+generator:model
+verified
+Adirondack Park Preserve
+65 mph
+none|merge_to_left
+Populus
+Gebäude (allgemein)
+Fraxinus ornus
+© CNES 2004-2007 / Spot Image
+Bornheim
+20a
+recycling:small_electrical_appliances
+cadastre-dgi-fr source : Direction Generale des Impots - Cadastre. Mise a jour : 2019
+ISO3166-2
+drink:espresso
+centralkey
+free_flying:paragliding
+bell_tower
+stele
+Liquidambar styraciflua
+IGN, Service de Géodésie et Nivellement: 2006
+abandoned:landuse
+headway
+Bünde
+source:lanes
+flickr
+currency:XLT
+hostel
+Way
+in_track
+hydro
+alpine_hiking
+through;right
+analog
+B 4
+parking:lane:right:inline
+military:abandoned
+source:building:levels
+lengths:left
+Kleve
+Direction Générale des Finances Publiques ; Cadastre : mise à jour 2011
+Geoportal Berlin / k5_2012_sw_sued.zip
+Konstanz
+variant
+round
+bulk_upload.pl-836179cd-999b-4b38-8c6a-8128a67dee08
+Offenbach am Main
+opening_day
+note:2
+#333333
+Stettiner Straße
+cadastre.data.gouv.fr 2017-10
+maxheight:physical
+razed:voltage
+disused:addr:housenumber
+destination:ref:to:lanes:forward
+novice
+piste
+entrance:width
+destination:3
+Borken
+railway:track_ref:ESTW
+footway:left:smoothness
+Nettetal
+type:FR:PLU
+climbing:grade:UIAA:min
+lamp:light
+Orange, NY
+DE:241
+combined_transport_codification
+razed:man_made
+community:fr
+survey 2013
+manhole:shape
+railway:signal:snowplow:height
+climbing:grade:UIAA:max
+survey 2015; bing 2015
+Alsdorf
+Juglans regia
+Q1422336
+sale
+lamp_ref_senstadtumb
+seamark:conspicuity
+seamark:cable_submarine:name
+hazard:forward
+Pappel
+E 55
+source:ref:FR:FINESS
+destination:symbol:to:lanes
+Regensburg
+Kaiserstraße
+FR:motorway
+Gera
+Stadt Graz - data.graz.gv.at
+direction:effect
+railway:electricity:jumpering
+destination:to:backward
+gendarmerie
+Lichterfelde
+emergency_phone
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2016 + Bing
+bus_station
+Eschweiler
+bulk_upload.pl-f924af11-2b11-40e3-a545-e3041c449159
+siren
+Opendata.gouv.fr RGP 2012
+escalator
+theatre:genre
+railway:signal:crossing_hint:height
+Mapillary
+name:ur
+Uithoorn
+vehicle:forward
+oil
+BD Carthage;BDOrtho IGN
+wheelchair:step_height
+destination:lang:hsb:forward
+Königswinter
+water_tank
+Langenfeld
+alpine_hut
+Dülmen
+Feldahorn
+small_craft_facility
+oa:imported_by
+oa:lon
+oa:lat
+oa:version
+D 31
+bog
+addr:housenumber_1
+adit
+Grand Lyon - Smart Data
+traffic_island
+cuzk:km
+Communauté de Communes Vitry, Champagne et Der
+suspension
+opening_hours:check_date
+display_type
+ID_SLH_IMPORT
+name:etymology:wikipedia
+motorcycle:sales
+parking:lane:left:inline
+through|through|right
+boutique
+Verkehrsverbund Rhein-Sieg
+Frechen
+childcare
+deep_draft
+NHD:FType
+historic:name
+NHD:way_id
+golf_course
+update
+note:bicycle
+Castricum
+Heiloo
+Emden
+Cir
+Herzogenrath
+geiomage.at
+note:old_railway_operator
+recycling:others
+gis.ny.gov/gisdata
+Richard-Wagner-Straße
+Taxus baccata
+Gummersbach
+monorail
+building:roof:levels
+source:deep_draft
+heritage:ensemble
+waterfall
+disk
+HiRes aerial imagery 2010
+gambrel
+Grüner Weg
+name:wa
+1.25
+BDOrtho IGN; Cadastre MàJ 2018; BD Carthage
+adr_les
+building:beds
+source:name:br:date
+GPS + cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2011
+Friedenstraße
+winery
+pump:status
+cadastre-dgi-fr source : Direction GÃ©nÃ©rale des ImpÃ´ts - Cadastre. Mise Ã  jour : 2012
+plan.at 2008,bing
+D 21
+Waldweg
+D 18
+Frankfurter Straße
+concrete_plates
+11.8
+seamark:period_start
+seamark:period_end
+railway:ballastless:system
+bulk_upload.pl-1aa366ab-424a-4964-924f-d7622e95e50a
+destination:to:forward
+share_taxi:phone
+Kirchweg
+ref:old
+employment_agency
+seamark:beacon_cardinal:category
+name:wikipedia
+name:mzn
+Ulster, NY
+ref:VAG
+route_map
+destination:lang:hsb:backward
+contact:youtube
+maps4bw, LGL, www.lgl-bw.de; Mapbox Satellite
+Menden
+viaduct
+STIF 2019-01
+Rue Pasteur
+MNC
+cycleway:lane
+addr2:hamlet
+maps4bw (LGL, www.lgl-bw.de); Bing, Mapbox Satellite; Esri
+Rheda-Wiedenbrück
+oysters
+2B
+retention
+building:buildyear
+fire_station:type
+topmark:shape
+motorcycle:clothes
+GPS and Sightseeing
+21a
+left||
+D 22
+railway:signal:distant:marker_light
+survey;BDOrtho IGN
+picnic_shelter
+funeral_directors
+access:customer
+12.0
+advanced
+ruian
+osmarender:renderName
+Lemgo
+Hennef (Sieg)
+Lidl
+Hochbefliegung LMBVmbH 2.Hj.2007
+car_service
+sidewalk:left:incline
+nysdot_sh_ref
+seamark:light:1:sequence
+frequence
+source:maxheight
+Rathausstraße
+rvnsh
+Bing 2012-Nov
+C 1
+D 16
+Eichenstraße
+menhir
+railway:lanes
+locked
+transmission
+Südstraße
+Stadt Göttingen
+AT-V2:räumarbeit_aufnehmen
+access_point
+Soest
+Göppingen
+brass
+22a
+KPN
+D 28
+Retrieved from v1
+Orthophotos 2016 du SITG (Système d'Information du Territoire Genevois)
+Steinstraße
+lighting
+seamark:gate:category
+Robert-Koch-Straße
+ref:FR:FFT
+DOP40 NRW
+06
+Heidenheim an der Brenz
+own aerial image
+La Direction de l'information légale et administrative (Premier ministre)
+NTF-5
+Messing
+Bing;cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014
+K 2
+description:FR
+beacon:frequency
+Type_ZHE
+payment:visa_electron
+cycleway:both:lane
+Bahnstraße
+C 3
+motorhome
+Ludwigstraße
+Ahaus
+C 2
+11.7
+Mo-Sa 07:00-20:00
+D 26
+Löhne
+cd_Invent
+Ref_Util
+Surf_ZH
+motorcycle:repair
+Lib_Zone
+Annee_Ref
+LieuDit
+NOM_COMM
+AtlasZH
+Long_ZH
+NumFiche
+cd_ZE
+left|
+Bing, LGL, www.lgl-bw.de.
+Pestalozzistraße
+staircase
+nation
+Bayerische Vermessungsverwaltung
+lay_by
+evening
+mansard
+uploaded_by
+Lib_ZHE
+F
+survey 2017
+MEeau_BVim
+INSEE_COMM
+xmas:fee
+BV_Surf
+cd_ZHE
+BV_Souterr
+maps4bw (LGL, www.lgl-bw.de); Bing
+New York
+kitchen
+sandwich
+connection_point
+Remscheid
+builidingpart
+name_3
+abandoned:tracks
+language:es
+Kreuzstraße
+Friedrichshafen
+old_addr:street
+August-Bebel-Straße
+light:description
+Kolpingstraße
+climbing:orientation
+augsburgbarrierefrei:ref
+position:2
+buoy_special_purpose
+BDOrtho IGN 2016;DGFiP 2016/BANO
+cadastre-dgi-fr - 2011 - PTscript
+Sudetenstraße
+lpis
+Esche
+confectionery
+siren:model
+ref:colour
+status
+B1
+Tilia x europaea
+Pinus nigra nigra
+Altitude
+Lehrte
+it:fvg:regional_catalog:corsi_acqua:codice_fvg
+sidewalk:left:oneway
+source:incline
+code:FR:RPG
+it:fvg:regional_catalog:corsi_acqua:caratteristica
+it:fvg:regional_catalog:corsi_acqua:sottobacino
+note:neuli
+it:fvg:regional_catalog:corsi_acqua:bacino
+platform_section_sign_value
+bulk_upload.pl-0d4f55fc-dacb-4a17-aed5-3c49e22073e8
+Ortho littorale 2000
+Kapellenstraße
+Aalsmeer
+Kantstraße
+Direction Générale des Finances Publiques - cadastre. Mise à jour 2014
+seamark:beacon_cardinal:colour
+Dutchess, NY
+Zehlendorf
+1A
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014-03-03
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 14-07-2008
+it
+http://www.crige-paca.org/geoportail/geocatalogue.html
+B 7
+D 30
+residential;commercial
+ref:MMM
+D 35
+2013-06
+Am Sportplatz
+Burgdorf
+website2
+removed:name
+guess
+DE-BY-MVV
+1.7
+through|through
+service:vehicle:car_repair
+historic:gauge
+K 3
+Baden-Baden
+slurry
+name:cadastre
+D 23
+source:id
+Yahoo imagery
+B 96
+reflector
+Fasanenweg
+D 39
+source:carriage
+wet_barrel
+0.18
+identity
+DE-ESO:hp0;DE-ESO:hp1;DE-ESO:hp2
+maps4bw (LGL, www.lgl-be.de)
+40 mph
+conifer
+Bergkamen
+cadastre-dgi-fr source : BMO - 20091021
+beer_garden
+clinic
+piste:lanes
+ref:LUBW
+RDV63:ROUTE
+Sparkasse
+DE-ESO:lf6
+Gartenweg
+Mahlsdorf
+parts
+Landshut
+vehicle:lanes:forward
+Zeppelinstraße
+Maps4BW ( LGL, www.lgl-bw.de)
+Fastigiata
+NE
+Rosenheim
+Albert-Schweitzer-Straße
+gay
+even
+BDOrtho IGN - available 2018 at the latest
+name:mr
+embedded
+Brückenstraße
+door:direction
+roof:height:source
+source:maxweight
+DGFiP mars2010
+35 mph
+B 9
+12.5
+hazmat:E
+seamark:radar_reflector
+ref:caclr
+destination:ref:to:lanes:backward
+al:landuse
+D 32
+Fliederweg
+hardware
+16.67
+23a
+Friedensstraße
+tiger:zip_left_4
+grave:ref
+climbing:grade:saxon:min
+windmill
+Wilhelmshaven
+bulk_upload.pl-3703966a-44da-4456-94bb-05548ced59cd
+lamp
+West Babylon
+railway:signal:crossing_distant:caption
+Offenburg
+landuse_1
+TMC:cid_58:tabcd_1:TypeName:loc
+hazmat:backward
+SNCF Transilien - Plans d'architecte et plan de communication - Prestation de saisie réalisée par Arx IT en hiver 2016
+11.9
+Kiefernweg
+A10
+ambulance_station
+source:outine
+building:architecture:wikidata
+source:year
+bayern(2m);bing
+Zandvoort
+SE
+Coesfeld
+Pyrus calleryana
+row_house
+Meisenweg
+segment
+seamark:beacon_cardinal:colour_pattern
+DE-ESO:vr0;DE-ESO:vr1;DE-ESO:vr2
+sport_1
+TMC:cid_58:tabcd_1:TypeName
+E 54
+Bing, 2013-03
+D 34
+local survey & PDOK 25 18-07-19
+international
+45 mph
+Commack
+lateral_port
+Geldern
+Bremerhaven
+traffic_mirror
+GeoDaten Kanton Basel Stadt
+Kreis_Viersen_Katasteramt_2012_12
+barbed_wire
+Dornbirn
+accessvia
+tracksection
+winkelnummer
+NW
+merge_to_right|none
+Dessau-Roßlau
+Kastanienweg
+v2; Direction Générale des Finances Publiques - Cadastre ; mise à jour : 2009
+disc
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2017-01-06
+Bad Homburg v.d. Höhe
+Wels
+Elmshorn
+24a
+Waiblingen
+Brentwood
+Niederkassel
+B 54
+railway:signal:route_distant:form
+capacity:area
+Kölner Straße
+AT-V2:räumarbeit_einstellen
+swing
+STIF - 12/2016
+Sonnenstraße
+coffee
+emuia.gugik.gov.pl
+railway:electricity
+language:ru
+pipeline:ref:1
+temporary:access
+name:pnb
+source:start_date
+railway:signal:route_distant
+Breite Straße
+0;-1
+N 7
+D 27
+Weesp
+is_in:village
+seamark:light:3:colour
+name:abbreviation
+fire_hydrant:colour
+3b
+Hindenburgstraße
+convenience;gas
+E 22
+Ahornstraße
+Q590952
+Place de l'Église
+Porta Westfalica
+commune déléguée
+SiiG
+vogis.at & Precision Height-Shading-Model 0.5m
+palm
+building:level
+building:use:pl
+vehicle:backward
+endpoint:transformer
+B 51
+Rue de la Fontaine
+manor
+Mühlstraße
+0.55
+bing;bayern(2m)
+seamark:berth:category
+Volendam
+OpenData CAPP 2013-01-02
+coastal
+07
+K 5
+name:fi
+D 24
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2018;BDOrtho IGN
+Osnabrück
+note2
+surface:material
+RDV63:CATEGORIE_RD
+RDV63:DIVISION
+cadastre-dgi-fr : Direction Général des Impots - Cadastre ; mise à jour : 2010
+Geoportal Berlin / ALKIS
+Haltern am See
+3 m
+ref:nrhp
+contact:webcam
+website_1
+Schagen
+snack
+addr4:housenumber
+marked_trail
+place_name
+Direction Générale des Finances Publiques - Cadastre ; mise à  jour : 2010
+seafood
+addr4:street
+interval:evening
+position:1
+Microsoft Bing orbital imagery + survey
+15%
+0.65
+lunch
+bing; estimate; survey
+Lage
+aerowest
+E 41
+footway:both
+class:bicycle:mtb:technical
+maxdraft
+pipeline:ref:2
+Sachsen WebAtlasSN
+Maps4BW, LGL-BW, www.lgl-bw.de
+D 29
+art
+Nantes Métropole 01/2013
+department_store
+08
+flats
+recycling:metal
+ele:NN
+Kempen
+footway:right:width
+telescope:type
+hgv:forward
+communication:television
+http://data.grandtoulouse.fr
+EBO
+LGL, www:lgl-bw:de
+residents
+TMC:RoadEnd
+seamark:light:3:character
+tree_location:suburb
+ref:LOCODE
+alt_name:de
+Heideweg
+Würzburg
+Weiden i.d.OPf.
+02
+crevasse
+Cottbus
+ref:note
+payment:routex
+note:hiking
+platform_ref
+bollard:type
+www.geodaten.bayern.de
+lateral_starboard
+Kempten (Allgäu)
+embassy
+Gutenbergstraße
+Rue de la Mairie
+4b
+Warendorf
+Steinfurt
+Albany, NY
+wikipedia:fr
+surface:lanes
+v2; cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2009
+Flensburg
+0.45
+Emsdetten
+#808080
+bing; BD Carthage
+Weinbergstraße
+Rudow
+service:bicycle:diy
+message:front
+subject
+NRW Atlas DOP 40
+DE-ESO:hp0;DE-ESO:hp1
+plaque
+source:motor_vehicle
+maxspeed:forward:conditional
+turkish
+seamark:light:3:sector_start
+ref:t4t35.fr
+Cadastre
+Nottuln
+potential
+2A
+detention
+Heinrich-Heine-Straße
+internet_access:operator:wikidata
+language:pl
+12.1
+Bad Bentheim
+bulk_upload.pl-45a3a3d3-8f08-4c12-9e05-ef8f46e2e6ab
+DE:250
+Tulpenweg
+mobile
+Rue du Stade
+Lichtenrade
+none|none|none|merge_to_left
+floodlight
+sector
+sandpit
+pressure
+ref:FR:SMICOTOM
+coffee_shop
+seamark:light:3:sector_end
+Centereach
+25a
+maps4bw, LGL, ww-lgl-bw.de; Bing Aerial
+depot
+src
+sidewalk:right:segregated
+indoor:area
+oam:agricultural_utilized_land
+oneway:conditional
+90 @ (22:00-05:00)
+rising
+kapor2
+post_annex
+DE-ESO:hp0;DE-ESO:ks1
+8c9293
+miniature_golf
+Amberg
+bing; extrapolation; survey
+1.1
+aerialway:summer:access
+ref:FR:PTT:NRA
+source:note
+provides
+ref:2007
+Enkhuizen
+import_ref
+deaf:description:fr
+A35
+car_parts
+Mühlweg
+Balingen
+A 44
+toll_booth
+hearing_aids
+left|through|through|right
+Ortsstraße
+kneipp_water_cure:foot
+darksalmon
+04
+diagonal
+Bing, local_knowledge
+monitoring:air_quality
+Lutherstadt Wittenberg
+booking
+paving_stones:shape
+Gerhart-Hauptmann-Straße
+Klosterstraße
+watering_place
+bulk_upload.pl-979497f3-246c-4530-a7f6-8e8fb9bf0f77
+beam
+memorial:conflict
+Frankenstraße
+breakwater
+Bensheim
+sweets
+26a
+Kaufbeuren
+antenna
+sinkhole
+Kamen
+17.5
+DE-ESO:db:zs7
+pastry_shop
+DGFiP 2017/BANO
+Hattingen
+contact:foursquare
+FR:B30[30]
+Aschaffenburg
+D 37
+finely_mown
+hikingmap
+disused:service
+parking:condition:both:default
+Villach
+seamark:light:3:range
+local_authority
+Maps4BW LGL www.lgl-bw.de
+Bing;DGFiP 2016/BANO
+Ravensburg
+11.00
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre.
+Jägerstraße
+Korschenbroich
+E 35
+ref:FR:FANTOIR:left
+railway:pos
+cadastre-dgi-fr source : Direction Generale des Impots - Cadastre ; mise a jour : 2009
+A 61
+medical_supply
+cross
+Lauda-Königshofen
+Theodor-Heuss-Straße
+H1
+12.2
+seamark:notice:2:orientation
+seamark:notice:1:orientation
+ref:opendata_versailles
+sprockhoff
+official_status
+tunnel:length
+C 4
+C12
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour en CDIF : 2014
+DE:260,1026-36
+Sindelfingen
+ref:FFRP
+hgv:backward
+dance:style
+traffic_signals:operating_times
+ALKIS
+ref:dortmund
+destroyed:building
+camera:features
+K 4
+D 33
+Karl-Marx-Straße
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 13-07-2008
+Rossmann
+Heide
+Caisse d'Épargne
+workshop
+Neu-Ulm
+memorial:addr:suburb
+ortenau_bunkermap
+source:surface
+seamark:light:3:height
+root:shape
+node_network
+Bing and site visit in aug 2016
+Eschenweg
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2013 + Bing
+religious
+Carpinus
+K 6
+Rue Victor Hugo
+Buchenstraße
+survey;Bing
+data.gouv.fr:LaPoste - 01/2013
+seamark:building:function
+volume
+squad
+is_in:province
+abandoned:tracktype
+through|through|slight_right
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2017-07-28
+Assendelft
+Schwäbisch Hall
+NRW Geobasis ALK 2013
+Kirchplatz
+fr:Crédit agricole
+lwn_ref
+openfire
+building:use:sport
+note:Wanderrouten
+abbreviation
+observatory:type
+diet:halal
+etymology:wikidata
+BDOrtho IGN; Cadastre MàJ 2015; BD Carthage
+Achim
+Cadastre. Mise à jour : 2010;knowledge
+D 38
+plumber
+seamark:landmark:height
+ref:RBO
+de:vrs
+NYSTL:SWISS
+seamark:signal_station_traffic:impact
+swisstopo:KANTONSNUM
+maps4bw (LGL, www.lgl-bw.de); Mapbox Satellite; Bing
+not_left|not_right
+railway:signal:request
+Fl
+0.35
+D 36
+0.50
+Liriodendron tulipifera
+peak_traffic
+Säulenahorn
+B 10
+Schwerte
+doors
+seamark:beacon_lateral:information
+description2
+vehicle:lanes:backward
+portage
+Oststraße
+Populus sp.
+children
+railway:signal:request:form
+profile
+mast:type
+performance
+addr:type:description
+railway:signal:request:states
+Land Steiermark - data.steiermark.gv.at;geoimage.at
+Nürtingen
+Schwabach
+animal_shelter
+data.gouv.fr:RFF - 11/2011
+paving_stones:30
+cadastre-dgi-fr 2010  - PTscript
+A 20
+Königstraße
+railway:signal:crossing_distant:shortened
+Schwarzwaldverein
+addr:type:de
+footway:right:bicycle:oneway
+Aerowest HiRes aerial images
+destination:S
+VBN
+Luisenstraße
+Reihenleuchte
+C 5
+Conseil général de la Saône-et-Loire - Direction des Transports et de l'intermodalité - 03/2013
+Merkaartor 0.10
+K 7
+SW
+poi
+ref:addr
+xmas:operator
+5b
+Peine
+Neustadt am Rübenberge
+D 50
+restricted
+Grabenstraße
+name:fy
+razed:ref
+railway:signal:switch
+railway:usage
+was:amenity
+maxspeed:type:backward
+payment:cards
+Wiener Straße
+Rue de la République
+Völklingen
+stately
+DE:325
+checked
+mechanical
+left;through
+tunnel:wikipedia
+ref:fr:RGP
+Naarden
+yes|no
+Würselen
+Görlitz
+railway:name:DB
+climbing:length
+maxweight:bus
+footway:both:surface
+name:wae
+maps4bw (LGL, www.lgl-bw.de);Mapbox Satellite
+tank
+data.gouv.fr
+Kapellenweg
+Mo-Sa 10:00-20:00
+survey; bing
+Höhenweg
+ceiling
+NL:G11
+note:url
+K 8
+data.gouv.fr:Ministère de l'Intérieur - 10/2018
+Weimar
+Communauté Urbaine de Bordeaux - 03/2014
+12.00
+name:ta
+whitewater:name
+description:NL
+destination:E
+railway:interlaced
+numero
+Kevelaer
+DB Station&Service AG
+Ansatzleuchte
+Siedlung
+larochelle_pacy_id
+access:N2
+access:hgv
+contenance
+Rüsselsheim am Main
+Barsinghausen
+Teilstück
+hazmat:conditional
+ref:fr_illenoo
+hvv:psv_type
+name:frp
+bayern(80cm);DigitalGlobe
+27a
+bulk_upload.pl-70a828ce-9f2b-4508-a761-36b8d93518b4
+Norderstedt
+jewish
+Oberursel (Taunus)
+Pinus sylvestris
+pastry
+muslim
+6b
+AT-V2:verschubverbot_aufgehoben
+maxspeed:type:forward
+railway:radio:analogue:channel
+oneway:mofa
+Ministère de l'Economie, de l'Industrie et du Numérique - 08/04/2018
+entrance_marker:tram
+railway:signal:traversable
+related:wikipedia
+advertising:size
+Dresdener Straße
+Krommenie
+signal_box
+Colmar
+Mosbach
+AT-V2:halt;AT-V2:frei_mit_40
+E 30
+dist:blue
+bus_direction
+lanes:psv:forward
+old_name:ca
+exhibit
+Baumhasel
+Orthophotos 1998 RCJU 50cm
+recalé Bing
+Goch
+Suhl
+Sehnde
+Geschwister-Scholl-Straße
+apron
+step:condition
+footway:left:width
+display:analog
+description1
+beacon:code
+parking:zone
+construction:gauge
+ref:bartoschek
+reg_name:wikipedia
+tidalflat
+geoimage.at (high res)
+electrician
+Kehl
+iLOE 1.9
+Lerchenstraße
+retrieved using undelete JOSM plugin
+source:bridge
+building:design:note
+Kirchgasse
+laundry_service
+local_name
+28a
+no @ (Feb 10,17,24 07:00-18:00,22:00-24:00; Mar 3,10 07:00-18:00,22:00-24:00; Jul 21,28 07:00-19:00; Aug 4,11,18 07:00-19:00 AND weight>7.5)
+Gifhorn
+Am Anger
+A 31
+K 12
+Ulmenweg
+citywalls
+bulk_upload.pl-81812855-f7b8-437c-9c7c-abe12a83de71
+disused:emergency
+capacity:bus
+Q2328652
+HGK:service
+check_date:collection_times
+B 19
+Gemeinde Gaschurn
+Bühl
+Bing + survey
+SO!GIS Import
+Expy
+H2
+date_off
+source:oneway
+destination:4
+wide_stands
+Flurstraße
+bing 2014
+Bing, LGL, lgl-bw.de
+lat
+sled
+cadastre-dgi-fr source : Direction Générale des Impots - Cadastre. Mise à  jour : 2010
+reihe
+IBNR
+entrance:step_count
+health_person:type
+bulk_upload.pl-9017db46-4934-48a4-bb86-dd472c933b3a
+seamark:notice:direction
+TMC:RoadStart
+barley
+Itzehoe
+Pinus
+1;2
+0.70
+Rheinberg
+Kaarst
+Wesseling
+fuel:octane_92
+source:leaf_cycle
+election:level:de
+railway:signal:route_distant:states
+note:addr:postcode
+message:opposite
+Filderstadt
+Styphnolobium japonica
+Schorndorf
+animal_breeding
+01796
+Marburg
+Crédit Mutuel
+DGFiP/BMO2009
+wsh
+railway:signal:crossing_distant:deactivated
+B 85
+Sankt Wendel
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre;mise à jour : 2011
+Ettlingen
+present
+maxspeed:backward:conditional
+priority_road:forward
+destination:symbol:to:backward
+Fürstenwalde/Spree
+Emmerich am Rhein
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 12/02/2010
+A 45
+Hemer
+restriction:conditional
+Bing + Maps4BW LGL www.lgl-bw.de
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2012 + calage Bing
+telephone_office
+none|none|none|slight_right
+Am Hang
+Im Winkel
+B 14
+women
+inline
+Beckum
+A9
+VVS
+lon
+wheelchair:source
+destination:N
+historic:building
+check_date:access_point
+name:exit
+bulk_upload.pl-82556092-873a-484a-926e-d068451b1d3e
+b5m
+13.5
+NRW Atlas (ALK);bing
+Mörikestraße
+Erkelenz
+Böblingen
+shop:VRS
+note:timetable
+network:metro
+waterway:ukw_channel
+date_on
+gymnastics
+derail
+Landau in der Pfalz
+DE-ESO:dr:zs1
+D 40
+Mittelweg
+Mettmann
+West Islip
+child
+addr:neighbourhood
+cinema:3D
+D 57
+FIPS
+pasture
+election:part_name
+seamark:light:3:period
+disused:website
+operator:VRS
+name:tunnel
+rwn
+K 10
+NTF-6
+Orthophotographie CRAIG/Sintegra/IGN 2013
+Forststraße
+Stralsund
+Rue de Verdun
+join
+old_de:regionalschluessel
+light:period
+seamark:light:1:group
+description:name
+authentication:phone_call
+Schnurbaum
+Herrenberg
+flag
+clochers.org
+D 117
+Bing Sat (2012)
+K 9
+Mo-Sa 09:00-20:00
+cn_tud:token
+MEau_TPME
+recycling:electrical_items
+AGIS OF2011
+7b
+Gewöhnliche Rosskastanie
+Köpenick
+Lörrach
+removed:railway
+ref:FR:FANTOIR:right
+fire_hydrant:pillar
+tmc:forward
+Yahoo! Aerial Imagery
+source:maxaxleload
+Warschauer Allee
+Bing;cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2012
+xybot
+14.0
+lavoir
+elevation
+0.85
+meadow_orchard
+Am Bahnhof
+indian
+Ailanthus altissima
+lanes:psv:backward
+source:conscriptionnumber
+sanitary_dump_station:grey_water
+hike
+coach
+Rue du Château
+copyshop
+WestfalenTarif
+0.22
+Panoramastraße
+Alte Dorfstraße
+survey;local_knowledge
+Sonnenweg
+Ginsterweg
+building:use:industrial
+Voerde (Niederrhein)
+parcel_pickup;parcel_mail_in
+destination:W
+max_level
+temporary:date_off
+motor_vehicle:backward
+Steinweg
+#bfc6ca
+Haydnstraße
+Platanus orientalis
+BD Ortho IGN ; Direction Générale des Impôts - Cadastre. Mise à jour : 2018 ; survey
+30a
+C16
+A 81
+K 11
+Hildesheim
+DE:274[30]
+D 43
+AT-V2:halt;AT-V2:frei
+Tönisvorst
+locale
+ref:0--2016-10-31
+Kirchheim unter Teck
+railway:signal:crossing_info:repeated
+maxspeed:lanes:backward
+source:horse:yes
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2018-06-11
+fire_hydrant:pipe_diameter
+sanitary_dump_station:chemical_toilet
+seamark:pipeline_submarine:information
+source:ref:FR:CRTA
+seamark:light:2:sequence
+footway:right.sloped_curb.start
+source:horse:no
+CC
+0.76
+bing;BD carthage
+B 71
+Smithtown
+Verkehrsverbund Berlin-Brandenburg
+D 52
+Fichtenweg
+06886
+Neubrandenburg
+Oneida, NY
+Südlicher Zürgelbaum
+ref:bauwerksnummer
+speech_output:de
+note:ref
+ref:De_Lijn
+Singen
+motor_vehicle:forward
+note:DE
+Land Steiermark - data.steiermark.gv.at
+bulk_upload.pl-59b56217-fc2d-4664-acef-b2035367f45f
+12.3
+Road
+Broadway
+slide
+Bruchsal
+#ffffff
+silage
+Columnare
+Wolfenbüttel
+12.4
+Backnang
+age
+Kasseler Bord vorhanden
+souq
+swisstopo:OBJEKTART
+swisstopo:BFS_NUMMER
+Greifswald
+Weststraße
+bett_and_bike:ref
+bulk_upload.pl-a95e05af-80d7-4b33-b625-b1ab609b39d5
+ToulouseMetropole - Orthophotoplan 2015
+broad_leaved
+volleyball
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2018-04-23
+cadastre-dgfip-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015
+evangelical
+Huntington Station
+leashed
+heritage:ref:vie
+sidewalk:right:sloped_curb:start
+cycle:discouraged
+watermill:disused
+Hölderlinstraße
+Acer platanoides Columnare
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014
+construction:building
+29a
+ele:msl
+parking:lane:left:diagonal
+payment:payback_app
+picture
+cadastre.gouv.fr 2012
+Auerbach
+Deer Park
+5%
+Koblenz
+Detmold
+12%
+central_office
+japanese
+Kreis_Viersen_Katasteramt_2018_04
+swisstopo:SHN
+playground:slide
+outdoor_seating:comfort
+accessfrom
+website:official
+kva_dbr:type
+design:incomplete
+<different>
+K 16
+Kamp-Lintfort
+Fraxinus sp.
+closed
+estimation; survey
+sideway
+0.95
+Nelkenweg
+BDOrtho IGN - disponible 2016
+TCL
+source:direction
+ref:DGKZ
+garden:style
+Illingen
+name:t4t35.fr
+Zwaag
+abandoned:operator
+cosmetics
+charging_station:output
+Coram
+NTF-3
+Schulweg
+K 13
+Potlatch 0.8a
+Rietberg
+chair_lift
+Frankfurt (Oder)
+ref:station
+day_on
+name:railway
+Heidestraße
+description:soutien_region
+8b
+bulk_upload.pl-2c67690c-d856-459b-bbe3-b6fbd5cbb150
+Mechernich
+bing & bayernatlas
+survey; Bing
+name:hi
+name:az
+parking:lane:right:diagonal
+12.6
+balise_count
+display:colour
+Höhenstraße
+temporary:date_on
+aerodrome:type
+sidewalk:right:sloped_curb:end
+elevator_platform
+D 44
+Stadtwerke Gelnhausen
+birds_nest
+BMO 2009
+Schwarzwaldstraße
+none|slight_right
+Potlatch 0.10
+Hohe Straße
+Erkrath
+visible
+DE:274[50]
+NYSTL:HAMMOND_ID
+windmill:disused
+cave:length
+note:route:name
+seamark:notice:1:distance_down
+NYSTL:HAMMOND_
+Ter
+NRW Atlas: ALKIS
+Adressdaten: © Österreichisches Adressregister, Stichtagsdaten vom 02.10.2016
+bike
+Local knowledge
+Sullivan, NY
+Bing Sat (2012) + local knowledge
+A 93
+source:internet_access
+Prenzlauer Berg
+Horb am Neckar
+ref:FR:SANDRE
+generator:output:heat
+devices
+Biesdorf
+DE:269
+Stade
+Rue Jean Jaurès
+0.31
+Leinfelden-Echterdingen
+1.05
+Leonberg
+Monheim am Rhein
+Hermann-Löns-Straße
+Julianadorp
+Rheinbach
+Haan
+Koelreuteria paniculata
+free_flying:official
+osmc:ref
+name:fr-x-gallo
+traffic_signals:floor_vibration
+name:VBB
+Picea abies
+ferry_terminal
+-
+Ginkgo biloba
+spherical
+Siemensstraße
+https://de.wikipedia.org/wiki/Bildtafel_der_Verkehrszeichen_in_der_Bundesrepublik_Deutschland_seit_2017
+animal_boarding
+Potlatch 0.10c
+C 6
+courthouse
+12.8
+maxspeed:zone
+sidewalk:smoothness
+seamark:bridge:clearance_height_closed
+flag:wikidata
+flag:name
+field
+Eisenbahnstraße
+#8c9293
+biomass
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2010
+Rastatt
+plan.at 2009, geoimage.at
+Biberach an der Riß
+thai
+0.47
+Freiberg
+petanque
+DE:394-50
+Ludwigshafen am Rhein
+Schwalbenweg
+maps4bw (LGL, www.lgl-bw.de); Digital Globe
+name:gl
+D 42
+building:support
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2017;BD Ortho IGN 2017
+priority_road:backward
+source:delivery_date
+cdaa9d
+Weißbirke
+note:addr:housenumber
+D 67
+Kreuzberg
+Werl
+Holunderweg
+D 65
+tmc:point
+Bretten
+donau
+other
+musical_instrument
+contrasted
+Nelkenstraße
+1c
+religion:wikidata
+Hermannstraße
+note:addr:street
+note:vehicle
+building:use:accommodation
+junction:name
+day_off
+old_amenity
+Lindenhurst
+description:typologie
+Shell
+D 60
+Bing HiRes aerial images
+Mairie de Paris
+Mapbox, Maps4BW, LGL, www.lgl-bw.de
+B 5
+Martin-Luther-Straße
+Meckenheim
+seamark:sea_area:category
+Bayern2m
+CCPRO 2014
+cowshed
+railway:maxspeed
+note:1
+ref:gusid
+Mühlacker
+NL:G12a
+Saratoga, NY
+Hamminkeln
+Châtellerault
+-2;-1
+Delbrück
+booth
+Rue Nationale
+Ulmus
+10'
+name:et
+Akazienweg
+route_ref:De_Lijn
+zone:De_Lijn
+removed:addr:housenumber
+ref:megalithic.co.uk
+source:landuse
+prominence
+D 63
+Fellbach
+Tulpenstraße
+km
+D 48
+Humboldtstraße
+Cloppenburg
+Garmin_z
+dog_park
+A 38
+footway:surface
+payment:apple_pay
+building:roof:ridge
+AT-V2:vorsicht;AT-V2:hauptsignal_frei;AT-V2:hauptsignal_frei_mit_60;AT-V2:hauptsignal_frei_mit_40
+iucn_level
+NRCan-CanVec-8.0
+OSM
+Shirley
+0.37
+B 75
+sidewalk:left:sloped_curb:start
+railway:lanes:backward
+socket:schuko:output
+osmarender:renderRef
+swisstopo:BEZIRKSNUM
+bridge:length
+railway:lanes:forward
+Vestas
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2014;Bing
+Dorf
+Birke
+D 53
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2010 ; Bing
+Rue des Jardins
+DE115055186
+Hansalinie
+K 29
+Brilon
+yes|designated
+Kulmbach
+Direction Générale des Finances Publiques - cadastre. Mise à jour : 2009
+free_flying:hanggliding
+leisure_1
+construction:highway
+climbing:multipitch
+sidewalk:left:sloped_curb:end
+wall:material
+Lindenallee
+DigitalGlobe
+Kings, NY
+Feldkirch
+Orthophoto Tour(s) Plus 2008
+Bing, LGL, www.lgl-bw.de, Maps4BW
+Ilmenau
+cadastre dgfip 2017
+Bergen (NH)
+C+O
+cadastre 2015
+N 10
+ele:wgs84
+railway:signal:ref
+Weidenweg
+emergency_bay
+09599
+disused:ref
+bulk_upload.pl-b0c86849-d216-4dc8-8c1f-47f81b629254
+defect_detector:hot_box
+disused:denomination
+crane:mobile
+network:vogis
+0.21
+Weinheim
+LA Karlsruhe
+Rue du Général de Gaulle
+Blankenfelde-Mahlow
+tyres
+survey2014
+31a
+dur
+Potlatch 0.7b
+semi_evergreen
+Bautzen
+D 41
+outreach
+A 71
+seamark:buoy_lateral:information
+species:wikipedia
+vending:sweets
+Nordhausen
+gis.ny.gov/gisdata/
+Austraße
+A 10
+Stuttgarter Straße
+Ortho SIG L-R 2012
+sat
+fibre
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre;mise à jour :2010
+Kaiserlinde
+D 86
+seamark:navigation_line:orientation
+Rue des Écoles
+wheelchair:description:en
+wayside_chapel
+Weyhe
+highway:proposed
+Werne
+shingle
+Neuenkirchen
+32a
+Rödinghausen
+beacon_special_purpose
+20%
+Altenburg
+Rastede
+seamark:notice:1:distance_up
+Aral
+socket:typee
+assisted_living
+kerb:left
+climbing:trad
+name:loc
+DE-ESO:vr0;DE-ESO:vr1
+Lärchenweg
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 06-03-2009
+E 66
+Orthophotos 2009 du SITG (Système d'Information du Territoire Genevois
+K 14
+Rensselaer, NY
+Wormerveer
+CRAIG - IGN - TopoGEODIS - Feder Auvergne-Rhône-Alpes 2016
+washing_machine
+via_ferrata
+Mo-Sa 07:00-22:00
+old_de:amtlicher_gemeindeschluessel
+interval:sunday
+name:güterweg
+disused:religion
+dist:white
+flow_direction
+Hubertusstraße
+Datteln
+Aeroview
+CZ
+measuring_point
+artificial_turf
+population,is_in
+Historische Landesgrenze Königreich Sachsen Königreich Preußen 1815 (Wiener Kongress)
+Pirna
+K 17
+railway:signal:stop:deactivated
+grave:name
+section:type:criteria
+toponym
+ref:bridge
+section:type
+vending:toys
+start_stop
+Vogelkirsche
+olive_trees
+bulk_upload.pl-fba941cb-021f-493f-9a12-bf31e7f3e079
+Long Island Rail Road
+Konrad-Adenauer-Straße
+58:1
+wildlife
+manual
+public_bookcase
+fruit
+lightgrey
+capacity:car
+maxspeed:hazmat
+building:use:healthcare
+boundary_type
+note:addr:city
+seamark:notice:2:distance_up
+note:addr:country
+railway:signal
+climbing:length:max
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2010 + calage CRAIG
+Total
+actual
+Explorationsphase
+AT-V2:signalnachahmer
+bed
+D 62
+Bedburg
+bulk_upload.pl-7a8b8348-e1c4-4793-875d-a8017a3888d6
+Crailsheim
+BD Ortho IGN ; SNCF Réseau
+ref_heritage
+ticket_validator
+cycleway:left:traffic_sign:backward
+test:cycle
+section:name
+alt_name:fr
+Celtis
+unimainz:buildingId
+K 30
+Max-Planck-Straße
+Survey;Cadastre
+Landstraße
+Place de la Mairie
+recalé sur l'orthophoto IGN
+9b
+E 31
+one-level
+D 59
+tubular
+0.60
+drag_lift
+tmc:segment
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2015 + Bing
+light:flash
+icn_ref
+Vaihingen an der Enz
+geoimage. at
+1.20
+bulk_upload.pl-c9bc9b74-f232-468a-ba7b-87e5cc3a4e97
+fabric
+Jüchen
+emergency_ward_entrance
+Sandstraße
+Ulmenstraße
+skitour
+Bing, knowledge
+D 113
+D 47
+Bayern(2m)
+source:shop
+seamark:notice:2:distance_down
+railway:signal:expected_position
+electric_wheelchair
+width:carriageway
+door:wings
+interaction
+D 137
+firepit
+30 @ (22:00-06:00)
+shortcut
+Schloß Holte-Stukenbrock
+metal_construction
+Baesweiler
+Staaken
+bulk_upload.pl-a8b76316-35ae-4929-916e-9e5f24ef02a1
+13.2
+sidewalk:left:segregated
+contents
+Precision-Terrain-Model (50cm/Pixel), Land Vorarlberg, vogis.cnv.at, local knowledge, Orthofoto 2012 (12cm/Pixel)
+Kaulsdorf
+ref:FR:Megalis
+ref:FR:Megalis:NRO
+maxspeed:goods
+render
+abandoned:waterway
+destinations
+2 m
+-10%
+Augsburger Verkehrs- und Tarifverbund
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 23-06-2008
+Geodaten Bayern
+Salzkotten
+Freital
+Senden
+distillery
+Meschede
+10b
+*
+name:yi
+name:ms
+access:winter
+hdop
+planned:addr:housenumber
+alt:NHN
+endpoint:overhead_line
+B 87
+St. Lawrence, NY
+LGL, www.lgl-bw.de u. Bing
+B 28
+Mörfelden-Walldorf
+Bietigheim-Bissingen
+AT-V2:hauptsignal_halt;AT-V2:hauptsignal_frei;AT-V2:hauptsignal_frei_geschwindigkeitsbeschränkung
+K 20
+government_managed
+Xanten
+Retrieved from v2
+razed:natural
+cd_ZPT
+tactile_writing:embossed_printed_letters:de
+travel_time
+disused:aerialway
+note_2
+D 46
+anchor
+D 64
+D 49
+monastery
+D 54
+compensator
+odd
+Lübbecke
+K 18
+04600
+Orthophotos 2011 du SITG (Système d'Information du Territoire Genevois
+Acer negundo
+light_minor
+training
+seamark:signal_station_traffic:name
+hampshire_gate
+timber_framing
+cycleway:traffic_sign
+defibrillator:location:de
+toll:motorcar
+operator:MNC
+E 15
+01705
+campus
+2c
+Altena
+blz
+E 44
+kneipp_water_cure:arm
+railway:signal:traversable:type
+fashion
+gantry
+Silcherstraße
+dock
+Maps4BW ( LGL, www.lgl-bw.de) / DigitalGlobe Standard Imagery
+AT:zone30
+02625
+cyclestreet
+1B
+D 70
+12.7
+D 45
+Teichstraße
+B21
+shell
+Ilsede
+generator:output:biogas
+timetable_box:A3_landscape
+topic
+0.15
+mine
+Wedemark
+Acer saccharinum
+0.80
+D 51
+Charlottenburg
+D 55
+basemap.at;geoimage.at
+Stendal
+Lichtenau
+33a
+BD TOPO Hydrographie - avril 2017
+Ostfildern
+0.34
+isolated
+Neukirchen-Vluyn
+Pappelweg
+post_box:apertures
+area:highway:prohibited
+whc:criteria
+seamark:shoreline_construction:category
+Service-Public.fr - 06/2013
+seamark:fairway:information
+payment:bancomat
+34a
+aerowest_iws
+C18
+0.78
+A 14
+Ennepetal
+Schneverdingen
+Fichtenstraße
+Yahoo Sat
+K 21
+Prunus cerasifera
+NHD:FTYPE
+razed:gauge
+polling_station:city
+note:opening_hours
+ref:CD30
+removed:addr:street
+ref:ProRail
+Schöneberg
+D 82
+post
+tattoo
+Dorpsstraat
+double_slip
+Jülich
+snow_cannon
+Mo-Sa 09:30-20:00
+DE-ESO:hp0;DE-ESO:hp2
+Italica
+K 15
+removed
+estimate; survey
+survey, bing
+Holbrook
+Helmstedt
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 2017
+proposed:amenity
+enter
+NHD:FDate
+playground:swing
+railway:signal:switch:form
+class_admi
+maxspeed:lanes:forward
+recycling:glass_jars
+ashtray
+D 101
+Teil der "7000 Eichen" von Joseph Beuys
+music
+C 7
+double_half
+Friedberg (Hessen)
+Moltkestraße
+bulk_upload.pl-34d328e5-f365-4ad5-88d4-e0cb5564b0d0
+Kirchenstraße
+Cadastre. Mise à jour : 2012
+DE:260,1020-30
+lengths:right
+McDonald's
+footway:left.sloped_curb.start
+harbour:category
+footway:right.sloped_curb.end
+ANCON
+year_import
+stop_date
+area:highway:crossing
+ref:ogdsteiermark
+Südring
+Elsdorf
+Daimlerstraße
+CXX
+vertical
+Alte Straße
+Uetze
+wedge
+property
+Osterholz-Scharmbeck
+ref_estimation
+3dr
+13.4
+0.28
+fuel:octane_102
+rape
+Ernst-Thälmann-Straße
+brothel
+INSEE 2010
+Harsewinkel
+1.15
+D 104
+coal
+Apfelbaum
+Badhoevedorp
+Q1547738
+Stutensee
+Falkenweg
+plants
+gallery
+restriction:hgv
+03238
+VRN
+hard
+sidewalk:right:kerb
+heat
+Weberstraße
+12.9
+Luftbilder Radolfzell
+C15
+anchors
+D 56
+Warburg
+roller_ski
+fitness
+FR-212616
+Segment
+ref:FR:ANFR
+source:geo
+footway:right:incline
+rwetempcharging_station:plug
+demolished:roof:shape
+building:facade:color
+railway:signal:switch:states
+source:railway
+D 58
+Winnenden
+DOP (LVG-Bayern - Lizenziert von britschler)
+Radolfzell
+Stolberg (Rhld.)
+Wiehl
+K 27
+fr:Groupe Caisse d'épargne
+cevni
+bing2013
+0.62
+Bing;DOP_LVA_BY
+cone, point down
+Röntgenstraße
+Neuer Weg
+tank:type
+cycleway:right:surface:colour
+courthouse:type:at
+Selm
+Verl
+http://wiki.openstreetmap.org/index.php/DE:DSL_Hauptverteiler
+D 115
+1.35
+DE:260
+Heerstraße
+Weinstadt
+A64
+Wetter (Ruhr)
+saltbox
+AT-V2:schaltstellenpflock
+glacier
+A 46
+Datenquelle: LGL; www.lgl-bw.de
+Dammstraße
+region:right
+abandoned:shop
+noexit:vehicle
+parking:condition:right:vehicles
+source:description
+Microsoft Bing Satellite
+region:type
+CCPI mars2011
+Tannenstraße
+Kanzan
+UntereDenkmalbehörde
+Steig 1
+N 83
+platform_section_sign
+Griesheim
+D 906
+Steinhagen
+D 103
+D 112
+ref:bufa
+-0.5
+capacity:persons
+Büren
+disused:opening_hours
+legal_status:FR
+Bing and personal site review in August 2016
+Gendarmerie nationale
+Bayern (80 cm)
+14.5
+Rue de la Chapelle
+Kreis_Viersen_Katasteramt_2014_11
+05
+Händelstraße
+Im Wiesengrund
+data.gouv.fr:LaPoste - 04/2012
+Lüdinghausen
+Rue des Tilleuls
+disused:cuisine
+socket:type3
+source:ref:FR:Paris:DSP
+ref:bicycle
+minspeed:lanes
+positive:ramp
+communication:military
+destination:SE
+has_accompanying_footway
+Leutkirch im Allgäu
+Hauppauge
+Lohmar
+Central Islip
+H
+0.56
+mural
+D 105
+0.43
+KomSIS
+measurement
+0.1
+nursery
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015
+Bing + terrain
+ref:tour
+abandoned:leisure
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre ; mise à jour : 23/01/2009
+seamark:buoy_special_purpose:reflectivity
+payment:google_pay
+climbing:quality
+Geoimage.at MaxRes; basemap.at
+cycling:commute
+Germering
+B 49
+Mo-Sa 10:00-19:00
+13.6
+Wormer
+Basel
+Buckow
+Q642627
+01445
+Marseille
+eternit
+Bad Münstereifel
+Alfter
+fortification
+id
+name:suffix
+display:digital
+geoimage.at, survey
+D 69
+Heiligenhaus
+Bundesstraße
+13.8
+11b
+zub262
+reef
+scout
+Krummhörn
+Vreden
+Murtal
+Uitgeest
+Greven
+RWE
+gardener
+13.7
+AT-V2:verschubhalttafel
+Kampstraße
+B 101
+name:cv
+Heinrichstraße
+post_partner
+HiRes aerial imagery;Bing
+Gevelsberg
+seamark:light:2:group
+information_type
+ref:bgt:id
+ref:housenumber
+fee:conditional
+ref:bgt:bronhouder
+Mo-Sa 08:00-21:00
+Rheinfelden (Baden)
+WMS-Freizeitinfo-Dienst LGLN
+Ensembleteil
+Verden
+Maps4BW, LGL,, www.lgl-bw.de
+Neckarsulm
+D 119
+13.1
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre ; mise à jour : 2014
+Velserbroek
+Pattensen
+photographer
+Herderstraße
+survey;GrandNancy Orthophotographie 2012
+milk
+Columbia, NY
+free_flying:site_orientation
+source:power
+destination:symbol:to:forward
+Prunus sp.
+color:back
+sewerage
+note:type_prise
+3dr:height2
+maxspeed:reason
+Landsberg am Lech
+12b
+Alte Landstraße
+Bing Imagery
+Société Générale
+C17
+NRW Atlas: ALK
+East Northport
+Ellwangen (Jagst)
+11'
+fr:Crédit mutuel
+Bing Sat (2012) + survey
+CCPRO 2019
+Neustraße
+painter
+restricted_area
+3.50
+skiing
+MVG
+managed
+gps:fix
+ref:NUTS
+railway:signal:distant:function
+footway:left:bicycle:oneway
+tmc:backward
+ref:colour_tx
+BDOrtho IGN 2019
+gps:hdop
+Taunusstein
+D 120
+Bronx, NY
+Kurt-Schumacher-Straße
+Uferstraße
+0.40
+Weil am Rhein
+Rotblühende Kastanie
+all
+educational_institution
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2017;BDOrtho IGN 2017
+Maps4BW, LGL, www.lgl-bw.de, Bing
+over
+Aichach
+tiger:name_type_3
+NL:201;NL:202;NL:206;NL:209;NL:210;NL:212;NL:214;NL:215
+website:regulation
+maxspeed:trailer
+zone:colour
+ref:wetter
+Sprockhövel
+Petershagen
+chess:association
+FR:AB3a
+antiques
+0.53
+suction
+N 88
+Rudolf-Breitscheid-Straße
+60 @ (22:00-05:00 AND weight>7.5)
+exchange
+Orthophoto Tour(s)plus 2013
+Cattaraugus, NY
+Bing ; cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2011
+Neukölln
+orienteering
+Grenzweg
+K 25
+system
+playground:sandpit
+cycleway:surface:colour
+no_parking:type
+Schwalmtal
+toilets:handwashing
+building:use:logistics
+Gelnhausen
+tiger:zip_right_4
+name:note
+seamark:restricted_area:category
+health_specialty
+cycleway:both:foot
+0.38
+AT-V2:geschwindigkeitsanzeiger
+Selden
+Fagus
+ORKa.MV
+Waltrop
+shoemaker
+A45
+0.84
+http://catalogue.data.grandlyon.com/
+13.3
+Rottweil
+0.72
+D 61
+Robinia
+Eckernförde
+GPS Tracks
+Rue des Vignes
+Jefferson, NY
+Asternweg
+14.2
+Bad Vilbel
+1B/2C
+Huntington
+bing; estimate; extrapolate; survey
+http://wms.openstreetmap.de/tms/Dortmund/!/!/!.png
+35a
+left;through|through;right
+ref:1
+K 23
+camera:recording
+ref:EU:ENTSOE_EIC
+chess:league
+recycling:white_goods
+aerialway:drag_lift
+Rue des Lilas
+color:text
+CoursEau
+chess:training
+sanitary_dump_station:accepted
+built
+D 68
+A 36
+Fulda
+Perchtoldsdorf
+D 938
+usgs_dlg
+DE:237
+weight
+Hampton Bays
+DGFiP-cadastre 2013
+indeterminate
+Medford
+Lake Ronkonkoma
+Chautauqua, NY
+Dix Hills
+36a
+razed:electrified
+group_only
+highway:1972-
+highway:-1972
+dhm_id
+mdb_id
+BingSat and Mapillary.com
+step:contrast
+opening_hours:note
+destination:SW
+Mairie
+105 01
+ref:dadlo
+name_old
+demolished:amenity
+source:ref:UAI
+recycling:glass_bottles:colour
+Bing;cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2013
+ALK NRW-Atlas tracer2 ohne Verschiebung
+K 26
+N 20
+NRW Atlas:ALK
+Falkenstraße
+Kastanie
+D 102
+Gaggenau
+AT:zone
+Püttlingen
+K 19
+local inspection
+3A
+A 40
+LfD Bremen
+barracks
+ref:TECN
+description:ProRail
+Quedlinburg
+route:f
+Wegberg
+fire_hydrant:street
+Hafenstraße
+negative:ramp
+route_ref:TECN
+handball
+CCPRO 2015
+Badstraße
+Kastanienallee
+D 118
+bump_gate
+Langen (Hessen)
+barbecue_grill
+A 73
+Fürstenfeldbruck
+rubber_tires
+cycleway:right:traffic_sign:forward
+oam:arable_land_type
+fence:material
+playground:climbingframe
+Wadgassen
+Klosterneuburg
+0.19
+Münchner Verkehrs- und Tarifverbund
+Netphen
+Bing-2012
+Markkleeberg
+regulation
+Maps4BW, Bing
+yahoo;cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2006 (nom)
+bulk_upload.pl-c03b2a86-e411-450e-8a10-be3d60619e42
+Géobretagne - Morbihan 2010
+0.30
+Bing; survey
+Berliner Ring
+BDOrtho IGN - available 2017
+ref:TECX
+class_listed
+Villejuif
+source_date:geometry
+plant:output:hot_water
+001000
+destination:NE
+route_ref:TECX
+CCLD dec2010
+Bad Rappenau
+Kürten
+D 106
+bing, survey
+DE-ESO:hl
+D 107
+Laren
+divider
+hifi
+070000
+GB
+13.9
+K 22
+Sinsheim
+E 52
+note:motor_vehicle_conditional
+noexit:motor_vehicle
+single lane
+Mariendorf
+Globosum
+Rotdornweg
+B171
+Weiherstraße
+Base Adresse Nationale
+Volksbank
+Plettenberg
+Microsoft Bing satellite 2011
+opposite_track
+D 71
+0.69
+newspapers
+Rhede
+DigitalGlobe;bayern(80cm)
+Saarstraße
+Neu-Isenburg
+name:cy
+Reichenbach
+seamark:signal_station_warning:information
+ref:FR:NM
+Lauf a.d.Pegnitz
+Grundschule
+maxweight:forward
+destination:5
+destination:NW
+name:svhl
+maxweight:backward
+note_1
+Potlatch 0.9a
+Altglienicke
+Sandweg
+D 116
+047
+Franravel
+hgv:lanes:conditional
+Starenweg
+no_straight_on
+Stadtlohn
+Chanticleer
+Trl
+twitter
+Steig 2
+2.5 m
+Feldgasse
+Frühlingstraße
+charge_zone
+1.80
+B 15
+Mühlgasse
+Buchen
+archery
+txc
+Heiligensee
+vasière
+Copiague
+no_anchoring
+DE-ESO:bü
+taxiway_centre
+Neuruppin
+BDOrtho IGN; Cadastre MàJ 2015; Route 500
+platform_edge
+avalanche_barrier
+Boxberg
+name:is
+ref:gdke
+piste:lift
+payment:ep_quick
+ref:taskey
+freestanding
+D 83
+D 81
+Brahmsstraße
+Bay Shore
+Vlotho
+Tauberbischofsheim
+shared
+Lindlar
+Groß-Gerau
+bulk_upload.pl-9008b238-e3f5-42a0-9a79-3f30b43b5bca
+Hauptplatz
+A 27
+Ofis publik ar brezhoneg
+Bing, NRW Atlas
+classification
+Schlehenweg
+Nordring
+0.87
+N 12
+geoimage.at; survey
+Pfungstadt
+Halle (Westf.)
+Bing;data.gouv.fr:RFF - 11/2011
+D 109
+on_sight
+historic:highway
+Westerstede
+province:right
+source:proposed
+D 77
+Kirsche
+K 31
+Ridge
+Eitorf
+Enger
+Taunusstraße
+AT-V2:vorsicht;AT-V2:hauptsignal_frei
+G
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2009
+Erlenstraße
+Loosdrecht
+B 62
+rugby_union
+cadastre-dgi-fr : Direction Général des Impots - Cadastre ; mise à jour : 2015
+Österreichische Schwarzföhre
+Orthophotographie CRAIG/TopoGEODIS 20013
+FIXME:de
+ref:FR:CTS_SMS
+Finkenstraße
+gtfs_id
+class:bicycle:non_experienced
+protected
+removed:addr:city
+Dieselstraße
+D 75
+Europe
+Wermelskirchen
+no @ (06:00-19:00)
+Stuhr
+air survey by hike39
+Dahlienweg
+Traun
+none @ destination
+double_saltbox
+Eppelborn
+slubice.e-mapa.net
+Friedrichshain
+left_of:2
+Dresdner Straße
+munitions
+Niederkrüchten
+Neuwied
+therapist
+ngo
+Umleitung
+DGFiP / CCPA 2010
+04416
+lgbtq
+operator:de
+ref:ortsnetz
+building:hochparterre
+in_tunnel
+operator:tenant
+Adlerstraße
+alternative_stop
+Rue de Paris
+destination:to:lanes:backward
+Bing2012
+fixbot
+Hörstel
+biogas
+HOPKINTON
+slurry_tank
+B 173
+crane
+district
+Alemannenstraße
+D 111
+38a
+pipes
+aerialway:length
+buildingpart:verticalpassage:floorrange
+feeding:type
+quad
+Steinbach
+Reichshof
+Pinus pinea L., 1753
+fire_hydrant:color
+brothel:apartment
+source:capacity:area
+Bing & Direction Générale des Impôts - Cadastre. Mise à jour : 2011
+information:de
+note:amenity
+removed:addr:postcode
+Adirondack Park
+Tpke
+old_name:etymology:wikidata
+wall:colour
+maxwidth:lanes
+Bing Luftbilder
+Berg
+Rees
+Straße des Friedens
+extraction vectorielle cadastre-dgi-fr source : Direction Générale des Impôts - Cadas. Mise à jour : 2010
+D 940
+0.20
+0.94
+Populus alba
+Schulgasse
+Blaricum
+name:am
+ref:rce
+D 66
+physician
+B 13
+admin_type:FR:2016-01-01-
+motorcycle:rental
+parking:condition:residents
+bulk_upload.pl-41549773-eb30-4e6b-b0c6-0283f6c17316
+source:prominence
+Wunstorf
+historic:place
+Schiffweiler
+traction
+Schweriner
+Riedstadt
+data.gouv.fr:Éducation Nationale - 04/2014
+Noirmoutier-en-l'Île
+Hermsdorf
+Reinickendorf
+Bing;cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2013
+Ennigerloh
+temporary
+Kirchberg
+Windeck
+37a
+Main Street
+Trachycarpus fortunei
+Geislingen an der Steige
+Mo-Fr 09:00-18:00
+Rue Jean Moulin
+Metzingen
+K 36
+DE:386.3
+0.23
+East Patchogue
+Richmond, NY
+Sand-Birke Weiss-Birke
+name:ba
+footway:left.sloped_curb.end
+cycle:dangerous
+fake_gaslight
+basin_area
+ref:vorwahl
+lanes:bus:forward
+DE:239;DE:1022-10
+Direction Générale des Impôts - Cadastre. Mise à jour : 2010
+service:vehicle:oil_change
+Bing Sat mit GPX-Track Shift
+Riverhead
+yellow:white:yellow_diamond
+Simmerath
+basic_hut
+Bremer Straße
+brothel:club
+DE-ESO:bü0;DE-ESO:bü1
+text_color
+sidewalk:left:kerb
+open
+abandoned:tower
+Fraxinus angustifolia
+maps4bw, LGL, www.lgl-bw.de;Bing Aerial
+Ligne de Noisy-le-Sec à Strasbourg
+channel_right
+Tilleul Argenté
+Siegburg
+0.90
+hot_water
+Laupheim
+D 114
+Wacholderweg
+Bing;knowledge
+Fliederstraße
+14.4
+springy
+railway:signal:brake_test
+Attendorn
+railway:signal:brake_test:states
+kerb:right
+Keplerstraße
+railway:signal:brake_test:form
+Hiddenhausen
+alt_name:br
+ele:local
+ref:building
+waterway:vehicle
+railway:signal:station_distant:deactivated
+Oelde
+data.graz.gv.at aerial
+C 8
+D 125
+bfc6ca
+Lilienstraße
+14b
+holding_position
+Brucknerstraße
+Karow
+K 39
+I 90
+Yahoo Satellite Images
+Radebeul
+Olching
+Ochtrup
+A 43
+Chêne Pédonculé
+water_hazard
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre mise à jour : 2010
+yes|yes|no
+Quercus cerris
+Diversifolia
+destination_display
+marking
+Aerowest HiRes aerial imagery
+Avenue du Général de Gaulle
+waterway:mindepth
+D 72
+railway:signal:crossing:deactivated
+addr:housenumber:alt
+Brunnenweg
+capacity:truck
+Peilung
+bollard:material
+14.1
+Wismar
+Rue de la Paix
+Kladow
+N 57
+Andernach
+Mo-Sa 07:00-21:00
+Neunkirchen-Seelscheid
+Bing Sat (2013) (angepasst mit Maps4BW)
+Karben
+alkis/MetropoleRuhrLuftbild
+channel_left
+Schmelz
+Potlatch 0.10d
+K 28
+Direction Générale des Finances Publiques - Cadastre ;  mise à jour : 2011
+future
+13b
+name:os
+Moormerland
+Marzahn
+Kettelerstraße
+fuel:octane_80
+obelisk
+Toulouse - Orthophotoplan 2011
+yes|not_right|no
+maxspeed:hgv:forward
+seamark:wreck:category
+Grefrath
+hvv:barrier_free
+sanitary_dump_station:gravity
+passage_type
+note:3
+railway:signal:speed_limit_distant:deactivated
+Geseke
+transportation
+LCL
+E 59
+Lengerich
+Hechingen
+Britz
+Kanalstraße
+Münsterstraße
+Japanische Blütenkirsche
+agriculture
+Q151954
+waterway_right
+Wallstraße
+Überlingen
+Rockland, NY
+Alter Postweg
+led
+end_of_catenary
+0.97
+Brüggen
+VRB
+E 80
+Bad Honnef
+medium
+D 108
+aerial
+Oberdorfstraße
+Acer platanoides Globosum
+40a
+39a
+ref:SNCF
+A 13
+horse-drawn_carriage
+run-of-the-river
+name:viaduct
+admin_level:2016-01-01-
+seamark:restricted_area:name
+AWS Web API
+Steglitz
+4A
+14.3
+1.75
+D 74
+Elisabethstraße
+Quercus rubra
+singletrail
+LGL (www.lgl-bw.de)
+K 37
+Versmold
+Weidenstraße
+110 @ (22:00-05:00)
+0.59
+NVV
+ref:lfdh
+ref:VRN
+operator:2
+temporary:name
+bing; estimation; survey
+source:link
+BMO/SIG 2010
+destination:distance:backward
+abandoned:public_transport
+payment:sms
+Ronkonkoma
+object:location
+Neuburg an der Donau
+id_ob
+addr:quarter
+https://www.tisseo.fr
+building:use:religion
+railway:signal:main:marker_light
+D 123
+13.00
+Westring
+Wipperfürth
+Erie
+platter
+Schwelm
+Bing, visit
+Kugelspitzahorn
+infiltration
+0+
+Robinie
+Werdau
+Butzbach
+DOP_LVA_BY
+Weilerswist
+Schumannstraße
+bulk_upload.pl-17e673b3-8f0a-4b17-9348-3542bfd67d0b
+PN public pour voitures avec barrières ou 1/2 barrières non gardé à SAL 2 et SAL 2B
+Espelkamp
+Magnolia grandiflora
+Weißensee
+Stadt Wien - data.wien.gv.at
+Siedlerstraße
+dining
+4wd_only
+capacity:smoker_free
+seamark:bridge:clearance_height_safe
+source:capacity
+Henstedt-Ulzburg
+Neckarstraße
+gebäudealter:jünger_1994
+power_rating
+disused:military
+payment:ec
+removed:addr:country
+note:position
+railway:signal:expected_position:height
+disused:deanery
+demolished:building:levels
+Turmstraße
+Brühlstraße
+Essex, NY
+Lankwitz
+permit
+Alban
+Lichtenberg
+Karl-Liebknecht-Straße
+Wildeshausen
+08412
+Diepholz
+Wilnsdorf
+Goslar
+opening_hours:last_check
+operator_1
+mapillary:W
+disused:diocese
+xmas:feature:shop
+Bad Driburg
+Kirchlengern
+ref:iz
+bing + BD Carthage
+railway:signal:electricity:states
+SIG LR
+source : Direction générale des impôts – Cadastre ; mise à jour : 2008
+Pinus pinea
+Fritz-Reuter-Straße
+undefined
+bing,geoimage.at
+0.24
+garage_boxes
+Rue des Acacias
+Micocoulier de Provence
+1.10
+Veilchenweg
+Bruchstraße
+Jever
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 12-06-2008
+Toulouse
+basemap
+bing;geoimage.at
+A 33
+Frohnau
+Gröbenzell
+Weingarten
+monitoring:traffic
+num_ligne
+addr:source:housenumber
+Ditzingen
+canoe_rental
+15b
+name:cz
+ref:mtb
+hazmat:B
+dtag-vzk
+Vechelde
+ref:track
+is_in:township
+Maintal
+bulk_upload.pl-d13cd152-5c9e-4bfe-b1d1-354b877ab36e
+power:abandoned
+ref:historic
+addr:street:alt
+note_de
+Kleiststraße
+Stetten
+houseware
+B 55
+K 24
+Koog aan de Zaan
+Baden
+0.81
+Dürerstraße
+Reinbek
+almien_coastlines mod
+Zierbirne
+fire_water_pond
+Kreuztal
+bulk_upload.pl-76c2f01f-97e8-4577-832a-27364377b656
+Nürnberger Straße
+Leonding
+Platanus sp.
+059
+ref:network
+contrastive_stripes
+service:bicycle:tools
+Plauen
+D 951
+seamark:buoy_special_purpose:colour_pattern
+seamark:notice:1:status
+description:DE
+brothel:saunaclub
+planned:building
+historic:operator
+Mainzer Straße
+left;through|through
+Rue des Vergers
+Schmallenberg
+Schramberg
+maps4bw (LGL, www.lgl-be.de); Digital Globe; Esri, Bing
+waterway_left
+13'
+Konz
+Regione Liguria
+Käthe-Kollwitz-Straße
+5A
+Freudenstadt
+04808
+A4
+03200
+lean_to
+cadastre-dgi-fr - PTscript
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2013 +Bing
+Münchener Straße
+snow_fence
+Johannesstraße
+Tempelhof
+Speyer
+disused:parish
+railway:signal:crossing_distant:repeated
+capacity:truck_diesel_pumps
+comment:fr
+westbound_collector_lanes
+0.96
+start_date:note
+objectid
+footway:left:incline
+name:alt
+taxon:cultivar:de
+through|merge_to_left
+D 907
+K 34
+mexican
+Stolberg
+fr:Gendarmerie nationale française
+research_institution
+movable
+seated
+valley
+oam:permanent_grassland_type
+Schwarzpappel
+Otto-Hahn-Straße
+Grenzstraße
+utm
+parking:condition:area:customers
+brothel:eros_center
+service:bicycle:parts
+building:part:verticalpassage
+seamark:light:3:sequence
+Mühlbach
+construction:amenity
+Friedrichsdorf
+weather:anemometer
+seamark:notice:2:status
+sidewalk:right:wheelchair
+Französisch Buchholz
+Oswego, NY
+start_date:fr
+Oberdorf
+Bing, 2013-02
+RATP
+Römerweg
+B 299
+climbingframe
+A12
+Avenue de la Gare
+Siedlungsstraße
+Conseil Général des Côtes d'Armor - 2014
+organisation
+basemap.at Hires
+clochers.org;2011
+B3
+DE-ESO:sh0
+source:hazmat
+communication:bos:tetra
+New York, NY
+parking:condition:right:2
+bridge_name
+railway:signal:train_protection:deactivated
+addr.source:housenumber
+information:en
+step:height
+cycleway:freedom_of_choice
+access:visitor
+footway:right.wheelchair
+Robert-Bosch-Straße
+Oberstraße
+mapped_by
+Reihenhaus
+tiger:tlid2
+02708
+D 910
+0.93
+Bing and survey
+Remseck am Neckar
+Alte Poststraße
+D 80
+Gewerbestraße
+gasometer
+081
+hvac
+Bad Nauheim
+cheese
+Marktoberdorf
+Meinerzhagen
+motor
+site_status
+seamark:beacon_cardinal:shape
+ref:FR:SDIS
+bulk_upload.pl-23466b53-bd37-414b-b19a-9f0fd972b984
+dismantled
+Oer-Erkenschwick
+dennert_fir_tree
+Hemmingen
+D 110
+destination:distance:forward
+Achern
+temporary:highway
+interval:saturday
+Bad Schwartau
+basemap.at orthofoto
+Am Berg
+survey, bing & extrapolation
+http://gis.ny.gov/gisdata/inventories/details.cfm?DSID=1114
+http://www.gas-tankstellen.de
+chocolate
+Hamburger Straße
+Waldshut-Tiengen
+Oyten
+data.grandlyon.com (DSIT 2016-07 emplacements PMR + orthophoto2015)
+best-guess
+Wagnerstraße
+Bing Luftbild
+Direction générale des Finances Publiques - cadastre. Mise à jour : 2016
+HiRes aerial imagery 2007
+Rue Neuve
+entrance_marker:bus
+variation
+abandoned:wikipedia
+maxtents
+6A
+15.0
+seamark:daymark:information
+seamark:light:1:category
+Mastic Beach
+horse_drawn
+boduble
+Url:Merimee
+proposed:railway:etcs
+Thomas-Mann-Straße
+goods_conveyor
+Schwarzer Weg
+no|yes
+Lederhülsenbaum
+accountant
+Mössingen
+Breisach am Rhein
+Chamaecyparis lawsoniana
+A 28
+Le ministère des solidarités et de la santé - 10/2018
+Mo-Sa 07:00-19:00; PH Su off
+bs-hessen
+use
+A 72
+Middletown
+4.50
+sally_port
+maps4bw, LGL, ww-lgl-bw.de; Mapbox Satellite
+siren:range
+ref:SNCF:Transilien
+landlord
+lcn_ref2
+seamark:notice:3:function
+K 35
+Ackerstraße
+baptist
+09456
+Blumenesche
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 22-06-2008
+PPIGE NPDC - orthophoto 2012 - 2013
+Bing;HiRes aerial imagery
+cadastre recalé avec Bing
+Tegel
+survey, photo
+Ritterstraße
+Département d'Ille-et-Vilaine (juillet 2016)
+16b
+Kurze Straße
+La Baïse
+2/1
+AVV
+county
+Wangen im Allgäu
+Bad Berleburg
+tv
+Hille
+survey;geoimage.at
+D 127
+gpx
+Pyramidenpappel
+mapillary:E
+whitewater:rapid_grade
+01561
+seamark:notice:3:category
+seamark:light:4:colour
+timetable_box:A3_portrait
+razed:power
+seamark:notice:1:distance_end
+Ziegelstraße
+Querstraße
+proposed:building:levels
+Donaustraße
+12'
+Hwy
+Southold
+D 91
+geoimage MaxRes
+ship:type
+railway:signal:resetting_switch:form
+gdke:criteria
+railway:signal:resetting_switch
+E 49
+left|left
+on_kerb
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 1982
+Ingelheim am Rhein
+Euchlora
+D 79
+D 84
+B 16
+flight_of_stairs
+Aachener Straße
+Blücherstraße
+B 12
+Villingen
+Obere Hauptstraße
+Tisséo
+Leichlingen (Rheinland)
+bulk_upload.pl-c5f554b9-2498-4b48-88c5-f360562d7f60
+1.03
+D 93
+ele:nhn
+ref:scoutingnl
+karlsruhe_brunnen_ref
+abandoned:barrier
+note:operator
+hazard:de
+Maps4BW, LGL, www.lgl-bw.de; survey
+maxspeed:motorcycle
+addr:community
+seamark:notice:2:national_information
+bulk_upload.pl-1fecb2a1-60a1-4606-99ac-a1c767368f08
+Mühltal
+Perpignan
+ref:FR:CTS
+ref:FR:SFR
+seamark:rescue_station:category
+Lortzingstraße
+A 39
+Bad Waldsee
+Pfarrgasse
+Pfinztal
+Schwerin
+street_furniture:transit_shelter
+combustion
+Islip
+sunrise-sunset
+Swisttal
+Schöneiche bei Berlin
+Am Markt
+Warstein
+B 169
+Hessen
+Leopoldshöhe
+A25
+1.06
+Straelen
+before 2012-04
+41a
+Ginkgo
+B 180
+Öhringen
+0.91
+quantity
+additional
+name:vo
+contact:xing
+railway:lower_pantograph_section
+seamark:fog_signal:category
+seamark:light:4:character
+inscription:2
+Germany
+available gps-data;yahoo;bing;estimated from DOPs
+Esso
+Lilienweg
+Stadt
+Direction Générale des Finances Publiques ; cadastre. Mise à jour : 2015
+Kopernikusstraße
+Landsmeer
+14.6
+Neheim-Hüsten
+Schleiden
+Mulhouse
+Unterschleißheim
+Pyrus calleryana Chanticleer
+Körnerstraße
+Burscheid
+Düsseldorfer Straße
+Scheffelstraße
+Den Burg
+Setauket-East Setauket
+Banque Populaire
+parking:lane:both:orthogonal
+1.30
+Wikipedia
+put_in
+has_accompanying_cycleway
+railway:signal:electricity:deactivated
+IGN Ortho
+D 130
+ref:FR:ToulouseMetropole
+mhs:criteria
+CCPI avril2011
+42a
+K 32
+Arndtstraße
+Lebenstedt
+Alt-Hohenschönhausen
+Crimmitschau
+rooftop
+Avenue Jean Jaurès
+skating
+Mo-Fr 08:00-18:00
+Westend
+Wilmersdorf
+Rundweg
+E 42
+North Babylon
+Sachsenheim
+B 20
+CCPC mai 2010
+08451
+Walnussbaum
+Map Warper
+condoms
+left_triangle
+new_apostolic
+0.32
+Oerlinghausen
+Holtsville
+Rotbuche
+casino
+Untere Hauptstraße
+N 85
+demanding_alpine_hiking
+Dorfplatz
+name:ga
+weather:thermometer
+access:resident
+seamark:buoy_safe_water:colour
+Blomberg
+Stony Brook
+Palmier de Chine
+laboratory
+connector:ids
+parking:condition:right:2:time_interval
+seamark:light:4:sector_start
+shop_2
+railway:cbtc
+socket:tesla_supercharger
+gsm:cellid
+eastbound_collector_lanes
+source:colour
+name:vec
+seamark:light:4:sector_end
+D 124
+B 31
+Köthen (Anhalt)
+CRIGE PACA Alpes-Maritimes 2009 orbital imagery + survey
+HiRes aerial imagery; LGL, www.lgl-bw.de
+height_restrictor
+GPS survey
+Leoben
+Bad Saulgau
+E 37
+Rue du Lavoir
+B2
+Otsego, NY
+Rue du Général Leclerc
+research
+Güstrow
+route_marker
+K 50
+yellow:white:yellow_bar
+Prunus serrulata Kanzan
+mise à jour : 2009;cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre
+lockers
+Brackenheim
+Geoserver NRW ALK
+0.63
+New York State Constitution, Article XIV
+16.5
+B 22
+Mühlheim am Main
+Braunau am Inn
+pets
+destination:to:lanes:forward
+level_0
+abandoned:service
+CCPA mai2011
+Wülfrath
+seamark:buoy_safe_water:colour_pattern
+parking:lane:both:inline
+seamark:light:4:range
+motorcycle_friendly
+Ministère de la Culture - 07/2018
+Finnentrop
+D 73
+Weißdornweg
+event
+D 121
+Lennestadt
+Ottweiler
+Kornwestheim
+1/1
+Am Sonnenhang
+Austria
+seated;urinal
+0.26
+06366
+D 612
+yahoo_wms
+Kings Park
+Forstweg
+yes|yes|designated
+MAPS4BW
+ref:KBS
+health_specialty:dentistry
+#666666
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2017-12-13
+ele:DHHN12
+old_ref:sandre
+addr:postbox
+inscription:1
+railway:signal:speed_limit:states
+name:war
+historic:1990:railway
+south (cars-trucks-buses)
+N 4
+Brakel
+front
+50 mph
+Überherrn
+r_coastlines
+Wiesengrund
+Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2016-12-13
+Lorch
+Cadastre. Mise à jour : 2010;survey;knowledge
+Crimson King
+Rocky Point
+Wiefelstede
+Schleswig
+data.gouv.fr-Ministère de l'Intérieur-03/2012
+Schönebeck
+dryer
+Bachgasse
+blind
+name:uz
+Seevetal
+footway:left.width
+disused:office
+lamp:duration
+feeding:for
+Moselstraße
+organic:label
+seamark:ferry_route:category
+Schwarzföhre
+0.73
+E 09
+A 96
+Calw
+B 61
+CoVe
+1.40
+Königslutter am Elm
+Erbach
+Bad Wildungen
+Oberkirch
+Cesson-Sévigné
+Edewecht
+Odenthal
+Ottobrunn
+Bing AI
+Riehen
+Flörsheim am Main
+CIC
+conciliation_cross
+signpost
+Sayville
+Bad Dürkheim
+department
+Hohenzollernstraße
+revolving
+4 m
+Wendelstein
+Adalbert-Stifter-Straße
+Rheinstetten
+fr:Lidl
+D 901
+7A
+ref:aveo
+Oostzaan
+Radevormwald
+cost
+Carrefour Market
+it:fvg:regional_catalog:corsi_acqua:nome_foreste
+seaway
+Preetz
+source:loc
+Tilia europaea "Pallida"
+recycling:beverage_carton
+service:vehicle:used_car_sales
+disabled_spaces
+disused:CEMT
+TMC:Road
+piste:status
+protection_title:en
+name:pms
+overtaking:note
+Horn-Bad Meinberg
+Rue Gambetta
+geoland.at MaxRes 2012
+Hans-Böckler-Straße
+D 201
+fish
+-1;-2
+Niedersachsen
+Johann-Sebastian-Bach-Straße
+Kreuzau
+dibavod A06
+Bruz
+Netto
+Bovenkarspel
+GPS;cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2009
+0.88
+E 43
+8%
+20'
+N 3
+0.64
+Brandenburger Straße
+seamark:buoy_special_purpose:information
+proposed:name
+Südliches Anhalt
+name:historic
+ref:FR:CORRIDOR
+watch:SlowRider
+climbing:grade:french:max
+cycleway:both:oneway
+Karlsruhe:Das_Fest
+maxspeed:hazmat:forward
+dance
+windsock
+D 952
+19'
+Verkehrsbetriebe Karlsruhe GmbH
+Sassenburg
+Warren, NY
+D 928
+17b
+Salix
+perch
+Rue Aristide Briand
+Hochbordstein, kein Buskapstein
+Eisenach
+Le ministère des solidarités et de la santé - 08/2018
+Friedrich-Engels-Straße
+Nachtigallenweg
+check
+Eschborn
+2.3 MW
+Herdecke
+Heppenheim
+C13
+t-bar
+Direction Générale des Finances Publiques - cadastre.Mise à jour : 2011
+acoustic
+14.00
+D 943
+2 h
+C 9
+Germany,Europe
+Burgweg
+Linden
+name:gd
+E 29
+design:ref
+sidewalk:right:est_width
+lighthouse
+workrules:ruleset
+volcano:status
+seamark:buoy_safe_water:shape
+lamp:tilt
+north (cars-trucks-buses)
+reoccurence
+lanes:bus:backward
+name:yue
+operator2
+Blumenweg
+Communauté Urbaine de Bordeaux 05/2013
+1.45
+0.33
+B 39
+Olpe
+right_triangle
+beam_pump
+Meiningen
+E 34
+21'
+Shp
+Weinstraße
+E 25
+D 92
+DE-ESO:sh2
+Populus nigra Italica
+Fontanestraße
+8A
+tax_advisor
+K 40
+Coswig (Anhalt)
+aqueduct
+Neuenstein
+Pfullingen
+Wörth
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. mise à jour : 2010
+E 56
+A 29
+Rostocker Straße
+two-level
+kiln
+DE-ESO:db:bü4
+Bing imagery
+name:pa
+name:sh
+Feldbach
+motor_vehicle:conditional:note
+former_operator:wikipedia
+addr:housenumber_2
+motorcar:conditional
+seamark:light:4:height
+contact:tripadvisor
+vehicle:conditional:note
+Shape_Leng
+force
+european_cultural_path
+proposed:highspeed
+former_operator:wikidata
+whitewater:description
+07743
+BDOrtho IGN 2016;cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2016
+Aschersleben
+gynaecology
+GVA_Basel
+N 19
+Wilhelm-Busch-Straße
+18b
+0.01
+basemap.at Orthhofoto
+Amstetten
+St. James
+cycle
+Medemblik
+Bönen
+locksmith
+saline
+Greene, NY
+maps4bw (LGL, www.lgl.bw.de); Mapbox Satellite
+Burgwedel
+High-Resolution Aerial Imagery
+forward:stop
+Ebingen
+factory
+06120
+Much
+Martinstraße
+authentication:short_message:number
+ref:gnd
+Fabrikstraße
+ref1
+Rosenthal
+piste:abandoned
+Picea
+ref:LAVV
+operator:website
+drink:soy_milk
+Föhrenweg
+climbing:summit_log
+D 94
+lamps
+Thüringen
+Aldi
+Liebigstraße
+K 38
+Fasanenstraße
+cadastre-dgfip-fr source : Direction Générale des Finances Publiques - Cadastre ; mise à jour :2016
+Karlsbader Straße
+Freiherr-vom-Stein-Straße
+Schömberg
+Monschau
+Trierer Straße
+Poitiers
+Gundelsheim
+Karlsbad
+Alleestraße
+43a
+line_termination
+Rue du 8 Mai 1945
+Courthézon
+Bergweg
+basemap.at-orthofoto
+0.92
+Hofstraße
+06449
+D 122
+D 126
+Evangelische Kirche von Westfalen
+basemap.at ortophoto
+D 96
+project
+budovy201004
+grades
+Lichtenfels
+ski:rental
+maps4bw, LGL, ww-lgl-bw.de; Bing
+toll:name
+paddock
+Monnickendam
+Fröbelstraße
+Schloß Neuhaus
+Dahlem
+umts:LAC
+area:ha
+health_specialty:psychotherapy
+Josefstraße
+A3
+D 85
+miniature
+Gemeinde_N
+GemeindeNR
+Ehingen (Donau)
+umts:cellid
+proposed:gauge
+access:foot
+note:pl
+0.77
+E 62
+copier
+Chemnitzer Straße
+18'
+POI
+Bogenstraße
+geology
+Drensteinfurt
+D 133
+Ascheberg
+Lustenau
+0.36
+D 76
+Nordex
+Land Steiermark - data.steiermark.gv.at; geoimage.at
+dmgroom_coastlines
+D 88
+Bischofsheim
+06484
+14.8
+Cercis siliquastrum
+Pallida
+Corylus
+advertising_agency
+Nantes
+Nagold
+Bad Friedrichshall
+Beverungen
+D 90
+15.5
+Tilsiter Straße
+AT-V2:halt;AT-V2:frei;AT-V2:frei_mit_60
+lane_spec
+disused:wheelchair
+source:operator
+Tilia n. sp.
+cellar:use
+access:backward
+artwork:type
+railway:maximum_current:ET420
+source:historic
+parking:lane:width
+Autobahnmeisterei
+Weserstraße
+0.83
+B 26
+Winterberg
+15.00
+B 104
+kitchen_hours
+3dr_type
+tourism_1
+Pilz/matt
+DGFiP
+Stahnsdorf
+Spenge
+Eislingen/Fils
+0.67
+Hanau
+Kalkar
+Information
+GPS,bing
+Sigmaringen
+no @ (weight>7.5)
+lfd
+0.48
+A 30
+15.3
+Washington, NY
+State Highway 5
+geoland.at
+0.82
+A 57
+Auf der Heide
+pinus_mugo
+sidewalk:segregated
+name:id
+ref:LMF
+city_gate
+1.16
+0.52
+Mühlhausen
+C 10
+future_adress
+ref:IDFM
+Bad Laasphe
+speech_output
+climbing:grade:french:min
+naptan:Bearing
+Schrank
+ref:relation
+abandoned:bridge
+ref:hagen
+Catalpa bignonioides
+0.74
+firebrick
+Genthin
+BD Ortho IGN 2017
+Bahnhof
+Schwedt
+A 66
+01809
+Avenue de la République
+State Highway 25
+D 145
+Keltenstraße
+Bouleau Pleureur
+Rathaus
+4%
+maps4bw (LGL, www.lgl-bw.de); Mapbox satellite
+Mastic
+D 149
+06502
+atv
+http://www.nationalpark-saechsische-schweiz.de/wp-content/uploads/2013/12/Radwege-Karte-B%C3%B6hmische-Schweiz.pdf (nach Rücksprache mit der Nationalparkverwaltung)
+unnamed
+EDF
+name:ku
+gps_error
+0.98
+weather:barometer
+unit
+Isernhagen
+NTF-2
+pillbox
+monitoring:bicycle
+traffic_mode
+08209
+access:description
+quarter
+it:fvg:regional_catalog:corsi_acqua:nome
+wheelchair:note
+access:fuel:lpg
+historic:amenity
+alternate_stop
+Schwierigk
+service:vehicle:inspection
+ref:Herzogenrath
+parking:condition:left:2
+it:fvg:regional_catalog:corsi_acqua:natura
+ref:Facilibus_Saint-Gervais
+environment
+Energie AG
+Appenweier
+Eppingen
+DE-ESO:db:zs6
+Damaschkestraße
+Hövelhof
+GPS trace
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. mise à jour : 2018
+V2-cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2009
+44a
+A11
+0.58
+Stockach
+Bregenz
+stamps
+Schmiedestraße
+basemap.at; geoimage.at
+Brunsbüttel
+Blankenfelde
+Waghäusel
+3 MW
+Schlesierstraße
+Sportplatzstraße
+DE:261
+Rommerskirchen
+Meißen
+Pyrus
+merge_to_right|through
+Feldweg
+name:kn
+surface.smoothness
+0.68
+xmas:note
+was:highway
+Blankenburg
+destination:symbol:to:lanes:backward
+razed:name
+CNES/Spot Image
+ref:FR:LILA
+embankment:right
+pictogram:bicycle
+highway:disused
+maxload
+Bing ; SNCF Réseau
+sanitary_dump_station:basin
+planned:highway
+Ansbach
+3/1
+Stadtlinde
+1.09
+footway:left.wheelchair
+vietnamese
+Hochdorf
+Bergen
+Krems an der Donau
+Höxter
+Tilia cordata Greenspire
+Direction Générale des Finances Publiques - Cadastre ;  Mise à jour : 2011
+AT-V2:schutzsignal
+Glauchau
+Oc
+AT-V2:fahrverbot;AT-V2:fahrverbot_aufgehoben
+Blé tendre
+Schopfheim
+Mindelheim
+caterer
+B 56
+bulk_upload.pl-4ce9dfd7-5433-4798-8825-c5c1e89e81ae
+08371
+resurvey
+enclosure
+Rathausplatz
+Baiersbronn
+Magdeburger Straße
+drinks
+B 303
+DHL
+Niederschönhausen
+opendata.larochelle.fr 2013-07
+DE-ESO:zs2
+09337
+01109
+Heinestraße
+1.13
+Celtis occidentalis
+Vichy
+Renault
+Kalletal
+Heckenweg
+PL
+005
+closed:amenity
+Fichtestraße
+is_accompanying_footway
+Zwanenburg
+guidepost:type
+note:cadastre
+temporary_amenity
+lamp_ignition
+parking:condition:default
+disused:tracktype
+D 148
+VRS
+corn
+B 243
+Fischbach
+Herzebrock-Clarholz
+Hockenheim
+floor
+BMO2011
+Odenwaldstraße
+Neukirchen
+Regionale
+0.39
+0.66
+6 m
+E 51
+Route Nationale
+0.12
+Plouzané
+dolmen
+sienna
+data.nantes.fr 2011-11
+Land Vorarlberg
+D 87
+cadastre-dgi-fr : Direction Général des Impots - Cadastre ; mise à jour : 2016
+juvenile
+Wachtberg
+Bad Oldesloe
+D 933
+4/1
+name:af
+election:type
+ref:name
+Horn
+Sundern
+Tostedt
+Arzt für Allgemeinmedizin
+Emmendingen
+Wilhelmstadt
+Tholey
+guide_strips
+parking:condition:right:fee_per_hour
+seamark:navigation_line:category
+service:copy
+uiaa_scale
+15 mph
+Merseburg
+removed:barrier
+FACC_CODE
+headroom
+seamark:notice:1:national_information
+mtb_trail_type
+abandoned:aerialway
+bulk_upload.pl-9049829b-2dc7-4455-bda3-ed9049ae4dd3
+parking:lane:right:marked
+Fischerstraße
+Ouistreham
+nrw atlas ALK
+txe
+15.2
+taxiway_edge
+existing riverbanks
+geoimage.at;survey
+theme_park
+Geoland.at MaxRes 2012
+Telgte
+19b
+0.79
+Bodelschwinghstraße
+Oberkrämer
+Rue Jules Ferry
+mapbox
+Hüllhorst
+K 33
+Fraxinus excelsior 'Westhofs Glorie'
+Mapbox Satellite
+2.15
+0.27
+0.86
+Büttelborn
+2 bis
+Bergneustadt
+Rosa-Luxemburg-Straße
+Bing Sat Imagery
+AT-V2:halt;AT-V2:frei;AT-V2:frei_mit_60;AT-V2:frei_mit_40
+C1
+1.01
+0.29
+D 89
+B 65
+intersects
+true
+anaerobic_digestion
+Feldbergstraße
+3dr:direction
+socket:typee:output
+building:owner
+audio_anouncement
+socket:cee_blue
+Travemünde
+payement:cheque
+transit:lanes:backward
+toll:bicycle
+maxspeed:bus
+addr:city:hsb
+parking:lane:left:marked
+volcano:type
+Grootebroek
+lda
+Nesconset
+attic
+14'
+1.02
+0.42
+0.46
+Sperberweg
+Michelstadt
+Zülpich
+Castanea
+Rue de la Libération
+Schwetzingen
+OOWV
+C19
+0.44
+0.57
+E 70
+Yahoo/checked in reality
+06217
+Stadtwerke Karlsruhe GmbH
+geoimage.at;bing
+Linzer Straße
+Bédarrides
+steak_house
+1 bis
+bottom_board
+101 02
+berth
+Fritzlar
+basemap.at,geoimage.at
+80 @ (22:00-05:00 AND weight>7.5)
+railway:signal:main_repeated:height
+railway:signal:main_repeated:deactivated
+destination:country:forward
+addr:street_2
+Holzwickede
+mtb:trailtype
+vhf_channel
+surface_1
+#800000
+FR:ERP
+construction:maxspeed
+trolley:deposit
+geographical_region
+footway:right.width
+cycleway:both:traffic_sign
+name:ast
+parking:lane:both:perpendicular
+Leimen
+american
+Münsingen
+B 214
+Fleury-les-Aubrais
+0.61
+K 42
+Geoportal Berlin / Hausumringe + DOP 2014
+Microsoft Bing Satellite 2011
+ERDF
+9A
+07751
+cadastre 2016 + survey
+maps4bw, LGL, ww.lgl-bw.de; Bing
+Bohnsdorf
+Farmingville
+Steinheim
+A7
+45a
+model_aerodrome
+Retrieved from v3
+Augsburger Straße
+09306
+02906
+Arnstadt
+Kerken
+newspaper
+Berggasse
+Hauffstraße
+Q270363
+name:sq
+name:bn
+Hohenhameln
+old_name:1979
+technical
+fire_hydrant:class
+ref:FR:MontfortCommunaute:OC
+DE:206
+heritage:ref:inspire
+03253
+funicular
+Rahden
+Bad Schwalbach
+Albrecht-Dürer-Straße
+D 129
+authentication:short_message:text
+authentication:phone_call:number
+railway:signal:fouling_point
+eea:cdda:sitecode
+locomotive:type
+foot:left
+seamark:light:4:period
+authentication:money_card
+tractor
+L 551
+D 142
+Schöningen
+preschool
+Hof
+1A/2B
+Saint-Chamond
+Algermissen
+Dieburg
+#EEEEEE
+Neugasse
+Stadt Reutlingen - Befliegung 2006
+20b
+2;3
+18.5
+E 23
+B 44
+01662
+Friedhof
+Neustadt in Holstein
+Nohfelden
+sushi
+East Islip
+Malsch
+Mo-Sa 09:00-19:00
+B 36
+Blutahorn
+Zaandijk
+D 900
+CH
+Wiener Linien
+D 140
+European ash
+0.5 m
+stonemason
+name:ce
+disused:sport
+note:tracktype
+railway:signal:crossing_hint:repeated
+Kapfenberg
+seamark:notice:1:distance_start
+Copalme d'Amérique
+railway:signal:switch:height
+recycling:rubble
+city:right
+westbound_express_lanes
+DE:260,DE:1020-30
+south (cars only)
+Brandenburg an der Havel
+north (cars only)
+cadastre-dgfip-fr source : Direction Générale des Finances Publiques - Cadastre ; mise à jour : 2015
+1.60
+fort
+stop_area_group
+US:NY
+AT-V2:vorsicht;AT-V2:hauptsignal_frei;AT-V2:hauptsignal_frei_mit_60
+maintenance
+D 131
+Einsteinstraße
+VMS
+Triftstraße
+signal_station_traffic
+split_rail
+Cremlingen
+E 712
+Emplacement à planter
+Direction Générale des Finances Publiques - cadastre.Mise à jour : 2013
+Le Relecq-Kerhuon
+sourvey CC0;geoimage.at;www.basemap.at CC BY 4.0
+Mo-Fr 09:00-18:00; Sa 09:00-13:00
+Bad Ischl
+D 916
+Reinheim
+Renningen
+San Remo
+Theodor-Storm-Straße
+Leibnizstraße
+Sulz am Neckar
+cobblestone:flattened
+D 925
+Eibenweg
+bottom
+Walldürn
+Les Sables-d'Olonne
+psychotherapist
+Geoportal Berlin / K5
+Thale
+name:tt
+name:io
+name:bo
+closed:name
+payment:paypal
+colour_name
+scale:dav
+theatre:type
+parking:condition:both:fee_per_hour
+Trace GPX et Bing
+service:vehicle:tyres
+wire_fence
+destination:symbol:to:lanes:forward
+incline:right
+recycling:bottles
+name:swg
+name:scn
+sidewalk:left:wheelchair
+Wegname
+Puchheim
+opening_hours:atm
+10A
+3c
+14.7
+#777777
+Altheim
+UMTS
+bulk_upload.pl-62eeb845-5722-4f14-9028-ea0e1313ff5b
+fish_pass
+paint
+Bing;cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. Mise à jour : 2015
+0.54
+Werdohl
+4c
+Annaberg-Buchholz
+International Boundary Commission
+Observations personnelles
+Ebersbach an der Fils
+Obersulm
+GPSBabel-1.3.6
+Rue Anatole France
+fr:Société générale
+Clinton, NY
+LandSat
+name:nn
+name:rm
+Ostring
+Bing + Cadastre 2013
+Pankow
+old_name:1970
+Zeisigweg
+Memmingen
+ref:FR:cadastre
+Akazienstraße
+footway:width
+eea:cdda:parentiso
+Mo-Fr 10:00-19:00; Sa 10:00-18:00
+footway:right:bicycle
+Friesenstraße
+gps track
+name:be-tarask
+Ostlandstraße
+#loop1
+removed:shop
+transit:lanes:forward
+short_name:de
+Keolis Rennes 5 mai 2016
+gsm:LAC
+operator:note
+designated:name
+Hötting
+Hardtstraße
+Marienberg
+Finsterwalde
+3B
+tax
+cone
+Ober-Ramstadt
+survey;image
+03172
+Carpinus betulus Fastigiata
+Kudelstaart
+Brunnengasse
+Im Grund
+Wedel
+Santpoort-Noord
+Bussardweg
+roofer
+Heusenstamm
+Hans-Sachs-Straße
+Amselstraße
+festival
+Rue du Pont
+17'
+Rue Basse
+Egmond aan Zee
+Nibelungenstraße
+Bing, local_knowlegde
+Salix alba
+D 136
+ref:gemeentecode
+beacon:channel
+Grand'Rue
+Direction Générale des Finances Publiques - Cadastre. Mise à jour 2012
+data.loire-atlantique.fr
+note:
+Marchtrenk
+historic:landuse
+seamark:radar_station:category
+seamark:fairway:minimum_depth
+disused:phone
+maxspeed:hgv:backward
+ref:FR:NantesMetropole
+removed:contact:website
+removed:landuse
+telescope:diameter
+Haßloch
+seamark:notice:3:impact
+footway:left.surface
+Katharinenstraße
+ref:IRIS
+alternative:hgv:backward
+service:bicycle:Bicycle_Sales_and_Service
+tiger:name_direction_prefix_2
+maxspeed:shunting
+101 03
+historic:1990:electrified
+name:ext
+cabins
+by_demand
+crepe
+Ottostraße
+Deutsche Telekom
+P2
+Survey 01/2016
+08056
+Potsdamer Straße
+Springs
+remote
+market
+Wielandstraße
+blue:white:blue_bar
+Manosque
+Linnich
+output
+Communauté Urbaine de Bordeaux - 06/2013
+GSM 900
+Kronberg im Taunus
+E 57
+oven
+special_purpose
+Gerlingen
+Gescher
+CCLD/DGFip dec2010
+07749
+Leer (Ostfriesland)
+Blaustein
+glasshouse
+ground;grass
+Ouderkerk aan de Amstel
+granite_stone
+Greenspire
+arete
+Alpen
+name:gv
+proposed:landuse
+1.07
+make
+recycling:cds
+addr:old_housenumber
+Panoramaweg
+recycling:engine_oil
+actuator
+ophthalmology
+Riedstraße
+6/1
+Carrefour
+46a
+Friedberg
+Bilk
+Herkimer, NY
+Maps4BW, LGL, www.lgl-bw.de; Mapbox Satellite
+ref:ropiky.net
+Spiesen-Elversberg
+available gps-data;yahoo;estimated from DOPs
+Edam
+red;white;red
+Viernheim
+Freiligrathstraße
+accuracy
+Selfkant
+15'
+D 78
+Kreuzweg
+web
+Main
+Goldbach
+Baumschulenweg
+Waren (Müritz)
+GPS, Land Vorarlberg
+SDIS29/2011
+allmountain
+DE:zone20
+Grünstraße
+Lutherstraße
+Am Weinberg
+Bad Lippspringe
+USA
+light:signal_group
+Tailfingen
+1.04
+D 98
+Anna Paulowna
+Karlsruher Verkehrsverbund
+01640
+paving_stones:width
+source:maxseed
+DE:250,DE:1020-30
+47a
+building:roof:oriel
+ref:eeg
+Lyon
+maxsideheight
+payment:quick
+diet:kosher
+grave:number
+building:obm
+campusbuilding
+service:print
+parking:lane:both:capacity
+Wading River
+DigitalGlobe Standard Imagery
+Bad Wurzach
+source:old_name:1970
+mindistance:hgv
+parking:condition:left:2:time_interval
+description:1
+footway:right.surface
+access:employee
+url:timetable
+D 160
+Au
+SON
+1.22
+Extertal
+BDTOPO Hydrographie 10-2017
+cadastre-dgi-fr  - PTscript
+Rödental
+Kirchengasse
+GPS-Track
+Wurzen
+1d
+C20
+B 88
+Wersten
+Rancho
+D 936
+L 52
+04720
+Saarbrücker Straße
+Wervershoof
+NRW-Atlas: Automatisierte Liegenschaftskarte (Vektor)
+Kleinblättrige Winterlinde
+Tilia cordata Rancho
+Trossingen
+data.grandlyon.com - Orthophoto 8cm - 2015/05
+Karlshorst
+marego
+Franklin, NY
+Kurfürstenstraße
+D 128
+0.02
+accomodation
+0.51
+Tiefenbach
+Talweg
+planted
+Borchen
+ref:TECL
+0.71
+name:start_date
+CTRL
+Einebenenmast
+Rue des Roses
+Wedding
+D 902
+Bing, LGL, www.lgl-bw.bw
+source:leisure
+capacity:restaurant
+recycling:mobile_phones
+building:use:military
+building_type:de
+Preußisch Oldendorf
+source:parking:lane
+#FF0000
+escalator_dir
+lanes:conditional
+Potlatch alpha
+Bobingen
+building:levels:roof
+capacity:shower
+Bad Wörishofen
+1 m
+Rue Haute
+Olfen
+not_left|yes|yes
+Prädator (BBP Ofi)
+Wasserstraße
+Tettnang
+Collected via KeypadMapper
+sawmill
+Gabelsbergerstraße
+Annastraße
+fluorescent_bulb
+Traunstein
+Björn Steiger Stiftung
+Reken
+Bing; gps
+null
+Säulenhainbuche
+scuba_diving
+17.2
+nails
+Saint-Estève
+cadastre-dgi-fr source : Direction Générale des Finances Publiques - Cadastre. mise à jour : 2017
+circular
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 11-07-2008
+tea
+colonnade:left
+institute
+color:arrow
+preserved:railway
+cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 21-06-2008
+Spich
+parking:condition:right:3
+04100
+ref:AT:bda
+piste:fee
+railway:signal:combined:marker_light
+forward_platform
+Barbarastraße
+maxweight:description
+Halver
+route_ref:TECL
+B 188
+valves
+Angerstraße
+source:coordinates
+ref:ESTW
+period
+demolished:barrier
+recycling:tyres
+removed:contact:phone
+railway:signal:speed_limit_distant:turn_direction
+plan.at 2009;geoimage.at
+maxweight:forestry
+Weiterstadt

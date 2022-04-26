@@ -1,0 +1,556 @@
+
+//
+// Cases that deal with local keys in various combinations
+//
+
+query:  w[tourism=museum][cherry_local]
+    museum_multi_locals: true
+    museum_no_locals: false
+    only_locals: false
+
+query:  w[tourism=museum][cherry_local][apple_local]
+    museum_multi_locals: true
+    museum_no_locals: false
+    only_locals: false
+
+query:  w[tourism=museum][cherry_local][apple_local][banana_local]
+    museum_multi_locals: true
+    museum_no_locals: false
+    only_locals: false
+
+query:  w[tourism=museum][cherry_local!=monkeys][apple_local!=monkeys]
+    museum_multi_locals: true
+    museum_no_locals: true
+    only_locals: false
+
+query:  w[tourism=museum][cherry_local!=monkeys][apple_local]
+    museum_multi_locals: true
+    museum_no_locals: false
+    only_locals: false
+
+query:  w[tourism=museum][cherry_local][apple_local!=monkeys]
+    museum_multi_locals: true
+    museum_no_locals: false
+    only_locals: false
+
+query:  w[cherry_local][apple_local!=monkeys]
+    museum_multi_locals: true
+    museum_no_locals: false
+    only_locals: true
+
+
+// Test case for "skipOptionalClauses"
+
+query:  w[highway][!bridge][uncommon_key]
+    highway3: false
+    highway3_uncommon: true
+    highway_bridge_uncommon: false
+
+query:  w[highway][bridge]
+    not_a_bridge:   false
+
+//
+// Cases with numbers
+//
+
+query: w[highway][maxspeed=15,25,100.000001,30,83.13]
+    highway3_uncommon2: true
+    highway_residential: true
+    highway_track: true
+    highway_motorway: false
+    highway4: true
+    highway5: false
+    highway8: true
+
+query: w[highway > 32]
+    highway3:                   false
+
+query: w[highway < 32]
+    highway3:                   false
+
+query: w[highway < 32][highway!=motorway]
+    highway3:                   false
+
+query: w[highway > 2][highway < 100]
+    highway3:                   false
+
+query: w[highway = 32]
+    highway3:                   false
+
+query: w[highway != 32]
+    highway3:                   true
+
+query: w[!highway][!amenity][!uncommon_key]
+    single_uncommon_key:        false
+    single_uncommon_key_no:     true
+    hotel2:                     true
+    highway3:                   false
+    highway3_uncommon:          false
+
+query: w[!highway][!amenity][uncommon_key][!uncommon_key2]
+    single_uncommon_key:        true
+    single_uncommon_key_999:    true
+    double_uncommon_key:        false
+    hotel2:                     false
+    highway3:                   false
+    highway3_uncommon:          false
+
+query: w[highway][uncommon_key]
+    single_uncommon_key:        false
+    hotel2:                     false
+    amenity_uncommon_key:       false
+    highway3:                   false
+    highway3_uncommon:          true
+
+query: w[!highway][uncommon_key]
+    single_uncommon_key:        true
+    hotel2:                     false
+    amenity_uncommon_key:       true
+    highway3:                   false
+    highway3_uncommon:          false
+
+
+query: w[!highway][!amenity][uncommon_key]
+    single_uncommon_key:        true
+    hotel2:                     false
+    amenity_uncommon_key:       false
+    highway3:                   false
+    highway3_uncommon:          false
+
+query: w[!highway][amenity][uncommon_key]
+    single_uncommon_key:        false
+    double_uncommon_key:        false
+    amenity_uncommon_key:       true
+    highway3:                   false
+    highway3_uncommon:          false
+
+query: w[!highway][amenity][uncommon_key][!uncommon_key2]
+    single_uncommon_key:        false
+    double_uncommon_key:        false
+    amenity_uncommon_key:       true
+    highway3:                   false
+    highway3_uncommon:          false
+
+
+query:  w[!highway][highway!=residential]
+    highway3:               false
+    restaurant4: 		    true
+
+query:  w[!highway][highway!=primary]
+    highway3:               false
+    restaurant4: 		    true
+
+query:  w[highway][highway=primary]
+    highway3:               true
+    restaurant4: 		    false
+
+query:  w[!highway][highway=primary]
+    error: conflict
+
+query:  w[highway][!highway]
+    error: conflict
+
+query: w[highway="residential"]["highway"=residential]["highway"="res*"][highway="*dential"]
+	highway3:               false
+    highway3_uncommon:      false
+    highway_track:          false
+    restaurant4: 		    false
+    highway_no:             false
+    highway_local_string:   false
+    highway_numeric:        false
+    highway_numeric_wide:   false
+    highway_residential:    true
+
+// Uncommon keys
+
+query: w[uncommon_key]
+    single_uncommon_key:            true
+    double_uncommon_key:            true
+
+query: w[uncommon_key][uncommon_key2]
+    single_uncommon_key:            false
+    double_uncommon_key:            true
+
+query: w[!uncommon_key][!uncommon_key2]
+    single_uncommon_key:            false
+    double_uncommon_key:            false
+
+query: w[uncommon_key][!uncommon_key2]
+    single_uncommon_key:            true
+    double_uncommon_key:            false
+
+query: w[uncommon_key=uncommon_value]
+    single_uncommon_key:            true
+    single_uncommon_key_no:         false
+    single_uncommon_key_999:        false
+
+query: w[uncommon_key=uncommon_value,999]
+    single_uncommon_key:            true
+    single_uncommon_key_no:         false
+    single_uncommon_key_999:        true
+
+query: w[uncommon_key!=uncommon_value,999]
+    single_uncommon_key:            false
+    single_uncommon_key_no:         true
+    single_uncommon_key_999:        false
+
+query: w[uncommon_key=uncommon_value,999,no]
+    single_uncommon_key:            true
+    single_uncommon_key_no:         true
+    single_uncommon_key_999:        true
+
+query: w[uncommon_key][uncommon_key!=999]
+    single_uncommon_key:            true
+    single_uncommon_key_no:         false
+    single_uncommon_key_999:        false
+    track:                          false
+
+// Easy cases
+
+query: w[highway]
+	highway3:               true
+    highway3_uncommon:      true
+    highway_track:          true
+    restaurant4: 		    false
+    highway_no:             false
+    highway_no2:            false
+    highway_local_string:   true
+    highway_numeric:        true
+    highway_numeric_wide:   true
+
+query: w[!highway]
+	highway3:               false
+    highway3_uncommon:      false
+    highway_track:          false
+    restaurant4: 		    true
+    highway_no:             true
+    highway_local_string:   false
+    highway_numeric:        false
+    highway_numeric_wide:   false
+
+query: w[highway!=restaurant]
+	highway3:               true
+    highway3_uncommon:      true
+    highway_track:          true
+    restaurant4: 		    true
+    highway_no:             true
+    highway_local_string:   true
+    highway_numeric:        true
+    highway_numeric_wide:   true
+
+query: w[highway=no]
+	highway3:               false
+    highway3_uncommon:      false
+    highway_track:          false
+    restaurant4: 		    false
+    highway_no:             true
+    highway_local_string:   false
+    highway_numeric:        false
+    highway_numeric_wide:   false
+
+query: w[highway!=no]
+	highway3:               true
+    highway3_uncommon:      true
+    highway_track:          true
+    restaurant4: 		    true
+    highway_no:             false
+    highway_local_string:   true
+    highway_numeric:        true
+    highway_numeric_wide:   true
+
+query: w[highway!=some_local_string_value_that_will_not_match]
+	highway3:               true
+    highway3_uncommon:      true
+    highway_track:          true
+    restaurant4: 		    true
+    highway_no:             true
+    highway_local_string:   true
+    highway_numeric:        true
+    highway_numeric_wide:   true
+
+query: w[highway=track][tracktype=grade5]
+    track:          false
+    track_grade5:   true
+
+query: w[highway][!tracktype]
+    track:          true
+    track_grade5:   false
+
+query: w[!highway][!tracktype]
+    track:          false
+    track_grade5:   false
+
+query: w[highway!=track][!tracktype]
+    track:          false
+    track_grade5:   false
+
+query: w[highway!=track][tracktype!=grade5]
+    track:          false
+    track_grade5:   false
+
+query: w[highway=track][tracktype!=grade5]
+    track:          true
+    track_grade5:   false
+
+query: w[highway=track][tracktype!=grade4,grade5]
+    track:          true
+    track_grade5:   false
+
+// Queries that should throw an exception
+
+query: w[maxspeed>"abc"]
+    error: expected_number
+
+query: w[maxspeed>some:value]
+    error: expected_number
+
+query: w[maxspeed
+    error: syntax
+
+query: w[maxspeed!!!!
+    error: syntax
+
+query: w[maxspeed>4,5]
+    error: expected_single
+
+query: w[name!~444]
+    error: expected_string
+
+query: w[!name=a]
+    error: syntax // TODO
+
+query: w[!]
+    error: expected_key
+
+query: w["some key"<>4]
+    error: syntax // TODO
+
+// Syntactically correct, but nonsensical
+// (Queries that never match anything)
+
+query: w[highway="residential"]["highway"!=residential]
+	highway3:               false
+    highway3_uncommon:      false
+    highway_track:          false
+    restaurant4: 		    false
+    highway_no:             false
+    highway_local_string:   false
+    highway_numeric:        false
+    highway_numeric_wide:   false
+    highway_residential:    false
+
+// Syntactically correct, but inefficient
+
+query: w[highway="residential"]["highway"=residential]
+	highway3:               false
+    highway3_uncommon:      false
+    highway_track:          false
+    restaurant4: 		    false
+    highway_no:             false
+    highway_local_string:   false
+    highway_numeric:        false
+    highway_numeric_wide:   false
+    highway_residential:    true
+
+// Query with superfluous clause
+query: w[highway=residential][highway!=primary]
+	highway3:               false
+    highway3_uncommon:      false
+    highway_track:          false
+    restaurant4: 		    false
+    highway_no:             false
+    highway_numeric:        false
+    highway_residential:    true
+
+query: w[maxspeed>10][maxspeed>20][maxspeed>25][maxspeed<100000000000000000]
+    highway3:               true
+    highway_motorway:       true
+    highway_residential2:   false
+
+// Sample queries and the cases that they should match (or not match)
+
+query: w[uncommon_key]
+    single_uncommon_key:            true
+    single_uncommon_key_no:         false
+    single_uncommon_key_999:        true
+    track:                          false
+
+query: w[!uncommon_key]
+    single_uncommon_key:            false
+    single_uncommon_key_no:         true
+    single_uncommon_key_999:        false
+    track:                          true
+
+query: w[uncommon_key!=999]
+    single_uncommon_key:            true
+    single_uncommon_key_no:         true
+    single_uncommon_key_999:        false
+    track:                          true
+
+query: w[uncommon_key>=999]
+    single_uncommon_key:            false
+    single_uncommon_key_no:         false
+    single_uncommon_key_999:        true
+    track:                          false
+
+query: w[uncommon_key<999]
+    single_uncommon_key:            false
+    single_uncommon_key_no:         false
+    single_uncommon_key_999:        false
+    track:                          false
+
+query: w[uncommon_key="9*"]
+    single_uncommon_key:            false
+    single_uncommon_key_no:         false
+    single_uncommon_key_999:        true
+    track:                          false
+
+query: w[uncommon_key="*9"]
+    single_uncommon_key:            false
+    single_uncommon_key_no:         false
+    single_uncommon_key_999:        true
+    track:                          false
+
+query: w[uncommon_key="*9"][uncommon_key>100]
+    single_uncommon_key:            false
+    single_uncommon_key_no:         false
+    single_uncommon_key_999:        true
+    track:                          false
+
+
+// Any feature that is not tagged restaurant
+// Different from "amenity=restaurant"
+query:	na[!restaurant]
+	restaurant4: 	true
+	hotel1:			true
+
+query:	w[highway="*ary"]
+	highway3:		true
+
+query:  *[name="*straße"]
+	highway3:		true
+	restaurant4: 	false
+
+query:  *[name="*apri"]
+	highway_residential:		true
+
+query:	na[amenity=restaurant][cuisine=chicken]
+	highway3:		false
+	restaurant4: 	true
+	hotel1: 		false
+	restaurant_cuisine_numeric: 	false
+
+query: w[uncommon_key]
+	highway3:           false
+    highway3_uncommon:  true
+
+// "tertiary" misspelled on purpose
+query:	w[highway=primary,secondary,tertiery,unclassified]
+	highway3:		true
+	restaurant4: 	false
+
+query: w[maxspeed<50]
+	highway3: 				true
+	highway_residential:	true
+	highway_residential2:	false
+	highway_motorway:       false
+
+query: w[uncommon_key="some*"]
+    highway3_uncommon:  true
+    highway3_uncommon2: false
+
+query: w[highway=track], w[uncommon_key]
+    highway3:           false
+    highway3_uncommon:  true
+    highway_track:      true
+
+query: w[!uncommon_key]
+	highway3:           true
+    highway3_uncommon:  false
+
+query: w[railway], w[highway]
+	highway3:           true
+    highway3_uncommon:  true
+
+query: w[highway=track], w[uncommon_key="some*"]
+    highway3:           false
+    highway3_uncommon:  true
+    highway_track:      true
+
+query: w[highway=residential][maxspeed<50][!tunnel][lit]
+	highway3: 				false
+	highway_residential:	true
+	highway_residential2:	false
+
+query:	w[highway=primary,secondary,tertiary,unclassified]
+	highway3:		true
+	restaurant4: 	false
+
+query:	w[highway=residential,"*ary"]
+	highway3:		true
+	restaurant4: 	false
+
+query:	w[highway!=residential,"*ary"]
+	highway3:		false
+	restaurant4: 	true
+
+query:	w[highway!=residential,"*ary"], w[highway=primary,track]
+	highway3:		true
+	restaurant4: 	true
+
+// Primary road with speed limit that is over 50 and up to and including 100
+query:	w[highway=primary][maxspeed > 50][maxspeed <= 100]
+	highway3:		false
+	highway4: 		true
+	highway5: 		true
+	highway6: 		true
+	highway7: 		true
+	highway8: 		false
+
+query:	na[amenity=restaurant]
+	highway3:		false
+	restaurant4: 	true
+	hotel1: 		false
+
+query:	na[amenity=restaurant][cuisine=pizza]
+	highway3:		false
+	restaurant4: 	false
+	hotel1: 		false
+
+query:  na[addr:housenumber >= 100]
+	highway3:		false
+	restaurant4: 	true
+	
+query:  na[addr:street="*straße"][addr:housenumber >= 100]
+	highway3:		false
+	restaurant4: 	true
+	
+query:  na[addr:street="*weg"][addr:housenumber >= 100]
+	highway3:		false
+	restaurant4: 	false
+	church1:		false
+
+query:  na[addr:street!="*weg"][addr:housenumber >= 100]
+	highway3:		false
+	restaurant4: 	true
+	hotel1:			false
+	hotel2:			true
+	church1:		false
+	
+// Hotels without restaurant
+query:	na[tourism=hotel][!restaurant]
+	restaurant4: 	false
+	hotel1:			true
+
+
+// Features in a specific postal code
+query:	na[addr:postcode=67891]
+	restaurant4: 	true
+
+// Not a church
+query:	na[amenity!=place_of_worship]
+	church1:		false
+	restaurant4: 	true
+	hotel1:			true
+	
+

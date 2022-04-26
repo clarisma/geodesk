@@ -1,0 +1,26 @@
+motorways:      w[highway=motorway]
+highways:       wa[highway]
+restaurants:    na[amenity=restaurant][cuisine=italian][website][phone][opening_hours]
+coastlines:     w[natural=coastline]
+hotels:         na[tourism=hotel,guest_house]
+railways:       w[railway]
+pubs:           na[amenity=pub]
+named_parks:    a[leisure=park][name]
+castles:        na[historic=castle]
+post_boxes:     n[amenity=post_box]
+places:         na[place]
+admin_areas:    a[boundary=administrative]
+bike_routes:    r[type=route][route=bicycle]
+canals:         w[waterway=canal]
+lighthouses:    na[man_made=lighthouse]
+fire_hydrants:  n[emergency=fire_hydrant]
+eateries:       na[amenity=restaurant,cafe,fast_food,biergarten,bar,pub,ice_cream]
+soccer_fields:  a[leisure=pitch][sport=soccer]
+farmyards:      a[landuse=farmyard]
+bakeries:       na[shop=bakeries]
+woods:          a[natural=wood]
+libraries:      na[amenity=library]
+nodes:          n
+areas:          a
+anything:       *
+
