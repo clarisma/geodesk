@@ -66,8 +66,10 @@ public abstract class TagFilter implements Filter
         }
     }
 
+    /*
     protected static void debug(String msg, int value)
     {
         FeatureStoreBase.log.debug(msg, value);
     }
+     */
 }

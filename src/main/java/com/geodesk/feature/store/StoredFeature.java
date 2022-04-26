@@ -557,6 +557,7 @@ public abstract class StoredFeature implements Feature
 		}
 	}
 
+	/*
 	public void dumpTags()
 	{
 		TagIterator iter = new TagIterator(ptr + 8);
@@ -567,6 +568,7 @@ public abstract class StoredFeature implements Feature
 			// FeatureStore.log.debug("    = {}", iter.value());
 		}
 	}
+	 */
 
 	@Override public boolean belongsToRelation()
 	{

@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 
 public class OsmPbfReaderTest
 {
+    /*
     @Test
     public void testReader() throws IOException
     {
@@ -16,4 +17,5 @@ public class OsmPbfReaderTest
         // reader.read("/home/md/geodesk/mapdata/de-2021-01-29.osm.pbf");
         reader.read("/home/md/geodesk/mapdata/planet.osm.pbf");
     }
+     */
 }

@@ -24,8 +24,6 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class FeatureStoreBase extends BlobStore
 {
-    public static final Logger log = LogManager.getLogger();
-
     private int minZoom;
     private int zoomSteps;
     private ObjectIntMap<String> stringsToCodes;

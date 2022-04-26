@@ -62,12 +62,12 @@ public class BaseOsmPbfReader extends OsmPbfReader
 
     public static void test(String mapDataFile) throws IOException
     {
-        log.info("Counting nodes...");
+        System.out.println("Counting nodes...");
         Stopwatch timer = new Stopwatch();
         timer.start();
         BaseOsmPbfReader reader = new BaseOsmPbfReader();
         reader.read(mapDataFile);
-        log.info("Completed in {} ms\n", timer.stop());
+        System.out.format("Completed in %d ms\n", timer.stop());
     }
 
     public static void main(String[] args) throws Exception

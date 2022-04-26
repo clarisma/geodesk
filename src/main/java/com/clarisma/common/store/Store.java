@@ -1,5 +1,6 @@
 package com.clarisma.common.store;
 
+import com.clarisma.common.util.Log;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.iterator.IntIterator;
@@ -44,7 +45,7 @@ import static java.nio.file.StandardOpenOption.WRITE;
 
 public abstract class Store
 {
-    protected static final Logger log = LogManager.getLogger();
+    // protected static final Logger log = LogManager.getLogger();
 
     private static final Set<String> openStores = new HashSet<>();
     private Path path;
@@ -524,7 +525,7 @@ public abstract class Store
             }
             syncSegments(affectedSegments);
 
-            log.debug("Committed {} blocks in {} segments",
+            Log.debug("Committed %d blocks in %d segments",
                 transactionBlocks.size(), affectedSegments.size());
 
             clearJournal();

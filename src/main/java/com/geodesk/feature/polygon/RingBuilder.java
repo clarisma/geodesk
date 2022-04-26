@@ -6,8 +6,6 @@ import org.apache.logging.log4j.Logger;
 
 public class RingBuilder
 {
-    public static final Logger log = LogManager.getLogger();
-
     /**
      * Turns a series of Segments into a series of Rings, which works only if
      * the Segments are ordered such that neighboring segments connect and

@@ -22,8 +22,6 @@ import java.util.regex.Pattern;
 
 public class QueryParser extends Parser
 {
-	private static final Logger log = LogManager.getLogger();
-
 	private static final String COMMA = ",";
 	private static final String STAR = "*";
 	private static final String COLON = ":";

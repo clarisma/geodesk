@@ -1,5 +1,6 @@
 package com.geodesk.feature.store;
 
+import com.clarisma.common.util.Log;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.filter.FilterSet;
 import com.geodesk.geom.Bounds;
@@ -17,7 +18,6 @@ import java.util.concurrent.*;
 
 public class Query implements Iterator<Feature>, Bounds
 {
-    public static final Logger log = LogManager.getLogger();
 
     private final FeatureStoreBase store;
     private int minX;
@@ -119,16 +119,18 @@ public class Query implements Iterator<Feature>, Bounds
 
     void put(TileQueryTask task)
     {
+        // TODO
+
         try
         {
             if(!queue.add(task))
             {
-                log.error("Couldn't add");
+                Log.error("Couldn't add");
             }
         }
         catch (Exception e)
         {
-            log.error(e);
+            Log.error("%s", e);
             e.printStackTrace();
         }
     }

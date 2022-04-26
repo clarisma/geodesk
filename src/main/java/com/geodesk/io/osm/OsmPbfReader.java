@@ -2,6 +2,7 @@ package com.geodesk.io.osm;
 
 import com.clarisma.common.pbf.PbfBuffer;
 import com.clarisma.common.pbf.PbfException;
+import com.clarisma.common.util.Log;
 import com.geodesk.feature.Tags;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -87,7 +88,7 @@ import static com.geodesk.io.osm.OsmPbf.*;
 
 public class OsmPbfReader
 {
-    protected static final Logger log = LogManager.getLogger();
+    // protected static final Logger log = LogManager.getLogger();
     private static Tags EMPTY_TAGS = new EmptyTags();
 
     private long startTime;
@@ -112,10 +113,7 @@ public class OsmPbfReader
 
     protected static void log(String s)
     {
-        synchronized(log)
-        {
-            log.debug("{}: {}", Thread.currentThread().getName(), s);
-        }
+        Log.debug("%s: %s", Thread.currentThread().getName(), s);
     }
 
     protected long fileSize()
@@ -173,6 +171,7 @@ public class OsmPbfReader
      */
     protected void fail(Throwable ex)
     {
+        /*
         synchronized (log)
         {
             // TODO: remove
@@ -180,6 +179,7 @@ public class OsmPbfReader
                 Thread.currentThread().getName(), ex.getMessage());
             ex.printStackTrace();
         }
+         */
         error = ex;
         inputThread.interrupt();
         outputThread.interrupt();

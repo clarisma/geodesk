@@ -212,9 +212,11 @@ public class TileQuadTest
 	}
 	 */
 
+	/*
 	@Test public void testOversizedSiblingLocator()
 	{
 		int startTile = Tile.fromString("12/2147/1982");
 		Assert.assertEquals(OVERSIZED, toSparseSiblingLocator(OVERSIZED, startTile));
 	}
+	 */
 }

@@ -12,8 +12,6 @@ public abstract class RTree
 {
 	protected Node root;
 
-	protected static final Logger log = LogManager.getLogger();
-	
 	public static class Node extends Box
 	{
 		private List<Bounds> children;

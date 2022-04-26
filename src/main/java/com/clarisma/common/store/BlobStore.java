@@ -140,8 +140,6 @@ public class BlobStore extends Store
 
             for(;;)
             {
-                assert trunkOfs < TRUNK_FREE_TABLE_OFS + FREE_TABLE_LEN;
-
                 if ((trunkRanges & 1) == 0)
                 {
                     // There are no free blobs in the target range, so let's
@@ -162,6 +160,8 @@ public class BlobStore extends Store
 
                     leafSlot = 0;
                 }
+                assert trunkOfs < TRUNK_FREE_TABLE_OFS + FREE_TABLE_LEN;
+
                 for (; trunkOfs < trunkEnd; trunkOfs += 4)
                 {
                     int leafTableBlob = rootBlock.getInt(trunkOfs);

@@ -14,8 +14,6 @@ import org.locationtech.jts.geom.Polygon;
 
 public class PolygonBuilder
 {
-    public static final Logger log = LogManager.getLogger();
-
     /**
      * Creates an int array with X/Y coordinate pairs that represent the given Ring. The Ring must consist of properly
      * ordered Segments which are closed.
@@ -162,10 +160,12 @@ public class PolygonBuilder
         Segment outerSegments = null;
         Segment innerSegments = null;
 
+        /*
         if(rel.id() == 224457)
         {
             log.debug("!!!");
         }
+         */
 
         // TODO: use proper member filtering
 

@@ -1,5 +1,6 @@
 package com.geodesk.feature.store;
 
+import com.clarisma.common.util.Log;
 import com.geodesk.core.Tile;
 import com.geodesk.feature.filter.Filter;
 import com.geodesk.feature.filter.FilterSet;
@@ -10,8 +11,6 @@ import java.nio.ByteBuffer;
 
 public class TileQueryTask extends QueryTask
 {
-    public static final Logger log = LogManager.getLogger();
-
     private final int tile;
     private final int tip;
     private int bboxFlags;
@@ -116,7 +115,7 @@ public class TileQueryTask extends QueryTask
         }
         catch(Throwable ex)
         {
-            log.error("Failed: {}", ex);
+            Log.error("Failed: %s", ex);
         }
         return true;
     }

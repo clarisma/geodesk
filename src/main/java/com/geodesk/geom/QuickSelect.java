@@ -32,8 +32,7 @@ import org.eclipse.collections.impl.stack.mutable.primitive.IntArrayStack;
  */
 public class QuickSelect 
 {
-	private static final Logger log = LogManager.getLogger();
-	
+
 	// sort an array so that items come in groups of n unsorted items, with groups sorted between each other;
 	// combines selection algorithm with binary divide & conquer approach
 
