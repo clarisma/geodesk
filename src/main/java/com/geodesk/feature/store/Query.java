@@ -4,8 +4,6 @@ import com.clarisma.common.util.Log;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.filter.FilterSet;
 import com.geodesk.geom.Bounds;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.set.primitive.MutableLongSet;
 import org.eclipse.collections.impl.set.mutable.primitive.LongHashSet;
 
@@ -38,7 +36,7 @@ public class Query implements Iterator<Feature>, Bounds
     private boolean allTilesRequested;
     private BlockingQueue<TileQueryTask> queue;
 
-    public Query(FeatureView<?> view)
+    public Query(WorldView<?> view)
     {
         this.store = view.store;
         this.executor = store.executor();

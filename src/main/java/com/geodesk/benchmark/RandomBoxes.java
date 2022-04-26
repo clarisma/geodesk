@@ -2,8 +2,9 @@ package com.geodesk.benchmark;
 
 import com.geodesk.core.Mercator;
 import com.geodesk.core.Tile;
-import com.geodesk.feature.FeatureStore;
 import com.geodesk.core.Box;
+import com.geodesk.feature.FeatureLibrary;
+import com.geodesk.feature.Features;
 import com.geodesk.geom.Bounds;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -64,7 +65,7 @@ public class RandomBoxes
     }
 
     public static RandomBoxes loadOrCreate(Path path,
-        FeatureStore features, Bounds outer, int count,
+        Features<?> features, Bounds outer, int count,
         int minMeters, int maxMeters, int minDensity) throws IOException
     {
         if(Files.exists(path)) return load(path);
@@ -124,7 +125,7 @@ public class RandomBoxes
 
     public static void main(String[] args) throws IOException
     {
-        FeatureStore features = new FeatureStore(Paths.get("C:\\geodesk\\local"));
+        Features<?> features = new FeatureLibrary("C:\\geodesk\\local");
         loadOrCreate(
             Paths.get("C:\\geodesk\\random-boxes.bin"),
             features, Tile.bounds(Tile.fromString("4/8/5")),

@@ -2,13 +2,10 @@ package com.geodesk.feature.store;
 
 import com.clarisma.common.pbf.PbfDecoder;
 import com.clarisma.common.store.BlobStore;
-import com.geodesk.feature.Feature;
 import com.geodesk.feature.Features;
 import com.geodesk.feature.filter.FilterSet;
 import com.geodesk.feature.query.FilterCompiler;
 import com.geodesk.geom.Bounds;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
 import org.eclipse.collections.api.map.primitive.MutableIntIntMap;
 import org.eclipse.collections.api.map.primitive.MutableObjectIntMap;
@@ -22,7 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
-public abstract class FeatureStoreBase extends BlobStore
+public class FeatureStoreBase extends BlobStore
 {
     private int minZoom;
     private int zoomSteps;
@@ -110,8 +107,9 @@ public abstract class FeatureStoreBase extends BlobStore
         keysToCategories = map;
     }
 
-    protected void enableQueries()
+    public void enableQueries()
     {
+        // TODO: guard against multiple calls
         filters = new FilterCompiler(stringsToCodes, codesToStrings, keysToCategories);
         executor = new ForkJoinPool();// TODO: ability to set parallelism
         geometryFactory = new GeometryFactory(); // TODO
@@ -203,17 +201,17 @@ public abstract class FeatureStoreBase extends BlobStore
 
     public Features<?> features()
     {
-        return new FeatureView(this);
+        return new WorldView(this);
     }
 
     public Features<?> features(String filter)
     {
-        return new FeatureView<>(this, getFilters(filter));
+        return new WorldView<>(this, getFilters(filter));
     }
 
     public Features<?> in(Bounds bbox)
     {
-        return new FeatureView(this, bbox);
+        return new WorldView(this, bbox);
     }
 
     @Override public void close()

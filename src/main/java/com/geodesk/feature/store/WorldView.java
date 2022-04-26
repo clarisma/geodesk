@@ -9,39 +9,39 @@ import java.util.Iterator;
 
 // TODO: do we need to create a defensive copy of the bbox?
 
-public class FeatureView<T extends Feature> implements Features<T>
+public class WorldView<T extends Feature> implements Features<T>
 {
     protected FeatureStoreBase store;
     protected Bounds bbox;
     protected FilterSet filters;
 
-    public FeatureView(FeatureStoreBase store)
+    public WorldView(FeatureStoreBase store)
     {
         this.store = store;
         filters = FilterSet.ALL;
     }
 
-    public FeatureView(FeatureStoreBase store, Bounds bbox)
+    public WorldView(FeatureStoreBase store, Bounds bbox)
     {
         this.store = store;
         this.bbox = bbox;
         filters = FilterSet.ALL;
     }
 
-    public FeatureView(FeatureStoreBase store, FilterSet filters)
+    public WorldView(FeatureStoreBase store, FilterSet filters)
     {
         this.store = store;
         this.filters = filters;
     }
 
-    public FeatureView(FeatureView<?> other, Bounds bbox)
+    public WorldView(WorldView<?> other, Bounds bbox)
     {
         this.store = other.store;
         this.filters = other.filters;
         this.bbox = bbox;           // TODO: intersect bbox
     }
 
-    public FeatureView(FeatureView<?> other, int types)
+    public WorldView(WorldView<?> other, int types)
     {
         this.store = other.store;
         this.bbox = other.bbox;
@@ -49,7 +49,7 @@ public class FeatureView<T extends Feature> implements Features<T>
         this.filters = other.filters;
     }
 
-    public FeatureView(FeatureView<?> other, FilterSet filters)
+    public WorldView(WorldView<?> other, FilterSet filters)
     {
         this.store = other.store;
         this.bbox = other.bbox;
@@ -72,7 +72,7 @@ public class FeatureView<T extends Feature> implements Features<T>
 
     @Override public Features<?> features(String filter)
     {
-        return new FeatureView<>(this, store.getFilters(filter));
+        return new WorldView<>(this, store.getFilters(filter));
     }
 
     @Override public Features<Node> nodes()
@@ -82,12 +82,12 @@ public class FeatureView<T extends Feature> implements Features<T>
 
     @Override public Features<Node> nodes(String filter)
     {
-        return new FeatureView<Node>(this, Filter.NODES);
+        return new WorldView<Node>(this, Filter.NODES);
     }
 
     @Override public Features<Way> ways()
     {
-        return new FeatureView<Way>(this, Filter.WAYS);
+        return new WorldView<Way>(this, Filter.WAYS);
     }
 
     @Override public Features<Way> ways(String filter)
@@ -117,7 +117,7 @@ public class FeatureView<T extends Feature> implements Features<T>
 
     @Override public Features<?> in(Bounds bbox)
     {
-        return new FeatureView(this, bbox);
+        return new WorldView(this, bbox);
     }
 
     /*

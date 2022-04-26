@@ -79,7 +79,7 @@ public class StoredRelation extends StoredFeature implements Relation
 	{
 		int ppMembers = ptr + 12;
 		int pMembers = ppMembers + buf.getInt(ppMembers);
-		if(isEmpty(pMembers)) return EmptyFeatures.ANY;
+		if(isEmpty(pMembers)) return EmptyView.ANY;
 		return new MemberView<>(store, buf, pMembers, Filter.ALL);
 	}
 

@@ -44,22 +44,22 @@ public class ParentRelationView implements Features<Relation>
 
     @Override public Features<Node> nodes()
     {
-        return (Features<Node>)EmptyFeatures.ANY;
+        return (Features<Node>) EmptyView.ANY;
     }
 
     @Override public Features<Node> nodes(String filter)
     {
-        return (Features<Node>)EmptyFeatures.ANY;
+        return (Features<Node>) EmptyView.ANY;
     }
 
     @Override public Features<Way> ways()
     {
-        return (Features<Way>)EmptyFeatures.ANY;
+        return (Features<Way>) EmptyView.ANY;
     }
 
     @Override public Features<Way> ways(String filter)
     {
-        return (Features<Way>)EmptyFeatures.ANY;
+        return (Features<Way>) EmptyView.ANY;
     }
 
 //    @Override public Features<?> areas()

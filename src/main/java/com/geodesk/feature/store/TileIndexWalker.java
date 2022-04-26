@@ -1,7 +1,6 @@
 package com.geodesk.feature.store;
 
 import com.geodesk.core.Tile;
-import com.geodesk.feature.FeatureStore;
 import com.geodesk.geom.Bounds;
 
 import java.nio.ByteBuffer;
@@ -88,7 +87,7 @@ public class TileIndexWalker
         level.pChildEntries = pTileIndex + 4;   // skip purgatory tile
     }
 
-    public TileIndexWalker(FeatureStore store)
+    public TileIndexWalker(FeatureStoreBase store)
     {
         this(store.baseMapping(), store.tileIndexPointer(), store.zoomLevels());
     }

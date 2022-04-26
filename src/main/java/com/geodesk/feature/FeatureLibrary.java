@@ -1,13 +1,16 @@
 package com.geodesk.feature;
 
+import com.geodesk.feature.store.FeatureStoreBase;
+import com.geodesk.feature.store.WorldView;
 import com.geodesk.geom.Bounds;
 
+import java.nio.file.Path;
 import java.util.Iterator;
 
 /**
  * A Geographic Object Library containing features.
  */
-public class FeatureLibrary implements Features<Feature>
+public class FeatureLibrary extends WorldView<Feature>
 {
     /**
      * Creates a `FeatureLibrary` instance associated with an existing GOL file.
@@ -16,6 +19,10 @@ public class FeatureLibrary implements Features<Feature>
      */
     public FeatureLibrary(String path)
     {
+        super(new FeatureStoreBase());
+        store.setPath(Path.of(path));
+        store.open();
+        store.enableQueries();
     }
 
     /**
@@ -27,54 +34,12 @@ public class FeatureLibrary implements Features<Feature>
      */
     public FeatureLibrary(String path, String url)
     {
+        this(path);
+        // TODO: set repository URL
     }
 
     public void close()
     {
-    }
-
-    @Override public Features<?> features(String query)
-    {
-        return null;
-    }
-
-    @Override public Features<Node> nodes()
-    {
-        return null;
-    }
-
-    @Override public Features<Node> nodes(String query)
-    {
-        return null;
-    }
-
-    @Override public Features<Way> ways()
-    {
-        return null;
-    }
-
-    @Override public Features<Way> ways(String query)
-    {
-        return null;
-    }
-
-    @Override public Features<Relation> relations()
-    {
-        return null;
-    }
-
-    @Override public Features<Relation> relations(String query)
-    {
-        return null;
-    }
-
-    @Override public Features<?> in(Bounds bbox)
-    {
-        return null;
-    }
-
-    @Override public Iterator<Feature> iterator()
-    {
-        return null;
+        store.close();
     }
 }

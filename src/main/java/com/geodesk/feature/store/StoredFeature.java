@@ -578,7 +578,7 @@ public abstract class StoredFeature implements Feature
 	@Override public Features<Relation> parentRelations()
 	{
 		return belongsToRelation() ? new ParentRelationView(store, buf, getRelationTablePtr()) :
-			(Features<Relation>)EmptyFeatures.ANY;
+			(Features<Relation>) EmptyView.ANY;
 	}
 
 	/**

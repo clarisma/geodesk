@@ -1,5 +1,6 @@
 package com.geodesk.feature;
 
+import com.geodesk.feature.store.EmptyView;
 import com.geodesk.geom.Bounds;
 
 import java.util.ArrayList;
@@ -81,6 +82,33 @@ public interface Features<T extends Feature> extends Iterable<T>
      * @return a collection of {@link Relation} objects
      */
     Features<Relation> relations(String query);
+
+    /**
+     * Returns a sub-view that contains only the features that are nodes of the
+     * given way, or members of the given relation. If a node is passed as
+     * `parent`, an empty view is returned (as nodes cannot have child elements).
+     *
+     * @param parent    a way or relation
+     * @return          a collection of features
+     */
+    default Features<T> of(Feature parent)
+    {
+        // TODO: placehodler only
+        return (Features<T>)EmptyView.ANY;
+    };
+
+    /**
+     * Returns a sub-view that contains only the features that are parent
+     * elements of the given feature (ways and/or relations).
+     *
+     * @param child     a way or relation
+     * @return          a collection of features
+     */
+    default Features<T> with(Feature child)
+    {
+        // TODO: placehodler only
+        return (Features<T>)EmptyView.ANY;
+    };
 
     /**
      * Returns a view of this collection that contains only features whose
@@ -180,33 +208,4 @@ public interface Features<T extends Feature> extends Iterable<T>
         return false;
     }
 
-        // TODO: implement later
-    /*
-    boolean contains(T f);
-    boolean containsNode(long id);
-    boolean containsWay(long id);
-    boolean containsRelation(long id);
-    Node node(long id);
-    Way way(long id);
-    Relation relation(long id);
-    */
-
-    // TODO: probably not needed:
-    // Features<Feature> nodesAndAreas();
-    // Features<Feature> nodesAndAreas(String filter);
-    // Features<Feature> waysAndAreas();
-    // Features<Feature> waysAndAreas(String filter);
-
-
-    /*
-    Features<Node> wayNodes();                      // not needed: use of()
-    Features<Node> wayNodesOf(String filter);       // not needed: use of()
-    Features<?> relationMembers();                  // not needed: use of()
-    Features<?> membersOf(String filter);           // not needed: use of()
-    Features<T> ofType(Class<T extends Feature);    // not needed: use way() & relation()
-    Features<T> of(Feature parent);                 // only useful one!
-    Features<T> of(Features<?> parents);
-    Features<T> with(Features<?> children);
-
-     */
 }

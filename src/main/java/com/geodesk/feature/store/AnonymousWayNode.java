@@ -111,7 +111,7 @@ public class AnonymousWayNode implements Node
      */
     @Override public Features<Relation> parentRelations()
     {
-        return (Features<Relation>)EmptyFeatures.ANY;
+        return (Features<Relation>) EmptyView.ANY;
     }
 
     @Override public boolean isArea()

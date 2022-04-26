@@ -1,7 +1,7 @@
 package com.geodesk.benchmark;
 
 import com.clarisma.common.fab.FabReader;
-import com.geodesk.feature.FeatureStore;
+import com.geodesk.feature.FeatureLibrary;
 import com.geodesk.feature.Features;
 import com.geodesk.feature.Tags;
 import com.geodesk.feature.Way;
@@ -43,7 +43,7 @@ public class QueryBenchmark
     }
 
     private Path outputPath;
-    private FeatureStore features;
+    private Features<?> features;
     private Map<String,Bounds> areas = new HashMap<>();
     private Map<String,BoxSpecs> boxSpecs = new HashMap<>();
     private Map<String,String> queryStrings = new HashMap<>();
@@ -147,7 +147,7 @@ public class QueryBenchmark
 
     private abstract static class BenchmarkTask implements Callable<Double>
     {
-        FeatureStore features;
+        Features<?> features;
         String queryString;
         Bounds[] boxes;
         int boxStartIndex;
@@ -159,7 +159,7 @@ public class QueryBenchmark
         {
         }
 
-        public void init(FeatureStore features, String queryString,
+        public void init(Features<?> features, String queryString,
             Bounds[] boxes, int boxStartIndex, int boxEndIndex)
         {
             this.features = features;
@@ -488,8 +488,7 @@ public class QueryBenchmark
 
     public void perform(Path storePath, String area) throws Exception
     {
-        outputPath = Paths.get("/home/md/geodesk/benchmarks");
-        features = new FeatureStore(storePath);
+        features = new FeatureLibrary("/home/md/geodesk/benchmarks");
         new BenchmarkSpecReader().read(
             getClass().getClassLoader().getResourceAsStream("benchmarks/benchmark.fab"));
         Map<String, RandomBoxes> boxes = makeBoxes(area);
