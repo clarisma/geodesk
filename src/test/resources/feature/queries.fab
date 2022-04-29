@@ -1,3 +1,67 @@
+//
+//  Wildcard matching
+//
+
+query: w[name="Hü*"]
+    highway_residential: false
+    highway3: true
+
+query: w[name="V*"]
+    highway_residential: true
+    highway3: false
+
+query: w[name="Vi*"]
+    highway_residential: true
+    highway3: false
+
+query: w[name="Via*"]
+    highway_residential: true
+    highway3: false
+
+query: w[name="Via *"]
+    highway_residential: true
+    highway3: false
+
+query: w[name="Hu*"]
+    highway_residential: false
+    highway3: false
+
+query: w[name="Hühner*"]
+    highway_residential: false
+    highway3: true
+
+query: w[name="Hühne*"]
+    highway_residential: false
+    highway3: true
+
+query: w[name="Hühn*"]
+    highway_residential: false
+    highway3: true
+
+query: w[name="Hüh*"]
+    highway_residential: false
+    highway3: true
+
+query: w[name="Hü*"]
+    highway_residential: false
+    highway3: true
+
+
+query: w[name="*pri"]
+    highway_residential: true
+    highway3: false
+
+query: w[name="Hüh*"]
+    highway_residential: false
+    highway3: true
+
+query: w[name="Via*","Hü*","Someotherstring*"]
+    highway_residential: true
+    highway3: true
+
+query: w[name="*Ca*"]
+    highway_residential: true
+    highway3: false
 
 //
 // Cases that deal with local keys in various combinations
@@ -80,6 +144,10 @@ query: w[highway = 32]
 query: w[highway != 32]
     highway3:                   true
 
+//
+// Unary clauses
+//
+
 query: w[!highway][!amenity][!uncommon_key]
     single_uncommon_key:        false
     single_uncommon_key_no:     true
@@ -131,6 +199,9 @@ query: w[!highway][amenity][uncommon_key][!uncommon_key2]
     highway3:                   false
     highway3_uncommon:          false
 
+//
+// Negation
+//
 
 query:  w[!highway][highway!=residential]
     highway3:               false
@@ -150,6 +221,10 @@ query:  w[!highway][highway=primary]
 query:  w[highway][!highway]
     error: conflict
 
+//
+// Wildcard strings
+//
+
 query: w[highway="residential"]["highway"=residential]["highway"="res*"][highway="*dential"]
 	highway3:               false
     highway3_uncommon:      false
@@ -161,7 +236,9 @@ query: w[highway="residential"]["highway"=residential]["highway"="res*"][highway
     highway_numeric_wide:   false
     highway_residential:    true
 
+//
 // Uncommon keys
+//
 
 query: w[uncommon_key]
     single_uncommon_key:            true
@@ -205,7 +282,9 @@ query: w[uncommon_key][uncommon_key!=999]
     single_uncommon_key_999:        false
     track:                          false
 
+//
 // Easy cases
+//
 
 query: w[highway]
 	highway3:               true
@@ -296,7 +375,9 @@ query: w[highway=track][tracktype!=grade4,grade5]
     track:          true
     track_grade5:   false
 
+//
 // Queries that should throw an exception
+//
 
 query: w[maxspeed>"abc"]
     error: expected_number
@@ -325,8 +406,10 @@ query: w[!]
 query: w["some key"<>4]
     error: syntax // TODO
 
+//
 // Syntactically correct, but nonsensical
 // (Queries that never match anything)
+//
 
 query: w[highway="residential"]["highway"!=residential]
 	highway3:               false
@@ -339,7 +422,9 @@ query: w[highway="residential"]["highway"!=residential]
     highway_numeric_wide:   false
     highway_residential:    false
 
+//
 // Syntactically correct, but inefficient
+//
 
 query: w[highway="residential"]["highway"=residential]
 	highway3:               false
@@ -352,7 +437,10 @@ query: w[highway="residential"]["highway"=residential]
     highway_numeric_wide:   false
     highway_residential:    true
 
+//
 // Query with superfluous clause
+//
+
 query: w[highway=residential][highway!=primary]
 	highway3:               false
     highway3_uncommon:      false

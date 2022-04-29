@@ -134,7 +134,7 @@ public class QueryCoder extends ExpressionCoder
 {
 	private static final String
 		FILTER_BASE_CLASS = "com/geodesk/feature/filter/TagFilter",
-		STRUCTS_CLASS = "com/clarisma/common/soar/Structs",
+		BYTES_CLASS = "com/clarisma/common/util/Bytes",
 		TAG_VALUES_CLASS = "com/geodesk/feature/store/TagValues";
 
 	private static final String
@@ -473,6 +473,12 @@ public class QueryCoder extends ExpressionCoder
 				sample |= (((long) b) & 0xff) << (8 * i);
 				n++;
 			}
+
+			// extend the sign (This is important for properly matching non-ASCII
+			// chars, which have the high-most bit set)
+			int shift = 8 * (8-run);
+			sample = (sample << shift) >> shift;
+
 			remaining -= run;
 			matched += run;
 
@@ -527,7 +533,8 @@ public class QueryCoder extends ExpressionCoder
 				jumpInsn = run == 8 ? IFNE : IF_ICMPNE;
 			}
 
-			// TODO: careful of sign exensions!
+			// When comparing samples, we need to be mindful of sign extension
+			// (Caused a problem if last character of a run was non-ASCII (bit 7 set)
 
 			if (run == 8)
 			{
@@ -599,7 +606,7 @@ public class QueryCoder extends ExpressionCoder
 	{
 		mv.visitVarInsn(ALOAD, $buf);
 		mv.visitVarInsn(ILOAD, pointerVar);
-		mv.visitMethodInsn(INVOKESTATIC, STRUCTS_CLASS, "readString",
+		mv.visitMethodInsn(INVOKESTATIC, BYTES_CLASS, "readString",
 			"(Ljava/nio/ByteBuffer;I)Ljava/lang/String;", false);
 	}
 

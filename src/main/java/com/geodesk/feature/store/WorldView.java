@@ -59,8 +59,7 @@ public class WorldView<T extends Feature> implements Features<T>
 
     @Override public boolean isEmpty()
     {
-        // TODO
-        return false;
+        return iterator().hasNext();
     }
 
     @Override public long count()

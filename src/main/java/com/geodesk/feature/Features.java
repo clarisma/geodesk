@@ -14,6 +14,10 @@ import java.util.List;
 //        Allows us to store bbox coords, no need to reference a Box;
 //        then we don't care about Box being mutable
 
+// TODO:
+//  Maybe create two subtypes: FeatureSet and FeatureList
+//  This way, users can write Set<Feature> and List<Node>
+
 /**
  * A collection of features.
  *

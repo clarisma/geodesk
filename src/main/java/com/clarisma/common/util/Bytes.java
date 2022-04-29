@@ -2,8 +2,6 @@ package com.clarisma.common.util;
 
 import java.nio.ByteBuffer;
 
-// not used
-// TODO: only put... are used
 public class Bytes
 {
     /**
@@ -94,8 +92,11 @@ public class Bytes
     }
 
     /**
-     * Reads a string from a buffer. Note that only string
-     * lengths up to 32K are supported.
+     * Reads a string from a buffer. A String must be in the following format:
+     * one or two bytes (using multi-byte encoding) that indicate the length,
+     * followed by the UTF-8 encoded content of the string.
+     *
+     * Note that only string lengths up to 32K are supported.
      *
      * @param buf	the buffer
      * @param p		the position of the string

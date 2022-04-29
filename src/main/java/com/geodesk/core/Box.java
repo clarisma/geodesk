@@ -2,6 +2,7 @@ package com.geodesk.core;	// TODO: rename to util?
 
 import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 
 /**
  * An axis-aligned bounding box. A `Box` represents minimum and maximum
@@ -302,6 +303,16 @@ public class Box implements Bounds
 			(int) Mercator.xFromLon(east), (int) Mercator.yFromLat(north));
 	}
 
+	public static Box atLonLat(double lon, double lat)
+	{
+		int x = (int) Mercator.xFromLon(lon);
+		int y = (int) Mercator.yFromLat(lat);
+		return new Box(x,y,x,y);
+	}
+
+
+
+
 	// TODO: decide what width/height mean
 	public static Box ofXYWidthHeight(int x, int y, int w, int h)
 	{
@@ -362,6 +373,11 @@ public class Box implements Bounds
 			(int) Math.round(env.getMinY()),
 			(int) Math.ceil(env.getMaxX()),
 			(int) Math.round(env.getMaxY()));
+	}
+
+	public static Box of(Geometry geom)
+	{
+		return fromEnvelope(geom.getEnvelopeInternal());
 	}
 
 	private static double parseCoordinate(String s, String name, double max)

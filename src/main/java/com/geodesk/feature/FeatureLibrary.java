@@ -38,6 +38,12 @@ public class FeatureLibrary extends WorldView<Feature>
         // TODO: set repository URL
     }
 
+    /**
+     * Closes the library and releases its resources. **Important**: Do not call
+     * the methods of any collections or features you have retrieved from this
+     * library after you've closed it. Doing so leads to undefined results and
+     * may cause a segmentation fault.
+     */
     public void close()
     {
         store.close();
