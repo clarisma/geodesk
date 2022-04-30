@@ -1810,6 +1810,7 @@ public class QueryCoder extends ExpressionCoder
 	private boolean matchStringValue(BinaryExpression exp, Label t, Label f)
 	{
 		// TODO: regex pattern matching
+		// TODO: contained string matching
 
 		Expression right = exp.right();
 		if (!(right instanceof Literal)) return false;
@@ -1826,6 +1827,19 @@ public class QueryCoder extends ExpressionCoder
 			Label swap = t;
 			t = f;
 			f = swap;
+		}
+
+		if(matchString.isEmpty())
+		{
+			// "*" (wildcard with empty string) matches anything
+			if(op == Operator.IN || op == QueryParser.STARTS_WITH || op == QueryParser.ENDS_WITH)
+			{
+				if(t != null)
+				{
+					mv.visitJumpInsn(GOTO, t);
+				}
+				return true;
+			}
 		}
 
 		assert op == Operator.EQ || op == QueryParser.STARTS_WITH ||

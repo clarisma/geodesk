@@ -2,66 +2,180 @@
 //  Wildcard matching
 //
 
+query: *[highway][uncommon_key]
+    highway3_uncommon: true
+
+query: *[uncommon_key][highway]
+    highway3_uncommon: true
+
+query: *[reference][network]
+    global_local: true
+    bad_random3: true
+
+query: *[reference="*a"][reference="Via R*"][network="*iwn"]
+    bad_random3: true
+
+query: *[reference="*a"][route][route][reference="Via R*"][network][symbol="*oldener Pilgerstab auf blauem Grund;rote Inschrift \"Via Romea\""][route="hi*"][route][network="*iwn"]
+    bad_random3: true
+
+query: *[addr:housenumber="227"]
+    bad_random2: true
+
+query: *[addr:housenumber<=227.0]
+    bad_random2: true
+
+query: *[addr:housenumber<=227.0][addr:housenumber="227"]
+    bad_random2: true
+
+query: *[building][addr:street][addr:city][building="*yes"][addr:street][addr:street="Reedestraße"][addr:street][building][building]
+    bad_random2: true
+
+query: *[addr:housenumber<=227.0][addr:housenumber="227"][addr:housenumber="*"][addr:housenumber="22*"]
+    bad_random2: true
+
+query: *[addr:housenumber<=227.0][building][addr:street][addr:city][building="*yes"][addr:street][addr:street="Reedestraße"][addr:housenumber="227"][addr:street][addr:housenumber="*"][addr:housenumber="22*"][building][building]
+    bad_random2: true
+
+query: *[height="*3.5"][tourism="artwork"][inscription][name="*kieker"][tourism="artwork"][height="3.5"][name][name][tourism="artwork"][name="De Utkieker"][inscription="„De Utkieker“; "][height<=3.5]
+    bad_random1: true
+
+// * matches anything including "no"
+
+query: w[maxspeed="130*"]
+    highway_motorway: true
+    highway_residential: false
+
+query: w[maxspeed="*130"]
+    highway_motorway: true
+    highway_residential: false
+
+query: *[name="*"]
+    highway3: true
+    highway_residential: true
+    highway_motorway: false
+    museum_no_locals: true
+
+query: *[name!="*"]
+    highway3: false
+    highway_residential: false
+    highway_motorway: true
+    museum_no_locals: false
+
+query: *[highway="*"]
+    highway3: true
+    highway_no: true
+    restaurant4: false
+
+query: *[highway!="*"]
+    highway3: false
+    highway_no: false
+    restaurant4: true
+
+
+// uses global strings
+query: w[highway="resi*"]
+    highway_residential: true
+    highway3: false
+
+// uses global strings
+query: w[highway="*al"]
+    highway_residential: true
+    highway3: false
+
+
 query: w[name="Hü*"]
     highway_residential: false
     highway3: true
+    short_local_name: false
 
 query: w[name="V*"]
     highway_residential: true
     highway3: false
+    short_local_name: true
 
 query: w[name="Vi*"]
     highway_residential: true
     highway3: false
+    short_local_name: false
 
 query: w[name="Via*"]
     highway_residential: true
     highway3: false
+    short_local_name: false
 
 query: w[name="Via *"]
     highway_residential: true
     highway3: false
+    short_local_name: false
 
 query: w[name="Hu*"]
     highway_residential: false
     highway3: false
+    short_local_name: false
 
 query: w[name="Hühner*"]
     highway_residential: false
     highway3: true
+    short_local_name: false
 
 query: w[name="Hühne*"]
     highway_residential: false
     highway3: true
+    short_local_name: false
 
 query: w[name="Hühn*"]
     highway_residential: false
     highway3: true
+    short_local_name: false
 
 query: w[name="Hüh*"]
     highway_residential: false
     highway3: true
+    short_local_name: false
 
 query: w[name="Hü*"]
     highway_residential: false
     highway3: true
-
+    short_local_name: false
 
 query: w[name="*pri"]
     highway_residential: true
     highway3: false
+    short_local_name: false
 
 query: w[name="Hüh*"]
     highway_residential: false
     highway3: true
+    short_local_name: false
 
 query: w[name="Via*","Hü*","Someotherstring*"]
     highway_residential: true
     highway3: true
+    short_local_name: false
+
+query: w[name="Hü*","V*","Someotherstring*"]
+    highway_residential: true
+    highway3: true
+    short_local_name: true
+
+query: w[name="Hü*","*V","Someotherstring*"]
+    highway_residential: false
+    highway3: true
+    short_local_name: true
 
 query: w[name="*Ca*"]
     highway_residential: true
     highway3: false
+
+//
+//  RegEx
+//
+
+query: w[name~".str."]
+    highway_residential: false
+    highway3: true
+    short_local_name: false
+
 
 //
 // Cases that deal with local keys in various combinations

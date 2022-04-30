@@ -81,7 +81,7 @@ public class TagClause extends Variable implements Comparable<TagClause>
 		{
 			return other.key == 0 ? name().compareTo(other.name()) : 1;
 		}
-		return Integer.compare(key, other.key);
+		return other.key == 0 ? -1 : Integer.compare(key, other.key);
 	}
 
 	/**

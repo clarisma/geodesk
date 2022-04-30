@@ -10,6 +10,10 @@ public class MathUtilsTest
     @Test
     public void testDoubleFromString()
     {
+        assertTrue("Must be Nan", Double.isNaN(doubleFromString("Test")));
+        assertTrue("Must be Nan", Double.isNaN(doubleFromString("--2")));
+        assertTrue("Must be Nan", Double.isNaN(doubleFromString("..5")));
+        assertTrue("Must be Nan", Double.isNaN(doubleFromString("-..5")));
         assertEquals(457, doubleFromString("457"), 0);
         assertEquals(457, doubleFromString("457.0"), 0);
         assertEquals(457, doubleFromString("457.000000000000000"), 0);

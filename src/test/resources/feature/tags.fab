@@ -177,3 +177,43 @@ only_locals:
     apple_local=some_value
     banana_local=some_other_value
     cherry_local=yet_another_value
+
+// make sure "V" is not in strings.txt
+short_local_name:
+    highway=primary
+    name=V
+
+bad_random1:
+    name="De Utkieker"
+    wheelchair=no
+    tourism=artwork
+    height=3.5
+    start_date=2007-06-10
+    inscription="„De Utkieker“; "
+    artist="Hannes Helmke"
+
+bad_random2:
+    building=yes
+    addr:street="Reedestraße"
+    addr:housenumber=227
+    addr:city=Borkum
+    addr:postcode=26757
+    addr:country=DE
+    roof:shape=gabled
+
+bad_random3:
+    name="Via Romea - Deutschland - Bayern"
+    ref=VR
+    type=route
+    network=iwn
+    wikidata=Q2521677
+    route=hiking
+    wikipedia="de:Via Romea"
+    osmc:symbol="blue:blue::VR:yellow"
+    symbol="Goldener Pilgerstab auf blauem Grund;rote Inschrift \"Via Romea\""
+    url="https://www.viaromea.de/"
+    reference="Via Romea"
+
+global_local:
+    reference=primary
+    network=primary

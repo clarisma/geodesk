@@ -21,6 +21,7 @@ public class MathUtils
         for(; i<len; i++) if(s.charAt(i) > 32) break;
         if(i >= len) return Double.NaN;
         boolean negative = false;
+        boolean seenDigit = false;
         int decimalPos = -1;
         double value = 0;
         if(s.charAt(i) == '-')
@@ -34,6 +35,7 @@ public class MathUtils
             if (ch >= '0' && ch <= '9')
             {
                 value = value * 10 + (ch - '0');
+                seenDigit = true;
                 continue;
             }
             if (ch == '.')
@@ -44,6 +46,7 @@ public class MathUtils
             }
             break;
         }
+        if(!seenDigit) return Double.NaN;
         if(negative) value = -value;
         return decimalPos < 0 ? value : (value / MathUtils.pow10(i-decimalPos-1));
     }

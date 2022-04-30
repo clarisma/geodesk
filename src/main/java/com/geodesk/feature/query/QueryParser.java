@@ -317,8 +317,16 @@ public class QueryParser extends Parser
 								if (s.charAt(0) == '*')
 								{
 									negate = (opFlags & OP_EQUAL) == 0;
-									op = ENDS_WITH;
-									val = s.substring(1);
+									if (s.charAt(len - 1) == '*')
+									{
+										op = Operator.IN;
+										val = len==1 ? "" : s.substring(1, len-1);
+									}
+									else
+									{
+										op = ENDS_WITH;
+										val = s.substring(1);
+									}
 									flags |= TagClause.VALUE_LOCAL_STRING |
 										TagClause.VALUE_ANY_STRING;
 									opFlags &= ~OP_EXACT;

@@ -310,8 +310,10 @@ public class Box implements Bounds
 		return new Box(x,y,x,y);
 	}
 
-
-
+	public static Box ofXYXY(int x1, int y1, int x2, int y2)
+	{
+		return new Box(x1,y1,x2,y2);
+	}
 
 	// TODO: decide what width/height mean
 	public static Box ofXYWidthHeight(int x, int y, int w, int h)
