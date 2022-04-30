@@ -1,5 +1,6 @@
 package com.geodesk.feature.filter;
 
+import com.clarisma.common.math.MathUtils;
 import com.geodesk.feature.query.QueryException;
 import com.geodesk.feature.store.FeatureStoreBase;
 
@@ -42,6 +43,8 @@ public abstract class TagFilter implements Filter
 
     protected static double stringToDouble(String s)
     {
+        return MathUtils.doubleFromString(s);
+        /*
         try
         {
             return Double.parseDouble(s);
@@ -50,6 +53,7 @@ public abstract class TagFilter implements Filter
         {
             return Double.NaN;
         }
+         */
     }
 
     protected String globalString(int code)

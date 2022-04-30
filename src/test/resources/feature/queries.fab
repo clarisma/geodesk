@@ -2,6 +2,12 @@
 //  Wildcard matching
 //
 
+query: w[highway][maxspeed<=50][maxspeed="*mph"]
+    highway_speed_mph: true
+
+query: *[source][seamark:light:range="7"][source="*-04-02"][seamark:light:colour="r*"][seamark:light:range="*7"][seamark:light:sequence="5+(*"][seamark][source][seamark:light:sequence]
+    bad_random4: true
+
 query: *[highway][uncommon_key]
     highway3_uncommon: true
 

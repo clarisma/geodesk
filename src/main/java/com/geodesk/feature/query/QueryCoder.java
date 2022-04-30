@@ -643,6 +643,7 @@ public class QueryCoder extends ExpressionCoder
 	 */
 	private void stringToDouble()
 	{
+		// TODO: could call MathUtils.doubleFromString(s) directly
 		mv.visitMethodInsn(INVOKESTATIC, FILTER_BASE_CLASS,
 			"stringToDouble", "(Ljava/lang/String;)D", false);
 	}

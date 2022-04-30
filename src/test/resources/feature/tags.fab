@@ -217,3 +217,24 @@ bad_random3:
 global_local:
     reference=primary
     network=primary
+
+bad_random4:
+    name="Binnenhafen, Unterfeuer"
+    source="US NGA Pub. 114. 2011-04-02"
+    description="Rot-weißer Mast (7 m); Richtfeuerlinie 302,2°"
+    seamark:type="light_minor"
+    light=yes
+    seamark=beacon
+    seamark:light:colour=red
+    seamark:light:character=Oc
+    seamark:light:period=6
+    beacon:colour=white
+    seamark:light:height=8
+    seamark:light:reference="B 1324"
+    seamark:light:category=front
+    seamark:light:range=7
+    seamark:light:sequence="5+(1)"
+
+highway_speed_mph:
+    highway=primary
+    maxspeed="50 mph"
