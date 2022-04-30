@@ -238,3 +238,17 @@ bad_random4:
 highway_speed_mph:
     highway=primary
     maxspeed="50 mph"
+
+bad_random5:
+    name="Kleingartenkolonie \"Till Eulenspiegel\""
+    landuse=allotments
+
+bad_random6:
+    building=yes
+    addr:street="Lina\'s Diek"
+    addr:housenumber=21
+    addr:city="Schönkirchen"
+    addr:postcode=24232
+
+name_with_quotes:
+    name="\"Buena Vista\""

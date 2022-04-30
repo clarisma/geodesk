@@ -2,6 +2,18 @@
 //  Wildcard matching
 //
 
+query: *[name="\"Buena *"]
+    name_with_quotes: true
+
+query: *[name="*Vista\""]
+    name_with_quotes: true
+
+query: *[addr:housenumber][building="*es"][addr:housenumber][addr:street="Lina\'s Diek"]
+    bad_random6: true
+
+query: *[name="Klei*"][name="*spiegel\""][landuse][landuse="allotments"][landuse="*ments"]
+    bad_random5: true
+
 query: w[highway][maxspeed<=50][maxspeed="*mph"]
     highway_speed_mph: true
 
