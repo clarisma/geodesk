@@ -534,8 +534,9 @@ public class Parser implements CharSequence, FileLocation // TODO: remove FileLo
 		for(; n < length(); n++)
 		{
 			char ch = charAt(n);
-			if(ch==chQuote)
+			if(ch == '\"' || ch == '\'')
 			{
+				if (ch != chQuote) continue;
 				chQuote = 0;
 				n++;
 				break;

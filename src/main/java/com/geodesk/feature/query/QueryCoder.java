@@ -273,6 +273,10 @@ public class QueryCoder extends ExpressionCoder
 	 * @param t          where to jump if string is matched
 	 * @param f          where to jump if string is NOT matched
 	 */
+
+	// TODO: does not work for matching strings of 128 bytes (not chars!) or greater
+	//  fixed, but verify
+
 	private void matchString(Operator op, int pointerVar, String match, Label t, Label f)
 	{
 		// Instead of the "traditional" way of string matching, which requires
@@ -316,14 +320,16 @@ public class QueryCoder extends ExpressionCoder
 		{
 			// For a full string match, we check if the lower length
 			// byte matches; if not, the match fails
+			int lenByteToCheck;
 			if (len < 128)
 			{
-				lenByte = (byte) len;
+				lenByteToCheck = lenByte = (byte) len;
 				matched = 1;
 			}
 			else
 			{
-				lenByte = (byte) ((len & 0x7f) | 128);
+				lenByteToCheck = (byte) ((len & 0x7f) | 128);
+				lenByte = (byte)(len >> 7);
 				remaining++;
 				n--;
 
@@ -332,7 +338,7 @@ public class QueryCoder extends ExpressionCoder
 				// (TODO: assumes max string length of 16K,
 				//  do we need to check more than 2 length bytes?)
 			}
-			loadIntConstant(lenByte);
+			loadIntConstant(lenByteToCheck);
 			mv.visitJumpInsn(IF_ICMPNE, fx);
 
 			// debug("Matched string length, p = {}", pointerVar);

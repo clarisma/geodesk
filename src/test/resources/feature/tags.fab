@@ -252,3 +252,20 @@ bad_random6:
 
 name_with_quotes:
     name="\"Buena Vista\""
+
+address_with_quotes:
+    addr:street="Wulff\'sche Kehre"
+
+name_with_quotes2:
+    name="Dodo\'s Style Friseursalon"
+
+address_with_quotes2:
+    addr:street="An\'t Holt"
+
+// node/7462554925
+bad_random7:
+    name="Alter Omnibus"
+    material=stone
+    historic=memorial
+    memorial=plaque
+    inscription="Hier stand jahrelang der Bus, in dem während der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"

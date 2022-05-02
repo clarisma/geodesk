@@ -98,7 +98,9 @@ public class Strings
         	char ch = s.charAt(i);
         	if (ch=='\\')
         	{
-        		buf.append(unescape(ch));
+        		i++;
+				if(i >= len) break;
+				buf.append(unescape(s.charAt(i)));
         	}
         	else
         	{

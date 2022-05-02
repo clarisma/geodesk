@@ -2,6 +2,34 @@
 //  Wildcard matching
 //
 
+query: *[addr:street="An't Holt"]
+    address_with_quotes2: true
+
+query: *[addr:street="An\'t Holt"]
+    address_with_quotes2: true
+
+query: *[inscription="Hier stand jahrelang der Bus, in dem während der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"]
+    bad_random7: true
+
+query: *["material"="stone"][inscription="*d der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"][memorial]["inscription"="Hier stand jahrelang der Bus, in dem während der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"]["material"="stone"][memorial="plaque"]["memorial"="plaque"][material="stone"][name]["name"="*Omnibus"]["historic"][memorial="pl*"]
+    bad_random7: true
+
+query: *[name="Dodo\'s Style Friseursalon"]
+    name_with_quotes2: true
+
+
+query: *[addr:street="An*"]
+    address_with_quotes2: true
+
+query: *[addr:street="* Holt"]
+    address_with_quotes2: true
+
+query: w[maxspeed="*"]
+    highway3: true
+
+query: *[addr:street][addr:street="Wulff\'sche Kehre"]
+    address_with_quotes: true
+
 query: *[name="\"Buena *"]
     name_with_quotes: true
 
