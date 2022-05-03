@@ -20,6 +20,12 @@ import java.util.regex.Pattern;
 // TODO: When parsing value of a role clause, be aware that the range of valid
 //  global-string roles is different from keys
 
+// TODO: consider ambiguities if we implement simplified form
+//  The type letter may appear in any order, could they represent valid keys?
+//  "war", "raw", "ran", "warn"?
+//  What if we allow other letter for types?
+//  l = line, c = collection?
+
 public class QueryParser extends Parser
 {
 	private static final String COMMA = ",";
@@ -62,12 +68,20 @@ public class QueryParser extends Parser
 		addToken("!~", Operator.NOT_MATCH);
 	}
 
+	/**
+	 * Matches an identifier string and returns a bit field with the bits
+	 * representing the types accepted by the current selector.
+	 *
+	 * @return  type mask, or 0 if the type specifier is not valid
+	 */
 	private int featureTypes()
 	{
 		int types = 0;
 		expect(IDENTIFIER);
 		String s = stringValue();
-		nextToken();
+		nextToken();		// TODO: don't advance to next token if we allow
+							//  simplified form (in which case the current
+							//  identifier may represent a key
 		for (int i = 0; i < s.length(); i++)
 		{
 			char ch = s.charAt(i);
