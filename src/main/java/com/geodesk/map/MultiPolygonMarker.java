@@ -1,6 +1,7 @@
 package com.geodesk.map;
 
 import com.geodesk.geom.Coordinates;
+import com.geodesk.util.JavaScript;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Polygon;

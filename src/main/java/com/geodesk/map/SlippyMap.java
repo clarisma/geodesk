@@ -7,6 +7,7 @@ import com.geodesk.feature.Node;
 import com.geodesk.feature.Relation;
 import com.geodesk.feature.Way;
 import com.geodesk.geom.Bounds;
+import com.geodesk.util.JavaScript;
 import org.locationtech.jts.geom.*;
 
 import java.io.File;

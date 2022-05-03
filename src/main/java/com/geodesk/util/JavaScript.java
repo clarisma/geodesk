@@ -1,4 +1,4 @@
-package com.geodesk.map;
+package com.geodesk.util;
 
 import com.clarisma.common.text.Strings;
 

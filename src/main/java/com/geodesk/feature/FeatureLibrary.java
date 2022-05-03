@@ -3,6 +3,7 @@ package com.geodesk.feature;
 import com.geodesk.feature.store.FeatureStoreBase;
 import com.geodesk.feature.store.WorldView;
 import com.geodesk.geom.Bounds;
+import org.locationtech.jts.geom.GeometryFactory;
 
 import java.nio.file.Path;
 import java.util.Iterator;
@@ -23,6 +24,11 @@ public class FeatureLibrary extends WorldView<Feature>
         store.setPath(Path.of(path));
         store.open();
         store.enableQueries();
+    }
+
+    public GeometryFactory geometryFactory()
+    {
+        return store.geometryFactory();
     }
 
     /**
