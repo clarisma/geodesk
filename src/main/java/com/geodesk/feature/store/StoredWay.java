@@ -7,7 +7,7 @@ import com.geodesk.feature.FeatureType;
 import com.geodesk.feature.Features;
 import com.geodesk.feature.Node;
 import com.geodesk.feature.Way;
-import com.geodesk.feature.filter.Filter;
+import com.geodesk.feature.Filter;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 
@@ -17,7 +17,7 @@ import java.util.Iterator;
 
 public class StoredWay extends StoredFeature implements Way
 {
-	public StoredWay(FeatureStoreBase store, ByteBuffer buf, int ptr)
+	public StoredWay(FeatureStore store, ByteBuffer buf, int ptr)
 	{
 		super(store, buf, ptr);
 	}
@@ -192,7 +192,7 @@ public class StoredWay extends StoredFeature implements Way
 
 	public static class Iter implements Iterator<Node>
 	{
-		private final FeatureStoreBase store;
+		private final FeatureStore store;
 		private final ByteBuffer buf;
 		private final Filter filter;
 		private int pNext;
@@ -207,7 +207,7 @@ public class StoredWay extends StoredFeature implements Way
 		private static final int NF_DIFFERENT_TILE = 8;
 
 
-		public Iter(FeatureStoreBase store, ByteBuffer buf, int pFirst, Filter filter)
+		public Iter(FeatureStore store, ByteBuffer buf, int pFirst, Filter filter)
 		{
 			this.store = store;
 			this.buf = buf;

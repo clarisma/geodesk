@@ -1,8 +1,11 @@
 package com.geodesk.feature.store;
 
 import com.geodesk.feature.*;
-import com.geodesk.feature.filter.Filter;
+import com.geodesk.feature.Filter;
 import com.geodesk.feature.polygon.PolygonBuilder;
+import com.geodesk.feature.query.EmptyView;
+import com.geodesk.feature.query.MemberIterator;
+import com.geodesk.feature.query.MemberView;
 import org.eclipse.collections.api.set.primitive.MutableLongSet;
 import org.eclipse.collections.impl.set.mutable.primitive.LongHashSet;
 import org.locationtech.jts.geom.Geometry;
@@ -12,7 +15,7 @@ import java.util.*;
 
 public class StoredRelation extends StoredFeature implements Relation
 {
-	public StoredRelation(FeatureStoreBase store, ByteBuffer buf, int ptr)
+	public StoredRelation(FeatureStore store, ByteBuffer buf, int ptr)
 	{
 		super(store, buf, ptr);
 	}

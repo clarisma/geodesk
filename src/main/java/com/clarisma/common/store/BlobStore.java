@@ -66,12 +66,18 @@ public class BlobStore extends Store
         return ((long)baseMapping.getInt(TOTAL_PAGES_OFS)) << pageSizeShift;
     }
 
-    protected ByteBuffer bufferOfPage(int page)
+    // TODO: naming
+    public ByteBuffer baseMapping()
+    {
+        return baseMapping;
+    }
+
+    public ByteBuffer bufferOfPage(int page)
     {
         return getMapping(page >> (30 - pageSizeShift));
     }
 
-    protected int offsetOfPage(int page)
+    public int offsetOfPage(int page)
     {
         return (page << pageSizeShift) & 0x3fff_ffff;
     }

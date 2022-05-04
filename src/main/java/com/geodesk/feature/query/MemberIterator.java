@@ -1,15 +1,18 @@
-package com.geodesk.feature.store;
+package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Bytes;
 import com.geodesk.feature.Feature;
-import com.geodesk.feature.filter.Filter;
+import com.geodesk.feature.Filter;
+import com.geodesk.feature.store.FeatureConstants;
+import com.geodesk.feature.store.FeatureStore;
+import com.geodesk.feature.store.StoredFeature;
 
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
 public class MemberIterator implements Iterator<Feature>
 {
-    private final FeatureStoreBase store;
+    private final FeatureStore store;
     private final ByteBuffer buf;
     private final Filter filter;
     private int pCurrent;
@@ -27,7 +30,7 @@ public class MemberIterator implements Iterator<Feature>
     private static final int MF_DIFFERENT_ROLE = 4;
     private static final int MF_DIFFERENT_TILE = 8;
 
-    public MemberIterator(FeatureStoreBase store, ByteBuffer buf, int pTable, Filter filter)
+    public MemberIterator(FeatureStore store, ByteBuffer buf, int pTable, Filter filter)
     {
         this.store = store;
         this.buf = buf;

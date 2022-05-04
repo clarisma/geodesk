@@ -1,11 +1,11 @@
-package com.geodesk.feature.store;
+package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
 import com.geodesk.core.Tile;
-import com.geodesk.feature.filter.Filter;
+import com.geodesk.feature.Filter;
 import com.geodesk.feature.filter.FilterSet;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.geodesk.feature.store.FeatureFlags;
+import com.geodesk.feature.store.FeatureStore;
 
 import java.nio.ByteBuffer;
 
@@ -82,7 +82,7 @@ public class TileQueryTask extends QueryTask
 
         try
         {
-            FeatureStoreBase store = query.store();
+            FeatureStore store = query.store();
             int tilePage = store.fetchTile(tip);
             ByteBuffer buf = store.bufferOfPage(tilePage);
             int pTile = store.offsetOfPage(tilePage);

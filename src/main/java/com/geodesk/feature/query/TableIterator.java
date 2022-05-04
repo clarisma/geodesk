@@ -1,7 +1,7 @@
-package com.geodesk.feature.store;
+package com.geodesk.feature.query;
 
 import com.geodesk.feature.Feature;
-import com.geodesk.feature.filter.Filter;
+import com.geodesk.feature.store.FeatureConstants;
 
 import java.nio.ByteBuffer;
 import java.util.Iterator;

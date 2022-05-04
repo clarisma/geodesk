@@ -87,7 +87,7 @@ public class TileIndexWalker
         level.pChildEntries = pTileIndex + 4;   // skip purgatory tile
     }
 
-    public TileIndexWalker(FeatureStoreBase store)
+    public TileIndexWalker(FeatureStore store)
     {
         this(store.baseMapping(), store.tileIndexPointer(), store.zoomLevels());
     }

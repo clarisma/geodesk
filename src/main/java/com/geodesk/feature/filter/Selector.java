@@ -1,7 +1,8 @@
-package com.geodesk.feature.query;
+package com.geodesk.feature.filter;
 
 import com.clarisma.common.ast.AstVisitor;
 import com.clarisma.common.ast.Expression;
+import com.geodesk.feature.query.IndexBits;
 
 public class Selector extends Expression
 {

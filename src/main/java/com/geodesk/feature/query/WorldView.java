@@ -1,8 +1,10 @@
-package com.geodesk.feature.store;
+package com.geodesk.feature.query;
 
 import com.geodesk.feature.*;
-import com.geodesk.feature.filter.Filter;
+import com.geodesk.feature.Filter;
 import com.geodesk.feature.filter.FilterSet;
+import com.geodesk.feature.filter.TypeBits;
+import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.geom.Bounds;
 
 import java.util.Iterator;
@@ -11,24 +13,24 @@ import java.util.Iterator;
 
 public class WorldView<T extends Feature> implements Features<T>
 {
-    protected FeatureStoreBase store;
+    protected FeatureStore store;
     protected Bounds bbox;
     protected FilterSet filters;
 
-    public WorldView(FeatureStoreBase store)
+    public WorldView(FeatureStore store)
     {
         this.store = store;
         filters = FilterSet.ALL;
     }
 
-    public WorldView(FeatureStoreBase store, Bounds bbox)
+    public WorldView(FeatureStore store, Bounds bbox)
     {
         this.store = store;
         this.bbox = bbox;
         filters = FilterSet.ALL;
     }
 
-    public WorldView(FeatureStoreBase store, FilterSet filters)
+    public WorldView(FeatureStore store, FilterSet filters)
     {
         this.store = store;
         this.filters = filters;
@@ -81,12 +83,13 @@ public class WorldView<T extends Feature> implements Features<T>
 
     @Override public Features<Node> nodes(String filter)
     {
-        return new WorldView<Node>(this, Filter.NODES);
+        // TODO
+        return new WorldView<Node>(this, TypeBits.NODES);
     }
 
     @Override public Features<Way> ways()
     {
-        return new WorldView<Way>(this, Filter.WAYS);
+        return new WorldView<Way>(this, TypeBits.WAYS);
     }
 
     @Override public Features<Way> ways(String filter)

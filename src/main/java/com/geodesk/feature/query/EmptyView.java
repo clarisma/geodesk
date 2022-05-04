@@ -1,4 +1,4 @@
-package com.geodesk.feature.store;
+package com.geodesk.feature.query;
 
 import com.geodesk.feature.*;
 import com.geodesk.geom.Bounds;

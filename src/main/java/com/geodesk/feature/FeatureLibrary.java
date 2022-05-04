@@ -1,12 +1,10 @@
 package com.geodesk.feature;
 
-import com.geodesk.feature.store.FeatureStoreBase;
-import com.geodesk.feature.store.WorldView;
-import com.geodesk.geom.Bounds;
+import com.geodesk.feature.store.FeatureStore;
+import com.geodesk.feature.query.WorldView;
 import org.locationtech.jts.geom.GeometryFactory;
 
 import java.nio.file.Path;
-import java.util.Iterator;
 
 /**
  * A Geographic Object Library containing features.
@@ -20,7 +18,7 @@ public class FeatureLibrary extends WorldView<Feature>
      */
     public FeatureLibrary(String path)
     {
-        super(new FeatureStoreBase());
+        super(new FeatureStore());
         store.setPath(Path.of(path));
         store.open();
         store.enableQueries();

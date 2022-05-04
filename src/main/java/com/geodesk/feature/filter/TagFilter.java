@@ -1,8 +1,8 @@
 package com.geodesk.feature.filter;
 
 import com.clarisma.common.math.MathUtils;
-import com.geodesk.feature.query.QueryException;
-import com.geodesk.feature.store.FeatureStoreBase;
+import com.geodesk.feature.Filter;
+import org.locationtech.jts.geom.Geometry;
 
 import java.nio.ByteBuffer;
 
@@ -19,20 +19,34 @@ public abstract class TagFilter implements Filter
         this.keyMin = keyMin;
     }
 
+    // TODO
+    @Override public boolean acceptTyped(int types, ByteBuffer buf, int pos)
+    {
+        return accept(buf, pos);
+    }
 
+    /*
     @Override public boolean accept(ByteBuffer buf, int pos, int roleGroup)
     {
         return accept(buf, pos);
     }
+
+    @Override public int acceptRole(int roleCode, String roleString)
+    {
+        return 1;
+    }
+     */
 
     @Override public boolean acceptIndex(int keys)
     {
         return (keys & keyMask) >= keyMin;
     }
 
-    @Override public int acceptRole(int roleCode, String roleString)
+    @Override public boolean acceptGeometry(Geometry geom)
     {
-        return 1;
+        throw new UnsupportedOperationException(
+            "This Filter is not intended for geometries");
+        // return true;
     }
 
     protected static String doubleToString(double d)

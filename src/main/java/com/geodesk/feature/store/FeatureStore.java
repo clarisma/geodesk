@@ -4,7 +4,8 @@ import com.clarisma.common.pbf.PbfDecoder;
 import com.clarisma.common.store.BlobStore;
 import com.geodesk.feature.Features;
 import com.geodesk.feature.filter.FilterSet;
-import com.geodesk.feature.query.FilterCompiler;
+import com.geodesk.feature.filter.FilterCompiler;
+import com.geodesk.feature.query.WorldView;
 import com.geodesk.geom.Bounds;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
 import org.eclipse.collections.api.map.primitive.MutableIntIntMap;
@@ -19,7 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
-public class FeatureStoreBase extends BlobStore
+public class FeatureStore extends BlobStore
 {
     private int minZoom;
     private int zoomSteps;
@@ -53,6 +54,7 @@ public class FeatureStoreBase extends BlobStore
         zoomSteps = ZoomLevels.zoomSteps(zoomLevels);
     }
 
+    /*
     protected ByteBuffer baseMapping()
     {
         return baseMapping;
@@ -67,8 +69,9 @@ public class FeatureStoreBase extends BlobStore
     {
         return super.offsetOfPage(page);
     }
+     */
 
-    protected int zoomLevels()
+    public int zoomLevels()
     {
         return baseMapping.getInt(ZOOM_LEVELS_OFS);
     }
@@ -115,12 +118,12 @@ public class FeatureStoreBase extends BlobStore
         geometryFactory = new GeometryFactory(); // TODO
     }
 
-    protected ExecutorService executor()
+    public ExecutorService executor()
     {
         return executor;
     }
 
-    protected int tileIndexPointer()
+    public int tileIndexPointer()
     {
         return baseMapping.getInt(TILE_INDEX_PTR_OFS) + TILE_INDEX_PTR_OFS;
     }
@@ -130,7 +133,7 @@ public class FeatureStoreBase extends BlobStore
         return baseMapping.getInt(tileIndexPointer() + tip * 4) >>> 1;
     }
 
-    protected String stringFromCode(int code)
+    public String stringFromCode(int code)
     {
         try
         {
@@ -161,7 +164,7 @@ public class FeatureStoreBase extends BlobStore
         }
     }
 
-    protected int fetchTile(int tip)
+    public int fetchTile(int tip)
     {
         assert tip >= 0 && tip < (1 << 24) : String.format("Invalid TIP: %d", tip);
         ByteBuffer buf = baseMapping;

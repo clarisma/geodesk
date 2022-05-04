@@ -1,5 +1,8 @@
 package com.geodesk.feature.query;
 
+import com.geodesk.feature.filter.FilterCoder;
+import com.geodesk.feature.filter.FilterParser;
+import com.geodesk.feature.filter.FilterXmlWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.map.primitive.MutableObjectIntMap;
@@ -15,14 +18,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 public class QueryParserTest
 {
     public static final Logger log = LogManager.getLogger();
 
-    QueryParser parser;
-    QueryCoder coder;
+    FilterParser parser;
+    FilterCoder coder;
     String[] codesToStrings;
     ObjectIntMap<String> stringsToCodes;
 
@@ -30,8 +31,8 @@ public class QueryParserTest
     public void setUp() throws Exception
     {
         loadStrings();
-        parser = new QueryParser(stringsToCodes, null); // TODO
-        coder = new QueryCoder(stringsToCodes.get("no"));
+        parser = new FilterParser(stringsToCodes, null); // TODO
+        coder = new FilterCoder(stringsToCodes.get("no"));
     }
 
     private void loadStrings() throws IOException
@@ -54,7 +55,7 @@ public class QueryParserTest
 
     private void dumpQuery()
     {
-        QueryXmlWriter out = new QueryXmlWriter(System.out);
+        FilterXmlWriter out = new FilterXmlWriter(System.out);
         out.writeQuery(parser.query());
         out.flush();
     }

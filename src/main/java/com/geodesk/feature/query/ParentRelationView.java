@@ -1,7 +1,9 @@
-package com.geodesk.feature.store;
+package com.geodesk.feature.query;
 
 import com.geodesk.feature.*;
-import com.geodesk.feature.filter.Filter;
+import com.geodesk.feature.Filter;
+import com.geodesk.feature.store.FeatureStore;
+import com.geodesk.feature.store.StoredRelation;
 import com.geodesk.geom.Bounds;
 
 import java.nio.ByteBuffer;
@@ -9,13 +11,13 @@ import java.util.Iterator;
 
 public class ParentRelationView implements Features<Relation>
 {
-    private FeatureStoreBase store;
+    private FeatureStore store;
     private ByteBuffer buf;
     private int ptr;
     private final Filter filter = Filter.ALL;   // TODO
 
 
-    public ParentRelationView(FeatureStoreBase store, ByteBuffer buf, int ptr)
+    public ParentRelationView(FeatureStore store, ByteBuffer buf, int ptr)
     {
         this.store = store;
         this.buf = buf;

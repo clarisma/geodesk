@@ -1,8 +1,9 @@
 package com.geodesk.feature.query;
 
-import com.geodesk.feature.filter.Filter;
+import com.geodesk.feature.Filter;
 import com.clarisma.common.fab.FabException;
 import com.clarisma.common.fab.FabReader;
+import com.geodesk.feature.filter.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.map.primitive.MutableObjectIntMap;
@@ -34,7 +35,7 @@ import java.util.Map;
  * - feature/tags.fab: objects and their tags
  * - feature/strings.txt: the global string table
  */
-public class QueryCompilerTest
+public class FilterCompilerTest
 {
 	public static final Logger log = LogManager.getLogger();
 	
@@ -129,8 +130,8 @@ public class QueryCompilerTest
 	void testQuery(TagTableTester tagTableTester, QueryTestCase qtc, int count) throws IOException
 	{
 		Selector sel;
-		QueryParser parser = new QueryParser(stringsToCodes, null); // TODO
-		QueryCoder coder = new QueryCoder(stringsToCodes.get("no"));
+		FilterParser parser = new FilterParser(stringsToCodes, null); // TODO
+		FilterCoder coder = new FilterCoder(stringsToCodes.get("no"));
 		log.debug("Parsing query: {}", qtc.query);
 		try
 		{
@@ -151,7 +152,7 @@ public class QueryCompilerTest
 			return;
 		}
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		QueryXmlWriter out = new QueryXmlWriter(baos);
+		FilterXmlWriter out = new FilterXmlWriter(baos);
 		out.writeQuery(sel);
 		out.flush();
 		log.debug(baos.toString());

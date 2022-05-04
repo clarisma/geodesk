@@ -1,12 +1,13 @@
-package com.geodesk.feature.store;
+package com.geodesk.feature.query;
 
 import com.geodesk.feature.*;
-import com.geodesk.feature.filter.Filter;
+import com.geodesk.feature.Filter;
 import com.geodesk.feature.filter.FilterSet;
+import com.geodesk.feature.store.FeatureStore;
 
 public abstract class AbstractView<T extends Feature> implements Features<T>
 {
-    protected FeatureStoreBase store;
+    protected FeatureStore store;
     protected int featureTypes;
     protected FilterSet filters;
 

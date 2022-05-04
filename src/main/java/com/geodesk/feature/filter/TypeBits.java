@@ -1,4 +1,4 @@
-package com.geodesk.feature.query;
+package com.geodesk.feature.filter;
 
 /**
  * Support for bitsets that precisely describe which features to match:

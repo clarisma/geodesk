@@ -1,7 +1,6 @@
-package com.geodesk.feature.query;
+package com.geodesk.feature.filter;
 
-import com.geodesk.feature.filter.Filter;
-import com.geodesk.feature.filter.FilterSet;
+import com.geodesk.feature.Filter;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
 import org.eclipse.collections.api.map.primitive.ObjectIntMap;
 
@@ -12,7 +11,7 @@ import java.util.Map;
 
 public class FilterCompiler extends ClassLoader
 {
-    private final QueryParser parser;
+    private final FilterParser parser;
     private final String[] codesToStrings;
     private final int valueNo;
     private final Map<String, FilterSet> filterSets = new HashMap<>();
@@ -24,7 +23,7 @@ public class FilterCompiler extends ClassLoader
         this.codesToStrings = codesToStrings;
         valueNo = stringsToCodes.get("no");
         if(valueNo == 0) throw new QueryException("String table must include \"no\"");
-        parser = new QueryParser(stringsToCodes, keysToCategories);
+        parser = new FilterParser(stringsToCodes, keysToCategories);
     }
 
     public FilterSet getFilters(String query)
@@ -40,7 +39,7 @@ public class FilterCompiler extends ClassLoader
 
     private Filter createFilter(Selector selectors)
     {
-        QueryCoder coder = new QueryCoder(valueNo);
+        FilterCoder coder = new FilterCoder(valueNo);
         classCount++;
         String className = "Filter_" + classCount;
         byte[] code = coder.createFilterClass(className, selectors);

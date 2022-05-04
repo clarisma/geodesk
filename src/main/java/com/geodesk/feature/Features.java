@@ -1,6 +1,6 @@
 package com.geodesk.feature;
 
-import com.geodesk.feature.store.EmptyView;
+import com.geodesk.feature.query.EmptyView;
 import com.geodesk.geom.Bounds;
 
 import java.util.ArrayList;

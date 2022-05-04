@@ -1,10 +1,8 @@
-package com.geodesk.feature.query;
+package com.geodesk.feature.filter;
 
 import com.clarisma.common.ast.*;
 import com.geodesk.feature.store.TagValues;
 import com.clarisma.common.parser.Parser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
 import org.eclipse.collections.api.map.primitive.ObjectIntMap;
 import org.eclipse.collections.impl.map.mutable.primitive.IntIntHashMap;
@@ -26,7 +24,7 @@ import java.util.regex.Pattern;
 //  What if we allow other letter for types?
 //  l = line, c = collection?
 
-public class QueryParser extends Parser
+public class FilterParser extends Parser
 {
 	private static final String COMMA = ",";
 	private static final String STAR = "*";
@@ -55,7 +53,7 @@ public class QueryParser extends Parser
 	private final ObjectIntMap<String> stringsToCodes;
 	private final IntIntMap keysToCategories;
 
-	public QueryParser(ObjectIntMap<String> stringsToCodes, IntIntMap keysToCategories)
+	public FilterParser(ObjectIntMap<String> stringsToCodes, IntIntMap keysToCategories)
 	{
 		if (stringsToCodes == null) stringsToCodes = new ObjectIntHashMap<>();
 		this.stringsToCodes = stringsToCodes;

@@ -2,6 +2,7 @@ package com.geodesk.feature.store;
 
 import com.geodesk.feature.*;
 import com.geodesk.core.Box;
+import com.geodesk.feature.query.EmptyView;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 
@@ -11,11 +12,11 @@ import org.locationtech.jts.geom.Geometry;
  */
 public class AnonymousWayNode implements Node
 {
-    private final FeatureStoreBase store;
+    private final FeatureStore store;
     private final int x;
     private final int y;
 
-    public AnonymousWayNode(FeatureStoreBase store, int x, int y)
+    public AnonymousWayNode(FeatureStore store, int x, int y)
     {
         this.store = store;
         this.x = x;

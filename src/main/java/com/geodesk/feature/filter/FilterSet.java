@@ -1,5 +1,7 @@
 package com.geodesk.feature.filter;
 
+import com.geodesk.feature.Filter;
+
 public class FilterSet
 {
     private final Filter nodes;

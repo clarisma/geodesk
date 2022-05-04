@@ -1,4 +1,4 @@
-package com.geodesk.feature.store;
+package com.geodesk.feature.query;
 
 import java.nio.ByteBuffer;
 

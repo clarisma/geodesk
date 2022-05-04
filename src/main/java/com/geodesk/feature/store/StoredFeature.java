@@ -5,6 +5,8 @@ import com.clarisma.common.util.Bytes;
 import com.geodesk.core.Mercator;
 import com.geodesk.feature.*;
 import com.geodesk.core.Box;
+import com.geodesk.feature.query.EmptyView;
+import com.geodesk.feature.query.ParentRelationView;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -12,7 +14,7 @@ import java.util.*;
 
 public abstract class StoredFeature implements Feature
 {
-	protected final FeatureStoreBase store;
+	protected final FeatureStore store;
 	protected final ByteBuffer buf;
 	protected final int ptr;
 	protected String role;
@@ -24,7 +26,7 @@ public abstract class StoredFeature implements Feature
 	public static final Iterable<Feature> EMPTY_MEMBERS = new ArrayList<>(0);
 
 
-	public StoredFeature(FeatureStoreBase store, ByteBuffer buf, int ptr)
+	public StoredFeature(FeatureStore store, ByteBuffer buf, int ptr)
 	{
 		this.store = store;
 		this.buf = buf;

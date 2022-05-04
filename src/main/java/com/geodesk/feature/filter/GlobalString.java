@@ -1,4 +1,4 @@
-package com.geodesk.feature.query;
+package com.geodesk.feature.filter;
 
 public class GlobalString implements Comparable<GlobalString>
 {

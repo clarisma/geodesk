@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
 
 public class StoredNode extends StoredFeature implements Node
 {
-	public StoredNode(FeatureStoreBase store, ByteBuffer buf, int ptr)
+	public StoredNode(FeatureStore store, ByteBuffer buf, int ptr)
 	{
 		super(store, buf, ptr);
 	}

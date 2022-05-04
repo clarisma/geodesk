@@ -1,8 +1,9 @@
-package com.geodesk.feature.store;
+package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.filter.FilterSet;
+import com.geodesk.feature.store.*;
 import com.geodesk.geom.Bounds;
 import org.eclipse.collections.api.set.primitive.MutableLongSet;
 import org.eclipse.collections.impl.set.mutable.primitive.LongHashSet;
@@ -17,7 +18,7 @@ import java.util.concurrent.*;
 public class Query implements Iterator<Feature>, Bounds
 {
 
-    private final FeatureStoreBase store;
+    private final FeatureStore store;
     private int minX;
     private final int minY;
     private int maxX;
@@ -52,7 +53,7 @@ public class Query implements Iterator<Feature>, Bounds
         start();
     }
 
-    public FeatureStoreBase store()
+    public FeatureStore store()
     {
         return store;
     }

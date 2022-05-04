@@ -1,4 +1,4 @@
-package com.geodesk.feature.query;
+package com.geodesk.feature.filter;
 
 import com.clarisma.common.ast.*;
 import com.geodesk.feature.store.TagValues;
@@ -130,7 +130,7 @@ import static org.objectweb.asm.Opcodes.*;
 
  */
 
-public class QueryCoder extends ExpressionCoder
+public class FilterCoder extends ExpressionCoder
 {
 	private static final String
 		FILTER_BASE_CLASS = "com/geodesk/feature/filter/TagFilter",
@@ -223,7 +223,7 @@ public class QueryCoder extends ExpressionCoder
 	 */
 	private int acceptedTagType;
 
-	public QueryCoder(int valueNo)
+	public FilterCoder(int valueNo)
 	{
 		this.valueNo = valueNo;
 		setTypeChecker(new TypeChecker());
@@ -375,7 +375,7 @@ public class QueryCoder extends ExpressionCoder
 			mv.visitInsn(IOR);
 			mv.visitLabel(single_byte_length);
 
-			if (op == QueryParser.ENDS_WITH)
+			if (op == FilterParser.ENDS_WITH)
 			{
 				// for ENDS_WITH, we adjust the string pointer
 				// to point at the potential substring of the candidate
@@ -682,7 +682,7 @@ public class QueryCoder extends ExpressionCoder
 		// startsWith and endsWith can operate on either a string pointer
 		// or a String object
 
-		assert op == QueryParser.STARTS_WITH || op == QueryParser.ENDS_WITH;
+		assert op == FilterParser.STARTS_WITH || op == FilterParser.ENDS_WITH;
 		Label use_string = new Label();
 		Label done = new Label();
 		// First, we check if the string pointer is non-null
@@ -696,7 +696,7 @@ public class QueryCoder extends ExpressionCoder
 		mv.visitVarInsn(ALOAD, $val_string);
 		// execute one of the basic String methods
 		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String",
-			op == QueryParser.STARTS_WITH ? "startsWith" : "endsWith",
+			op == FilterParser.STARTS_WITH ? "startsWith" : "endsWith",
 			"(Ljava/lang/String;)Z", false);
 		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
 		mv.visitLabel(done);
@@ -1839,7 +1839,7 @@ public class QueryCoder extends ExpressionCoder
 		if(matchString.isEmpty())
 		{
 			// "*" (wildcard with empty string) matches anything
-			if(op == Operator.IN || op == QueryParser.STARTS_WITH || op == QueryParser.ENDS_WITH)
+			if(op == Operator.IN || op == FilterParser.STARTS_WITH || op == FilterParser.ENDS_WITH)
 			{
 				if(t != null)
 				{
@@ -1849,8 +1849,8 @@ public class QueryCoder extends ExpressionCoder
 			}
 		}
 
-		assert op == Operator.EQ || op == QueryParser.STARTS_WITH ||
-			op == QueryParser.ENDS_WITH;
+		assert op == Operator.EQ || op == FilterParser.STARTS_WITH ||
+			op == FilterParser.ENDS_WITH;
 
 		Label done = new Label();
 		Label fx = f != null ? f : done;
@@ -1871,7 +1871,7 @@ public class QueryCoder extends ExpressionCoder
 			mv.visitVarInsn(ALOAD, $val_string);
 			mv.visitLdcInsn(matchString);
 			mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String",
-				op == QueryParser.STARTS_WITH ? "startsWith" : "endsWith",
+				op == FilterParser.STARTS_WITH ? "startsWith" : "endsWith",
 				"(Ljava/lang/String;)Z", false);
 			if (t != null)
 			{
