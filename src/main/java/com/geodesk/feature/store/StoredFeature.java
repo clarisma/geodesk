@@ -346,7 +346,12 @@ public abstract class StoredFeature implements Feature
 
 	@Override public boolean belongsTo(Feature parent)
 	{
-		// TODO
+		if(parent instanceof Relation rel)
+		{
+			return parentRelations().contains(rel);
+		}
+
+		// TODO: parent way
 		return false;
 	}
 
