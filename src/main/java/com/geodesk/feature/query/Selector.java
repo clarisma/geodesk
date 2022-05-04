@@ -5,12 +5,6 @@ import com.clarisma.common.ast.Expression;
 
 public class Selector extends Expression
 {
-	public static final int MATCH_NODES = 1; 
-	public static final int MATCH_WAYS = 2; 
-	public static final int MATCH_AREAS = 4; 
-	public static final int MATCH_RELATIONS = 8;
-	public static final int MATCH_ALL = 15;
-
 	/**
 	 * The types of clauses that are present in this Selector:
 	 * local/global, required/optional. A required-key clause only matches if
@@ -22,7 +16,7 @@ public class Selector extends Expression
 	public static final int CLAUSE_GLOBAL_REQUIRED = 4;
 	public static final int CLAUSE_GLOBAL_OPTIONAL = 8;
 
-	private final int matchTypes;
+	private int matchTypes;
 	private int clauseTypes;
 	private int indexBits;
 	private Selector next;
@@ -120,6 +114,26 @@ public class Selector extends Expression
 			}
 			prev = c;
 		}
+	}
+
+	/**
+	 * Splits off a shallow copy of this Selector. The new selector matches the
+	 * given type bits; these type bits are removed from this Selector.
+	 *
+	 * @param type
+	 * @return
+	 */
+	public Selector split(int type)
+	{
+		assert (matchTypes & type) == type: "Selector does not match this type";
+		assert (matchTypes ^ type) != 0: "No reason to split this selector";
+		Selector other = new Selector(type);
+		other.clauseTypes = clauseTypes;
+		other.indexBits = indexBits;
+		other.firstClause = firstClause;
+		// TODO: role
+		matchTypes &= ~type;
+		return other;
 	}
 	
 	@Override public <R> R accept(AstVisitor<R> visitor)

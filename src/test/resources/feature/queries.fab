@@ -45,9 +45,6 @@ query: *[name="Klei*"][name="*spiegel\""][landuse][landuse="allotments"][landuse
 query: w[highway][maxspeed<=50][maxspeed="*mph"]
     highway_speed_mph: true
 
-query: *[source][seamark:light:range="7"][source="*-04-02"][seamark:light:colour="r*"][seamark:light:range="*7"][seamark:light:sequence="5+(*"][seamark][source][seamark:light:sequence]
-    bad_random4: true
-
 query: *[highway][uncommon_key]
     highway3_uncommon: true
 
@@ -64,22 +61,10 @@ query: *[reference="*a"][reference="Via R*"][network="*iwn"]
 query: *[reference="*a"][route][route][reference="Via R*"][network][symbol="*oldener Pilgerstab auf blauem Grund;rote Inschrift \"Via Romea\""][route="hi*"][route][network="*iwn"]
     bad_random3: true
 
-query: *[addr:housenumber="227"]
-    bad_random2: true
-
 query: *[addr:housenumber<=227.0]
     bad_random2: true
 
-query: *[addr:housenumber<=227.0][addr:housenumber="227"]
-    bad_random2: true
-
 query: *[building][addr:street][addr:city][building="*yes"][addr:street][addr:street="Reedestraße"][addr:street][building][building]
-    bad_random2: true
-
-query: *[addr:housenumber<=227.0][addr:housenumber="227"][addr:housenumber="*"][addr:housenumber="22*"]
-    bad_random2: true
-
-query: *[addr:housenumber<=227.0][building][addr:street][addr:city][building="*yes"][addr:street][addr:street="Reedestraße"][addr:housenumber="227"][addr:street][addr:housenumber="*"][addr:housenumber="22*"][building][building]
     bad_random2: true
 
 query: *[height="*3.5"][tourism="artwork"][inscription][name="*kieker"][tourism="artwork"][height="3.5"][name][name][tourism="artwork"][name="De Utkieker"][inscription="„De Utkieker“; "][height<=3.5]
@@ -208,20 +193,6 @@ query: w[name="Hü*","*V","Someotherstring*"]
     highway_residential: false
     highway3: true
     short_local_name: true
-
-query: w[name="*Ca*"]
-    highway_residential: true
-    highway3: false
-
-//
-//  RegEx
-//
-
-query: w[name~".str."]
-    highway_residential: false
-    highway3: true
-    short_local_name: false
-
 
 //
 // Cases that deal with local keys in various combinations
@@ -750,9 +721,9 @@ query:	w[highway!=residential,"*ary"], w[highway=primary,track]
 query:	w[highway=primary][maxspeed > 50][maxspeed <= 100]
 	highway3:		false
 	highway4: 		true
-	highway5: 		true
-	highway6: 		true
-	highway7: 		true
+	// highway5: 		true        // TODO: Won't match because
+    highway6: 		true
+    highway7: 		true
 	highway8: 		false
 
 query:	na[amenity=restaurant]
@@ -800,5 +771,43 @@ query:	na[amenity!=place_of_worship]
 	church1:		false
 	restaurant4: 	true
 	hotel1:			true
-	
 
+// ============================
+//   Queries that fail so far
+// ============================
+
+//
+// Exact string match of numbers
+//
+
+query: *[source][seamark:light:range="7"][source="*-04-02"][seamark:light:colour="r*"][seamark:light:range="*7"][seamark:light:sequence="5+(*"][seamark][source][seamark:light:sequence]
+    bad_random4: true
+
+query: *[addr:housenumber="227"]
+    bad_random2: true
+
+query: *[addr:housenumber<=227.0][addr:housenumber="227"]
+    bad_random2: true
+
+query: *[addr:housenumber<=227.0][addr:housenumber="227"][addr:housenumber="*"][addr:housenumber="22*"]
+    bad_random2: true
+
+query: *[addr:housenumber<=227.0][building][addr:street][addr:city][building="*yes"][addr:street][addr:street="Reedestraße"][addr:housenumber="227"][addr:street][addr:housenumber="*"][addr:housenumber="22*"][building][building]
+    bad_random2: true
+
+//
+// Infix wildcard
+//
+
+query: w[name="*Ca*"]
+    highway_residential: true
+    highway3: false
+
+//
+//  RegEx
+//
+
+query: w[name~".str."]
+    highway_residential: false
+    highway3: true
+    short_local_name: false

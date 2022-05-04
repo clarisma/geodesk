@@ -38,57 +38,124 @@ public class FilterCompiler extends ClassLoader
         return filters;
     }
 
-    private FilterSet createFilters(String query)
+    private Filter createFilter(Selector selectors)
     {
         QueryCoder coder = new QueryCoder(valueNo);
-
         classCount++;
         String className = "Filter_" + classCount;
-        Filter nodes = null;
-        Filter ways = null;
-        Filter areas = null;
-        Filter relations = null;
+        byte[] code = coder.createFilterClass(className, selectors);
+        Class<?> matcherClass = defineClass(className, code, 0, code.length);
+        Filter filter;
+        try
+        {
+            Constructor<?> constructor = matcherClass.getDeclaredConstructor(
+                String.class.arrayType());
+            // Can't pass globalStrings directly, since it is an array
+            return (Filter)constructor.newInstance(new Object[]{ codesToStrings });
+        }
+        catch (NoSuchMethodException | SecurityException | InstantiationException |
+               IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
+        {
+            throw new QueryException("Filter compilation failed.", ex);
+        }
+    }
 
+    private FilterSet createFilters(String query)
+    {
         parser.parse(query);
-        Selector sel = parser.query();
+        Selector selectors = parser.query();
+
+        Selector sel = selectors;
+        int commonType=0;
         while(sel != null)
         {
             int type = sel.matchTypes();
-            Selector c = sel;
-            Selector next;
-            for (; ; )
+            if (commonType == 0)
             {
-                next = c.next();
-                if (next == null || next.matchTypes() != type) break;
-                c = next;
+                commonType = type;
             }
-
-            byte[] code = coder.createFilterClass(className, sel);
-            Class<?> matcherClass = defineClass(className, code, 0, code.length);
-            Filter filter;
-            try
+            else
             {
-				Constructor<?> constructor = matcherClass.getDeclaredConstructor(
-                    String.class.arrayType());
-                // Can't pass globalStrings directly, since it is an array
-                filter = (Filter)constructor.newInstance(new Object[]{ codesToStrings });
+                if (type != commonType) return createPolyformFilters(selectors);
             }
-            catch (NoSuchMethodException | SecurityException | InstantiationException |
-                IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
-            {
-                throw new QueryException("Filter compilation failed.", ex);
-            }
-
-            // TODO: assert that there is only one Matcher for each type
-            // .e. assert query.matchNodes==null;
-            if((type & Selector.MATCH_NODES) != 0) nodes = filter;
-            if((type & Selector.MATCH_WAYS) != 0) ways = filter;
-            if((type & Selector.MATCH_AREAS) != 0) areas = filter;
-            if((type & Selector.MATCH_RELATIONS) != 0) relations = filter;
-
-            sel = next;
+            sel = sel.next();
         }
-        return new FilterSet(nodes,ways,areas,relations);
+
+        Filter filter = createFilter(selectors);
+        return new FilterSet(
+            (commonType & TypeBits.NODES) != 0 ? filter : null,
+            (commonType & TypeBits.NONAREA_WAYS) != 0 ? filter : null,
+            (commonType & TypeBits.AREAS) != 0 ? filter : null,
+            (commonType & TypeBits.NONAREA_RELATIONS) != 0 ? filter : null);
     }
 
+    /**
+     * Extracts a chain of selectors that match the given type from
+     * a source chain. The source chain must have a "dummy" head element.
+     * If a Selector that matches the given type targets multiple types,
+     * a shallow copy is created.
+     *
+     * @param selectors     a chain of Selectors with a dummy head
+     * @param type          a bit field of types
+     * @return  a chain of Selectors that target the given type
+     */
+    private Selector extractSelectors(Selector selectors, int type)
+    {
+        Selector firstExtracted = null;
+        Selector lastExtracted = null;
+        Selector prev = selectors;
+        Selector next = prev.next();
+        for(;;)
+        {
+            Selector sel = next;
+            if(sel == null) break;
+            next = sel.next();
+            int selectorTypes = sel.matchTypes();
+            if((selectorTypes & type) == type)
+            {
+                if(selectorTypes == type)
+                {
+                    // If the Selector matches only the selected type,
+                    // take it from the chain
+                    prev.setNext(next);
+                    sel.setNext(null);
+                }
+                else
+                {
+                    // Otherwise, split off a copy
+                    sel = sel.split(type);
+                }
+                if(firstExtracted == null)
+                {
+                    firstExtracted = sel;
+                }
+                else
+                {
+                    lastExtracted.setNext(sel);
+                }
+                lastExtracted = sel;
+            }
+        }
+        return firstExtracted;
+    }
+
+    private FilterSet createPolyformFilters(Selector selectors)
+    {
+        // Create a "dummy" head to simplify the removal of elements
+        // from the linked list of Selectors
+        Selector head = new Selector(0);
+        head.setNext(selectors);
+
+        Selector selNodes     = extractSelectors(head, TypeBits.NODES);
+        Selector selWays      = extractSelectors(head, TypeBits.NONAREA_WAYS);
+        Selector selAreas     = extractSelectors(head, TypeBits.AREAS);
+        Selector selRelations = extractSelectors(head, TypeBits.NONAREA_RELATIONS);
+        assert head.next() == null: "All selectors must be extracted";
+
+        return new FilterSet(
+            selNodes     != null ? createFilter(selNodes)     : null,
+            selWays      != null ? createFilter(selWays)      : null,
+            selAreas     != null ? createFilter(selAreas)     : null,
+            selRelations != null ? createFilter(selRelations) : null);
+    }
 }

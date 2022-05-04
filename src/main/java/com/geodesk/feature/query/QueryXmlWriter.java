@@ -57,10 +57,10 @@ public class QueryXmlWriter extends ExpressionXmlWriter
 			Selector sel = (Selector)exp;
 			begin("selector");
 			int types = sel.matchTypes();
-			attr("nodes", (types & Selector.MATCH_NODES) != 0);
-			attr("ways", (types & Selector.MATCH_WAYS) != 0);
-			attr("areas", (types & Selector.MATCH_AREAS) != 0);
-			attr("relations", (types & Selector.MATCH_RELATIONS) != 0);
+			attr("nodes", (types & TypeBits.NODES) == TypeBits.NODES);
+			attr("ways", (types & TypeBits.NONAREA_WAYS) == TypeBits.NONAREA_WAYS);
+			attr("areas", (types & TypeBits.AREAS) == TypeBits.AREAS);
+			attr("relations", (types & TypeBits.NONAREA_RELATIONS) == TypeBits.NONAREA_RELATIONS);
 			TagClause clause = sel.firstClause();
 			while(clause != null)
 			{

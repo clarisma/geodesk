@@ -88,20 +88,24 @@ public class QueryParser extends Parser
 			switch (ch)
 			{
 			case 'n':
-				types |= Selector.MATCH_NODES;
+				if((types & TypeBits.NODES) == TypeBits.NODES) return 0;
+				types |= TypeBits.NODES;
 				break;
 			case 'w':
-				types |= Selector.MATCH_WAYS;
+				if((types & TypeBits.NONAREA_WAYS) == TypeBits.NONAREA_WAYS) return 0;
+				types |= TypeBits.NONAREA_WAYS;
 				break;
 			case 'a':
-				types |= Selector.MATCH_AREAS;
+				if((types & TypeBits.AREAS) == TypeBits.AREAS) return 0;
+				types |= TypeBits.AREAS;
 				break;
 			case 'r':
-				types |= Selector.MATCH_RELATIONS;
+				if((types & TypeBits.NONAREA_RELATIONS) == TypeBits.NONAREA_RELATIONS) return 0;
+				types |= TypeBits.NONAREA_RELATIONS;
 				break;
 			default:
 				error(String.format("Unknown feature type '%c', should be 'n','w','a', or 'r'", ch));
-				return -1;
+				return 0;
 			}
 		}
 		return types;
@@ -402,12 +406,12 @@ public class QueryParser extends Parser
 		int types;
 		if (acceptAndConsume(STAR))
 		{
-			types = Selector.MATCH_ALL;
+			types = TypeBits.ALL;
 		}
 		else
 		{
 			types = featureTypes();
-			if (types < 0) return null;
+			if (types == 0) return null;
 		}
 		Selector sel = new Selector(types);
 		for (; ; )

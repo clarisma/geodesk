@@ -486,9 +486,10 @@ public class QueryBenchmark
         return script;
     }
 
-    public void perform(Path storePath, String area) throws Exception
+    public void perform(String outputPathString, String storePathString, String area) throws Exception
     {
-        features = new FeatureLibrary("/home/md/geodesk/benchmarks");
+        outputPath = Paths.get(outputPathString);
+        features = new FeatureLibrary(storePathString);
         new BenchmarkSpecReader().read(
             getClass().getClassLoader().getResourceAsStream("benchmarks/benchmark.fab"));
         Map<String, RandomBoxes> boxes = makeBoxes(area);
@@ -504,7 +505,7 @@ public class QueryBenchmark
 
     public static void main(String[] args) throws Exception
     {
-        // new QueryBenchmark().perform(Paths.get("C:\\geodesk\\tests\\de.gol"), "germany");
-        new QueryBenchmark().perform(Paths.get("/home/md/geodesk/tests/de4.gol"), "germany");
+        new QueryBenchmark().perform("c:\\geodesk\\benchmarks", "C:\\geodesk\\tests\\de.gol", "germany");
+        // new QueryBenchmark().perform("/home/md/geodesk/benchmarks", "/home/md/geodesk/tests/de4.gol", "germany");
     }
 }
