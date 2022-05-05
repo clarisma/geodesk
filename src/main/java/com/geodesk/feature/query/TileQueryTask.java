@@ -9,6 +9,8 @@ import com.geodesk.feature.store.FeatureStore;
 
 import java.nio.ByteBuffer;
 
+import static com.geodesk.feature.filter.TypeBits.*;
+
 public class TileQueryTask extends QueryTask
 {
     private final int tile;
@@ -96,12 +98,32 @@ public class TileQueryTask extends QueryTask
                 ((query.minX() < west) ? FeatureFlags.MULTITILE_WEST : 0);
 
             FilterSet filters = query.filters();
-            Filter f;
             RTreeQueryTask task = null;
+
+            /*
+            Filter f;
             if ((f = filters.nodes()) != null) task = searchNodeRTree(buf, pTile + 8, f, task);
             if ((f = filters.ways()) != null) task = searchRTree(buf, pTile + 12, f, task);
             if ((f = filters.areas()) != null) task = searchRTree(buf, pTile + 16, f, task);
             if ((f = filters.relations()) != null) task = searchRTree(buf, pTile + 20, f, task);
+            */
+            int types = query.types();
+            if ((types & NODES) != 0)
+            {
+                task = searchNodeRTree(buf, pTile + 8, filters.nodes(), task);
+            }
+            if ((types & NONAREA_WAYS) != 0)
+            {
+                task = searchRTree(buf, pTile + 12, filters.ways(), task);
+            }
+            if ((types & AREAS) != 0)
+            {
+                task = searchRTree(buf, pTile + 16, filters.areas(), task);
+            }
+            if ((types & NONAREA_RELATIONS) != 0)
+            {
+                task = searchRTree(buf, pTile + 20, filters.relations(), task);
+            }
 
             QueryResults res = QueryResults.EMPTY;
             while (task != null)

@@ -121,7 +121,7 @@ public interface Features<T extends Feature> extends Iterable<T>
      * @param bbox the bounding box to use as a filter
      * @return a collection of {@link Relation} objects
      */
-    Features<?> in(Bounds bbox);
+    Features<T> in(Bounds bbox);
 
     /**
      * Returns the first feature in the collection. If the collection is unordered,

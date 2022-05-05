@@ -75,17 +75,29 @@ public class FilterCompiler extends ClassLoader
             }
             else
             {
-                if (type != commonType) return createPolyformFilters(selectors);
+                if (type != commonType)
+                {
+                    do
+                    {
+                        commonType |= type;
+                        sel = sel.next();
+                    }
+                    while (sel != null);
+                    return createPolyformFilters(commonType, selectors);
+                }
             }
             sel = sel.next();
         }
 
         Filter filter = createFilter(selectors);
-        return new FilterSet(
+        return new FilterSet(commonType,
             (commonType & TypeBits.NODES) != 0 ? filter : null,
             (commonType & TypeBits.NONAREA_WAYS) != 0 ? filter : null,
             (commonType & TypeBits.AREAS) != 0 ? filter : null,
-            (commonType & TypeBits.NONAREA_RELATIONS) != 0 ? filter : null);
+            (commonType & TypeBits.NONAREA_RELATIONS) != 0 ? filter : null,
+            new SimpleMemberFilter(filter));    // TODO: proper member filter
+            // TODO: can use simple constructor once we've fixed the
+            //  TileQueryTask
     }
 
     /**
@@ -138,7 +150,7 @@ public class FilterCompiler extends ClassLoader
         return firstExtracted;
     }
 
-    private FilterSet createPolyformFilters(Selector selectors)
+    private FilterSet createPolyformFilters(int types, Selector selectors)
     {
         // Create a "dummy" head to simplify the removal of elements
         // from the linked list of Selectors
@@ -151,10 +163,11 @@ public class FilterCompiler extends ClassLoader
         Selector selRelations = extractSelectors(head, TypeBits.NONAREA_RELATIONS);
         assert head.next() == null: "All selectors must be extracted";
 
-        return new FilterSet(
+        return new FilterSet(types,
             selNodes     != null ? createFilter(selNodes)     : null,
             selWays      != null ? createFilter(selWays)      : null,
             selAreas     != null ? createFilter(selAreas)     : null,
-            selRelations != null ? createFilter(selRelations) : null);
+            selRelations != null ? createFilter(selRelations) : null,
+            null);      // TODO: member filter
     }
 }

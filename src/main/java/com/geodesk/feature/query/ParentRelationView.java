@@ -2,6 +2,9 @@ package com.geodesk.feature.query;
 
 import com.geodesk.feature.*;
 import com.geodesk.feature.Filter;
+import com.geodesk.feature.filter.AndFilter;
+import com.geodesk.feature.filter.FilterSet;
+import com.geodesk.feature.filter.TypeBits;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredRelation;
 import com.geodesk.geom.Bounds;
@@ -11,10 +14,10 @@ import java.util.Iterator;
 
 public class ParentRelationView implements Features<Relation>
 {
-    private FeatureStore store;
-    private ByteBuffer buf;
-    private int ptr;
-    private final Filter filter = Filter.ALL;   // TODO
+    private final FeatureStore store;
+    private final ByteBuffer buf;
+    private final int ptr;
+    private final Filter filter;
 
 
     public ParentRelationView(FeatureStore store, ByteBuffer buf, int ptr)
@@ -22,26 +25,26 @@ public class ParentRelationView implements Features<Relation>
         this.store = store;
         this.buf = buf;
         this.ptr = ptr;
+        filter = Filter.ALL;
     }
 
-    /*
+    public ParentRelationView(ParentRelationView other, Filter filter)
+    {
+        this.store = other.store;
+        this.buf = other.buf;
+        this.ptr = other.ptr;
+        this.filter = filter;
+    }
+
     @Override public boolean isEmpty()
     {
-        // TODO
+        // can never be empty
         return false;
     }
 
-    @Override public long count()
+    @Override public Features<?> features(String query)
     {
-        // TODO
-        return 0;
-    }
-    */
-
-    @Override public Features<?> features(String filter)
-    {
-        // TODO
-        return null;
+        return relations(query);
     }
 
     @Override public Features<Node> nodes()
@@ -64,74 +67,25 @@ public class ParentRelationView implements Features<Relation>
         return (Features<Way>) EmptyView.ANY;
     }
 
-//    @Override public Features<?> areas()
-//    {
-//        // TODO
-//        return null;
-//    }
-//
-//    @Override public Features<?> areas(String filter)
-//    {
-//        // TODO
-//        return null;
-//    }
-
     @Override public Features<Relation> relations()
     {
         return this;
     }
 
-    @Override public Features<Relation> relations(String filter)
+    @Override public Features<Relation> relations(String query)
+    {
+        FilterSet filters = store.getFilters(query);
+        if((filters.types() & TypeBits.RELATIONS) == 0) return EmptyView.RELATIONS;
+        Filter newFilter = filters.relations();
+        if(filter != Filter.ALL) newFilter = new AndFilter(filter, newFilter);
+        return new ParentRelationView(this, newFilter);
+    }
+
+    @Override public Features<Relation> in(Bounds bbox)
     {
         // TODO
         return null;
     }
-
-    @Override public Features<?> in(Bounds bbox)
-    {
-        // TODO
-        return null;
-    }
-
-    /*
-    @Override public boolean contains(Relation f)
-    {
-        // TODO
-        return false;
-    }
-
-    @Override public boolean containsNode(long id)
-    {
-        return true;
-    }
-
-    @Override public boolean containsWay(long id)
-    {
-        return true;
-    }
-
-    @Override public boolean containsRelation(long id)
-    {
-        // TODO
-        return false;
-    }
-
-    @Override public Node node(long id)
-    {
-        return null;
-    }
-
-    @Override public Way way(long id)
-    {
-        return null;
-    }
-
-    @Override public Relation relation(long id)
-    {
-        // TODO
-        return null;
-    }
-     */
 
     @Override public Iterator<Relation> iterator()
     {

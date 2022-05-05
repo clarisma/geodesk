@@ -33,6 +33,11 @@ public abstract class StoredFeature implements Feature
 		this.ptr = ptr;
 	}
 
+	public FeatureStore store()
+	{
+		return store;
+	}
+
 	protected ByteBuffer buffer()
 	{
 		return buf;
@@ -55,11 +60,17 @@ public abstract class StoredFeature implements Feature
 		return buf.getInt(ptr);
 	}
 
+	/*
 	public static int type(ByteBuffer buf, int ptr)
 	{
 		return (buf.getInt(ptr) >> 3) & 3;
 	}
+	 */
 
+	public int flags()
+	{
+		return buf.get(ptr);	// get single byte
+	}
 
 	@Override public int x()
 	{
@@ -603,6 +614,11 @@ public abstract class StoredFeature implements Feature
 		int pBody = buf.getInt(ppBody) + ppBody;
 		int ppRelTable = pBody-4;
 		return buf.getInt(ppRelTable) + ppRelTable;
+	}
+
+	public boolean matches(Filter filter)
+	{
+		return filter.accept(buf, ptr);
 	}
 }
 

@@ -17,12 +17,12 @@ import java.util.concurrent.*;
 
 public class Query implements Iterator<Feature>, Bounds
 {
-
     private final FeatureStore store;
     private int minX;
     private final int minY;
     private int maxX;
     private final int maxY;
+    private final int types;
     private final FilterSet filters;
     private ExecutorService executor;
     // private TileQueryTask head;     // access must be synchronized
@@ -41,6 +41,7 @@ public class Query implements Iterator<Feature>, Bounds
     {
         this.store = view.store;
         this.executor = store.executor();
+        this.types = view.types;
         this.filters = view.filters;
         Bounds bbox = view.bbox;
         minX = bbox.minX();
@@ -56,6 +57,11 @@ public class Query implements Iterator<Feature>, Bounds
     public FeatureStore store()
     {
         return store;
+    }
+
+    public int types()
+    {
+        return types;
     }
 
     public FilterSet filters()

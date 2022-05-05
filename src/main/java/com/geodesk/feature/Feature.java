@@ -88,6 +88,8 @@ public interface Feature
 	 * @param key the key (e.g. <code>highway</code>)
 	 * @return true if feature is tagged with this key, otherwise false
 	 */
+	// TODO: Does not check for "no"; what should be the expected behaviour?
+	//  maybe: booleanValue()?
 	boolean hasTag(String key);
 
 	/**

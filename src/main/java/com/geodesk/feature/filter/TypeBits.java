@@ -1,5 +1,7 @@
 package com.geodesk.feature.filter;
 
+import com.clarisma.common.util.Log;
+
 /**
  * Support for bitsets that precisely describe which features to match:
  * - by primitive type
@@ -71,5 +73,52 @@ public class TypeBits
     {
         assert (1 << 31) == (1 << 0xffff_ffff);
         return 1 << (flags >> 1);       // Don't need & 0x1F, Java's shift only considers lowest 5 bits
+    }
+
+    public static String toString(int flags)
+    {
+        StringBuilder s = new StringBuilder();
+        for(int type=0; type<28; type++)
+        {
+            if((flags & (1 << type)) != 0)
+            {
+                if(!s.isEmpty()) s.append('\n');
+                s.append(switch((type >> 2) & 3)
+                {
+                    case 0 -> "  node";
+                    case 1 -> "  way";
+                    case 2 -> "  relation";
+                    default -> "  invalid";
+                });
+                if((type & 1) != 0) s.append(" area");
+                if((type & 2) != 0) s.append(" relmember");
+                if((type & 16) != 0) s.append(" waynode");
+            }
+        }
+        return s.toString();
+    }
+
+    public static void main(String[] args)
+    {
+        Log.debug("%d", 1 << -1);
+        Log.debug("%d", 1 << -128);
+        Log.debug("%d", 1 << 32);
+        Log.debug("%d", 1 << 128);
+        Log.debug("%d", 1 << 33);
+        Log.debug("%d", 1 << 129);
+        Log.debug("--- Nodes ---");
+        Log.debug(toString(NODES));
+        Log.debug("--- Ways ---");
+        Log.debug(toString(WAYS));
+        Log.debug("--- Relations ---");
+        Log.debug(toString(RELATIONS));
+        Log.debug("--- Areas ---");
+        Log.debug(toString(AREAS));
+        Log.debug("--- All ---");
+        Log.debug(toString(ALL));
+        Log.debug("--- Covered ---");
+        Log.debug(toString(262148000));
+        Log.debug("--- Parsed FilterSet ---");
+        Log.debug(toString(267718645));
     }
 }

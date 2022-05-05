@@ -80,7 +80,7 @@ public class MemberView<T extends Feature> implements Features<T>
         return null;
     }
 
-    @Override public Features<?> in(Bounds bbox)
+    @Override public Features<T> in(Bounds bbox)
     {
         return null;
     }

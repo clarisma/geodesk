@@ -202,21 +202,6 @@ public class FeatureStore extends BlobStore
         return new StoredRelation(this, buf, p);
     }
 
-    public Features<?> features()
-    {
-        return new WorldView(this);
-    }
-
-    public Features<?> features(String filter)
-    {
-        return new WorldView<>(this, getFilters(filter));
-    }
-
-    public Features<?> in(Bounds bbox)
-    {
-        return new WorldView(this, bbox);
-    }
-
     @Override public void close()
     {
         if(executor != null)
