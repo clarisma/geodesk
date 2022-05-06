@@ -158,4 +158,8 @@ public class Bytes
         return true;
     }
 
+    public static boolean stringEquals(ByteBuffer buf, int p, String s)
+    {
+        return readString(buf,p).equals(s);
+    }
 }

@@ -173,7 +173,9 @@ public abstract class StoredFeature implements Feature
 			int flags = rawPointer & 7;
 			int pKey = ((rawPointer ^ flags) >> 1) + origin;    // preserve sign
 			// uncommon keys are relative to the 4-byte-aligned tagtable address
-			if (Bytes.stringEqualsAscii(buf, pKey, keyString))
+			// if (Bytes.stringEqualsAscii(buf, pKey, keyString))
+				// TODO: can't assume keys to be ASCII-only, use this slower method for now:
+			if (Bytes.stringEquals(buf, pKey, keyString))
 			{
 				return (((long) (p - 2) << 32) | flags |
 					(((long) ((char) tag)) << 16));
