@@ -5,4 +5,5 @@ import com.geodesk.feature.Filter;
 public interface MemberFilter
 {
     Filter filterForRole(int roleCode, String roleString);
+    // TODO: call it acceptRole
 }

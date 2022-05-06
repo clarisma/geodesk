@@ -24,6 +24,18 @@ public interface Way extends Feature, Iterable<Node>
 	 */
 	Features<Node> nodes();
 
+	/**
+	 * Returns the way's nodes that match the given query.
+	 *
+	 * @param  q  a query in <a href="/goql">GOQL</a> format
+	 *
+	 * @return a collection of member nodes that match the given query
+	 *        (may be empty)
+	 *
+	 * @return an ordered collection of {@link Node} objects
+	 */
+	Features<Node> nodes(String q);
+
 	// TODO: needed? Could use nodes().contains(node)
 	// boolean hasNode(Node node);
 

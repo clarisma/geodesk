@@ -78,6 +78,11 @@ public class WorldView<T extends Feature> implements Features<T>
     }
      */
 
+    public int types()
+    {
+        return types;
+    }
+
 
     /**
      *
@@ -131,7 +136,7 @@ public class WorldView<T extends Feature> implements Features<T>
 
     @Override public Features<?> features(String query)
     {
-        return (Features<Node>)select(ALL, ALL, query);
+        return select(ALL, ALL, query);
     }
 
     @Override public Features<Node> nodes()

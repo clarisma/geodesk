@@ -13,8 +13,8 @@ import java.nio.ByteBuffer;
 
 public class PbfDecoder 
 {
-	protected final ByteBuffer buf;
-	protected int pos;
+	private final ByteBuffer buf;
+	private int pos;
 
 	/*
 	public PbfDecoder()

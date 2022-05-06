@@ -6,50 +6,49 @@ import java.nio.ByteBuffer;
 
 public interface Filter
 {
-    boolean accept(ByteBuffer buf, int pos);
-    boolean acceptTyped(int types, ByteBuffer buf, int pos);
-    // boolean accept(ByteBuffer buf, int pos, int roleGroup);
-    boolean acceptIndex(int keys);
-    boolean acceptGeometry(Geometry geom);
-    // int acceptRole(int roleCode, String roleString);
-
-    /*
-    public static final int NODES = 1;
-    public static final int WAYS = 2;
-    public static final int AREAS = 4;
-    public static final int RELATIONS = 8;
-    */
-
-    public static final Filter ALL = new Filter()
+    /**
+     * Checks whether a feature meets the conditions of this Filter.
+     *
+     * @param buf       the Buffer of the feature
+     * @param pos       the anchor position of the feature in the Buffer
+     * @return          `true` if the feature matches the filter condition
+     */
+    default boolean accept(ByteBuffer buf, int pos)
     {
-        @Override public boolean accept(ByteBuffer buf, int pos)
-        {
-            return true;
-        }
+        return true;
+    }
 
-        @Override public boolean acceptTyped(int types, ByteBuffer buf, int pos)
-        {
-            return true;
-        }
+    /**
+     * Accepts this feature only if its type matches the given type mask.
+     *
+     * @param types     the type mask to match (must not be 0)
+     * @param buf       the Buffer of the feature
+     * @param pos       the anchor position of the feature in the Buffer
+     * @return          `true` if the feature matches the filter condition
+     */
+    default boolean acceptTyped(int types, ByteBuffer buf, int pos)
+    {
+        return true;
+    }
 
-        /*
-        @Override public boolean accept(ByteBuffer buf, int pos, int roleGroup)
-        {
-            return true;
-        }
-        @Override public int acceptRole(int roleCode, String roleString)
-        {
-            return 1;
-        }
-         */
-        @Override public boolean acceptIndex(int keys)
-        {
-            return true;
-        }
+    /**
+     * Checks whether this Filter might be fulfilled by features that
+     * are stored in an index with the given key bits.
+     *
+     * @param keys      the key bits of the index
+     * @return          `true` if features that match this Filter might be found
+     *                  in the given index, or `false` if none of those
+     *                  features could be a match
+     */
+    default boolean acceptIndex(int keys)
+    {
+        return true;
+    }
 
-        @Override public boolean acceptGeometry(Geometry geom)
-        {
-            return true;
-        }
-    };
+    default boolean acceptGeometry(Geometry geom)
+    {
+        return true;
+    }
+
+    Filter ALL = new Filter() {};
 }

@@ -251,10 +251,12 @@ public abstract class StoredFeature implements Feature
 			int ppValue = (int) (value >> 32);    // preserve sign? (TODO: should be absolute ptr)
 			int pValueString = buf.getInt(ppValue) + ppValue;
 			String s = Bytes.readString(buf, pValueString);
+			// TODO: should be: return MathUtils.doubleFromString(s);
 			return TagValues.toInt(s);
 		}
 		// narrow string
 		String s = store.stringFromCode((char) (value >> 16));
+		// TODO: should be: return MathUtils.doubleFromString(s);
 		return TagValues.toInt(s);
 	}
 

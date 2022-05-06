@@ -8,6 +8,10 @@ import com.geodesk.feature.Features;
 import com.geodesk.feature.Node;
 import com.geodesk.feature.Way;
 import com.geodesk.feature.Filter;
+import com.geodesk.feature.filter.FilterSet;
+import com.geodesk.feature.filter.TypeBits;
+import com.geodesk.feature.query.EmptyView;
+import com.geodesk.feature.query.WayNodeView;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 
@@ -24,12 +28,17 @@ public class StoredWay extends StoredFeature implements Way
 
 	@Override public FeatureType type() { return FeatureType.WAY; }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Features<Node> nodes()
+	@Override public Features<Node> nodes()
 	{
-		// TODO
-		return null;
+		return new WayNodeView(store, buf, ptr);
+	}
+
+	@Override public Features<Node> nodes(String query)
+	{
+		if((buf.get(ptr) & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.NODES;
+		FilterSet filters = store.getFilters(query);
+		if((filters.types() & TypeBits.NODES) == 0) return EmptyView.NODES;
+		return new WayNodeView(store, buf, ptr, filters.nodes());
 	}
 
 	@Override public String toString()
@@ -39,7 +48,7 @@ public class StoredWay extends StoredFeature implements Way
 
 	// TODO: use tuple iterator form
 	// TODO: expose as public, provide lat and lon
-	private static class XYIterator extends PbfDecoder
+	public static class XYIterator extends PbfDecoder
 	{
 		private int x;
 		private int y;
@@ -47,9 +56,9 @@ public class StoredWay extends StoredFeature implements Way
 		private final int firstX;
 		private final int firstY;
 		private int duplicatedLastCoord;
-		protected final int flags;
+		private final int flags;
 
-		XYIterator(ByteBuffer buf, int pos, int prevX, int prevY, int flags)
+		public XYIterator(ByteBuffer buf, int pos, int prevX, int prevY, int flags)
 		{
 			super(buf, pos);
 			x = prevX;

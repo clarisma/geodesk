@@ -24,7 +24,7 @@ public class MemberIterator implements Iterator<Feature>
     private int member;
     private Feature memberFeature;
 
-    // TODO: consolidate these flags
+    // TODO: consolidate these flags?
     private static final int MF_LAST = 1;
     private static final int MF_FOREIGN = 2;
     private static final int MF_DIFFERENT_ROLE = 4;
