@@ -869,6 +869,8 @@ public class FilterCoder extends ExpressionCoder
 			mv.visitVarInsn(ISTORE, $val_string_ptr);
 		}
 
+		// TODO: create numeric strings based on type to preserve
+		//  exact string representation
 		if (valueFulfilled == TagClause.VALUE_DOUBLE &&
 			(valuesRequired & TagClause.VALUE_ANY_STRING) != 0)
 		{

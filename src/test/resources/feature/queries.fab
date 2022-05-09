@@ -2,6 +2,9 @@
 //  Wildcard matching
 //
 
+query: *[height="*3.5"]
+    bad_random1: true
+
 query: *[name="Light*", Brew]
     wildcard1: true
     wildcard2: true
@@ -819,9 +822,6 @@ query: w[name~".str."]
     highway_residential: false
     highway3: true
     short_local_name: false
-
-query: *[height="*3.5"]
-    bad_random1: true
 
 query: *[height="3.5"]
     bad_random1: true
