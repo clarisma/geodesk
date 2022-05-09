@@ -2,6 +2,14 @@
 //  Wildcard matching
 //
 
+query: *[name="Light*", Brew]
+    wildcard1: true
+    wildcard2: true
+    wildcard3: false
+
+query: *[addr:street="An't Holt"]
+    address_with_quotes2: true
+
 query: *[addr:street="An't Holt"]
     address_with_quotes2: true
 
@@ -811,3 +819,9 @@ query: w[name~".str."]
     highway_residential: false
     highway3: true
     short_local_name: false
+
+query: *[height="*3.5"]
+    bad_random1: true
+
+query: *[height="3.5"]
+    bad_random1: true

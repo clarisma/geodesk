@@ -1,6 +1,7 @@
 package com.geodesk.feature.filter;
 
 import com.clarisma.common.ast.*;
+import com.clarisma.common.math.MathUtils;
 import com.geodesk.feature.store.TagValues;
 import com.clarisma.common.parser.Parser;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
@@ -36,6 +37,8 @@ public class FilterParser extends Parser
 	private final static Pattern KEY_IDENTIFIER_PATTERN =
 		Pattern.compile("[a-zA-Z_][\\w:]*");
 	// TODO: make pattern stricter?
+	//  No, should make more lenient:
+	//    "[a-zA-Z_\u00C0-\u1FFF\u2C00-\uD7FF][\\w:\u00C0-\u1FFF\u2C00-\uD7FF]*"
 	// TODO: move these?
 	// TODO: should we implement these as functions instead?
 	public static final Operator STARTS_WITH =
@@ -272,6 +275,15 @@ public class FilterParser extends Parser
 		return OP_REQUIRES_KEY | OP_NUMERIC;
 	}
 
+	private static boolean isNumericString(String s)
+	{
+		int len = s.length();
+		if(len == 0) return false;
+		char ch = s.charAt(0);
+		if((ch < '0' || ch > '9') && ch != '-') return false;
+		return MathUtils.countNumberChars(s) == len;
+	}
+
 	// TODO: decide on a common exit point where we reset the identifier pattern
 	private TagClause tagClause()
 	{
@@ -318,6 +330,8 @@ public class FilterParser extends Parser
 					boolean negate = false;
 					Object val = comparisonValue(opFlags);
 					if(val == null) return null;
+
+					Operator effectiveOp = op;
 					if (val instanceof Double)
 					{
 						flags |= TagClause.VALUE_DOUBLE;
@@ -335,31 +349,29 @@ public class FilterParser extends Parser
 									negate = (opFlags & OP_EQUAL) == 0;
 									if (s.charAt(len - 1) == '*')
 									{
-										op = Operator.IN;
+										effectiveOp = Operator.IN;
 										val = len==1 ? "" : s.substring(1, len-1);
 									}
 									else
 									{
-										op = ENDS_WITH;
+										effectiveOp = ENDS_WITH;
 										val = s.substring(1);
 									}
 									flags |= TagClause.VALUE_LOCAL_STRING |
 										TagClause.VALUE_ANY_STRING;
-									opFlags &= ~OP_EXACT;
 								}
 								else if (s.charAt(len - 1) == '*')
 								{
 									negate = (opFlags & OP_EQUAL) == 0;
-									op = STARTS_WITH;
+									effectiveOp = STARTS_WITH;
 									val = s.substring(0, len - 1);
 									flags |= TagClause.VALUE_LOCAL_STRING |
 										TagClause.VALUE_ANY_STRING;
-									// opFlags &= ~OP_EXACT;
 								}
 							}
 						}
 						// if((opFlags & OP_EXACT) != 0)
-						if(op == Operator.EQ || op == Operator.NE)
+						if(effectiveOp == Operator.EQ || effectiveOp == Operator.NE)
 						{
 							// TODO: when accepting values for "role", be aware
 							//  that not all global strings can be used as role values
@@ -376,8 +388,7 @@ public class FilterParser extends Parser
 							}
 						}
 					}
-					// TODO: back-ref to TagClause?
-					term = new BinaryExpression(op, new Variable(key), new Literal(val));
+					term = new BinaryExpression(effectiveOp, new Variable(key), new Literal(val));
 					if (negate) term = new UnaryExpression(Operator.NOT, term);
 					exp = exp == null ? term : new BinaryExpression(
 						(opFlags & OP_EQUAL) == 0 ? Operator.AND : Operator.OR, exp, term);

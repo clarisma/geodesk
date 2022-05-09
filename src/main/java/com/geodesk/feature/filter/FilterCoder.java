@@ -53,9 +53,9 @@ import static org.objectweb.asm.Opcodes.*;
 	string), narrow number (-256 to ~64K), or wide number (a decimal with a
 	mantissa -256 to ~1M, and 0 to 3 digits after the decimal point).
 	Numerical values that cannot be represented as narrow or wide numbers
-	must be stored as strings.
+	are stored as strings.
 
-	Values of Global-Key Tags are stored immediately after the key, values
+	Values of Global-Key Tags are stored immediately after their key, values
 	of Local-Key Tags are stored ahead of their key (This allows us to scan
 	the Tag Table from the Tag-Table Pointer -- forward for global, backward
 	for local).
@@ -182,10 +182,14 @@ public class FilterCoder extends ExpressionCoder
 	 */
 	private static final int $saved_pos = 10;
 	/**
+	 * A variable to store a copy of $val_string_ptr, which is used
+	 * (and modified) by the string-matching code
+	 */
+	private static final int $temp_string_ptr = 11;
+	/**
 	 * The flag that indicates whether the feature's tag-table
 	 * contains local keys (from Bit 0 of the tag-table pointer)
 	 */
-	private static final int $temp_string_ptr = 11;
 	private static final int $local_key_flag = 12;
 
 	private static final int NONE = 0;
@@ -1835,6 +1839,16 @@ public class FilterCoder extends ExpressionCoder
 			t = f;
 			f = swap;
 		}
+		/*		// TODO: enable for regex
+		else if (op == Operator.NOT_MATCH)
+		{
+			// Turn !~ into ~ (and swap the labels)
+			op = Operator.MATCH;
+			Label swap = t;
+			t = f;
+			f = swap;
+		}
+		 */
 
 		if(matchString.isEmpty())
 		{
@@ -1889,6 +1903,7 @@ public class FilterCoder extends ExpressionCoder
 		else
 		{
 			// value="string" always fails if string pointer is zero
+			// TODO: comparison of number to string?
 			mv.visitJumpInsn(IFEQ, fx);
 		}
 		// The code produced by matchString leaves the string-pointer
@@ -1897,6 +1912,8 @@ public class FilterCoder extends ExpressionCoder
 		// (maybe not worth optimizing)
 		mv.visitVarInsn(ILOAD, $val_string_ptr);
 		mv.visitVarInsn(ISTORE, $temp_string_ptr);
+		// TODO: let matchString stash this temp code, always use
+		// $val_string_ptr as argument
 		matchString(op, $temp_string_ptr, matchString, t, f);    // not fx
 		mv.visitLabel(done);
 		return true;

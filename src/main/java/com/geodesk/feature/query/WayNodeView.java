@@ -93,6 +93,7 @@ public class WayNodeView extends TableView<Node>
     }
 
     // TODO: apply spatial filters to geometric nodes
+    // TODO: inverse this: derive from feature iterator instead?
     private class AllNodesIter extends StoredWay.XYIterator implements Iterator<Node>
     {
         private Node nextFeatureNode;

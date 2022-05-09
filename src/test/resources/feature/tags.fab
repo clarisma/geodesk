@@ -269,3 +269,12 @@ bad_random7:
     historic=memorial
     memorial=plaque
     inscription="Hier stand jahrelang der Bus, in dem während der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"
+
+wildcard1:
+    name=Light
+
+wildcard2:
+    name=Lighthouse
+
+wildcard3:
+    name=Brewhouse
