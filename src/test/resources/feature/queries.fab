@@ -2,6 +2,10 @@
 //  Wildcard matching
 //
 
+query: *[addr:street][addr:street="An't Holt"]
+    address_with_quotes2: true
+
+
 query: *[height="*3.5"]
     bad_random1: true
 
