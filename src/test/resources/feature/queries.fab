@@ -2,16 +2,16 @@
 //  Wildcard matching
 //
 
-query: *[height="*3.5"]
+query: *[addr:street][addr:street="An't Holt"]
+    address_with_quotes2: true
+
+query: *[height][height="*3.5"]
     bad_random1: true
 
 query: *[name="Light*", Brew]
     wildcard1: true
     wildcard2: true
     wildcard3: false
-
-query: *[addr:street="An't Holt"]
-    address_with_quotes2: true
 
 query: *[addr:street="An't Holt"]
     address_with_quotes2: true

@@ -380,6 +380,18 @@ public class FilterParser extends Parser
 							{
 								val = s;
 								flags |= TagClause.VALUE_LOCAL_STRING;
+								if(isNumericString(s))
+								{
+									// If the string we're trying to match is a number,
+									// request that numeric tag values are converted to
+									// a string
+									// (We don't have to do this if the string is in the
+									// global string table -- in this case, a tag value
+									// will never be encoded as a number, and we can simply
+									// do the cheap & fast global-string test)
+
+									flags |= TagClause.VALUE_ANY_STRING;
+								}
 							}
 							else
 							{

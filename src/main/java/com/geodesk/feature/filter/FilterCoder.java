@@ -631,12 +631,32 @@ public class FilterCoder extends ExpressionCoder
 	}
 
 	/**
+	 * Emits code to convert a narrow number (on the stack) to a String.
+	 */
+	private void narrowNumberToString()
+	{
+		loadIntConstant(TagValues.MIN_NUMBER);
+		mv.visitInsn(IADD);
+		mv.visitMethodInsn(INVOKESTATIC, "java/lang/String", "valueOf",
+			"(I)Ljava/lang/String;", false);
+	}
+
+	/**
 	 * Emits code to convert a wide number (on the stack) to a double.
 	 */
 	private void wideNumberToDouble()
 	{
 		mv.visitMethodInsn(INVOKESTATIC, TAG_VALUES_CLASS,
 			"wideNumberToDouble", "(I)D", false);
+	}
+
+	/**
+	 * Emits code to convert a wide number (on the stack) to a String.
+	 */
+	private void wideNumberToString()
+	{
+		mv.visitMethodInsn(INVOKESTATIC, TAG_VALUES_CLASS,
+			"wideNumberToString", "(I)Ljava/lang/String;", false);
 	}
 
 	/**
@@ -766,9 +786,20 @@ public class FilterCoder extends ExpressionCoder
 			}
 			if (valueType == TagValues.NARROW_NUMBER)
 			{
-				narrowNumberToDouble();
-				mv.visitVarInsn(DSTORE, $val_double);
-				valueFulfilled = TagClause.VALUE_DOUBLE;
+				valueFulfilled = 0;
+				if((valuesRequired & TagClause.VALUE_ANY_STRING) != 0)
+				{
+					if((valuesRequired & TagClause.VALUE_DOUBLE) != 0) mv.visitInsn(DUP);
+					narrowNumberToString();
+					mv.visitVarInsn(ASTORE, $val_string);
+					valueFulfilled |= TagClause.VALUE_ANY_STRING;
+				}
+				if((valuesRequired & TagClause.VALUE_DOUBLE) != 0)
+				{
+					narrowNumberToDouble();
+					mv.visitVarInsn(DSTORE, $val_double);
+					valueFulfilled |= TagClause.VALUE_DOUBLE;
+				}
 			}
 			else // can only be GLOBAL_STRING
 			{
@@ -802,9 +833,20 @@ public class FilterCoder extends ExpressionCoder
 			getInt();
 			if (valueType == TagValues.WIDE_NUMBER)
 			{
-				wideNumberToDouble();
-				mv.visitVarInsn(DSTORE, $val_double);
-				valueFulfilled = TagClause.VALUE_DOUBLE;
+				valueFulfilled = 0;
+				if ((valuesRequired & TagClause.VALUE_ANY_STRING) != 0)
+				{
+					if((valuesRequired & TagClause.VALUE_DOUBLE) != 0) mv.visitInsn(DUP);
+					wideNumberToString();
+					mv.visitVarInsn(ASTORE, $val_string);
+					valueFulfilled |= TagClause.VALUE_ANY_STRING;
+				}
+				if((valuesRequired & TagClause.VALUE_DOUBLE) != 0)
+				{
+					wideNumberToDouble();
+					mv.visitVarInsn(DSTORE, $val_double);
+					valueFulfilled |= TagClause.VALUE_DOUBLE;
+				}
 			}
 			else // can only be LOCAL_STRING
 			{
@@ -817,13 +859,6 @@ public class FilterCoder extends ExpressionCoder
 				{
 					// We need to decode the actual String object
 					// and attempt to convert it into a number
-
-					// TODO: we may use a different method that
-					//  parses a double from a local string without
-					//  first retrieving a String object. This would
-					//  also allow us to stop parsing at first non-number
-					//  char (instead of rejecting the entire string), so
-					//  "50 mph" would result in 50, instead of an error
 
 					readString($val_string_ptr);
 					if ((valuesRequired & TagClause.VALUE_ANY_STRING) != 0)
@@ -869,6 +904,7 @@ public class FilterCoder extends ExpressionCoder
 			mv.visitVarInsn(ISTORE, $val_string_ptr);
 		}
 
+		/*
 		// TODO: create numeric strings based on type to preserve
 		//  exact string representation
 		if (valueFulfilled == TagClause.VALUE_DOUBLE &&
@@ -878,6 +914,7 @@ public class FilterCoder extends ExpressionCoder
 			doubleToString();
 			mv.visitVarInsn(ASTORE, $val_string);
 		}
+		 */
 	}
 
 	/**
