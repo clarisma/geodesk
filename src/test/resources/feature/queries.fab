@@ -2,6 +2,9 @@
 //  Wildcard matching
 //
 
+query: *[seamark:light:range="7"]
+    bad_random4: true
+
 query: *[addr:street][addr:street="An't Holt"]
     address_with_quotes2: true
 

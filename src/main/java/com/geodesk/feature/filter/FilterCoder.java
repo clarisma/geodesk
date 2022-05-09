@@ -800,6 +800,10 @@ public class FilterCoder extends ExpressionCoder
 					mv.visitVarInsn(DSTORE, $val_double);
 					valueFulfilled |= TagClause.VALUE_DOUBLE;
 				}
+
+				// TODO: This is stupid, if the value is not actually needed,
+				//  it should not be fetched in the first place
+				if(valueFulfilled == 0) mv.visitInsn(POP);
 			}
 			else // can only be GLOBAL_STRING
 			{
@@ -847,6 +851,10 @@ public class FilterCoder extends ExpressionCoder
 					mv.visitVarInsn(DSTORE, $val_double);
 					valueFulfilled |= TagClause.VALUE_DOUBLE;
 				}
+
+				// TODO: This is stupid, if the value is not actually needed,
+				//  it should not be fetched in the first place
+				if(valueFulfilled == 0) mv.visitInsn(POP);
 			}
 			else // can only be LOCAL_STRING
 			{
@@ -1941,9 +1949,38 @@ public class FilterCoder extends ExpressionCoder
 		}
 		else
 		{
-			// value="string" always fails if string pointer is zero
-			// TODO: comparison of number to string?
-			mv.visitJumpInsn(IFEQ, fx);
+			if((clause.flags() & TagClause.VALUE_ANY_STRING) != 0)
+			{
+				// If the clause accepts a String converted from a numeric
+				// tag value, we check that String if there is no local string
+				// value present
+
+				// TODO: should consolidate with above
+
+				Label use_string_ptr = new Label();
+				mv.visitJumpInsn(IFNE, use_string_ptr);
+				mv.visitLdcInsn(matchString);
+				mv.visitVarInsn(ALOAD, $val_string);
+				mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String",
+					"equals", "(Ljava/lang/Object;)Z", false);
+				if (t != null)
+				{
+					mv.visitJumpInsn(IFNE, t);  // jump if true
+				}
+				else
+				{
+					mv.visitJumpInsn(IFEQ, f);  // jump if false
+				}
+				// skip the string-pointer matching code
+				mv.visitJumpInsn(GOTO, done);
+				// continue here if we have a valid string pointer
+				mv.visitLabel(use_string_ptr);
+			}
+			else
+			{
+				// Otherwise, value="string" always fails if string pointer is zero
+				mv.visitJumpInsn(IFEQ, fx);
+			}
 		}
 		// The code produced by matchString leaves the string-pointer
 		// argument modified, so we use a temporary variable
