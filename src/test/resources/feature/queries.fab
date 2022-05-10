@@ -2,6 +2,46 @@
 //  Wildcard matching
 //
 
+query: *[name="*ap*"]
+    highway3: false
+    highway_residential: true
+    highway_motorway: false
+
+query: *[name!="*ap*"]
+    highway3: true
+    highway_residential: false
+    highway_motorway: true
+
+query: *[name="*ri*"]
+    highway3: false
+    highway_residential: true
+    highway_motorway: false
+
+query: *[name="*Via*"]
+    highway3: false
+    highway_residential: true
+    highway_motorway: false
+
+query: *[name != "*Via*"]
+    highway3: true
+    highway_residential: false
+    highway_motorway: true
+
+query: *[name="*ri"]
+    highway3: false
+    highway_residential: true
+    highway_motorway: false
+
+query: *[name="*straße"]
+    highway3: true
+    highway_residential: false
+    highway_motorway: false
+
+query: *[name="* Capri"]
+    highway3: false
+    highway_residential: true
+    highway_motorway: false
+
 query: *[maxspeed=30,20][maxspeed <= 30]
     highway3: true
     highway3_uncommon: true
@@ -64,6 +104,9 @@ query: *[addr:street="An\'t Holt"]
     address_with_quotes2: true
 
 query: *[inscription="Hier stand jahrelang der Bus, in dem während der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"]
+    bad_random7: true
+
+query: *[inscription="*d der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"]
     bad_random7: true
 
 query: *["material"="stone"][inscription="*d der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"][memorial]["inscription"="Hier stand jahrelang der Bus, in dem während der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"]["material"="stone"][memorial="plaque"]["memorial"="plaque"][material="stone"][name]["name"="*Omnibus"]["historic"][memorial="pl*"]

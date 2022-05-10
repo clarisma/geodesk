@@ -197,10 +197,10 @@ public class FilterCoder extends ExpressionCoder
 	 */
 	private static final int $next_match_ptr = 13;
 	/**
-	 * For "contains" string matching: The position where no other
-	 * match attempts will be performed.
+	 * For "contains" string matching: The last position where
+	 * a match will be attempted.
 	 */
-	private static final int $end_match_ptr = 13;
+	private static final int $last_match_ptr = 14;
 
 	private static final int NONE = 0;
 	private static final int REQUIRED = 1;
@@ -316,7 +316,7 @@ public class FilterCoder extends ExpressionCoder
 			t = f;
 			f = swap;
 		}
-		Label fx = f == null ? new Label() : f;
+		Label match_failed = (f == null) ? new Label() : f;
 		byte[] matchBytes = match.getBytes(StandardCharsets.UTF_8);
 		int len = matchBytes.length;
 
@@ -353,7 +353,7 @@ public class FilterCoder extends ExpressionCoder
 				//  do we need to check more than 2 length bytes?)
 			}
 			loadIntConstant(lenByteToCheck);
-			mv.visitJumpInsn(IF_ICMPNE, fx);
+			mv.visitJumpInsn(IF_ICMPNE, match_failed);
 
 			// debug("Matched string length, p = {}", pointerVar);
 			// TODO: allow comparison with zero-length test string
@@ -388,40 +388,71 @@ public class FilterCoder extends ExpressionCoder
 			mv.visitInsn(ISHL);
 			mv.visitInsn(IOR);
 			mv.visitLabel(single_byte_length);
+			// the length of the candidate string is at TOS here
 
-			if (op == FilterParser.ENDS_WITH)
+			// subtract the test-string length from the candidate length
+			loadIntConstant(len);
+			mv.visitInsn(ISUB);
+
+			if (op != FilterParser.STARTS_WITH)
 			{
-				// for ENDS_WITH, we adjust the string pointer
-				// to point at the potential substring of the candidate
-				// (We'll do this before the length comparison,
-				// because otherwise we would have to store a
-				// copy of the candidate length)
+				// for ENDS_WITH and IN, duplicate this difference,
+				// because we consume it as we adjust the string pointers
 				mv.visitInsn(DUP);
-					// duplicate the candidate's length
-					// (includes one length byte)
-				loadIntConstant(len-1);
-					// -1 to account for the fact that we haven't
-					// skipped the length byte
-				mv.visitInsn(ISUB);
 				mv.visitVarInsn(ILOAD, pointerVar);
 				mv.visitInsn(IADD);
-				mv.visitVarInsn(ISTORE, pointerVar);
+				if (op == FilterParser.ENDS_WITH)
+				{
+					mv.visitVarInsn(ISTORE, pointerVar);
+				}
+				else
+				{
+					mv.visitVarInsn(ISTORE, $last_match_ptr);
+				}
 
-				// TODO: subtract match_len from candidate_len,
-				//  then apply comparision (-1 --> no match possible)
-			}
-			else
-			{
-				// Move the pointer to the first character of the
-				// candidate string
-				mv.visitIincInsn(pointerVar, 1);
+				// (We could perform these steps *after* we've performed
+				// the length check, but we'd have to store the length
+				// difference in a temporary variable; so we might as
+				// well do it here)
 			}
 
-			// If the candidate is shorter than the test string,
+			// If the length difference is negative, this means
+			// the candidate is shorter than the test string,
 			// it can't possibly match, so we jump to "false"
-			loadIntConstant(len);
-			mv.visitJumpInsn(IF_ICMPLT, fx);
+			mv.visitJumpInsn(IFLT, match_failed);
+
+			// Increase string pointer by 1 to account for the (first)
+			// length byte of the candidate string
+			mv.visitIincInsn(pointerVar, 1);
 		}
+
+		Label loop_start = null;
+		Label match_attempt_failed;
+		Label match_success = t;
+		if(op == Operator.IN)
+		{
+			mv.visitVarInsn(ILOAD, pointerVar);
+			mv.visitVarInsn(ISTORE, $next_match_ptr);
+
+			// TODO: for test strings of 8 bytes or less, we could do without
+			//  $next_match_ptr, since we don't move <pointerVar> during the
+			//  match attempts
+
+			// as above, increase the pointer to the last possible match by 1,
+			// to account for the (first) length byte of the candidate string
+			mv.visitIincInsn($last_match_ptr, 1);
+			loop_start = new Label();
+			match_attempt_failed = new Label();
+			mv.visitLabel(loop_start);
+			if(t == null) match_success = new Label();
+		}
+		else
+		{
+			// EQ, STARTS_WITH and ENDS_WITH make only one attempt
+			match_attempt_failed = match_failed;
+		}
+
+		// Perform the actual string matching, starting at <pointerVar>
 
 		int prevRun = 0;
 		for (; ; )
@@ -544,11 +575,11 @@ public class FilterCoder extends ExpressionCoder
 
 			int jumpInsn;
 			Label jumpTo;
-			if (t != null && remaining <= 0)
+			if (match_success != null && remaining <= 0)
 			{
 				// If we are supposed to branch in case of successful match,
 				// do so only if the final run matches
-				jumpTo = t;
+				jumpTo = match_success;
 				jumpInsn = run == 8 ? IFEQ : IF_ICMPEQ;
 			}
 			else
@@ -556,7 +587,7 @@ public class FilterCoder extends ExpressionCoder
 				// In all other cases, jump to the explicit "false" label
 				// (or the point after the instructions) if the run does
 				// not match
-				jumpTo = fx;
+				jumpTo = match_attempt_failed;
 				jumpInsn = run == 8 ? IFNE : IF_ICMPNE;
 			}
 
@@ -576,14 +607,36 @@ public class FilterCoder extends ExpressionCoder
 
 			// debug("Matched run, p = {}", pointerVar);
 
-			if (remaining <= 0)
-			{
-				// debug("String match completed, p = {}", pointerVar);
-				if (f == null) mv.visitLabel(fx);
-				return;
-			}
+			if (remaining <= 0) break;
 			prevRun = run;
 		}
+
+		if(op == Operator.IN)
+		{
+			mv.visitLabel(match_attempt_failed);
+			mv.visitIincInsn($next_match_ptr, 1);
+			mv.visitVarInsn(ILOAD, $next_match_ptr);
+			mv.visitVarInsn(ILOAD, $last_match_ptr);
+			if(f == null)
+			{
+				mv.visitVarInsn(ILOAD, $next_match_ptr);
+				mv.visitVarInsn(ISTORE, pointerVar);
+				mv.visitJumpInsn(IF_ICMPLE, loop_start);
+			}
+			else
+			{
+				mv.visitJumpInsn(IF_ICMPGT, f);
+				mv.visitVarInsn(ILOAD, $next_match_ptr);
+				mv.visitVarInsn(ISTORE, pointerVar);
+				mv.visitJumpInsn(GOTO, loop_start);
+			}
+		}
+
+		// If caller did not specify explicit true/false labels,
+		// set them now
+		assert (t == null && f != null) || (t != null && f == null);
+		if(f == null) mv.visitLabel(match_failed);
+		if(t == null && match_success != null) mv.visitLabel(match_success);
 	}
 
 	/**
@@ -596,6 +649,7 @@ public class FilterCoder extends ExpressionCoder
 	 * @param t      where to jump if true
 	 * @param f      where to jump if false
 	 */
+	/*
 	private void stringStartsWith(String prefix, Label t, Label f)
 	{
 		mv.visitLdcInsn(prefix);
@@ -603,6 +657,7 @@ public class FilterCoder extends ExpressionCoder
 			"startsWith", "(Ljava/lang/String;)Z", false);
 		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
 	}
+	 */
 
 	/**
 	 * Emits code to check if the String object on the operand stack
@@ -614,6 +669,7 @@ public class FilterCoder extends ExpressionCoder
 	 * @param t      where to jump if true
 	 * @param f      where to jump if false
 	 */
+	/*
 	private void stringEndsWith(String suffix, Label t, Label f)
 	{
 		mv.visitLdcInsn(suffix);
@@ -621,6 +677,7 @@ public class FilterCoder extends ExpressionCoder
 			"endsWith", "(Ljava/lang/String;)Z", false);
 		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
 	}
+	 */
 
 	/**
 	 * Emits code to read and decode a UTF-8 string from the ByteBuffer ($buf).
@@ -679,11 +736,13 @@ public class FilterCoder extends ExpressionCoder
 	/**
 	 * Emits code to convert a double (on the stack) to a String.
 	 */
+	/*
 	private void doubleToString()
 	{
 		mv.visitMethodInsn(INVOKESTATIC, FILTER_BASE_CLASS,
 			"doubleToString", "(D)Ljava/lang/String;", false);
 	}
+	 */
 
 	/**
 	 * Emits code to convert a String (on the stack) to a double.
@@ -705,6 +764,7 @@ public class FilterCoder extends ExpressionCoder
 	 * @param t
 	 * @param f
 	 */
+	/*
 	private void matchPatternValue(Operator op, String match, Label t, Label f)
 	{
 		if (op == Operator.MATCH)
@@ -742,6 +802,7 @@ public class FilterCoder extends ExpressionCoder
 		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
 		mv.visitLabel(done);
 	}
+	 */
 
 	/**
 	 * Emits code to load the narrow value associated with a local tag.
@@ -1928,7 +1989,7 @@ public class FilterCoder extends ExpressionCoder
 		}
 
 		assert op == Operator.EQ || op == FilterParser.STARTS_WITH ||
-			op == FilterParser.ENDS_WITH;
+			op == FilterParser.ENDS_WITH || op == Operator.IN;
 
 		Label done = new Label();
 		Label fx = f != null ? f : done;
