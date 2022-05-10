@@ -256,55 +256,20 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 	 */
 	protected void or(Expression left, Expression right, Label t, Label f)
 	{
-		Label tx = t == null ? new Label() : t;
-		if(left instanceof BinaryExpression)
+		if(t != null)
 		{
-			BinaryExpression lb = (BinaryExpression)left;
-			Operator op = lb.operator();
-			if(op == Operator.AND)
-			{
-				Label fx = f == null ? new Label() : f;
-				and(lb.left(), lb.right(), tx, fx);
-				if(f == null) mv.visitLabel(fx);
-			}
-			else if(op == Operator.OR)
-			{
-				or(lb.left(), lb.right(), tx, null);
-			}
-			else
-			{
-				binaryLogicalExpression(lb, tx, null);
-			}
+			// branch on true
+			logicalExpression(left, t, null);
+			logicalExpression(right, t, null);
 		}
 		else
 		{
-			logicalExpression(left, tx, null);
+			// branch on false
+			t = new Label();
+			logicalExpression(left, t, null);
+			logicalExpression(right, null, f);
+			mv.visitLabel(t);
 		}
-		
-		if(right instanceof BinaryExpression)
-		{
-			BinaryExpression rb = (BinaryExpression)right;
-			Operator op = rb.operator();
-			if(op == Operator.AND)
-			{
-				Label fx = f == null ? new Label() : f;
-				and(rb.left(), rb.right(), t, fx);
-				if(f == null) mv.visitLabel(fx);
-			}
-			else if(op == Operator.OR)
-			{
-				or(rb.left(), rb.right(), tx, f);
-			}
-			else
-			{
-				binaryLogicalExpression(rb, t, f);
-			}	
-		}
-		else
-		{
-			logicalExpression(right, t, f);
-		}
-		if(t == null) mv.visitLabel(tx);
 	}
 	
 	/**
@@ -317,55 +282,20 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 	 */
 	protected void and(Expression left, Expression right, Label t, Label f)
 	{
-		Label fx = f == null ? new Label() : f;
-		if(left instanceof BinaryExpression)
+		if(t != null)
 		{
-			BinaryExpression lb = (BinaryExpression)left;
-			Operator op = lb.operator();
-			if(op == Operator.AND)
-			{
-				and(lb.left(), lb.right(), null, fx);
-			}
-			else if(op == Operator.OR)
-			{
-				Label tx = new Label();
-				or(lb.left(), lb.right(), tx, fx);
-				mv.visitLabel(tx);
-			}
-			else
-			{
-				binaryLogicalExpression(lb, null, fx);
-			}
+			// branch on true
+			f = new Label();
+			logicalExpression(left, null, f);
+			logicalExpression(right, t, null);
+			mv.visitLabel(f);
 		}
 		else
 		{
-			logicalExpression(left, null, fx);
+			// branch on false
+			logicalExpression(left, null, f);
+			logicalExpression(right, null, f);
 		}
-		
-		if(right instanceof BinaryExpression)
-		{
-			BinaryExpression rb = (BinaryExpression)right;
-			Operator op = rb.operator();
-			if(op == Operator.AND)
-			{
-				and(rb.left(), rb.right(), t, fx);
-			}
-			else if(op == Operator.OR)
-			{
-				Label tx = t == null ? new Label() : t;
-				or(rb.left(), rb.right(), tx, f);
-				if(t == null) mv.visitLabel(tx);
-			}
-			else
-			{
-				binaryLogicalExpression(rb, t, f);
-			}	
-		}
-		else
-		{
-			logicalExpression(right, t, f);
-		}
-		if(f == null) mv.visitLabel(fx);
 	}
 	
 	/**
@@ -413,6 +343,7 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 	 * Emits code to evaluate a logical expression.
 	 * If the expression is binary, both t and f  can be non-null. 
 	 * Otherwise, only one of the labels may be specified.
+	 * TODO: it should always be only one or the other!
 	 * 
 	 * @param exp	  the Expression
 	 * @param t       the Label where to jump if the expression 
