@@ -191,6 +191,16 @@ public class FilterCoder extends ExpressionCoder
 	 * contains local keys (from Bit 0 of the tag-table pointer)
 	 */
 	private static final int $local_key_flag = 12;
+	/**
+	 * For "contains" string matching: The next position where
+	 * a match will be attempted.
+	 */
+	private static final int $next_match_ptr = 13;
+	/**
+	 * For "contains" string matching: The position where no other
+	 * match attempts will be performed.
+	 */
+	private static final int $end_match_ptr = 13;
 
 	private static final int NONE = 0;
 	private static final int REQUIRED = 1;
@@ -298,7 +308,7 @@ public class FilterCoder extends ExpressionCoder
 		if (op == Operator.NE)
 		{
 			// If Operator is NE, we set it to EQ and switch jump targets
-			// (STARTS_WITH and ENDS_WITH don't have opposite operators,
+			// (STARTS_WITH, ENDS_WITH and IN don't have opposite operators,
 			// they are negated using a unary NOT expression, for which
 			// the ExpressionCoder already swaps the jump targets)
 			op = Operator.EQ;
@@ -387,6 +397,8 @@ public class FilterCoder extends ExpressionCoder
 				// because otherwise we would have to store a
 				// copy of the candidate length)
 				mv.visitInsn(DUP);
+					// duplicate the candidate's length
+					// (includes one length byte)
 				loadIntConstant(len-1);
 					// -1 to account for the fact that we haven't
 					// skipped the length byte
@@ -394,9 +406,14 @@ public class FilterCoder extends ExpressionCoder
 				mv.visitVarInsn(ILOAD, pointerVar);
 				mv.visitInsn(IADD);
 				mv.visitVarInsn(ISTORE, pointerVar);
+
+				// TODO: subtract match_len from candidate_len,
+				//  then apply comparision (-1 --> no match possible)
 			}
 			else
 			{
+				// Move the pointer to the first character of the
+				// candidate string
 				mv.visitIincInsn(pointerVar, 1);
 			}
 

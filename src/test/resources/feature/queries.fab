@@ -2,6 +2,47 @@
 //  Wildcard matching
 //
 
+query: *[maxspeed=30,20][maxspeed <= 30]
+    highway3: true
+    highway3_uncommon: true
+    highway4: false
+    highway5: false
+    highway6: false
+    restaurant4: false
+
+
+query: *[maxspeed="40",30][maxspeed != banana]
+    highway3: true
+    highway3_uncommon: true
+    highway4: false
+    highway5: false
+    highway6: false
+    restaurant4: false
+
+query: *[maxspeed=30][maxspeed != banana]
+    highway3: true
+    highway3_uncommon: true
+    highway4: false
+    highway5: false
+    highway6: false
+    restaurant4: false
+
+query: *[maxspeed="40",30]
+    highway3: true
+    highway3_uncommon: true
+    highway4: false
+    highway5: false
+    highway6: false
+    restaurant4: false
+
+query: *[maxspeed="40",30][maxspeed != banana,orange, cherry]
+    highway3: true
+    highway3_uncommon: true
+    highway4: false
+    highway5: false
+    highway6: false
+    restaurant4: false
+
 query: *[seamark:light:range="7"]
     bad_random4: true
 
