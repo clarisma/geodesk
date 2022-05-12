@@ -1,4 +1,4 @@
-package com.geodesk.feature.filter;
+package com.geodesk.feature.match;
 
 import com.clarisma.common.ast.*;
 import com.geodesk.feature.store.TagValues;
@@ -9,9 +9,9 @@ import java.nio.charset.StandardCharsets;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
- * A bytecode generator that produces a TagFilter class for a given query
- * string. Note that the filter code does not verify the feature type; it is
- * the caller's responsibility to only apply the TagFilter to features
+ * A bytecode generator that produces a TagMatcher class for a given query
+ * string. Note that the matcher code does not verify the feature type; it is
+ * the caller's responsibility to only apply the TagMatcher to features
  * of the appropriate type.
  *
  * This class relies on the ExpressionCoder base class to encode the
@@ -130,10 +130,10 @@ import static org.objectweb.asm.Opcodes.*;
 
  */
 
-public class FilterCoder extends ExpressionCoder
+public class MatcherCoder extends ExpressionCoder
 {
 	private static final String
-		FILTER_BASE_CLASS = "com/geodesk/feature/filter/TagFilter",
+		MATCHER_BASE_CLASS = "com/geodesk/feature/match/TagMatcher",
 		BYTES_CLASS = "com/clarisma/common/util/Bytes",
 		TAG_VALUES_CLASS = "com/geodesk/feature/store/TagValues";
 
@@ -237,7 +237,7 @@ public class FilterCoder extends ExpressionCoder
 	 */
 	private int acceptedTagType;
 
-	public FilterCoder(int valueNo)
+	public MatcherCoder(int valueNo)
 	{
 		this.valueNo = valueNo;
 		setTypeChecker(new TypeChecker());
@@ -254,7 +254,7 @@ public class FilterCoder extends ExpressionCoder
 	{
 		mv.visitLdcInsn(msg);
 		mv.visitVarInsn(ILOAD, localVar);
-		mv.visitMethodInsn(INVOKESTATIC, FILTER_BASE_CLASS,
+		mv.visitMethodInsn(INVOKESTATIC, MATCHER_BASE_CLASS,
 			"debug", "(Ljava/lang/String;I)V", false);
 	}
 
@@ -394,14 +394,14 @@ public class FilterCoder extends ExpressionCoder
 			loadIntConstant(len);
 			mv.visitInsn(ISUB);
 
-			if (op != FilterParser.STARTS_WITH)
+			if (op != MatcherParser.STARTS_WITH)
 			{
 				// for ENDS_WITH and IN, duplicate this difference,
 				// because we consume it as we adjust the string pointers
 				mv.visitInsn(DUP);
 				mv.visitVarInsn(ILOAD, pointerVar);
 				mv.visitInsn(IADD);
-				if (op == FilterParser.ENDS_WITH)
+				if (op == MatcherParser.ENDS_WITH)
 				{
 					mv.visitVarInsn(ISTORE, pointerVar);
 				}
@@ -750,7 +750,7 @@ public class FilterCoder extends ExpressionCoder
 	private void stringToDouble()
 	{
 		// TODO: could call MathUtils.doubleFromString(s) directly
-		mv.visitMethodInsn(INVOKESTATIC, FILTER_BASE_CLASS,
+		mv.visitMethodInsn(INVOKESTATIC, MATCHER_BASE_CLASS,
 			"stringToDouble", "(Ljava/lang/String;)D", false);
 	}
 
@@ -842,7 +842,7 @@ public class FilterCoder extends ExpressionCoder
 				{
 					mv.visitVarInsn(ALOAD, $this);
 					mv.visitVarInsn(ILOAD, $val_global_string);
-					mv.visitMethodInsn(INVOKEVIRTUAL, FILTER_BASE_CLASS,
+					mv.visitMethodInsn(INVOKEVIRTUAL, MATCHER_BASE_CLASS,
 						"globalString", "(I)Ljava/lang/String;", false);
 
 					if ((valuesRequired & TagClause.VALUE_DOUBLE) != 0)
@@ -1841,11 +1841,11 @@ public class FilterCoder extends ExpressionCoder
 		mv.visitEnd();
 	}
 
-	public byte[] createFilterClass(String className, Selector first)
+	public byte[] createMatcherClass(String className, Selector first)
 	{
 		// TODO
 		int keyMask = first.indexBits();
-		beginClass(className, FILTER_BASE_CLASS, null);
+		beginClass(className, MATCHER_BASE_CLASS, null);
 		createConstructor(keyMask, keyMask);	// TODO: keyMin
 		createAcceptMethod("accept", first);
 		endClass();
@@ -1926,7 +1926,7 @@ public class FilterCoder extends ExpressionCoder
 		if(matchString.isEmpty())
 		{
 			// "*" (wildcard with empty string) matches anything
-			if(op == Operator.IN || op == FilterParser.STARTS_WITH || op == FilterParser.ENDS_WITH)
+			if(op == Operator.IN || op == MatcherParser.STARTS_WITH || op == MatcherParser.ENDS_WITH)
 			{
 				if(t != null)
 				{
@@ -1936,8 +1936,8 @@ public class FilterCoder extends ExpressionCoder
 			}
 		}
 
-		assert op == Operator.EQ || op == FilterParser.STARTS_WITH ||
-			op == FilterParser.ENDS_WITH || op == Operator.IN ||
+		assert op == Operator.EQ || op == MatcherParser.STARTS_WITH ||
+			op == MatcherParser.ENDS_WITH || op == Operator.IN ||
 			op == Operator.MATCH;
 
 		if(op == Operator.MATCH)
@@ -1973,7 +1973,7 @@ public class FilterCoder extends ExpressionCoder
 			mv.visitVarInsn(ALOAD, $val_string);
 			mv.visitLdcInsn(matchString);
 			mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String",
-				op == FilterParser.STARTS_WITH ? "startsWith" : "endsWith",
+				op == MatcherParser.STARTS_WITH ? "startsWith" : "endsWith",
 				"(Ljava/lang/String;)Z", false);
 			if (t != null)
 			{

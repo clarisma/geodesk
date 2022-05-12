@@ -1,4 +1,4 @@
-package com.geodesk.feature.filter;
+package com.geodesk.feature.match;
 
 import com.clarisma.common.ast.BinaryExpression;
 import com.clarisma.common.ast.Expression;

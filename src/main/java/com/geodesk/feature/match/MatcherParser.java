@@ -1,4 +1,4 @@
-package com.geodesk.feature.filter;
+package com.geodesk.feature.match;
 
 import com.clarisma.common.ast.*;
 import com.clarisma.common.math.MathUtils;
@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 //  What if we allow other letter for types?
 //  l = line, c = collection?
 
-public class FilterParser extends Parser
+public class MatcherParser extends Parser
 {
 	private static final String COMMA = ",";
 	private static final String STAR = "*";
@@ -56,7 +56,7 @@ public class FilterParser extends Parser
 	private final ObjectIntMap<String> stringsToCodes;
 	private final IntIntMap keysToCategories;
 
-	public FilterParser(ObjectIntMap<String> stringsToCodes, IntIntMap keysToCategories)
+	public MatcherParser(ObjectIntMap<String> stringsToCodes, IntIntMap keysToCategories)
 	{
 		if (stringsToCodes == null) stringsToCodes = new ObjectIntHashMap<>();
 		this.stringsToCodes = stringsToCodes;

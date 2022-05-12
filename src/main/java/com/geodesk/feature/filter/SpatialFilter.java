@@ -1,14 +1,12 @@
 package com.geodesk.feature.filter;
 
+import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
-import org.locationtech.jts.geom.prep.PreparedGeometry;
-
-import java.nio.ByteBuffer;
 
 public class SpatialFilter implements Filter
 {
-    @Override public boolean accept(ByteBuffer buf, int pos)
+    @Override public boolean accept(Feature feature)
     {
-        return true;    // TODO
+        return acceptGeometry(feature.toGeometry());
     }
 }

@@ -1,7 +1,7 @@
 package com.geodesk.feature.query;
 
 import com.geodesk.feature.*;
-import com.geodesk.feature.Filter;
+import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.geom.Bounds;
 
@@ -13,9 +13,9 @@ public class MemberView<T extends Feature> implements Features<T>
     private final FeatureStore store;
     private final ByteBuffer buf;
     private final int pTable;
-    private final Filter filter;
+    private final Matcher filter;
 
-    public MemberView(FeatureStore store, ByteBuffer buf, int pTable, Filter filter)
+    public MemberView(FeatureStore store, ByteBuffer buf, int pTable, Matcher filter)
     {
         this.store = store;
         this.buf = buf;

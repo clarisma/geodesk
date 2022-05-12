@@ -2,17 +2,14 @@ package com.geodesk.feature.query;
 
 import com.geodesk.core.Box;
 import com.geodesk.feature.*;
-import com.geodesk.feature.Filter;
-import com.geodesk.feature.filter.AndFilter;
-import com.geodesk.feature.filter.FilterSet;
-import com.geodesk.feature.filter.TypeBits;
-import com.geodesk.feature.filter.TypeFilter;
+import com.geodesk.feature.match.Matcher;
+import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredFeature;
 import com.geodesk.geom.Bounds;
 
 import java.util.Iterator;
-import static com.geodesk.feature.filter.TypeBits.*;
+import static com.geodesk.feature.match.TypeBits.*;
 
 // TODO: do we need to create a defensive copy of the bbox?
 
@@ -27,8 +24,8 @@ public class WorldView<T extends Feature> implements Features<T>
     protected FeatureStore store;
     protected int types;
     protected Bounds bbox;
-    protected FilterSet filters;
-    protected Filter postFilter;
+    protected MatcherSet filters;
+    protected Matcher postFilter;
 
     protected final static Box WORLD = Box.ofWorld();
 
@@ -36,7 +33,7 @@ public class WorldView<T extends Feature> implements Features<T>
     {
         this.store = store;
         types= ALL;
-        filters = FilterSet.ALL;
+        filters = MatcherSet.ALL;
         bbox = WORLD;
     }
 
@@ -50,7 +47,7 @@ public class WorldView<T extends Feature> implements Features<T>
     }
 
 
-    public WorldView(WorldView<?> other, int types, FilterSet filters)
+    public WorldView(WorldView<?> other, int types, MatcherSet filters)
     {
         this.store = other.store;
         this.bbox = other.bbox;
@@ -101,14 +98,14 @@ public class WorldView<T extends Feature> implements Features<T>
      */
     private Features<?> select(int newTypes, int indexesCovered, String query)
     {
-        FilterSet newFilters;
+        MatcherSet newFilters;
         if(query != null)
         {
-            newFilters = store.getFilters(query);
+            newFilters = store.getMatchers(query);
             newTypes &= types & newFilters.types();
             if(newTypes == 0) return EmptyView.ANY;
 
-            if(filters != FilterSet.ALL)
+            if(filters != MatcherSet.ALL)
             {
                 newFilters = filters.and(newTypes, newFilters);
             }

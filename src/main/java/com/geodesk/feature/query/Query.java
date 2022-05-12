@@ -2,7 +2,7 @@ package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
 import com.geodesk.feature.Feature;
-import com.geodesk.feature.filter.FilterSet;
+import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.store.*;
 import com.geodesk.geom.Bounds;
 import org.eclipse.collections.api.set.primitive.MutableLongSet;
@@ -23,7 +23,7 @@ public class Query implements Iterator<Feature>, Bounds
     private int maxX;
     private final int maxY;
     private final int types;
-    private final FilterSet filters;
+    private final MatcherSet filters;
     private ExecutorService executor;
     // private TileQueryTask head;     // access must be synchronized
         // TODO: maybe put last, so we reduce false sharing (may be in
@@ -64,7 +64,7 @@ public class Query implements Iterator<Feature>, Bounds
         return types;
     }
 
-    public FilterSet filters()
+    public MatcherSet filters()
     {
         return filters;
     }

@@ -1,7 +1,7 @@
 package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
-import com.geodesk.feature.Filter;
+import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureFlags;
 
 import java.nio.ByteBuffer;
@@ -15,10 +15,10 @@ public class RTreeQueryTask extends QueryTask
     protected final ByteBuffer buf;
     protected final int ppTree;
     protected final int bboxFlags;
-    protected final Filter filter;
+    protected final Matcher filter;
     protected final RTreeQueryTask next;
 
-    public RTreeQueryTask(Query query, ByteBuffer buf, int ppTree, int bboxFlags, Filter filter, RTreeQueryTask next)
+    public RTreeQueryTask(Query query, ByteBuffer buf, int ppTree, int bboxFlags, Matcher filter, RTreeQueryTask next)
     {
         super(query);
         this.buf = buf;
@@ -179,7 +179,7 @@ public class RTreeQueryTask extends QueryTask
 
     public static class Nodes extends RTreeQueryTask
     {
-        public Nodes(Query query, ByteBuffer buf, int pos, Filter filter, RTreeQueryTask next)
+        public Nodes(Query query, ByteBuffer buf, int pos, Matcher filter, RTreeQueryTask next)
         {
             super(query, buf, pos, 0, filter, next);
         }

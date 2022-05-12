@@ -1,6 +1,9 @@
 package com.geodesk.feature;
 
+import com.geodesk.feature.filter.WithinFilter;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.prep.PreparedGeometry;
+import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
 // TODO:
 //  in order to create obtain the Geometry of a feature, we need a reference
@@ -36,15 +39,18 @@ import org.locationtech.jts.geom.Geometry;
 
 public class Filters
 {
-    /*
     public static Filter within(Feature f)
     {
-        return within(f.toGeometry())
+        return within(f.toGeometry());
     }
 
     public static Filter within(Geometry geom)
     {
-        return within(f.toGeometry())
+        return within(PreparedGeometryFactory.prepare(geom));
     }
-     */
+
+    public static Filter within(PreparedGeometry prepared)
+    {
+        return new WithinFilter(prepared);
+    }
 }

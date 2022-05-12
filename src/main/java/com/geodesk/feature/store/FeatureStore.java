@@ -2,11 +2,8 @@ package com.geodesk.feature.store;
 
 import com.clarisma.common.pbf.PbfDecoder;
 import com.clarisma.common.store.BlobStore;
-import com.geodesk.feature.Features;
-import com.geodesk.feature.filter.FilterSet;
-import com.geodesk.feature.filter.FilterCompiler;
-import com.geodesk.feature.query.WorldView;
-import com.geodesk.geom.Bounds;
+import com.geodesk.feature.match.MatcherSet;
+import com.geodesk.feature.match.MatcherCompiler;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
 import org.eclipse.collections.api.map.primitive.MutableIntIntMap;
 import org.eclipse.collections.api.map.primitive.MutableObjectIntMap;
@@ -28,7 +25,7 @@ public class FeatureStore extends BlobStore
     private String[] codesToStrings;
     private IntIntMap keysToCategories;
     private ExecutorService executor;
-    private FilterCompiler filters;
+    private MatcherCompiler matchers;
     private GeometryFactory geometryFactory;
 
     public static final int MAGIC = 0x1CE50D6E;  // "geodesic"
@@ -113,7 +110,7 @@ public class FeatureStore extends BlobStore
     public void enableQueries()
     {
         // TODO: guard against multiple calls
-        filters = new FilterCompiler(stringsToCodes, codesToStrings, keysToCategories);
+        matchers = new MatcherCompiler(stringsToCodes, codesToStrings, keysToCategories);
         executor = new ForkJoinPool();// TODO: ability to set parallelism
         geometryFactory = new GeometryFactory(); // TODO
     }
@@ -156,11 +153,11 @@ public class FeatureStore extends BlobStore
         return geometryFactory;
     }
 
-    public FilterSet getFilters(String query)
+    public MatcherSet getMatchers(String query)
     {
-        synchronized (filters)
+        synchronized (matchers)
         {
-            return filters.getFilters(query);
+            return matchers.getMatchers(query);
         }
     }
 

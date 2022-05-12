@@ -2,16 +2,15 @@ package com.geodesk.feature.query;
 
 import com.geodesk.core.XY;
 import com.geodesk.feature.*;
-import com.geodesk.feature.filter.FilterSet;
-import com.geodesk.feature.filter.TypeBits;
+import com.geodesk.feature.match.Matcher;
+import com.geodesk.feature.match.MatcherSet;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.store.AnonymousWayNode;
 import com.geodesk.feature.store.FeatureFlags;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredWay;
-import com.geodesk.geom.Bounds;
 
 import java.nio.ByteBuffer;
-import java.util.Collections;
 import java.util.Iterator;
 
 public class WayNodeView extends TableView<Node>
@@ -22,17 +21,17 @@ public class WayNodeView extends TableView<Node>
 
     public WayNodeView(FeatureStore store, ByteBuffer buf, int ptr)
     {
-        super(store, buf, ptr, Filter.ALL);
+        super(store, buf, ptr, Matcher.ALL);
         flags = (buf.get(ptr) & 0xff) | INCLUDE_GEOMETRY_NODES;
     }
 
-    public WayNodeView(FeatureStore store, ByteBuffer buf, int ptr, Filter filter)
+    public WayNodeView(FeatureStore store, ByteBuffer buf, int ptr, Matcher filter)
     {
         super(store, buf, ptr, filter);
         flags = buf.get(ptr) & 0xff;
     }
 
-    public WayNodeView(WayNodeView other, Filter filter, int flags)
+    public WayNodeView(WayNodeView other, Matcher filter, int flags)
     {
         super(other, filter);
         this.flags = flags;
@@ -51,7 +50,7 @@ public class WayNodeView extends TableView<Node>
     @Override public Features<Node> nodes(String query)
     {
         if((flags & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.NODES;
-        FilterSet filters = store.getFilters(query);
+        MatcherSet filters = store.getMatchers(query);
         if((filters.types() & TypeBits.NODES) == 0) return EmptyView.NODES;
         return new WayNodeView(this, filters.nodes(), flags & ~INCLUDE_GEOMETRY_NODES);
     }
@@ -87,7 +86,7 @@ public class WayNodeView extends TableView<Node>
         if((flags & INCLUDE_GEOMETRY_NODES) == 0)
         {
             return new StoredWay.Iter(store, buf, bodyPtr() - 4 -
-                (flags & FeatureFlags.RELATION_MEMBER_FLAG), filter);
+                (flags & FeatureFlags.RELATION_MEMBER_FLAG), matcher);
         }
         return new AllNodesIter(bodyPtr());
     }
@@ -105,7 +104,7 @@ public class WayNodeView extends TableView<Node>
             if((flags & FeatureFlags.WAYNODE_FLAG) != 0)
             {
                 featureNodeIter = new StoredWay.Iter(store, buf, pBody - 4 -
-                    (flags & FeatureFlags.RELATION_MEMBER_FLAG), Filter.ALL);
+                    (flags & FeatureFlags.RELATION_MEMBER_FLAG), Matcher.ALL);
                     // TODO: filters must apply to anonymous nodes as well!
                 if(featureNodeIter.hasNext()) nextFeatureNode = featureNodeIter.next();
             }

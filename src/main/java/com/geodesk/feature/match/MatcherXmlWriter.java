@@ -1,4 +1,4 @@
-package com.geodesk.feature.filter;
+package com.geodesk.feature.match;
 
 import com.clarisma.common.ast.Expression;
 import com.clarisma.common.ast.ExpressionXmlWriter;
@@ -7,11 +7,11 @@ import com.clarisma.common.ast.Variable;
 
 import java.io.OutputStream;
 
-public class FilterXmlWriter extends ExpressionXmlWriter
+public class MatcherXmlWriter extends ExpressionXmlWriter
 {
 	boolean inTagClause;
 	
-	public FilterXmlWriter(OutputStream out)
+	public MatcherXmlWriter(OutputStream out)
 	{
 		super(out);
 	}

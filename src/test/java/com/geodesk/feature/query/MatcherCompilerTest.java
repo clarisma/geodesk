@@ -1,9 +1,9 @@
 package com.geodesk.feature.query;
 
-import com.geodesk.feature.Filter;
+import com.geodesk.feature.match.Matcher;
 import com.clarisma.common.fab.FabException;
 import com.clarisma.common.fab.FabReader;
-import com.geodesk.feature.filter.*;
+import com.geodesk.feature.match.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.map.primitive.MutableObjectIntMap;
@@ -35,7 +35,7 @@ import java.util.Map;
  * - feature/tags.fab: objects and their tags
  * - feature/strings.txt: the global string table
  */
-public class FilterCompilerTest
+public class MatcherCompilerTest
 {
 	public static final Logger log = LogManager.getLogger();
 	
@@ -107,16 +107,16 @@ public class FilterCompilerTest
 
 	static class TestClassLoader extends ClassLoader
 	{
-		public Filter loadMatcherClass(String className, byte[] code, String[] globalStrings)
+		public Matcher loadMatcherClass(String className, byte[] code, String[] globalStrings)
 		{
 			Class<?> matcherClass = defineClass(className, code, 0, code.length);
-			Filter filter;
+			Matcher filter;
 			try
 			{
 				Constructor<?> constructor = matcherClass.getDeclaredConstructor(
 					String.class.arrayType());
 				// Can't pass globalStrings directly, since it is an array
-				return (Filter)constructor.newInstance(new Object[]{ globalStrings });
+				return (Matcher)constructor.newInstance(new Object[]{ globalStrings });
 			}
 			catch (NoSuchMethodException | SecurityException | InstantiationException |
 				IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
@@ -130,8 +130,8 @@ public class FilterCompilerTest
 	void testQuery(TagTableTester tagTableTester, QueryTestCase qtc, int count) throws IOException
 	{
 		Selector sel;
-		FilterParser parser = new FilterParser(stringsToCodes, null); // TODO
-		FilterCoder coder = new FilterCoder(stringsToCodes.get("no"));
+		MatcherParser parser = new MatcherParser(stringsToCodes, null); // TODO
+		MatcherCoder coder = new MatcherCoder(stringsToCodes.get("no"));
 		log.debug("Parsing query: {}", qtc.query);
 		try
 		{
@@ -152,18 +152,18 @@ public class FilterCompilerTest
 			return;
 		}
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		FilterXmlWriter out = new FilterXmlWriter(baos);
+		MatcherXmlWriter out = new MatcherXmlWriter(baos);
 		out.writeQuery(sel);
 		out.flush();
 		log.debug(baos.toString());
 
 		String className = "MatcherTest_" + count;
 		TestClassLoader classLoader = new TestClassLoader();
-		byte[] code = coder.createFilterClass(className, sel);
+		byte[] code = coder.createMatcherClass(className, sel);
 
 		Files.write(Path.of("c:\\geodesk\\debug\\classes\\" + className + ".class"), code);
 
-		Filter filter = classLoader.loadMatcherClass(className, code, globalStrings);
+		Matcher filter = classLoader.loadMatcherClass(className, code, globalStrings);
 
 		for(Map.Entry<String,Boolean> e: qtc.expected.entrySet())
 		{

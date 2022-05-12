@@ -2,7 +2,7 @@ package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Bytes;
 import com.geodesk.feature.Feature;
-import com.geodesk.feature.Filter;
+import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureConstants;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredFeature;
@@ -14,7 +14,7 @@ public class MemberIterator implements Iterator<Feature>
 {
     private final FeatureStore store;
     private final ByteBuffer buf;
-    private final Filter filter;
+    private final Matcher filter;
     private int pCurrent;
     private int role;
     private String roleString;
@@ -30,7 +30,7 @@ public class MemberIterator implements Iterator<Feature>
     private static final int MF_DIFFERENT_ROLE = 4;
     private static final int MF_DIFFERENT_TILE = 8;
 
-    public MemberIterator(FeatureStore store, ByteBuffer buf, int pTable, Filter filter)
+    public MemberIterator(FeatureStore store, ByteBuffer buf, int pTable, Matcher filter)
     {
         this.store = store;
         this.buf = buf;
