@@ -412,6 +412,10 @@ public class FilterParser extends Parser
 						return null;
 					}
 				}
+				if(op == Operator.MATCH || op == Operator.NOT_MATCH)
+				{
+					flags |= TagClause.VALUE_ANY_STRING | TagClause.VALUE_LOCAL_STRING;
+				}
 			}
 		}
 		expect(RBRACKET);

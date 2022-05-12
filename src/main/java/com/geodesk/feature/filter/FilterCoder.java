@@ -755,56 +755,6 @@ public class FilterCoder extends ExpressionCoder
 	}
 
 	/**
-	 * Emits code to perform a STARTS_WITH, ENDS_WITH, or MATCH operation.
-	 * <p>
-	 * TODO
-	 *
-	 * @param op
-	 * @param match
-	 * @param t
-	 * @param f
-	 */
-	/*
-	private void matchPatternValue(Operator op, String match, Label t, Label f)
-	{
-		if (op == Operator.MATCH)
-		{
-			Label string_valid = new Label();
-			mv.visitVarInsn(ALOAD, $val_string);
-			mv.visitJumpInsn(IFNONNULL, string_valid);
-			readString($val_string_ptr);
-			mv.visitVarInsn(ASTORE, $val_string);
-			mv.visitVarInsn(ALOAD, $val_string);
-			mv.visitLabel(string_valid);
-			// TODO
-			return;
-		}
-
-		// startsWith and endsWith can operate on either a string pointer
-		// or a String object
-
-		assert op == FilterParser.STARTS_WITH || op == FilterParser.ENDS_WITH;
-		Label use_string = new Label();
-		Label done = new Label();
-		// First, we check if the string pointer is non-null
-		mv.visitVarInsn(ILOAD, $val_string_ptr);
-		mv.visitJumpInsn(IFEQ, use_string);
-		// If we have a valid string pointer, use fast matching
-		matchString(op, $val_string_ptr, match, t, f);
-		mv.visitJumpInsn(GOTO, done);
-		// Otherwise, a valid String value must have been provided
-		mv.visitLabel(use_string);
-		mv.visitVarInsn(ALOAD, $val_string);
-		// execute one of the basic String methods
-		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String",
-			op == FilterParser.STARTS_WITH ? "startsWith" : "endsWith",
-			"(Ljava/lang/String;)Z", false);
-		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
-		mv.visitLabel(done);
-	}
-	 */
-
-	/**
 	 * Emits code to load the narrow value associated with a local tag.
 	 * $pos must be the address of the local tag's key.
 	 */
@@ -1964,7 +1914,6 @@ public class FilterCoder extends ExpressionCoder
 			t = f;
 			f = swap;
 		}
-		/*		// TODO: enable for regex
 		else if (op == Operator.NOT_MATCH)
 		{
 			// Turn !~ into ~ (and swap the labels)
@@ -1973,7 +1922,6 @@ public class FilterCoder extends ExpressionCoder
 			t = f;
 			f = swap;
 		}
-		 */
 
 		if(matchString.isEmpty())
 		{
@@ -1989,7 +1937,22 @@ public class FilterCoder extends ExpressionCoder
 		}
 
 		assert op == Operator.EQ || op == FilterParser.STARTS_WITH ||
-			op == FilterParser.ENDS_WITH || op == Operator.IN;
+			op == FilterParser.ENDS_WITH || op == Operator.IN ||
+			op == Operator.MATCH;
+
+		if(op == Operator.MATCH)
+		{
+			Label perform_match = new Label();
+			mv.visitVarInsn(ALOAD, $val_string);
+			mv.visitJumpInsn(IFNONNULL, perform_match);
+			readString($val_string_ptr);
+			mv.visitVarInsn(ASTORE, $val_string);
+			mv.visitLabel(perform_match);
+			loadRegexPattern(matchString);
+			mv.visitVarInsn(ALOAD, $val_string);
+			matchRegexPattern(t, f);
+			return true;
+		}
 
 		Label done = new Label();
 		Label fx = f != null ? f : done;

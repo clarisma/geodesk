@@ -278,3 +278,9 @@ wildcard2:
 
 wildcard3:
     name=Brewhouse
+
+long_name:
+    name="This is a long name, lots of text here, lots and lots, lots and lots, lots and lots, lots and lots, lots of text here, and some more, wow so much text, whoa this is long, so long, lots and lots, lots and lots, lots of text here, and some more, wow so much text, whoa this is long, so long, finally we come to the end."
+
+highway_applecherry:
+    highway=applecherry

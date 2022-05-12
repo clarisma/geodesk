@@ -12,9 +12,18 @@ import org.objectweb.asm.Opcodes;
 import com.clarisma.common.bytecode.Coder;
 import com.clarisma.common.bytecode.Instructions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ExpressionCoder extends Coder implements AstVisitor<Void>
 {
 	protected TypeChecker typeChecker;
+
+	/**
+	 * A mapping of regex expression strings to the (static) field name
+	 * of their Pattern class. (This Map is instantiated lazily)
+	 */
+	private Map<String,String> regexPatterns;
 
 	public void setTypeChecker(TypeChecker typeChecker)
 	{
@@ -82,7 +91,66 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 	{
 		// TODO
 	}
-	
+
+	/**
+	 * Emits code to load the {@link java.util.regex.Pattern) object for
+	 * the given regex onto the stack. This method also generates the
+	 * static initialization code to compile the `Pattern` class.
+	 *
+	 * @param regex
+	 */
+	protected void loadRegexPattern(String regex)
+	{
+		String patternField;
+		if(regexPatterns == null)
+		{
+			regexPatterns = new HashMap<>();
+			patternField = null;
+		}
+		else
+		{
+			patternField = regexPatterns.get(regex);
+		}
+		if(patternField == null)
+		{
+			patternField = "PATTERN" + regexPatterns.size();
+			regexPatterns.put(regex, patternField);
+			FieldVisitor fv = cw.visitField(
+				ACC_PRIVATE | ACC_FINAL | ACC_STATIC, patternField,
+				"Ljava/util/regex/Pattern;", null, null);
+			fv.visitEnd();
+			MethodVisitor staticMv = staticInitializer();
+			staticMv.visitLdcInsn(regex);
+			staticMv.visitMethodInsn(INVOKESTATIC, "java/util/regex/Pattern",
+				"compile", "(Ljava/lang/String;)Ljava/util/regex/Pattern;", false);
+			staticMv.visitFieldInsn(PUTSTATIC, className, patternField,
+				"Ljava/util/regex/Pattern;");
+		}
+		mv.visitFieldInsn(GETSTATIC, className, patternField,
+			"Ljava/util/regex/Pattern;");
+	}
+
+	/**
+	 * Emits code to test a string value against a regex pattern.
+	 * The Pattern object and the candidate string must have been placed
+	 * on the stack (and will be removed by the match operation).
+	 *
+	 * One of `t` or `f` (but not both) must specify a jump target.
+	 *
+	 * @param t		  	 where to jump if pattern matched
+	 * @param f       	 where to jump if pattern NOT matched
+	 */
+	protected void matchRegexPattern(Label t, Label f)
+	{
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/util/regex/Pattern",
+			"matcher", "(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;", false);
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/util/regex/Matcher",
+			"matches", "()Z", false);
+		// The value returned from matches() is 1 (true) or 0 (false)
+		// IFNE jumps if 1 (true), IFEQ jumps if 0 (false)
+		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
+	}
+
 	/**
 	 * Emits code to test a string value against a regular
 	 * expression pattern.
@@ -97,21 +165,9 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 	 */
 	protected void matchPattern(Expression left, Expression right, Label t, Label f)
 	{
-		if(right instanceof Literal)
+		if(right instanceof Literal literal)
 		{
-			String patternField = uniqueFieldName("PATTERN");
-			FieldVisitor fv = cw.visitField(ACC_FINAL | ACC_STATIC, patternField, 
-				"Ljava/util/regex/Pattern;", null, null);
-			fv.visitEnd();
-			MethodVisitor prevMv = useMethodWriter(staticInitializer());
-			evaluate(right, String.class);
-			mv.visitMethodInsn(INVOKESTATIC, "java/util/regex/Pattern", 
-				"compile", "(Ljava/lang/String;)Ljava/util/regex/Pattern;", false);
-			mv.visitFieldInsn(PUTSTATIC, className, patternField, 
-				"java/util/regex/Pattern;");
-			useMethodWriter(prevMv);
-			mv.visitFieldInsn(GETSTATIC, className, patternField, 
-				"Ljava/util/regex/Pattern;");
+			loadRegexPattern(literal.value().toString());
 		}
 		else
 		{
@@ -119,13 +175,7 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 			assert false: "Not implemented";
 		}
 		evaluate(left,  String.class);
-		mv.visitMethodInsn(INVOKEVIRTUAL, "java/util/regex/Pattern", 
-			"matcher", "(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;", false);
-		mv.visitMethodInsn(INVOKEVIRTUAL, "java/util/regex/Matcher", 
-			"matches", "()Z", false);
-		// The value returned from matches() is 1 (true) or 0 (false)
-		// IFNE jumps if 1 (true), IFEQ jumps if 0 (false)
-		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
+		matchRegexPattern(t, f);
 	}
 	
 	/**

@@ -1,6 +1,30 @@
 //
+//  RegEx
+//
+
+query: w[name~".*str.*", ".*house$"]
+    highway_residential: false
+    highway3: true
+    short_local_name: false
+    wildcard1: false
+    wildcard2: true
+    wildcard3: true
+
+//
 //  Wildcard matching
 //
+
+// Test the combination of global and local values
+query: w[highway=motorway,"monkeys&bananas","applecherry"], w[highway=primary]
+    highway3: true
+    highway_motorway: true
+    highway_residential: false
+    highway_applecherry: true
+
+query: *[name="*lots of text here, lots and lots*"]
+    long_name: true
+    highway3: false
+    highway_residential: false
 
 query: *[name="*ap*"]
     highway3: false
@@ -901,14 +925,6 @@ query: w[name="*Ca*"]
     highway_residential: true
     highway3: false
 
-//
-//  RegEx
-//
-
-query: w[name~".str."]
-    highway_residential: false
-    highway3: true
-    short_local_name: false
 
 query: *[height="3.5"]
     bad_random1: true
