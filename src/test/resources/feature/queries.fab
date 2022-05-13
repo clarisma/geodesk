@@ -114,7 +114,6 @@ query: *[addr:street][addr:street="An't Holt"]
     address_with_quotes2: true
 
 query: *[height][height="*3.5"]
->>>>>>> matching
     bad_random1: true
 
 query: *[name="Light*", Brew]
