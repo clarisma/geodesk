@@ -1,6 +1,5 @@
-package com.geodesk.feature.filter;
+package com.geodesk.feature.match;
 
-import com.geodesk.feature.Filter;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
 import org.eclipse.collections.api.map.primitive.ObjectIntMap;
 
@@ -9,57 +8,58 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FilterCompiler extends ClassLoader
+public class MatcherCompiler extends ClassLoader
 {
-    private final FilterParser parser;
+    private final MatcherParser parser;
     private final String[] codesToStrings;
     private final int valueNo;
-    private final Map<String, FilterSet> filterSets = new HashMap<>();
+    private final Map<String, MatcherSet> matcherSets = new HashMap<>();
     private int classCount;
 
-    public FilterCompiler(ObjectIntMap<String> stringsToCodes, String[] codesToStrings,
+    // TODO: take FeatureStore as argument
+    public MatcherCompiler(ObjectIntMap<String> stringsToCodes, String[] codesToStrings,
         IntIntMap keysToCategories)
     {
         this.codesToStrings = codesToStrings;
         valueNo = stringsToCodes.get("no");
         if(valueNo == 0) throw new QueryException("String table must include \"no\"");
-        parser = new FilterParser(stringsToCodes, keysToCategories);
+        parser = new MatcherParser(stringsToCodes, keysToCategories);
     }
 
-    public FilterSet getFilters(String query)
+    public MatcherSet getMatchers(String query)
     {
-        FilterSet filters = filterSets.get(query);
-        if(filters == null)
+        MatcherSet matchers = matcherSets.get(query);
+        if(matchers == null)
         {
-            filters = createFilters(query);
-            filterSets.put(query, filters);
+            matchers = createMatchers(query);
+            matcherSets.put(query, matchers);
         }
-        return filters;
+        return matchers;
     }
 
-    private Filter createFilter(Selector selectors)
+    private Matcher createMatcher(Selector selectors)
     {
-        FilterCoder coder = new FilterCoder(valueNo);
+        MatcherCoder coder = new MatcherCoder(valueNo);
         classCount++;
         String className = "Filter_" + classCount;
-        byte[] code = coder.createFilterClass(className, selectors);
+        byte[] code = coder.createMatcherClass(className, selectors);
         Class<?> matcherClass = defineClass(className, code, 0, code.length);
-        Filter filter;
         try
         {
             Constructor<?> constructor = matcherClass.getDeclaredConstructor(
                 String.class.arrayType());
             // Can't pass globalStrings directly, since it is an array
-            return (Filter)constructor.newInstance(new Object[]{ codesToStrings });
+            // TODO: pass FeatureStore, int types, resources
+            return (Matcher)constructor.newInstance(new Object[]{ codesToStrings });
         }
         catch (NoSuchMethodException | SecurityException | InstantiationException |
                IllegalAccessException | IllegalArgumentException | InvocationTargetException ex)
         {
-            throw new QueryException("Filter compilation failed.", ex);
+            throw new QueryException("Matcher compilation failed.", ex);
         }
     }
 
-    private FilterSet createFilters(String query)
+    private MatcherSet createMatchers(String query)
     {
         parser.parse(query);
         Selector selectors = parser.query();
@@ -83,19 +83,19 @@ public class FilterCompiler extends ClassLoader
                         sel = sel.next();
                     }
                     while (sel != null);
-                    return createPolyformFilters(commonType, selectors);
+                    return createPolyformMatchers(commonType, selectors);
                 }
             }
             sel = sel.next();
         }
 
-        Filter filter = createFilter(selectors);
-        return new FilterSet(commonType,
-            (commonType & TypeBits.NODES) != 0 ? filter : null,
-            (commonType & TypeBits.NONAREA_WAYS) != 0 ? filter : null,
-            (commonType & TypeBits.AREAS) != 0 ? filter : null,
-            (commonType & TypeBits.NONAREA_RELATIONS) != 0 ? filter : null,
-            new SimpleMemberFilter(filter));    // TODO: proper member filter
+        Matcher matcher = createMatcher(selectors);
+        return new MatcherSet(commonType,
+            (commonType & TypeBits.NODES) != 0 ? matcher : null,
+            (commonType & TypeBits.NONAREA_WAYS) != 0 ? matcher : null,
+            (commonType & TypeBits.AREAS) != 0 ? matcher : null,
+            (commonType & TypeBits.NONAREA_RELATIONS) != 0 ? matcher : null,
+            matcher);    // TODO: proper member filter
             // TODO: can use simple constructor once we've fixed the
             //  TileQueryTask
     }
@@ -150,7 +150,7 @@ public class FilterCompiler extends ClassLoader
         return firstExtracted;
     }
 
-    private FilterSet createPolyformFilters(int types, Selector selectors)
+    private MatcherSet createPolyformMatchers(int types, Selector selectors)
     {
         // Create a "dummy" head to simplify the removal of elements
         // from the linked list of Selectors
@@ -163,11 +163,11 @@ public class FilterCompiler extends ClassLoader
         Selector selRelations = extractSelectors(head, TypeBits.NONAREA_RELATIONS);
         assert head.next() == null: "All selectors must be extracted";
 
-        return new FilterSet(types,
-            selNodes     != null ? createFilter(selNodes)     : null,
-            selWays      != null ? createFilter(selWays)      : null,
-            selAreas     != null ? createFilter(selAreas)     : null,
-            selRelations != null ? createFilter(selRelations) : null,
+        return new MatcherSet(types,
+            selNodes     != null ? createMatcher(selNodes)     : null,
+            selWays      != null ? createMatcher(selWays)      : null,
+            selAreas     != null ? createMatcher(selAreas)     : null,
+            selRelations != null ? createMatcher(selRelations) : null,
             null);      // TODO: member filter
     }
 }

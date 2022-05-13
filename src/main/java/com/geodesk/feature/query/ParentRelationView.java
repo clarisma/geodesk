@@ -1,10 +1,10 @@
 package com.geodesk.feature.query;
 
 import com.geodesk.feature.*;
-import com.geodesk.feature.Filter;
-import com.geodesk.feature.filter.AndFilter;
-import com.geodesk.feature.filter.FilterSet;
-import com.geodesk.feature.filter.TypeBits;
+import com.geodesk.feature.match.Matcher;
+import com.geodesk.feature.match.AndMatcher;
+import com.geodesk.feature.match.MatcherSet;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredRelation;
 import com.geodesk.geom.Bounds;
@@ -17,7 +17,7 @@ public class ParentRelationView implements Features<Relation>
     private final FeatureStore store;
     private final ByteBuffer buf;
     private final int ptr;
-    private final Filter filter;
+    private final Matcher filter;
 
 
     public ParentRelationView(FeatureStore store, ByteBuffer buf, int ptr)
@@ -25,10 +25,10 @@ public class ParentRelationView implements Features<Relation>
         this.store = store;
         this.buf = buf;
         this.ptr = ptr;
-        filter = Filter.ALL;
+        filter = Matcher.ALL;
     }
 
-    public ParentRelationView(ParentRelationView other, Filter filter)
+    public ParentRelationView(ParentRelationView other, Matcher filter)
     {
         this.store = other.store;
         this.buf = other.buf;
@@ -74,10 +74,10 @@ public class ParentRelationView implements Features<Relation>
 
     @Override public Features<Relation> relations(String query)
     {
-        FilterSet filters = store.getFilters(query);
+        MatcherSet filters = store.getMatchers(query);
         if((filters.types() & TypeBits.RELATIONS) == 0) return EmptyView.RELATIONS;
-        Filter newFilter = filters.relations();
-        if(filter != Filter.ALL) newFilter = new AndFilter(filter, newFilter);
+        Matcher newFilter = filters.relations();
+        if(filter != Matcher.ALL) newFilter = new AndMatcher(filter, newFilter);
         return new ParentRelationView(this, newFilter);
     }
 

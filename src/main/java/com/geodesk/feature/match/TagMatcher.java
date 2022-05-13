@@ -1,52 +1,33 @@
-package com.geodesk.feature.filter;
+package com.geodesk.feature.match;
 
 import com.clarisma.common.math.MathUtils;
-import com.geodesk.feature.Filter;
-import org.locationtech.jts.geom.Geometry;
 
 import java.nio.ByteBuffer;
 
-public abstract class TagFilter implements Filter
+public abstract class TagMatcher extends Matcher
 {
+    private final int acceptedTypes = 0;  // TODO!
     protected final String[] globalStrings;
     protected final int keyMask;
     protected final int keyMin;
 
-    protected TagFilter(String[] globalStrings, int keyMask, int keyMin)
+    // TODO: take FeatureStore, types, resources
+    protected TagMatcher(String[] globalStrings, int keyMask, int keyMin)
     {
         this.globalStrings = globalStrings;
         this.keyMask = keyMask;
         this.keyMin = keyMin;
     }
 
-    // TODO
     @Override public boolean acceptTyped(int types, ByteBuffer buf, int pos)
     {
+        if((types & acceptedTypes) == 0) return false;
         return accept(buf, pos);
     }
-
-    /*
-    @Override public boolean accept(ByteBuffer buf, int pos, int roleGroup)
-    {
-        return accept(buf, pos);
-    }
-
-    @Override public int acceptRole(int roleCode, String roleString)
-    {
-        return 1;
-    }
-     */
 
     @Override public boolean acceptIndex(int keys)
     {
         return (keys & keyMask) >= keyMin;
-    }
-
-    @Override public boolean acceptGeometry(Geometry geom)
-    {
-        throw new UnsupportedOperationException(
-            "This Filter is not intended for geometries");
-        // return true;
     }
 
     protected static String doubleToString(double d)

@@ -12,9 +12,18 @@ import org.objectweb.asm.Opcodes;
 import com.clarisma.common.bytecode.Coder;
 import com.clarisma.common.bytecode.Instructions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ExpressionCoder extends Coder implements AstVisitor<Void>
 {
 	protected TypeChecker typeChecker;
+
+	/**
+	 * A mapping of regex expression strings to the (static) field name
+	 * of their Pattern class. (This Map is instantiated lazily)
+	 */
+	private Map<String,String> regexPatterns;
 
 	public void setTypeChecker(TypeChecker typeChecker)
 	{
@@ -82,7 +91,66 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 	{
 		// TODO
 	}
-	
+
+	/**
+	 * Emits code to load the {@link java.util.regex.Pattern) object for
+	 * the given regex onto the stack. This method also generates the
+	 * static initialization code to compile the `Pattern` class.
+	 *
+	 * @param regex
+	 */
+	protected void loadRegexPattern(String regex)
+	{
+		String patternField;
+		if(regexPatterns == null)
+		{
+			regexPatterns = new HashMap<>();
+			patternField = null;
+		}
+		else
+		{
+			patternField = regexPatterns.get(regex);
+		}
+		if(patternField == null)
+		{
+			patternField = "PATTERN" + regexPatterns.size();
+			regexPatterns.put(regex, patternField);
+			FieldVisitor fv = cw.visitField(
+				ACC_PRIVATE | ACC_FINAL | ACC_STATIC, patternField,
+				"Ljava/util/regex/Pattern;", null, null);
+			fv.visitEnd();
+			MethodVisitor staticMv = staticInitializer();
+			staticMv.visitLdcInsn(regex);
+			staticMv.visitMethodInsn(INVOKESTATIC, "java/util/regex/Pattern",
+				"compile", "(Ljava/lang/String;)Ljava/util/regex/Pattern;", false);
+			staticMv.visitFieldInsn(PUTSTATIC, className, patternField,
+				"Ljava/util/regex/Pattern;");
+		}
+		mv.visitFieldInsn(GETSTATIC, className, patternField,
+			"Ljava/util/regex/Pattern;");
+	}
+
+	/**
+	 * Emits code to test a string value against a regex pattern.
+	 * The Pattern object and the candidate string must have been placed
+	 * on the stack (and will be removed by the match operation).
+	 *
+	 * One of `t` or `f` (but not both) must specify a jump target.
+	 *
+	 * @param t		  	 where to jump if pattern matched
+	 * @param f       	 where to jump if pattern NOT matched
+	 */
+	protected void matchRegexPattern(Label t, Label f)
+	{
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/util/regex/Pattern",
+			"matcher", "(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;", false);
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/util/regex/Matcher",
+			"matches", "()Z", false);
+		// The value returned from matches() is 1 (true) or 0 (false)
+		// IFNE jumps if 1 (true), IFEQ jumps if 0 (false)
+		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
+	}
+
 	/**
 	 * Emits code to test a string value against a regular
 	 * expression pattern.
@@ -97,21 +165,9 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 	 */
 	protected void matchPattern(Expression left, Expression right, Label t, Label f)
 	{
-		if(right instanceof Literal)
+		if(right instanceof Literal literal)
 		{
-			String patternField = uniqueFieldName("PATTERN");
-			FieldVisitor fv = cw.visitField(ACC_FINAL | ACC_STATIC, patternField, 
-				"Ljava/util/regex/Pattern;", null, null);
-			fv.visitEnd();
-			MethodVisitor prevMv = useMethodWriter(staticInitializer());
-			evaluate(right, String.class);
-			mv.visitMethodInsn(INVOKESTATIC, "java/util/regex/Pattern", 
-				"compile", "(Ljava/lang/String;)Ljava/util/regex/Pattern;", false);
-			mv.visitFieldInsn(PUTSTATIC, className, patternField, 
-				"java/util/regex/Pattern;");
-			useMethodWriter(prevMv);
-			mv.visitFieldInsn(GETSTATIC, className, patternField, 
-				"Ljava/util/regex/Pattern;");
+			loadRegexPattern(literal.value().toString());
 		}
 		else
 		{
@@ -119,13 +175,7 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 			assert false: "Not implemented";
 		}
 		evaluate(left,  String.class);
-		mv.visitMethodInsn(INVOKEVIRTUAL, "java/util/regex/Pattern", 
-			"matcher", "(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;", false);
-		mv.visitMethodInsn(INVOKEVIRTUAL, "java/util/regex/Matcher", 
-			"matches", "()Z", false);
-		// The value returned from matches() is 1 (true) or 0 (false)
-		// IFNE jumps if 1 (true), IFEQ jumps if 0 (false)
-		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
+		matchRegexPattern(t, f);
 	}
 	
 	/**
@@ -256,55 +306,20 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 	 */
 	protected void or(Expression left, Expression right, Label t, Label f)
 	{
-		Label tx = t == null ? new Label() : t;
-		if(left instanceof BinaryExpression)
+		if(t != null)
 		{
-			BinaryExpression lb = (BinaryExpression)left;
-			Operator op = lb.operator();
-			if(op == Operator.AND)
-			{
-				Label fx = f == null ? new Label() : f;
-				and(lb.left(), lb.right(), tx, fx);
-				if(f == null) mv.visitLabel(fx);
-			}
-			else if(op == Operator.OR)
-			{
-				or(lb.left(), lb.right(), tx, null);
-			}
-			else
-			{
-				binaryLogicalExpression(lb, tx, null);
-			}
+			// branch on true
+			logicalExpression(left, t, null);
+			logicalExpression(right, t, null);
 		}
 		else
 		{
-			logicalExpression(left, tx, null);
+			// branch on false
+			t = new Label();
+			logicalExpression(left, t, null);
+			logicalExpression(right, null, f);
+			mv.visitLabel(t);
 		}
-		
-		if(right instanceof BinaryExpression)
-		{
-			BinaryExpression rb = (BinaryExpression)right;
-			Operator op = rb.operator();
-			if(op == Operator.AND)
-			{
-				Label fx = f == null ? new Label() : f;
-				and(rb.left(), rb.right(), t, fx);
-				if(f == null) mv.visitLabel(fx);
-			}
-			else if(op == Operator.OR)
-			{
-				or(rb.left(), rb.right(), tx, f);
-			}
-			else
-			{
-				binaryLogicalExpression(rb, t, f);
-			}	
-		}
-		else
-		{
-			logicalExpression(right, t, f);
-		}
-		if(t == null) mv.visitLabel(tx);
 	}
 	
 	/**
@@ -317,55 +332,20 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 	 */
 	protected void and(Expression left, Expression right, Label t, Label f)
 	{
-		Label fx = f == null ? new Label() : f;
-		if(left instanceof BinaryExpression)
+		if(t != null)
 		{
-			BinaryExpression lb = (BinaryExpression)left;
-			Operator op = lb.operator();
-			if(op == Operator.AND)
-			{
-				and(lb.left(), lb.right(), null, fx);
-			}
-			else if(op == Operator.OR)
-			{
-				Label tx = new Label();
-				or(lb.left(), lb.right(), tx, fx);
-				mv.visitLabel(tx);
-			}
-			else
-			{
-				binaryLogicalExpression(lb, null, fx);
-			}
+			// branch on true
+			f = new Label();
+			logicalExpression(left, null, f);
+			logicalExpression(right, t, null);
+			mv.visitLabel(f);
 		}
 		else
 		{
-			logicalExpression(left, null, fx);
+			// branch on false
+			logicalExpression(left, null, f);
+			logicalExpression(right, null, f);
 		}
-		
-		if(right instanceof BinaryExpression)
-		{
-			BinaryExpression rb = (BinaryExpression)right;
-			Operator op = rb.operator();
-			if(op == Operator.AND)
-			{
-				and(rb.left(), rb.right(), t, fx);
-			}
-			else if(op == Operator.OR)
-			{
-				Label tx = t == null ? new Label() : t;
-				or(rb.left(), rb.right(), tx, f);
-				if(t == null) mv.visitLabel(tx);
-			}
-			else
-			{
-				binaryLogicalExpression(rb, t, f);
-			}	
-		}
-		else
-		{
-			logicalExpression(right, t, f);
-		}
-		if(f == null) mv.visitLabel(fx);
 	}
 	
 	/**
@@ -413,6 +393,7 @@ public class ExpressionCoder extends Coder implements AstVisitor<Void>
 	 * Emits code to evaluate a logical expression.
 	 * If the expression is binary, both t and f  can be non-null. 
 	 * Otherwise, only one of the labels may be specified.
+	 * TODO: it should always be only one or the other!
 	 * 
 	 * @param exp	  the Expression
 	 * @param t       the Label where to jump if the expression 

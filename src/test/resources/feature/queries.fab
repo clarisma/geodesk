@@ -1,12 +1,120 @@
 //
+//  RegEx
+//
+
+query: w[name~".*str.*", ".*house$"]
+    highway_residential: false
+    highway3: true
+    short_local_name: false
+    wildcard1: false
+    wildcard2: true
+    wildcard3: true
+
+//
 //  Wildcard matching
 //
+
+// Test the combination of global and local values
+query: w[highway=motorway,"monkeys&bananas","applecherry"], w[highway=primary]
+    highway3: true
+    highway_motorway: true
+    highway_residential: false
+    highway_applecherry: true
+
+query: *[name="*lots of text here, lots and lots*"]
+    long_name: true
+    highway3: false
+    highway_residential: false
+
+query: *[name="*ap*"]
+    highway3: false
+    highway_residential: true
+    highway_motorway: false
+
+query: *[name!="*ap*"]
+    highway3: true
+    highway_residential: false
+    highway_motorway: true
+
+query: *[name="*ri*"]
+    highway3: false
+    highway_residential: true
+    highway_motorway: false
+
+query: *[name="*Via*"]
+    highway3: false
+    highway_residential: true
+    highway_motorway: false
+
+query: *[name != "*Via*"]
+    highway3: true
+    highway_residential: false
+    highway_motorway: true
+
+query: *[name="*ri"]
+    highway3: false
+    highway_residential: true
+    highway_motorway: false
+
+query: *[name="*straße"]
+    highway3: true
+    highway_residential: false
+    highway_motorway: false
+
+query: *[name="* Capri"]
+    highway3: false
+    highway_residential: true
+    highway_motorway: false
+
+query: *[maxspeed=30,20][maxspeed <= 30]
+    highway3: true
+    highway3_uncommon: true
+    highway4: false
+    highway5: false
+    highway6: false
+    restaurant4: false
+
+
+query: *[maxspeed="40",30][maxspeed != banana]
+    highway3: true
+    highway3_uncommon: true
+    highway4: false
+    highway5: false
+    highway6: false
+    restaurant4: false
+
+query: *[maxspeed=30][maxspeed != banana]
+    highway3: true
+    highway3_uncommon: true
+    highway4: false
+    highway5: false
+    highway6: false
+    restaurant4: false
+
+query: *[maxspeed="40",30]
+    highway3: true
+    highway3_uncommon: true
+    highway4: false
+    highway5: false
+    highway6: false
+    restaurant4: false
+
+query: *[maxspeed="40",30][maxspeed != banana,orange, cherry]
+    highway3: true
+    highway3_uncommon: true
+    highway4: false
+    highway5: false
+    highway6: false
+    restaurant4: false
+
+query: *[seamark:light:range="7"]
+    bad_random4: true
 
 query: *[addr:street][addr:street="An't Holt"]
     address_with_quotes2: true
 
-
-query: *[height="*3.5"]
+query: *[height][height="*3.5"]
+>>>>>>> matching
     bad_random1: true
 
 query: *[name="Light*", Brew]
@@ -17,13 +125,13 @@ query: *[name="Light*", Brew]
 query: *[addr:street="An't Holt"]
     address_with_quotes2: true
 
-query: *[addr:street="An't Holt"]
-    address_with_quotes2: true
-
 query: *[addr:street="An\'t Holt"]
     address_with_quotes2: true
 
 query: *[inscription="Hier stand jahrelang der Bus, in dem während der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"]
+    bad_random7: true
+
+query: *[inscription="*d der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"]
     bad_random7: true
 
 query: *["material"="stone"][inscription="*d der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"][memorial]["inscription"="Hier stand jahrelang der Bus, in dem während der letzten Tage des zweiten Weltkriegs im Mai 1945 das Stabspersonal der damaligen Regierung aus Berlin geflüchtet war und hier Unterschlupf gefunden hatte!"]["material"="stone"][memorial="plaque"]["memorial"="plaque"][material="stone"][name]["name"="*Omnibus"]["historic"][memorial="pl*"]
@@ -818,14 +926,6 @@ query: w[name="*Ca*"]
     highway_residential: true
     highway3: false
 
-//
-//  RegEx
-//
-
-query: w[name~".str."]
-    highway_residential: false
-    highway3: true
-    short_local_name: false
 
 query: *[height="3.5"]
     bad_random1: true

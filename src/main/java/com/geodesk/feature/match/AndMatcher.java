@@ -1,16 +1,13 @@
-package com.geodesk.feature.filter;
-
-import com.geodesk.feature.Filter;
-import org.locationtech.jts.geom.Geometry;
+package com.geodesk.feature.match;
 
 import java.nio.ByteBuffer;
 
-public class AndFilter implements Filter
+public class AndMatcher extends Matcher
 {
-    private final Filter a;
-    private final Filter b;
+    private final Matcher a;
+    private final Matcher b;
 
-    public AndFilter(Filter a, Filter b)
+    public AndMatcher(Matcher a, Matcher b)
     {
         this.a = a;
         this.b = b;
@@ -29,10 +26,5 @@ public class AndFilter implements Filter
     @Override public boolean acceptIndex(int keys)
     {
         return a.acceptIndex(keys) && b.acceptIndex(keys);
-    }
-
-    @Override public boolean acceptGeometry(Geometry geom)
-    {
-        return a.acceptGeometry(geom) && b.acceptGeometry(geom);
     }
 }

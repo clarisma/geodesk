@@ -1,4 +1,4 @@
-package com.geodesk.feature.filter;
+package com.geodesk.feature.match;
 
 import com.clarisma.common.ast.*;
 import com.geodesk.feature.store.TagValues;
@@ -9,9 +9,9 @@ import java.nio.charset.StandardCharsets;
 import static org.objectweb.asm.Opcodes.*;
 
 /**
- * A bytecode generator that produces a TagFilter class for a given query
- * string. Note that the filter code does not verify the feature type; it is
- * the caller's responsibility to only apply the TagFilter to features
+ * A bytecode generator that produces a TagMatcher class for a given query
+ * string. Note that the matcher code does not verify the feature type; it is
+ * the caller's responsibility to only apply the TagMatcher to features
  * of the appropriate type.
  *
  * This class relies on the ExpressionCoder base class to encode the
@@ -130,10 +130,10 @@ import static org.objectweb.asm.Opcodes.*;
 
  */
 
-public class FilterCoder extends ExpressionCoder
+public class MatcherCoder extends ExpressionCoder
 {
 	private static final String
-		FILTER_BASE_CLASS = "com/geodesk/feature/filter/TagFilter",
+		MATCHER_BASE_CLASS = "com/geodesk/feature/match/TagMatcher",
 		BYTES_CLASS = "com/clarisma/common/util/Bytes",
 		TAG_VALUES_CLASS = "com/geodesk/feature/store/TagValues";
 
@@ -191,6 +191,16 @@ public class FilterCoder extends ExpressionCoder
 	 * contains local keys (from Bit 0 of the tag-table pointer)
 	 */
 	private static final int $local_key_flag = 12;
+	/**
+	 * For "contains" string matching: The next position where
+	 * a match will be attempted.
+	 */
+	private static final int $next_match_ptr = 13;
+	/**
+	 * For "contains" string matching: The last position where
+	 * a match will be attempted.
+	 */
+	private static final int $last_match_ptr = 14;
 
 	private static final int NONE = 0;
 	private static final int REQUIRED = 1;
@@ -227,7 +237,7 @@ public class FilterCoder extends ExpressionCoder
 	 */
 	private int acceptedTagType;
 
-	public FilterCoder(int valueNo)
+	public MatcherCoder(int valueNo)
 	{
 		this.valueNo = valueNo;
 		setTypeChecker(new TypeChecker());
@@ -244,7 +254,7 @@ public class FilterCoder extends ExpressionCoder
 	{
 		mv.visitLdcInsn(msg);
 		mv.visitVarInsn(ILOAD, localVar);
-		mv.visitMethodInsn(INVOKESTATIC, FILTER_BASE_CLASS,
+		mv.visitMethodInsn(INVOKESTATIC, MATCHER_BASE_CLASS,
 			"debug", "(Ljava/lang/String;I)V", false);
 	}
 
@@ -298,7 +308,7 @@ public class FilterCoder extends ExpressionCoder
 		if (op == Operator.NE)
 		{
 			// If Operator is NE, we set it to EQ and switch jump targets
-			// (STARTS_WITH and ENDS_WITH don't have opposite operators,
+			// (STARTS_WITH, ENDS_WITH and IN don't have opposite operators,
 			// they are negated using a unary NOT expression, for which
 			// the ExpressionCoder already swaps the jump targets)
 			op = Operator.EQ;
@@ -306,7 +316,7 @@ public class FilterCoder extends ExpressionCoder
 			t = f;
 			f = swap;
 		}
-		Label fx = f == null ? new Label() : f;
+		Label match_failed = (f == null) ? new Label() : f;
 		byte[] matchBytes = match.getBytes(StandardCharsets.UTF_8);
 		int len = matchBytes.length;
 
@@ -343,7 +353,7 @@ public class FilterCoder extends ExpressionCoder
 				//  do we need to check more than 2 length bytes?)
 			}
 			loadIntConstant(lenByteToCheck);
-			mv.visitJumpInsn(IF_ICMPNE, fx);
+			mv.visitJumpInsn(IF_ICMPNE, match_failed);
 
 			// debug("Matched string length, p = {}", pointerVar);
 			// TODO: allow comparison with zero-length test string
@@ -378,33 +388,71 @@ public class FilterCoder extends ExpressionCoder
 			mv.visitInsn(ISHL);
 			mv.visitInsn(IOR);
 			mv.visitLabel(single_byte_length);
+			// the length of the candidate string is at TOS here
 
-			if (op == FilterParser.ENDS_WITH)
+			// subtract the test-string length from the candidate length
+			loadIntConstant(len);
+			mv.visitInsn(ISUB);
+
+			if (op != MatcherParser.STARTS_WITH)
 			{
-				// for ENDS_WITH, we adjust the string pointer
-				// to point at the potential substring of the candidate
-				// (We'll do this before the length comparison,
-				// because otherwise we would have to store a
-				// copy of the candidate length)
+				// for ENDS_WITH and IN, duplicate this difference,
+				// because we consume it as we adjust the string pointers
 				mv.visitInsn(DUP);
-				loadIntConstant(len-1);
-					// -1 to account for the fact that we haven't
-					// skipped the length byte
-				mv.visitInsn(ISUB);
 				mv.visitVarInsn(ILOAD, pointerVar);
 				mv.visitInsn(IADD);
-				mv.visitVarInsn(ISTORE, pointerVar);
-			}
-			else
-			{
-				mv.visitIincInsn(pointerVar, 1);
+				if (op == MatcherParser.ENDS_WITH)
+				{
+					mv.visitVarInsn(ISTORE, pointerVar);
+				}
+				else
+				{
+					mv.visitVarInsn(ISTORE, $last_match_ptr);
+				}
+
+				// (We could perform these steps *after* we've performed
+				// the length check, but we'd have to store the length
+				// difference in a temporary variable; so we might as
+				// well do it here)
 			}
 
-			// If the candidate is shorter than the test string,
+			// If the length difference is negative, this means
+			// the candidate is shorter than the test string,
 			// it can't possibly match, so we jump to "false"
-			loadIntConstant(len);
-			mv.visitJumpInsn(IF_ICMPLT, fx);
+			mv.visitJumpInsn(IFLT, match_failed);
+
+			// Increase string pointer by 1 to account for the (first)
+			// length byte of the candidate string
+			mv.visitIincInsn(pointerVar, 1);
 		}
+
+		Label loop_start = null;
+		Label match_attempt_failed;
+		Label match_success = t;
+		if(op == Operator.IN)
+		{
+			mv.visitVarInsn(ILOAD, pointerVar);
+			mv.visitVarInsn(ISTORE, $next_match_ptr);
+
+			// TODO: for test strings of 8 bytes or less, we could do without
+			//  $next_match_ptr, since we don't move <pointerVar> during the
+			//  match attempts
+
+			// as above, increase the pointer to the last possible match by 1,
+			// to account for the (first) length byte of the candidate string
+			mv.visitIincInsn($last_match_ptr, 1);
+			loop_start = new Label();
+			match_attempt_failed = new Label();
+			mv.visitLabel(loop_start);
+			if(t == null) match_success = new Label();
+		}
+		else
+		{
+			// EQ, STARTS_WITH and ENDS_WITH make only one attempt
+			match_attempt_failed = match_failed;
+		}
+
+		// Perform the actual string matching, starting at <pointerVar>
 
 		int prevRun = 0;
 		for (; ; )
@@ -527,11 +575,11 @@ public class FilterCoder extends ExpressionCoder
 
 			int jumpInsn;
 			Label jumpTo;
-			if (t != null && remaining <= 0)
+			if (match_success != null && remaining <= 0)
 			{
 				// If we are supposed to branch in case of successful match,
 				// do so only if the final run matches
-				jumpTo = t;
+				jumpTo = match_success;
 				jumpInsn = run == 8 ? IFEQ : IF_ICMPEQ;
 			}
 			else
@@ -539,7 +587,7 @@ public class FilterCoder extends ExpressionCoder
 				// In all other cases, jump to the explicit "false" label
 				// (or the point after the instructions) if the run does
 				// not match
-				jumpTo = fx;
+				jumpTo = match_attempt_failed;
 				jumpInsn = run == 8 ? IFNE : IF_ICMPNE;
 			}
 
@@ -559,14 +607,36 @@ public class FilterCoder extends ExpressionCoder
 
 			// debug("Matched run, p = {}", pointerVar);
 
-			if (remaining <= 0)
-			{
-				// debug("String match completed, p = {}", pointerVar);
-				if (f == null) mv.visitLabel(fx);
-				return;
-			}
+			if (remaining <= 0) break;
 			prevRun = run;
 		}
+
+		if(op == Operator.IN)
+		{
+			mv.visitLabel(match_attempt_failed);
+			mv.visitIincInsn($next_match_ptr, 1);
+			mv.visitVarInsn(ILOAD, $next_match_ptr);
+			mv.visitVarInsn(ILOAD, $last_match_ptr);
+			if(f == null)
+			{
+				mv.visitVarInsn(ILOAD, $next_match_ptr);
+				mv.visitVarInsn(ISTORE, pointerVar);
+				mv.visitJumpInsn(IF_ICMPLE, loop_start);
+			}
+			else
+			{
+				mv.visitJumpInsn(IF_ICMPGT, f);
+				mv.visitVarInsn(ILOAD, $next_match_ptr);
+				mv.visitVarInsn(ISTORE, pointerVar);
+				mv.visitJumpInsn(GOTO, loop_start);
+			}
+		}
+
+		// If caller did not specify explicit true/false labels,
+		// set them now
+		assert (t == null && f != null) || (t != null && f == null);
+		if(f == null) mv.visitLabel(match_failed);
+		if(t == null && match_success != null) mv.visitLabel(match_success);
 	}
 
 	/**
@@ -579,6 +649,7 @@ public class FilterCoder extends ExpressionCoder
 	 * @param t      where to jump if true
 	 * @param f      where to jump if false
 	 */
+	/*
 	private void stringStartsWith(String prefix, Label t, Label f)
 	{
 		mv.visitLdcInsn(prefix);
@@ -586,6 +657,7 @@ public class FilterCoder extends ExpressionCoder
 			"startsWith", "(Ljava/lang/String;)Z", false);
 		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
 	}
+	 */
 
 	/**
 	 * Emits code to check if the String object on the operand stack
@@ -597,6 +669,7 @@ public class FilterCoder extends ExpressionCoder
 	 * @param t      where to jump if true
 	 * @param f      where to jump if false
 	 */
+	/*
 	private void stringEndsWith(String suffix, Label t, Label f)
 	{
 		mv.visitLdcInsn(suffix);
@@ -604,6 +677,7 @@ public class FilterCoder extends ExpressionCoder
 			"endsWith", "(Ljava/lang/String;)Z", false);
 		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
 	}
+	 */
 
 	/**
 	 * Emits code to read and decode a UTF-8 string from the ByteBuffer ($buf).
@@ -631,6 +705,17 @@ public class FilterCoder extends ExpressionCoder
 	}
 
 	/**
+	 * Emits code to convert a narrow number (on the stack) to a String.
+	 */
+	private void narrowNumberToString()
+	{
+		loadIntConstant(TagValues.MIN_NUMBER);
+		mv.visitInsn(IADD);
+		mv.visitMethodInsn(INVOKESTATIC, "java/lang/String", "valueOf",
+			"(I)Ljava/lang/String;", false);
+	}
+
+	/**
 	 * Emits code to convert a wide number (on the stack) to a double.
 	 */
 	private void wideNumberToDouble()
@@ -640,13 +725,24 @@ public class FilterCoder extends ExpressionCoder
 	}
 
 	/**
+	 * Emits code to convert a wide number (on the stack) to a String.
+	 */
+	private void wideNumberToString()
+	{
+		mv.visitMethodInsn(INVOKESTATIC, TAG_VALUES_CLASS,
+			"wideNumberToString", "(I)Ljava/lang/String;", false);
+	}
+
+	/**
 	 * Emits code to convert a double (on the stack) to a String.
 	 */
+	/*
 	private void doubleToString()
 	{
 		mv.visitMethodInsn(INVOKESTATIC, FILTER_BASE_CLASS,
 			"doubleToString", "(D)Ljava/lang/String;", false);
 	}
+	 */
 
 	/**
 	 * Emits code to convert a String (on the stack) to a double.
@@ -654,56 +750,8 @@ public class FilterCoder extends ExpressionCoder
 	private void stringToDouble()
 	{
 		// TODO: could call MathUtils.doubleFromString(s) directly
-		mv.visitMethodInsn(INVOKESTATIC, FILTER_BASE_CLASS,
+		mv.visitMethodInsn(INVOKESTATIC, MATCHER_BASE_CLASS,
 			"stringToDouble", "(Ljava/lang/String;)D", false);
-	}
-
-	/**
-	 * Emits code to perform a STARTS_WITH, ENDS_WITH, or MATCH operation.
-	 * <p>
-	 * TODO
-	 *
-	 * @param op
-	 * @param match
-	 * @param t
-	 * @param f
-	 */
-	private void matchPatternValue(Operator op, String match, Label t, Label f)
-	{
-		if (op == Operator.MATCH)
-		{
-			Label string_valid = new Label();
-			mv.visitVarInsn(ALOAD, $val_string);
-			mv.visitJumpInsn(IFNONNULL, string_valid);
-			readString($val_string_ptr);
-			mv.visitVarInsn(ASTORE, $val_string);
-			mv.visitVarInsn(ALOAD, $val_string);
-			mv.visitLabel(string_valid);
-			// TODO
-			return;
-		}
-
-		// startsWith and endsWith can operate on either a string pointer
-		// or a String object
-
-		assert op == FilterParser.STARTS_WITH || op == FilterParser.ENDS_WITH;
-		Label use_string = new Label();
-		Label done = new Label();
-		// First, we check if the string pointer is non-null
-		mv.visitVarInsn(ILOAD, $val_string_ptr);
-		mv.visitJumpInsn(IFEQ, use_string);
-		// If we have a valid string pointer, use fast matching
-		matchString(op, $val_string_ptr, match, t, f);
-		mv.visitJumpInsn(GOTO, done);
-		// Otherwise, a valid String value must have been provided
-		mv.visitLabel(use_string);
-		mv.visitVarInsn(ALOAD, $val_string);
-		// execute one of the basic String methods
-		mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String",
-			op == FilterParser.STARTS_WITH ? "startsWith" : "endsWith",
-			"(Ljava/lang/String;)Z", false);
-		mv.visitJumpInsn(t != null ? IFNE : IFEQ, t != null ? t : f);
-		mv.visitLabel(done);
 	}
 
 	/**
@@ -766,9 +814,24 @@ public class FilterCoder extends ExpressionCoder
 			}
 			if (valueType == TagValues.NARROW_NUMBER)
 			{
-				narrowNumberToDouble();
-				mv.visitVarInsn(DSTORE, $val_double);
-				valueFulfilled = TagClause.VALUE_DOUBLE;
+				valueFulfilled = 0;
+				if((valuesRequired & TagClause.VALUE_ANY_STRING) != 0)
+				{
+					if((valuesRequired & TagClause.VALUE_DOUBLE) != 0) mv.visitInsn(DUP);
+					narrowNumberToString();
+					mv.visitVarInsn(ASTORE, $val_string);
+					valueFulfilled |= TagClause.VALUE_ANY_STRING;
+				}
+				if((valuesRequired & TagClause.VALUE_DOUBLE) != 0)
+				{
+					narrowNumberToDouble();
+					mv.visitVarInsn(DSTORE, $val_double);
+					valueFulfilled |= TagClause.VALUE_DOUBLE;
+				}
+
+				// TODO: This is stupid, if the value is not actually needed,
+				//  it should not be fetched in the first place
+				if(valueFulfilled == 0) mv.visitInsn(POP);
 			}
 			else // can only be GLOBAL_STRING
 			{
@@ -779,7 +842,7 @@ public class FilterCoder extends ExpressionCoder
 				{
 					mv.visitVarInsn(ALOAD, $this);
 					mv.visitVarInsn(ILOAD, $val_global_string);
-					mv.visitMethodInsn(INVOKEVIRTUAL, FILTER_BASE_CLASS,
+					mv.visitMethodInsn(INVOKEVIRTUAL, MATCHER_BASE_CLASS,
 						"globalString", "(I)Ljava/lang/String;", false);
 
 					if ((valuesRequired & TagClause.VALUE_DOUBLE) != 0)
@@ -802,9 +865,24 @@ public class FilterCoder extends ExpressionCoder
 			getInt();
 			if (valueType == TagValues.WIDE_NUMBER)
 			{
-				wideNumberToDouble();
-				mv.visitVarInsn(DSTORE, $val_double);
-				valueFulfilled = TagClause.VALUE_DOUBLE;
+				valueFulfilled = 0;
+				if ((valuesRequired & TagClause.VALUE_ANY_STRING) != 0)
+				{
+					if((valuesRequired & TagClause.VALUE_DOUBLE) != 0) mv.visitInsn(DUP);
+					wideNumberToString();
+					mv.visitVarInsn(ASTORE, $val_string);
+					valueFulfilled |= TagClause.VALUE_ANY_STRING;
+				}
+				if((valuesRequired & TagClause.VALUE_DOUBLE) != 0)
+				{
+					wideNumberToDouble();
+					mv.visitVarInsn(DSTORE, $val_double);
+					valueFulfilled |= TagClause.VALUE_DOUBLE;
+				}
+
+				// TODO: This is stupid, if the value is not actually needed,
+				//  it should not be fetched in the first place
+				if(valueFulfilled == 0) mv.visitInsn(POP);
 			}
 			else // can only be LOCAL_STRING
 			{
@@ -817,13 +895,6 @@ public class FilterCoder extends ExpressionCoder
 				{
 					// We need to decode the actual String object
 					// and attempt to convert it into a number
-
-					// TODO: we may use a different method that
-					//  parses a double from a local string without
-					//  first retrieving a String object. This would
-					//  also allow us to stop parsing at first non-number
-					//  char (instead of rejecting the entire string), so
-					//  "50 mph" would result in 50, instead of an error
 
 					readString($val_string_ptr);
 					if ((valuesRequired & TagClause.VALUE_ANY_STRING) != 0)
@@ -869,6 +940,7 @@ public class FilterCoder extends ExpressionCoder
 			mv.visitVarInsn(ISTORE, $val_string_ptr);
 		}
 
+		/*
 		// TODO: create numeric strings based on type to preserve
 		//  exact string representation
 		if (valueFulfilled == TagClause.VALUE_DOUBLE &&
@@ -878,6 +950,7 @@ public class FilterCoder extends ExpressionCoder
 			doubleToString();
 			mv.visitVarInsn(ASTORE, $val_string);
 		}
+		 */
 	}
 
 	/**
@@ -1768,11 +1841,11 @@ public class FilterCoder extends ExpressionCoder
 		mv.visitEnd();
 	}
 
-	public byte[] createFilterClass(String className, Selector first)
+	public byte[] createMatcherClass(String className, Selector first)
 	{
 		// TODO
 		int keyMask = first.indexBits();
-		beginClass(className, FILTER_BASE_CLASS, null);
+		beginClass(className, MATCHER_BASE_CLASS, null);
 		createConstructor(keyMask, keyMask);	// TODO: keyMin
 		createAcceptMethod("accept", first);
 		endClass();
@@ -1841,7 +1914,6 @@ public class FilterCoder extends ExpressionCoder
 			t = f;
 			f = swap;
 		}
-		/*		// TODO: enable for regex
 		else if (op == Operator.NOT_MATCH)
 		{
 			// Turn !~ into ~ (and swap the labels)
@@ -1850,12 +1922,11 @@ public class FilterCoder extends ExpressionCoder
 			t = f;
 			f = swap;
 		}
-		 */
 
 		if(matchString.isEmpty())
 		{
 			// "*" (wildcard with empty string) matches anything
-			if(op == Operator.IN || op == FilterParser.STARTS_WITH || op == FilterParser.ENDS_WITH)
+			if(op == Operator.IN || op == MatcherParser.STARTS_WITH || op == MatcherParser.ENDS_WITH)
 			{
 				if(t != null)
 				{
@@ -1865,8 +1936,23 @@ public class FilterCoder extends ExpressionCoder
 			}
 		}
 
-		assert op == Operator.EQ || op == FilterParser.STARTS_WITH ||
-			op == FilterParser.ENDS_WITH;
+		assert op == Operator.EQ || op == MatcherParser.STARTS_WITH ||
+			op == MatcherParser.ENDS_WITH || op == Operator.IN ||
+			op == Operator.MATCH;
+
+		if(op == Operator.MATCH)
+		{
+			Label perform_match = new Label();
+			mv.visitVarInsn(ALOAD, $val_string);
+			mv.visitJumpInsn(IFNONNULL, perform_match);
+			readString($val_string_ptr);
+			mv.visitVarInsn(ASTORE, $val_string);
+			mv.visitLabel(perform_match);
+			loadRegexPattern(matchString);
+			mv.visitVarInsn(ALOAD, $val_string);
+			matchRegexPattern(t, f);
+			return true;
+		}
 
 		Label done = new Label();
 		Label fx = f != null ? f : done;
@@ -1887,7 +1973,7 @@ public class FilterCoder extends ExpressionCoder
 			mv.visitVarInsn(ALOAD, $val_string);
 			mv.visitLdcInsn(matchString);
 			mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String",
-				op == FilterParser.STARTS_WITH ? "startsWith" : "endsWith",
+				op == MatcherParser.STARTS_WITH ? "startsWith" : "endsWith",
 				"(Ljava/lang/String;)Z", false);
 			if (t != null)
 			{
@@ -1904,9 +1990,38 @@ public class FilterCoder extends ExpressionCoder
 		}
 		else
 		{
-			// value="string" always fails if string pointer is zero
-			// TODO: comparison of number to string?
-			mv.visitJumpInsn(IFEQ, fx);
+			if((clause.flags() & TagClause.VALUE_ANY_STRING) != 0)
+			{
+				// If the clause accepts a String converted from a numeric
+				// tag value, we check that String if there is no local string
+				// value present
+
+				// TODO: should consolidate with above
+
+				Label use_string_ptr = new Label();
+				mv.visitJumpInsn(IFNE, use_string_ptr);
+				mv.visitLdcInsn(matchString);
+				mv.visitVarInsn(ALOAD, $val_string);
+				mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String",
+					"equals", "(Ljava/lang/Object;)Z", false);
+				if (t != null)
+				{
+					mv.visitJumpInsn(IFNE, t);  // jump if true
+				}
+				else
+				{
+					mv.visitJumpInsn(IFEQ, f);  // jump if false
+				}
+				// skip the string-pointer matching code
+				mv.visitJumpInsn(GOTO, done);
+				// continue here if we have a valid string pointer
+				mv.visitLabel(use_string_ptr);
+			}
+			else
+			{
+				// Otherwise, value="string" always fails if string pointer is zero
+				mv.visitJumpInsn(IFEQ, fx);
+			}
 		}
 		// The code produced by matchString leaves the string-pointer
 		// argument modified, so we use a temporary variable

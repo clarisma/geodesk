@@ -1,4 +1,4 @@
-package com.geodesk.feature.filter;
+package com.geodesk.feature.match;
 
 import com.clarisma.common.ast.*;
 import com.clarisma.common.math.MathUtils;
@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 //  What if we allow other letter for types?
 //  l = line, c = collection?
 
-public class FilterParser extends Parser
+public class MatcherParser extends Parser
 {
 	private static final String COMMA = ",";
 	private static final String STAR = "*";
@@ -56,7 +56,7 @@ public class FilterParser extends Parser
 	private final ObjectIntMap<String> stringsToCodes;
 	private final IntIntMap keysToCategories;
 
-	public FilterParser(ObjectIntMap<String> stringsToCodes, IntIntMap keysToCategories)
+	public MatcherParser(ObjectIntMap<String> stringsToCodes, IntIntMap keysToCategories)
 	{
 		if (stringsToCodes == null) stringsToCodes = new ObjectIntHashMap<>();
 		this.stringsToCodes = stringsToCodes;
@@ -380,6 +380,18 @@ public class FilterParser extends Parser
 							{
 								val = s;
 								flags |= TagClause.VALUE_LOCAL_STRING;
+								if(isNumericString(s))
+								{
+									// If the string we're trying to match is a number,
+									// request that numeric tag values are converted to
+									// a string
+									// (We don't have to do this if the string is in the
+									// global string table -- in this case, a tag value
+									// will never be encoded as a number, and we can simply
+									// do the cheap & fast global-string test)
+
+									flags |= TagClause.VALUE_ANY_STRING;
+								}
 							}
 							else
 							{
@@ -399,6 +411,10 @@ public class FilterParser extends Parser
 							"Multiple values are not allowed for %s", op));
 						return null;
 					}
+				}
+				if(op == Operator.MATCH || op == Operator.NOT_MATCH)
+				{
+					flags |= TagClause.VALUE_ANY_STRING | TagClause.VALUE_LOCAL_STRING;
 				}
 			}
 		}

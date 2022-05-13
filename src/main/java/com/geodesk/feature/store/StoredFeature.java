@@ -5,6 +5,7 @@ import com.clarisma.common.util.Bytes;
 import com.geodesk.core.Mercator;
 import com.geodesk.feature.*;
 import com.geodesk.core.Box;
+import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.feature.query.ParentRelationView;
 
@@ -620,7 +621,7 @@ public abstract class StoredFeature implements Feature
 		return buf.getInt(ppRelTable) + ppRelTable;
 	}
 
-	public boolean matches(Filter filter)
+	public boolean matches(Matcher filter)
 	{
 		return filter.accept(buf, ptr);
 	}

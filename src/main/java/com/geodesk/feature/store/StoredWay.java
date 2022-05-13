@@ -7,9 +7,9 @@ import com.geodesk.feature.FeatureType;
 import com.geodesk.feature.Features;
 import com.geodesk.feature.Node;
 import com.geodesk.feature.Way;
-import com.geodesk.feature.Filter;
-import com.geodesk.feature.filter.FilterSet;
-import com.geodesk.feature.filter.TypeBits;
+import com.geodesk.feature.match.Matcher;
+import com.geodesk.feature.match.MatcherSet;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.feature.query.WayNodeView;
 import org.locationtech.jts.geom.Geometry;
@@ -36,7 +36,7 @@ public class StoredWay extends StoredFeature implements Way
 	@Override public Features<Node> nodes(String query)
 	{
 		if((buf.get(ptr) & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.NODES;
-		FilterSet filters = store.getFilters(query);
+		MatcherSet filters = store.getMatchers(query);
 		if((filters.types() & TypeBits.NODES) == 0) return EmptyView.NODES;
 		return new WayNodeView(store, buf, ptr, filters.nodes());
 	}
@@ -116,7 +116,7 @@ public class StoredWay extends StoredFeature implements Way
 		int ppBody = ptr + 12;
 		int pBody = buf.getInt(ppBody) + ppBody;
 		return new Iter(store, buf, pBody - 4 -
-			(flags & FeatureFlags.RELATION_MEMBER_FLAG), Filter.ALL);
+			(flags & FeatureFlags.RELATION_MEMBER_FLAG), Matcher.ALL);
 	}
 
 	@Override public int[] toXY()
@@ -203,7 +203,7 @@ public class StoredWay extends StoredFeature implements Way
 	{
 		private final FeatureStore store;
 		private final ByteBuffer buf;
-		private final Filter filter;
+		private final Matcher filter;
 		private int pNext;
 		private Node featureNode;
 		private int tip = FeatureConstants.START_TIP;
@@ -216,7 +216,7 @@ public class StoredWay extends StoredFeature implements Way
 		private static final int NF_DIFFERENT_TILE = 8;
 
 
-		public Iter(FeatureStore store, ByteBuffer buf, int pFirst, Filter filter)
+		public Iter(FeatureStore store, ByteBuffer buf, int pFirst, Matcher filter)
 		{
 			this.store = store;
 			this.buf = buf;

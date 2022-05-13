@@ -1,8 +1,8 @@
 package com.geodesk.feature.query;
 
-import com.geodesk.feature.filter.FilterCoder;
-import com.geodesk.feature.filter.FilterParser;
-import com.geodesk.feature.filter.FilterXmlWriter;
+import com.geodesk.feature.match.MatcherCoder;
+import com.geodesk.feature.match.MatcherParser;
+import com.geodesk.feature.match.MatcherXmlWriter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.map.primitive.MutableObjectIntMap;
@@ -22,8 +22,8 @@ public class QueryParserTest
 {
     public static final Logger log = LogManager.getLogger();
 
-    FilterParser parser;
-    FilterCoder coder;
+    MatcherParser parser;
+    MatcherCoder coder;
     String[] codesToStrings;
     ObjectIntMap<String> stringsToCodes;
 
@@ -31,8 +31,8 @@ public class QueryParserTest
     public void setUp() throws Exception
     {
         loadStrings();
-        parser = new FilterParser(stringsToCodes, null); // TODO
-        coder = new FilterCoder(stringsToCodes.get("no"));
+        parser = new MatcherParser(stringsToCodes, null); // TODO
+        coder = new MatcherCoder(stringsToCodes.get("no"));
     }
 
     private void loadStrings() throws IOException
@@ -55,7 +55,7 @@ public class QueryParserTest
 
     private void dumpQuery()
     {
-        FilterXmlWriter out = new FilterXmlWriter(System.out);
+        MatcherXmlWriter out = new MatcherXmlWriter(System.out);
         out.writeQuery(parser.query());
         out.flush();
     }
@@ -102,7 +102,7 @@ public class QueryParserTest
         {
             parser.parse("na[amenity=pub,bar,cafe,restaurant][local_key != 'banana']");
             // parser.parse("w[natural=coastline]");
-            bytesEncoded += coder.createFilterClass("Test", parser.query()).length;
+            bytesEncoded += coder.createMatcherClass("Test", parser.query()).length;
         }
         log.info("Parsed and coded {} queries in {} ms ({} bytes per class)",
             runs, timer.stop(), bytesEncoded / runs);

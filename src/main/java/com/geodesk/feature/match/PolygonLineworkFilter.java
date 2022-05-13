@@ -1,14 +1,15 @@
-package com.geodesk.feature.filter;
+package com.geodesk.feature.match;
 
-import com.geodesk.feature.Filter;
-
-import java.nio.ByteBuffer;
-
-//public abstract class AbstractFilter implements Filter
+//public class PolygonLineworkFilter implements Filter
 //{
+//    @Override public boolean accept(ByteBuffer buf, int pos)
+//    {
+//        return false;
+//    }
+//
 //    @Override public boolean accept(ByteBuffer buf, int pos, int roleGroup)
 //    {
-//        return accept(buf, pos);
+//        return StoredFeature.type(buf, pos) == 1;
 //    }
 //
 //    @Override public boolean acceptIndex(int keys)
@@ -18,6 +19,7 @@ import java.nio.ByteBuffer;
 //
 //    @Override public int acceptRole(int roleCode, String roleString)
 //    {
+//        // TODO: only allow outer or inner
 //        return 1;
 //    }
 //}

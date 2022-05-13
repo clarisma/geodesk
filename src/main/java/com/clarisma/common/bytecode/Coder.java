@@ -31,6 +31,8 @@ public class Coder
 		if(staticMv != null)
 		{
 			staticMv.visitInsn(RETURN);
+			// force auto-calculation of maxStack and maxLocals
+			staticMv.visitMaxs(0, 0);
 			staticMv.visitEnd();
 			staticMv = null;
 		}

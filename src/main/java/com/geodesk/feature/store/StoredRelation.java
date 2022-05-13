@@ -1,7 +1,7 @@
 package com.geodesk.feature.store;
 
 import com.geodesk.feature.*;
-import com.geodesk.feature.Filter;
+import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.polygon.PolygonBuilder;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.feature.query.MemberIterator;
@@ -37,7 +37,7 @@ public class StoredRelation extends StoredFeature implements Relation
 		int ppMembers = ptr + 12;
 		int pMembers = ppMembers + buf.getInt(ppMembers);
 		if(isEmpty(pMembers)) return Collections.emptyIterator();
-		return new MemberIterator(store, buf, pMembers, Filter.ALL);
+		return new MemberIterator(store, buf, pMembers, Matcher.ALL);
 	}
 
 
@@ -83,7 +83,7 @@ public class StoredRelation extends StoredFeature implements Relation
 		int ppMembers = ptr + 12;
 		int pMembers = ppMembers + buf.getInt(ppMembers);
 		if(isEmpty(pMembers)) return EmptyView.ANY;
-		return new MemberView<>(store, buf, pMembers, Filter.ALL);
+		return new MemberView<>(store, buf, pMembers, Matcher.ALL);
 	}
 
 	@Override public Features<?> members(String q)

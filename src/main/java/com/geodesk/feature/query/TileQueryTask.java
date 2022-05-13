@@ -2,14 +2,14 @@ package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
 import com.geodesk.core.Tile;
-import com.geodesk.feature.Filter;
-import com.geodesk.feature.filter.FilterSet;
+import com.geodesk.feature.match.Matcher;
+import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.store.FeatureFlags;
 import com.geodesk.feature.store.FeatureStore;
 
 import java.nio.ByteBuffer;
 
-import static com.geodesk.feature.filter.TypeBits.*;
+import static com.geodesk.feature.match.TypeBits.*;
 
 public class TileQueryTask extends QueryTask
 {
@@ -25,7 +25,7 @@ public class TileQueryTask extends QueryTask
         this.tip = tip;
     }
 
-    private RTreeQueryTask searchRTree(ByteBuffer buf, int ppTree, Filter filter, RTreeQueryTask task)
+    private RTreeQueryTask searchRTree(ByteBuffer buf, int ppTree, Matcher filter, RTreeQueryTask task)
     {
         int p = buf.getInt(ppTree);
         if(p == 0) return task;
@@ -52,7 +52,7 @@ public class TileQueryTask extends QueryTask
         return task;
     }
 
-    private RTreeQueryTask searchNodeRTree(ByteBuffer buf, int ppTree, Filter filter, RTreeQueryTask task)
+    private RTreeQueryTask searchNodeRTree(ByteBuffer buf, int ppTree, Matcher filter, RTreeQueryTask task)
     {
         int p = buf.getInt(ppTree);
         if(p == 0) return task;
@@ -97,7 +97,7 @@ public class TileQueryTask extends QueryTask
             bboxFlags = ((query.maxY() > north) ? FeatureFlags.MULTITILE_NORTH : 0) |
                 ((query.minX() < west) ? FeatureFlags.MULTITILE_WEST : 0);
 
-            FilterSet filters = query.filters();
+            MatcherSet filters = query.filters();
             RTreeQueryTask task = null;
 
             /*

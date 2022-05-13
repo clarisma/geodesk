@@ -48,6 +48,19 @@ public class TagValues
         }
     }
 
+    public static String wideNumberToString(int number)
+    {
+        int mantissa = (number >>> 2) + TagValues.MIN_NUMBER;
+        switch(number & 3)
+        {
+        case 0: return String.valueOf(mantissa);
+        case 1: return String.format("%.1f", ((double)mantissa / 10));
+        case 2: return String.format("%.2f", ((double)mantissa / 100));
+        case 3: return String.format("%.3f", ((double)mantissa / 1000));
+        }
+        return null; // cannot reach this
+    }
+
     public static int toInt(String s)
     {
         try
