@@ -237,10 +237,20 @@ public class StoredWay extends StoredFeature implements Way
 				{
 					if ((node & NF_DIFFERENT_TILE) != 0)
 					{
-						// TODO: wide tip delta
+						// TODO: test wide tip delta
 						pNext -= 2;
 						int tipDelta = buf.getShort(pNext);
-						tipDelta >>= 1;     // signed
+						if((tipDelta & 1) != 0)
+						{
+							// wide TIP delta
+							pNext -= 2;
+							tipDelta = (buf.getShort(pNext) << 15) |
+								((tipDelta >> 1) & 0x7fff);
+						}
+						else
+						{
+							tipDelta >>= 1;     // signed
+						}
 						tip += tipDelta;
 						int tilePage = store.fetchTile(tip);
 						foreignBuf = store.bufferOfPage(tilePage);
@@ -256,7 +266,7 @@ public class StoredWay extends StoredFeature implements Way
 						// TODO: simplify alignment rules!
 				}
 				pNext -= 4;
-				pNext &= -1 + (node & NF_LAST);
+				pNext &= -1 + (node & NF_LAST);		// set pNext to 0 if this is the last node
 				if(filter.accept(nodeBuf, pNode))
 				{
 					featureNode = new StoredNode(store, nodeBuf, pNode);

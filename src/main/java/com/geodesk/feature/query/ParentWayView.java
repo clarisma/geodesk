@@ -3,6 +3,14 @@ package com.geodesk.feature.query;
 import com.geodesk.feature.Way;
 import com.geodesk.feature.match.MatcherSet;
 
+/**
+ * A view that contains the parent ways of a specific nodes.
+ *
+ * We use a WorldView whose bounding box is constrained to the coordinates of
+ * the node. If the node is a feature node, we select only ways that have the
+ * way-node flag set. We apply a Filter (that is also a Matcher) that accepts
+ * only ways that contain the node as part of their geometry.
+ */
 public class ParentWayView extends WorldView<Way>
 {
     // TODO: for "in()", can't use the default approach of intersecting;

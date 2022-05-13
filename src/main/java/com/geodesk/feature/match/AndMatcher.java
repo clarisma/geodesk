@@ -27,4 +27,13 @@ public class AndMatcher extends Matcher
     {
         return a.acceptIndex(keys) && b.acceptIndex(keys);
     }
+
+    @Override public Matcher acceptRole(int roleCode, String roleString)
+    {
+        Matcher ma = a.acceptRole(roleCode, roleString);
+        if(ma == null) return null;
+        Matcher mb = b.acceptRole(roleCode, roleString);
+        if(mb == null) return null;
+        return new AndMatcher(ma, mb);
+    }
 }

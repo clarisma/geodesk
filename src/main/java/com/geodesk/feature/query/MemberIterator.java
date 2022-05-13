@@ -51,6 +51,7 @@ public class MemberIterator implements Iterator<Feature>
         // do nothing
     }
 
+    // TODO: should this return `member` and set `pCurrent` itself?
     // TODO: could get rid of `member` by using the last-flag as a mask on pCurrent?
     private int fetchNext()
     {
@@ -66,12 +67,18 @@ public class MemberIterator implements Iterator<Feature>
         {
             if ((member & MF_DIFFERENT_TILE) != 0)
             {
-                // TODO: wide tip delta
+                // TODO: test wide tip delta
                 pForeignTile = 0;
                 int tipDelta = buf.getShort(p);
+                if((tipDelta & 1) != 0)
+                {
+                    // wide TIP delta
+                    tipDelta = buf.getInt(p);
+                    p += 2;
+                }
                 tipDelta >>= 1;     // signed
-                tip += tipDelta;
                 p += 2;
+                tip += tipDelta;
             }
         }
         if ((member & MF_DIFFERENT_ROLE) != 0)
@@ -100,6 +107,8 @@ public class MemberIterator implements Iterator<Feature>
     {
         for(;;)
         {
+            // TODO: possible bug: pCurrent not advanced if feature not accepted?
+
             int pNext = fetchNext();
             if (pNext == 0)
             {
@@ -127,6 +136,7 @@ public class MemberIterator implements Iterator<Feature>
             if(matcher.accept(featureBuf, pFeature))
             {
                 StoredFeature f = store.getFeature(featureBuf, pFeature);
+                // TODO: allow any negative instead of -1?
                 f.setRole(role == -1 ? roleString : store.stringFromCode(role));
                 memberFeature = (Feature) f;
                 pCurrent = pNext;
