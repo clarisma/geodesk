@@ -2,6 +2,7 @@ package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Bytes;
 import com.geodesk.feature.Feature;
+import com.geodesk.feature.Filter;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureConstants;
 import com.geodesk.feature.store.FeatureStore;
@@ -14,7 +15,7 @@ public class MemberIterator implements Iterator<Feature>
 {
     private final FeatureStore store;
     private final ByteBuffer buf;
-    private final Matcher filter;
+    private final Matcher matcher;
     private int pCurrent;
     private int role;
     private String roleString;
@@ -24,18 +25,24 @@ public class MemberIterator implements Iterator<Feature>
     private int member;
     private Feature memberFeature;
 
+    // TODO:
+    private int types;
+    private Matcher currentMatcher;
+    private Filter filter;
+
+
     // TODO: consolidate these flags?
     private static final int MF_LAST = 1;
     private static final int MF_FOREIGN = 2;
     private static final int MF_DIFFERENT_ROLE = 4;
     private static final int MF_DIFFERENT_TILE = 8;
 
-    public MemberIterator(FeatureStore store, ByteBuffer buf, int pTable, Matcher filter)
+    public MemberIterator(FeatureStore store, ByteBuffer buf, int pTable, Matcher matcher)
     {
         this.store = store;
         this.buf = buf;
         pCurrent = pTable;
-        this.filter = filter;
+        this.matcher = matcher;
         fetchNextFeature();
     }
 
@@ -117,7 +124,7 @@ public class MemberIterator implements Iterator<Feature>
                 featureBuf = buf;
                 pFeature = (pCurrent & 0xffff_fffc) + ((member >> 3) << 2);
             }
-            if(filter.accept(featureBuf, pFeature))
+            if(matcher.accept(featureBuf, pFeature))
             {
                 StoredFeature f = store.getFeature(featureBuf, pFeature);
                 f.setRole(role == -1 ? roleString : store.stringFromCode(role));

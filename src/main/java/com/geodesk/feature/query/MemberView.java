@@ -60,16 +60,6 @@ public class MemberView<T extends Feature> implements Features<T>
         return null;
     }
 
-//    @Override public Features<?> areas()
-//    {
-//        return null;
-//    }
-//
-//    @Override public Features<?> areas(String filter)
-//    {
-//        return null;
-//    }
-
     @Override public Features<Relation> relations()
     {
         return null;

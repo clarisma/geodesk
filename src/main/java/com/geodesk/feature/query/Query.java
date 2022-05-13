@@ -42,7 +42,7 @@ public class Query implements Iterator<Feature>, Bounds
         this.store = view.store;
         this.executor = store.executor();
         this.types = view.types;
-        this.filters = view.filters;
+        this.filters = view.matchers;
         Bounds bbox = view.bbox;
         minX = bbox.minX();
         minY = bbox.minY();

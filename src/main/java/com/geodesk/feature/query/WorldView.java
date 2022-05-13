@@ -2,7 +2,6 @@ package com.geodesk.feature.query;
 
 import com.geodesk.core.Box;
 import com.geodesk.feature.*;
-import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredFeature;
@@ -21,11 +20,11 @@ import static com.geodesk.feature.match.TypeBits.*;
 
 public class WorldView<T extends Feature> implements Features<T>
 {
-    protected FeatureStore store;
-    protected int types;
-    protected Bounds bbox;
-    protected MatcherSet filters;
-    protected Matcher postFilter;
+    protected final FeatureStore store;
+    protected final int types;
+    protected final Bounds bbox;
+    protected final MatcherSet matchers;
+    protected final Filter filter;
 
     protected final static Box WORLD = Box.ofWorld();
 
@@ -33,47 +32,31 @@ public class WorldView<T extends Feature> implements Features<T>
     {
         this.store = store;
         types= ALL;
-        filters = MatcherSet.ALL;
+        matchers = MatcherSet.ALL;
         bbox = WORLD;
+        filter = null;
     }
 
     public WorldView(WorldView<?> other, Bounds bbox)
     {
         this.store = other.store;
         this.types = other.types;
-        this.filters = other.filters;
+        this.matchers = other.matchers;
         this.bbox = bbox;           // TODO: intersect bbox
-        this.postFilter = other.postFilter; // TODO: clip bbox based on spatial filters
+        this.filter = other.filter; // TODO: clip bbox based on spatial filters
     }
 
 
-    public WorldView(WorldView<?> other, int types, MatcherSet filters)
+    public WorldView(WorldView<?> other, int types, MatcherSet matchers)
     {
         this.store = other.store;
         this.bbox = other.bbox;
         this.types = types;
-        this.filters = filters;
-        this.postFilter = other.postFilter;
+        this.matchers = matchers;
+        this.filter = other.filter;
 
         // TODO: merging of filters
     }
-
-    /*
-    public WorldView(WorldView<?> other, FilterSet filters)
-    {
-        this.store = other.store;
-        this.bbox = other.bbox;
-        // TODO: types
-        this.filters = filters;
-    }
-     */
-
-    /*
-    @Override public boolean isEmpty()
-    {
-        return iterator().hasNext();
-    }
-     */
 
     public int types()
     {
@@ -98,16 +81,16 @@ public class WorldView<T extends Feature> implements Features<T>
      */
     private Features<?> select(int newTypes, int indexesCovered, String query)
     {
-        MatcherSet newFilters;
+        MatcherSet newMatchers;
         if(query != null)
         {
-            newFilters = store.getMatchers(query);
-            newTypes &= types & newFilters.types();
+            newMatchers = store.getMatchers(query);
+            newTypes &= types & newMatchers.types();
             if(newTypes == 0) return EmptyView.ANY;
 
-            if(filters != MatcherSet.ALL)
+            if(matchers != MatcherSet.ALL)
             {
-                newFilters = filters.and(newTypes, newFilters);
+                newMatchers = matchers.and(newTypes, newMatchers);
             }
         }
         else
@@ -115,13 +98,13 @@ public class WorldView<T extends Feature> implements Features<T>
             newTypes &= types;
             if (newTypes == types) return this;
             if (newTypes == 0) return EmptyView.ANY;
-            newFilters = filters;
+            newMatchers = matchers;
         }
-        if(newTypes != (newFilters.types() & indexesCovered))
+        if(newTypes != (newMatchers.types() & indexesCovered))
         {
-            newFilters = newFilters.and(newTypes);
+            newMatchers = newMatchers.and(newTypes);
         }
-        return new WorldView<>(this, newTypes, newFilters);
+        return new WorldView<>(this, newTypes, newMatchers);
     }
 
     @Override public long count()
@@ -190,26 +173,26 @@ public class WorldView<T extends Feature> implements Features<T>
             // appropriate for its conceptual type
             if((featureType & NODES) != 0)
             {
-                if(!feature.matches(filters.nodes())) return false;
+                if(!feature.matches(matchers.nodes())) return false;
             }
             else if((featureType & NONAREA_WAYS) != 0)
             {
-                if(!feature.matches(filters.ways())) return false;
+                if(!feature.matches(matchers.ways())) return false;
             }
             else if((featureType & AREAS) != 0)
             {
-                if(!feature.matches(filters.areas())) return false;
+                if(!feature.matches(matchers.areas())) return false;
             }
             else
             {
                 assert (featureType & NONAREA_RELATIONS) != 0;
-                if(!feature.matches(filters.relations())) return false;
+                if(!feature.matches(matchers.relations())) return false;
             }
 
             // If this view has a spatial filter, the feature must match
             // that one as well
-            if(postFilter == null) return true;
-            return feature.matches(postFilter);
+            if(filter == null) return true;
+            return filter.accept(feature);
         }
         return false;
     }

@@ -65,6 +65,7 @@ public class TypeBits
     public static final int WAYS         = 0b00000000_11110000_00000000_11110000;
     public static final int RELATIONS    = 0b00001111_00000000_00001111_00000000;
     public static final int AREAS        = 0b00001010_10100000_00001010_10100000;
+    public static final int WAYNODE_FLAGGED     = 0b00000000_11110101_00000000_00000000;
     public static final int NONAREA_WAYS        = WAYS & (~AREAS);
     public static final int NONAREA_RELATIONS   = RELATIONS & (~AREAS);
     public static final int ALL                 = NODES | WAYS | RELATIONS;

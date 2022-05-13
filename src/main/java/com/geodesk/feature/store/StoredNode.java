@@ -5,6 +5,7 @@ import com.geodesk.feature.Features;
 import com.geodesk.feature.Node;
 import com.geodesk.feature.Way;
 import com.geodesk.core.Box;
+import com.geodesk.feature.query.EmptyView;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 
@@ -41,6 +42,7 @@ public class StoredNode extends StoredFeature implements Node
 			// If coordinates are 0/0, return an empty bbox
 			// (to accommodate missing nodes)
 			// TODO: 0/0 could also be the Null Island weather buoy
+			// TODO: use x == Integer.MIN to indicate placeholder node
 			return new Box();
 		}
 		return new Box(x, y);
@@ -63,6 +65,8 @@ public class StoredNode extends StoredFeature implements Node
 
 	@Override public Features<Way> parentWays()
 	{
+		if ((buf.getInt(ptr) & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.WAYS;
+
 		// TODO: query ways and area way; must have way-node flag set
 		//  bbox is single pixel
 		//  candidate way must have node as way-node
