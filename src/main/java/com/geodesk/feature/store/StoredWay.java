@@ -119,6 +119,16 @@ public class StoredWay extends StoredFeature implements Way
 			(flags & FeatureFlags.RELATION_MEMBER_FLAG), Matcher.ALL);
 	}
 
+	Iterator<Node> fastFeatureNodeIterator(Matcher matcher)
+	{
+		int flags = buf.getInt(ptr);
+		assert (flags & FeatureFlags.WAYNODE_FLAG) != 0;
+		int ppBody = ptr + 12;
+		int pBody = buf.getInt(ppBody) + ppBody;
+		return new Iter(store, buf, pBody - 4 -
+			(flags & FeatureFlags.RELATION_MEMBER_FLAG), matcher);
+	}
+
 	@Override public int[] toXY()
 	{
 		int flags = buf.getInt(ptr);
@@ -144,7 +154,7 @@ public class StoredWay extends StoredFeature implements Way
 		// TODO: LinearRing?
 	}
 
-	private XYIterator iterXY(int flags)
+	public XYIterator iterXY(int flags)
 	{
 		int ppBody = ptr + 12;
 		int pBody = buf.getInt(ppBody) + ppBody;

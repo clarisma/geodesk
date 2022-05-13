@@ -1,11 +1,11 @@
 package com.geodesk.feature.store;
 
-import com.geodesk.feature.FeatureType;
-import com.geodesk.feature.Features;
-import com.geodesk.feature.Node;
-import com.geodesk.feature.Way;
+import com.geodesk.feature.*;
 import com.geodesk.core.Box;
+import com.geodesk.feature.match.*;
 import com.geodesk.feature.query.EmptyView;
+import com.geodesk.feature.query.WorldView;
+import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 
@@ -66,11 +66,11 @@ public class StoredNode extends StoredFeature implements Node
 	@Override public Features<Way> parentWays()
 	{
 		if ((buf.getInt(ptr) & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.WAYS;
-
-		// TODO: query ways and area way; must have way-node flag set
-		//  bbox is single pixel
-		//  candidate way must have node as way-node
-		return null;
+		int types = TypeBits.WAYS & TypeBits.WAYNODE_FLAGGED;
+		final Matcher matcher = new TypeMatcher(types, Matcher.ALL);
+		return new WorldView<>(store, types,
+			bounds(), new MatcherSet(types, matcher),
+			new ParentWayFilter(id()));
 	}
 
 	@Override protected int getRelationTablePtr()
@@ -79,4 +79,19 @@ public class StoredNode extends StoredFeature implements Node
 		int ppBody = ptr + 12;
 		return buf.getInt(ppBody) + ppBody;
 	}
+
+	private static class ParentWayFilter extends IdMatcher implements Filter
+	{
+		public ParentWayFilter(long nodeId)
+		{
+			super(0, nodeId);
+		}
+
+		@Override public boolean accept(Feature feature)
+		{
+			StoredWay way = (StoredWay)feature;
+			return way.fastFeatureNodeIterator(this).hasNext();
+		}
+	}
+
 }

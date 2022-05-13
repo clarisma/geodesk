@@ -18,6 +18,13 @@ import static com.geodesk.feature.match.TypeBits.*;
 // non-Relation queries should return areas that are highways,
 //  as well as ways that are railway or highway
 
+// TODO: multiple bboxes
+//  bbox should not be intersected; a query with 2 bboxes simply means
+//  "this feature must intersect both bboxes" -- this does not mean that
+//  the bboxes themselves must intersect
+//  (rarely used, only needed to fulfill the API contract)
+
+
 public class WorldView<T extends Feature> implements Features<T>
 {
     protected final FeatureStore store;
@@ -37,7 +44,16 @@ public class WorldView<T extends Feature> implements Features<T>
         filter = null;
     }
 
-    public WorldView(WorldView<?> other, Bounds bbox)
+    public WorldView(FeatureStore store, int types, Bounds bbox, MatcherSet matchers, Filter filter)
+    {
+        this.store = store;
+        this.types= types;
+        this.bbox = bbox;
+        this.matchers = matchers;
+        this.filter = filter;
+    }
+
+    private WorldView(WorldView<?> other, Bounds bbox)
     {
         this.store = other.store;
         this.types = other.types;
@@ -47,7 +63,7 @@ public class WorldView<T extends Feature> implements Features<T>
     }
 
 
-    public WorldView(WorldView<?> other, int types, MatcherSet matchers)
+    private WorldView(WorldView<?> other, int types, MatcherSet matchers)
     {
         this.store = other.store;
         this.bbox = other.bbox;
