@@ -1,8 +1,10 @@
 package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
+import com.geodesk.feature.Filter;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureFlags;
+import com.geodesk.feature.store.StoredNode;
 
 import java.nio.ByteBuffer;
 
@@ -15,16 +17,18 @@ public class RTreeQueryTask extends QueryTask
     protected final ByteBuffer buf;
     protected final int ppTree;
     protected final int bboxFlags;
-    protected final Matcher filter;
+    protected final Matcher matcher;
+    protected final Filter filter;
     protected final RTreeQueryTask next;
 
-    public RTreeQueryTask(Query query, ByteBuffer buf, int ppTree, int bboxFlags, Matcher filter, RTreeQueryTask next)
+    public RTreeQueryTask(Query query, ByteBuffer buf, int ppTree, int bboxFlags, Matcher matcher, RTreeQueryTask next)
     {
         super(query);
         this.buf = buf;
         this.ppTree = ppTree;
         this.bboxFlags = bboxFlags;
-        this.filter = filter;
+        this.matcher = matcher;
+        this.filter = query.filter;
         this.next = next;
     }
 
@@ -161,9 +165,14 @@ public class RTreeQueryTask extends QueryTask
 
                     // log.debug("Feature bbox matched");
                     int pFeature = p + 16;
-                    if (filter.accept(buf, pFeature))
+                    if (matcher.accept(buf, pFeature))
                     {
-                        results.add(pFeature | ((flags >>> 3) & 3) | dupeFlag);
+                        // TODO: We should return results as Features rather than pointers,
+                        //  since we are creating a Feature anyway in order to apply a filter
+                        if(filter == null || filter.accept(query.store().getFeature(buf, pFeature)))
+                        {
+                            results.add(pFeature | ((flags >>> 3) & 3) | dupeFlag);
+                        }
                     }
                 }
                 else
@@ -198,9 +207,15 @@ public class RTreeQueryTask extends QueryTask
                 if(!(x > maxX || y > maxY || x < minX || y < minY))
                 {
                     int pFeature = p+8;
-                    if(filter.accept(buf, pFeature))
+                    if(matcher.accept(buf, pFeature))
                     {
-                        results.add(pFeature);
+                        // TODO: We should return results as Features rather than pointers,
+                        //  since we are creating a Feature anyway in order to apply a filter
+                        if(filter == null || filter.accept(
+                            new StoredNode(query.store(), buf, pFeature)))
+                        {
+                            results.add(pFeature);
+                        }
                     }
                 }
                 if((flags & 1) != 0) break;

@@ -212,4 +212,5 @@ public interface Features<T extends Feature> extends Iterable<T>
         return false;
     }
 
+    Features<T> select(Filter filter);
 }

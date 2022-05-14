@@ -1,6 +1,7 @@
 package com.geodesk.feature.query;
 
 import com.geodesk.feature.*;
+import com.geodesk.feature.filter.AndFilter;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.geom.Bounds;
@@ -79,4 +80,10 @@ public class MemberView<T extends Feature> implements Features<T>
     {
         return (Iterator<T>)new MemberIterator(store, buf, pTable, filter);
     }
+
+    @Override public Features<T> select(Filter filter)
+    {
+        throw new RuntimeException("todo");
+    }
+
 }

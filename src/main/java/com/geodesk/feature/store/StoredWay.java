@@ -119,6 +119,16 @@ public class StoredWay extends StoredFeature implements Way
 			(flags & FeatureFlags.RELATION_MEMBER_FLAG), Matcher.ALL);
 	}
 
+	Iterator<Node> fastFeatureNodeIterator(Matcher matcher)
+	{
+		int flags = buf.getInt(ptr);
+		assert (flags & FeatureFlags.WAYNODE_FLAG) != 0;
+		int ppBody = ptr + 12;
+		int pBody = buf.getInt(ppBody) + ppBody;
+		return new Iter(store, buf, pBody - 4 -
+			(flags & FeatureFlags.RELATION_MEMBER_FLAG), matcher);
+	}
+
 	@Override public int[] toXY()
 	{
 		int flags = buf.getInt(ptr);
@@ -144,7 +154,7 @@ public class StoredWay extends StoredFeature implements Way
 		// TODO: LinearRing?
 	}
 
-	private XYIterator iterXY(int flags)
+	public XYIterator iterXY(int flags)
 	{
 		int ppBody = ptr + 12;
 		int pBody = buf.getInt(ppBody) + ppBody;
@@ -237,10 +247,20 @@ public class StoredWay extends StoredFeature implements Way
 				{
 					if ((node & NF_DIFFERENT_TILE) != 0)
 					{
-						// TODO: wide tip delta
+						// TODO: test wide tip delta
 						pNext -= 2;
 						int tipDelta = buf.getShort(pNext);
-						tipDelta >>= 1;     // signed
+						if((tipDelta & 1) != 0)
+						{
+							// wide TIP delta
+							pNext -= 2;
+							tipDelta = (buf.getShort(pNext) << 15) |
+								((tipDelta >> 1) & 0x7fff);
+						}
+						else
+						{
+							tipDelta >>= 1;     // signed
+						}
 						tip += tipDelta;
 						int tilePage = store.fetchTile(tip);
 						foreignBuf = store.bufferOfPage(tilePage);
@@ -256,7 +276,7 @@ public class StoredWay extends StoredFeature implements Way
 						// TODO: simplify alignment rules!
 				}
 				pNext -= 4;
-				pNext &= -1 + (node & NF_LAST);
+				pNext &= -1 + (node & NF_LAST);		// set pNext to 0 if this is the last node
 				if(filter.accept(nodeBuf, pNode))
 				{
 					featureNode = new StoredNode(store, nodeBuf, pNode);

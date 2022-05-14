@@ -2,6 +2,7 @@ package com.geodesk.feature.query;
 
 import com.geodesk.core.Box;
 import com.geodesk.feature.*;
+import com.geodesk.feature.filter.AndFilter;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredFeature;
@@ -17,6 +18,13 @@ import static com.geodesk.feature.match.TypeBits.*;
 // wa[role=a][highway], w[role=b][railway]
 // non-Relation queries should return areas that are highways,
 //  as well as ways that are railway or highway
+
+// TODO: multiple bboxes
+//  bbox should not be intersected; a query with 2 bboxes simply means
+//  "this feature must intersect both bboxes" -- this does not mean that
+//  the bboxes themselves must intersect
+//  (rarely used, only needed to fulfill the API contract)
+
 
 public class WorldView<T extends Feature> implements Features<T>
 {
@@ -37,7 +45,16 @@ public class WorldView<T extends Feature> implements Features<T>
         filter = null;
     }
 
-    public WorldView(WorldView<?> other, Bounds bbox)
+    public WorldView(FeatureStore store, int types, Bounds bbox, MatcherSet matchers, Filter filter)
+    {
+        this.store = store;
+        this.types= types;
+        this.bbox = bbox;
+        this.matchers = matchers;
+        this.filter = filter;
+    }
+
+    private WorldView(WorldView<?> other, Bounds bbox)
     {
         this.store = other.store;
         this.types = other.types;
@@ -46,16 +63,24 @@ public class WorldView<T extends Feature> implements Features<T>
         this.filter = other.filter; // TODO: clip bbox based on spatial filters
     }
 
-
-    public WorldView(WorldView<?> other, int types, MatcherSet matchers)
+    // TODO: decide if matchers should be merged or replaced
+    //  (Tableview merges)
+    private WorldView(WorldView<?> other, int types, MatcherSet matchers)
     {
         this.store = other.store;
         this.bbox = other.bbox;
         this.types = types;
         this.matchers = matchers;
         this.filter = other.filter;
+    }
 
-        // TODO: merging of filters
+    private WorldView(WorldView<?> other, Filter filter)
+    {
+        this.store = other.store;
+        this.bbox = other.bbox;
+        this.types = other.types;
+        this.matchers = other.matchers;
+        this.filter = filter;
     }
 
     public int types()
@@ -195,6 +220,13 @@ public class WorldView<T extends Feature> implements Features<T>
             return filter.accept(feature);
         }
         return false;
+    }
+
+    @Override public Features<T> select(Filter filter)
+    {
+        // TODO: bbox!
+        if(this.filter != null) filter = new AndFilter(this.filter, filter);
+        return new WorldView<>(this, filter);
     }
 
     @Override public Iterator<T> iterator()

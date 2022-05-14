@@ -25,16 +25,22 @@ public class WayNodeView extends TableView<Node>
         flags = (buf.get(ptr) & 0xff) | INCLUDE_GEOMETRY_NODES;
     }
 
-    public WayNodeView(FeatureStore store, ByteBuffer buf, int ptr, Matcher filter)
+    public WayNodeView(FeatureStore store, ByteBuffer buf, int ptr, Matcher matcher)
     {
-        super(store, buf, ptr, filter);
+        super(store, buf, ptr, matcher);
         flags = buf.get(ptr) & 0xff;
     }
 
-    public WayNodeView(WayNodeView other, Matcher filter, int flags)
+    public WayNodeView(WayNodeView other, Matcher matcher, int flags)
+    {
+        super(other, matcher);
+        this.flags = flags;
+    }
+
+    public WayNodeView(WayNodeView other, Filter filter)
     {
         super(other, filter);
-        this.flags = flags;
+        this.flags = other.flags;
     }
 
     @Override public Features<?> features(String query)
@@ -55,24 +61,9 @@ public class WayNodeView extends TableView<Node>
         return new WayNodeView(this, filters.nodes(), flags & ~INCLUDE_GEOMETRY_NODES);
     }
 
-    @Override public Features<Way> ways()
+    @Override public Features<Node> select(Filter filter)
     {
-        return EmptyView.WAYS;
-    }
-
-    @Override public Features<Way> ways(String query)
-    {
-        return EmptyView.WAYS;
-    }
-
-    @Override public Features<Relation> relations()
-    {
-        return EmptyView.RELATIONS;
-    }
-
-    @Override public Features<Relation> relations(String query)
-    {
-        return EmptyView.RELATIONS;
+        return new WayNodeView(this, filter);
     }
 
     private int bodyPtr()

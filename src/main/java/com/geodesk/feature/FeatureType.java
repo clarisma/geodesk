@@ -1,7 +1,7 @@
 package com.geodesk.feature;
 
 /**
- * An enum representing the three feature types: NODE, WAY and AREA.
+ * An enum representing the three feature types: NODE, WAY and RELATION.
  */
 // TODO: add toClass()
 public enum FeatureType

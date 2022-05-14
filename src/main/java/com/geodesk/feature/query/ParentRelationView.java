@@ -12,28 +12,21 @@ import com.geodesk.geom.Bounds;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
-public class ParentRelationView implements Features<Relation>
+public class ParentRelationView extends TableView<Relation>
 {
-    private final FeatureStore store;
-    private final ByteBuffer buf;
-    private final int ptr;
-    private final Matcher filter;
-
-
     public ParentRelationView(FeatureStore store, ByteBuffer buf, int ptr)
     {
-        this.store = store;
-        this.buf = buf;
-        this.ptr = ptr;
-        filter = Matcher.ALL;
+        super(store, buf, ptr, Matcher.ALL);
     }
 
-    public ParentRelationView(ParentRelationView other, Matcher filter)
+    public ParentRelationView(ParentRelationView other, Matcher matcher)
     {
-        this.store = other.store;
-        this.buf = other.buf;
-        this.ptr = other.ptr;
-        this.filter = filter;
+        super(other, matcher);
+    }
+
+    public ParentRelationView(ParentRelationView other, Filter filter)
+    {
+        super(other, filter);
     }
 
     @Override public boolean isEmpty()
@@ -47,26 +40,6 @@ public class ParentRelationView implements Features<Relation>
         return relations(query);
     }
 
-    @Override public Features<Node> nodes()
-    {
-        return (Features<Node>) EmptyView.ANY;
-    }
-
-    @Override public Features<Node> nodes(String filter)
-    {
-        return (Features<Node>) EmptyView.ANY;
-    }
-
-    @Override public Features<Way> ways()
-    {
-        return (Features<Way>) EmptyView.ANY;
-    }
-
-    @Override public Features<Way> ways(String filter)
-    {
-        return (Features<Way>) EmptyView.ANY;
-    }
-
     @Override public Features<Relation> relations()
     {
         return this;
@@ -77,14 +50,12 @@ public class ParentRelationView implements Features<Relation>
         MatcherSet filters = store.getMatchers(query);
         if((filters.types() & TypeBits.RELATIONS) == 0) return EmptyView.RELATIONS;
         Matcher newFilter = filters.relations();
-        if(filter != Matcher.ALL) newFilter = new AndMatcher(filter, newFilter);
         return new ParentRelationView(this, newFilter);
     }
 
-    @Override public Features<Relation> in(Bounds bbox)
+    @Override public Features<Relation> select(Filter filter)
     {
-        // TODO
-        return null;
+        return new ParentRelationView(this, filter);
     }
 
     @Override public Iterator<Relation> iterator()
@@ -140,10 +111,14 @@ public class ParentRelationView implements Features<Relation>
                     pRel = (pCurrent & 0xffff_fffe) + ((rel >> 2) << 1);
                         // TODO: simplify alignment rules!
                 }
-                if (filter.accept(relBuf, pRel))
+                if (matcher.accept(relBuf, pRel))
                 {
-                    current = new StoredRelation(store, relBuf, pRel);
-                    return;
+                    Relation rel = new StoredRelation(store, relBuf, pRel);
+                    if(filter == null || filter.accept(rel))
+                    {
+                        current = rel;
+                        return;
+                    }
                 }
             }
         }

@@ -18,9 +18,9 @@ public class TileQueryTask extends QueryTask
     private int bboxFlags;
     private int tilesProcessed;
 
-    public TileQueryTask(Query executor, int tile, int tip)
+    public TileQueryTask(Query query, int tile, int tip)
     {
-        super(executor);
+        super(query);
         this.tile = tile;
         this.tip = tip;
     }
@@ -97,7 +97,7 @@ public class TileQueryTask extends QueryTask
             bboxFlags = ((query.maxY() > north) ? FeatureFlags.MULTITILE_NORTH : 0) |
                 ((query.minX() < west) ? FeatureFlags.MULTITILE_WEST : 0);
 
-            MatcherSet filters = query.filters();
+            MatcherSet filters = query.matchers();
             RTreeQueryTask task = null;
 
             /*

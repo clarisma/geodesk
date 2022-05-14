@@ -76,4 +76,6 @@ public class EmptyView<T extends Feature> implements Features<T>
     {
         return Collections.emptyIterator();
     }
+
+    @Override public Features<T> select(Filter filter) { return this; }
 }

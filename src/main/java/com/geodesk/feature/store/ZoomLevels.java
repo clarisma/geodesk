@@ -1,5 +1,8 @@
 package com.geodesk.feature.store;
 
+/**
+ * Methods for dealing with zoom levels
+ */
 public class ZoomLevels 
 {
 	public static final String DEFAULT = "4,6,8,10,12";
