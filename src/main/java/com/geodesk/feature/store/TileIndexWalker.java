@@ -20,7 +20,6 @@ public class TileIndexWalker
     private int currentTile;
     private int currentTip;
     // private int currentTilePage;
-    // TODO: tip
 
     private static class Level
     {

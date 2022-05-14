@@ -2,6 +2,7 @@ package com.geodesk.feature.query;
 
 import com.geodesk.core.Box;
 import com.geodesk.feature.*;
+import com.geodesk.feature.filter.AndFilter;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredFeature;
@@ -62,7 +63,8 @@ public class WorldView<T extends Feature> implements Features<T>
         this.filter = other.filter; // TODO: clip bbox based on spatial filters
     }
 
-
+    // TODO: decide if matchers should be merged or replaced
+    //  (Tableview merges)
     private WorldView(WorldView<?> other, int types, MatcherSet matchers)
     {
         this.store = other.store;
@@ -70,8 +72,15 @@ public class WorldView<T extends Feature> implements Features<T>
         this.types = types;
         this.matchers = matchers;
         this.filter = other.filter;
+    }
 
-        // TODO: merging of filters
+    private WorldView(WorldView<?> other, Filter filter)
+    {
+        this.store = other.store;
+        this.bbox = other.bbox;
+        this.types = other.types;
+        this.matchers = other.matchers;
+        this.filter = filter;
     }
 
     public int types()
@@ -211,6 +220,13 @@ public class WorldView<T extends Feature> implements Features<T>
             return filter.accept(feature);
         }
         return false;
+    }
+
+    @Override public Features<T> select(Filter filter)
+    {
+        // TODO: bbox!
+        if(this.filter != null) filter = new AndFilter(this.filter, filter);
+        return new WorldView<>(this, filter);
     }
 
     @Override public Iterator<T> iterator()

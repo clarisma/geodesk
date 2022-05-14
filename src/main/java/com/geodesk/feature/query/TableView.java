@@ -27,6 +27,8 @@ public abstract class TableView<T extends Feature> implements Features<T>
         this.filter = null;
     }
 
+    // TODO: decide if matchers should be merged or replaced
+    //  (WorldView replaces)
     public TableView(TableView other, Matcher matcher)
     {
         this.store = other.store;

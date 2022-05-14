@@ -212,8 +212,5 @@ public interface Features<T extends Feature> extends Iterable<T>
         return false;
     }
 
-    default Features<T> select(Filter filter)
-    {
-        return this;        // TODO: placeholder
-    }
+    Features<T> select(Filter filter);
 }
