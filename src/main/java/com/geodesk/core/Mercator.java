@@ -1,8 +1,6 @@
 package com.geodesk.core;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.*;
 import org.locationtech.jts.operation.distance.DistanceOp;
 
 /**
@@ -213,17 +211,50 @@ public class Mercator
 		return new Envelope(xFromLon(lon1), xFromLon(lon2),
 			yFromLat(lat1),	yFromLat(lat2));
 	}
-	
+
+	/*
 	public static double averageLatitude(Geometry geom)
 	{
 		Envelope env = geom.getEnvelopeInternal();
 		return (env.getMinY() + env.getMaxY()) / 2;
 	}
+	 */
 
+	/*
 	// TODO: remove?
 	public static Box bounds(double lon1, double lat1, double lon2, double lat2)
 	{
 		return new Box((int)xFromLon(lon1), (int)yFromLat(lat1),
 			(int)xFromLon(lon2), (int)yFromLat(lat2));
+	}
+	 */
+
+	/**
+	 * Converts the WGS84 (longitude/latitude) coordinates of a
+	 * {@link Geometry} into Mercator projection. The Geometry is
+	 * modified in-place.
+	 *
+	 * @param geom the `Geometry` whose coordinates to project
+	 */
+	public static void project(Geometry geom)
+	{
+		geom.apply(new CoordinateSequenceFilter()
+		{
+			@Override public void filter(CoordinateSequence seq, int i)
+			{
+				seq.setOrdinate(i,0,xFromLon(seq.getX(i)));
+				seq.setOrdinate(i,1,yFromLat(seq.getY(i)));
+			}
+
+			@Override public boolean isDone()
+			{
+				return false;
+			}
+
+			@Override public boolean isGeometryChanged()
+			{
+				return true;
+			}
+		});
 	}
 }

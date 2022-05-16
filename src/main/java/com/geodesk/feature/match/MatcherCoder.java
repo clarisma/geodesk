@@ -31,6 +31,9 @@ import static org.objectweb.asm.Opcodes.*;
  *
  */
 
+// TODO: Define matchers as hidden classes? (requires Java 15+)
+//  Makes class unloading easier (no ClassLoader required)
+
 /*
 	IMPLEMENTATION NOTES
    	════════════════════
