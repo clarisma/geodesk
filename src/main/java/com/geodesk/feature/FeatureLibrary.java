@@ -52,4 +52,10 @@ public class FeatureLibrary extends WorldView<Feature>
     {
         store.close();
     }
+
+    // TODO: remove from public API
+    public FeatureStore store()
+    {
+        return store;
+    }
 }

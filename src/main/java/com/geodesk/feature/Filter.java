@@ -1,5 +1,6 @@
 package com.geodesk.feature;
 
+import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Geometry;
 
 /**
@@ -22,4 +23,6 @@ public interface Filter
     {
         return true;
     }
+
+    default Bounds bounds() { return null; }
 }

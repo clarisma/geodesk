@@ -1,5 +1,6 @@
 package com.geodesk.feature;
 
+import com.geodesk.feature.filter.ConnectedFilter;
 import com.geodesk.feature.filter.WithinFilter;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
@@ -52,5 +53,30 @@ public class Filters
     public static Filter within(PreparedGeometry prepared)
     {
         return new WithinFilter(prepared);
+    }
+
+    /**
+     * Creates a `Filter` that accepts a feature that has at least one common node
+     * with the given `Feature`.
+     *
+     * @param f the `Feature` whose nodes to check against
+     * @return
+     */
+    public static Filter connectedTo(Feature f)
+    {
+        return new ConnectedFilter(f);
+    }
+
+    /**
+     * Creates a `Filter` that accepts a feature that has at least one common
+     * vertex with the given `Geometry`. Coordinates of the `Geometry` are
+     * rounded to integers.
+     *
+     * @param geom the `Geometry` whose vertexes to check against
+     * @return
+     */
+    public static Filter connectedTo(Geometry geom)
+    {
+        return new ConnectedFilter(geom);
     }
 }

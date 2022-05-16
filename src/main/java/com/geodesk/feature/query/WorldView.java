@@ -74,12 +74,12 @@ public class WorldView<T extends Feature> implements Features<T>
         this.filter = other.filter;
     }
 
-    private WorldView(WorldView<?> other, Filter filter)
+    private WorldView(WorldView<?> other, Bounds bbox, Filter filter)
     {
         this.store = other.store;
-        this.bbox = other.bbox;
         this.types = other.types;
         this.matchers = other.matchers;
+        this.bbox = bbox;
         this.filter = filter;
     }
 
@@ -224,9 +224,10 @@ public class WorldView<T extends Feature> implements Features<T>
 
     @Override public Features<T> select(Filter filter)
     {
-        // TODO: bbox!
+        Bounds filterBounds = filter.bounds();
         if(this.filter != null) filter = new AndFilter(this.filter, filter);
-        return new WorldView<>(this, filter);
+        // TODO: proper combining of bboxes
+        return new WorldView<>(this, filterBounds != null ? filterBounds : bbox, filter);
     }
 
     @Override public Iterator<T> iterator()

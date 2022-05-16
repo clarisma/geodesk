@@ -1,8 +1,10 @@
 package com.geodesk.core;	// TODO: rename to util?
 
+import com.geodesk.feature.store.WayCoordinateSequence;
 import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 
 /**
  * An axis-aligned bounding box. A `Box` represents minimum and maximum
@@ -440,4 +442,19 @@ public class Box implements Bounds
 			Integer.MIN_VALUE,Integer.MIN_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE);
 	}
 
+	public Geometry toGeometry(GeometryFactory factory)
+	{
+		int[] coords = new int[10];
+		coords[0] = minX;
+		coords[1] = minY;
+		coords[2] = maxX;
+		coords[3] = minY;
+		coords[4] = maxX;
+		coords[5] = maxY;
+		coords[6] = minX;
+		coords[7] = maxY;
+		coords[8] = minX;
+		coords[9] = minY;
+		return factory.createPolygon(new WayCoordinateSequence(coords));
+	}
 }
