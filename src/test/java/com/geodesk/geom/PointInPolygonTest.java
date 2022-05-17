@@ -1,7 +1,6 @@
 package com.geodesk.geom;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.clarisma.common.util.Log;
 import org.junit.Test;
 import org.locationtech.jts.util.Stopwatch;
 
@@ -10,8 +9,6 @@ import static com.geodesk.geom.PointInPolygon.*;
 
 public class PointInPolygonTest
 {
-    public static final Logger log = LogManager.getLogger();
-
     static final int[] P =
     {
         -400, 200,
@@ -87,12 +84,12 @@ public class PointInPolygonTest
 
     private void testVertices(String s, int[] p)
     {
-        log.debug(s);
+        Log.debug(s);
         for(int i=0; i<p.length; i+=2)
         {
             int x = p[i];
             int y = p[i+1];
-            log.debug("{}, {}: {}", x,y, isInside(p,x,y));
+            Log.debug("%d, %d: %s", x,y, isInside(p,x,y));
             // assertTrue(isInside(P,x,y));
         }
     }
@@ -150,7 +147,7 @@ public class PointInPolygonTest
             {
                 testPointsFast(P, points);
             }
-            log.debug("Run {}: {} ms", run, timer.stop());
+            Log.debug("Run %d: %d ms", run, timer.stop());
             timer.reset();
         }
 
@@ -164,7 +161,7 @@ public class PointInPolygonTest
             int x = points[i];
             int y = points[i+1];
             int inside = points[i+2];
-            log.debug("{}, {}: {}", x,y, isInside(polygon,x,y));
+            Log.debug("%d, %d: %s", x,y, isInside(polygon,x,y));
             // assertEquals(inside != 0, isInside(polygon, x,y));
         }
     }

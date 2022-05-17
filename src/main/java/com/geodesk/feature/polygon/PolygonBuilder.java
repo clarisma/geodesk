@@ -5,8 +5,6 @@ import com.geodesk.feature.Feature;
 import com.geodesk.feature.Relation;
 import com.geodesk.feature.Way;
 import com.geodesk.feature.store.WayCoordinateSequence;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LinearRing;

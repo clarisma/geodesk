@@ -1,7 +1,7 @@
 package com.clarisma.common.store;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import com.clarisma.common.util.Log;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -12,8 +12,6 @@ import static org.junit.Assert.*;
 
 public class BlobStoreTest
 {
-    private static final Logger log = LogManager.getLogger();
-
     public static class TestBlobStore extends BlobStore
     {
         public TestBlobStore(String filename)
@@ -26,7 +24,7 @@ public class BlobStoreTest
             beginTransaction();
             int blob = allocateBlob((pages << pageSizeShift) - 4);
             commit();
-            log.debug("Allocated blob with {} pages at {}", pages, blob);
+            Log.debug("Allocated blob with %d pages at %d", pages, blob);
             return blob;
         }
 
@@ -38,7 +36,7 @@ public class BlobStoreTest
                 freeBlob(blobs[i]);
             }
             commit();
-            log.debug("Freed blobs at {}", blobs);
+            Log.debug("Freed blobs at %d", blobs);
         }
     }
 

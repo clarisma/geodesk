@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.geodesk.core.Box;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public abstract class RTree
 {

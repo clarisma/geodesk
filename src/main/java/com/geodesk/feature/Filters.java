@@ -1,6 +1,7 @@
 package com.geodesk.feature;
 
 import com.geodesk.feature.filter.ConnectedFilter;
+import com.geodesk.feature.filter.FalseFilter;
 import com.geodesk.feature.filter.WithinFilter;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
@@ -47,7 +48,7 @@ public class Filters
 
     public static Filter within(Geometry geom)
     {
-        return within(PreparedGeometryFactory.prepare(geom));
+        return geom==null ? FalseFilter.INSTANCE : within(PreparedGeometryFactory.prepare(geom));
     }
 
     public static Filter within(PreparedGeometry prepared)

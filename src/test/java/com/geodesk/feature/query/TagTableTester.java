@@ -8,8 +8,6 @@ import com.geodesk.gol.compiler.STagTable;
 import com.clarisma.common.fab.FabException;
 import com.clarisma.common.fab.FabReader;
 import com.clarisma.common.parser.TagsParser;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.map.primitive.MutableObjectIntMap;
 import org.eclipse.collections.api.map.primitive.ObjectIntMap;
 import org.eclipse.collections.impl.factory.primitive.ObjectIntMaps;
@@ -28,8 +26,6 @@ public class TagTableTester
 	private Map<String, Map<String,Object>> cases = new HashMap<>();
 	private ObjectIntMap<String> stringTable;
 	private Random random = new Random(); 
-	
-	public static final Logger log = LogManager.getLogger();
 	
 	public TagTableTester() throws FabException, IOException
 	{

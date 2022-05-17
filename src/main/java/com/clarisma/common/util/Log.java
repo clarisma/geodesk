@@ -18,6 +18,11 @@ public class Log
         }
     }
 
+    public static void debug(Object arg)
+    {
+        log("%s", arg);
+    }
+
     public static void debug(String format, Object... args)
     {
         log(format, args);

@@ -1,8 +1,7 @@
 package com.geodesk.geom;
 
+import com.clarisma.common.util.Log;
 import com.geodesk.core.Box;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -10,8 +9,6 @@ import static java.lang.Integer.*;
 
 public class BoxTest
 {
-    public static final Logger log = LogManager.getLogger();
-
     private void testContain(Box box, int x, int y, boolean shouldContain)
     {
         assertEquals(shouldContain, box.contains(x,y));
@@ -26,23 +23,23 @@ public class BoxTest
     @Test public void test()
     {
         Box box = Box.ofWorld();
-        log.debug("World: {}", box);
+        Log.debug("World: %s", box);
         box.buffer(10);
-        log.debug("World + 10: {}", box);
+        Log.debug("World + 10: %s", box);
         box.buffer(-10);
-        log.debug("World - 10: {}", box);
+        Log.debug("World - 10: %s", box);
         box.buffer(Integer.MIN_VALUE);
-        log.debug("World - 10 - max: {}", box);
+        Log.debug("World - 10 - max: %s", box);
 
         box = new Box();
-        log.debug("Should be empty: {}", box);
+        Log.debug("Should be empty: %s", box);
         box.expandToInclude(90, 100);
-        log.debug("Should contain 90,100: {}", box);
+        Log.debug("Should contain 90,100: %s", box);
         box.expandToInclude(-4000, -8000);
-        log.debug("Added -4K,-8K: {}", box);
+        Log.debug("Added -4K,-8K: %s", box);
         box.buffer(200);
-        log.debug(" + 200: {}", box);
-        log.debug(" + 200: {}", box);
+        Log.debug(" + 200: %s", box);
+        Log.debug(" + 200: %s", box);
         testContain(box, 0,0, true);
         testContain(box, -7000,-3000, false);
 
@@ -123,11 +120,11 @@ public class BoxTest
     public void testTranslate()
     {
         Box h = new Box(H);
-        log.debug(h);
+        Log.debug(h);
         h.translate(MIN_VALUE,0);
-        log.debug(h);
+        Log.debug(h);
         h.translate(MIN_VALUE,0);
-        log.debug(h);
+        Log.debug(h);
     }
 
 }

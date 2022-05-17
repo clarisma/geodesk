@@ -4,8 +4,6 @@ import com.clarisma.common.pbf.PbfBuffer;
 import com.clarisma.common.pbf.PbfException;
 import com.clarisma.common.util.Log;
 import com.geodesk.feature.Tags;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,10 +1,9 @@
 package com.geodesk.feature.query;
 
+import com.clarisma.common.util.Log;
 import com.geodesk.feature.match.MatcherCoder;
 import com.geodesk.feature.match.MatcherParser;
 import com.geodesk.feature.match.MatcherXmlWriter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.map.primitive.MutableObjectIntMap;
 import org.eclipse.collections.api.map.primitive.ObjectIntMap;
 import org.eclipse.collections.impl.factory.primitive.ObjectIntMaps;
@@ -20,8 +19,6 @@ import java.util.List;
 
 public class QueryParserTest
 {
-    public static final Logger log = LogManager.getLogger();
-
     MatcherParser parser;
     MatcherCoder coder;
     String[] codesToStrings;
@@ -87,7 +84,7 @@ public class QueryParserTest
         {
             parser.parse("na[amenity=pub,bar,cafe,restaurant][local_key != 'banana']");
         }
-        log.info("Parsed {} queries in {} ms", runs, timer.stop());
+        Log.debug("Parsed %d queries in %d ms", runs, timer.stop());
 
     }
 
@@ -104,7 +101,7 @@ public class QueryParserTest
             // parser.parse("w[natural=coastline]");
             bytesEncoded += coder.createMatcherClass("Test", parser.query()).length;
         }
-        log.info("Parsed and coded {} queries in {} ms ({} bytes per class)",
+        Log.debug("Parsed and coded %d queries in %d ms (%d bytes per class)",
             runs, timer.stop(), bytesEncoded / runs);
 
     }

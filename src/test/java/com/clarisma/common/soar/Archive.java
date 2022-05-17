@@ -12,8 +12,6 @@ import static java.nio.file.StandardOpenOption.*;
 
 import com.clarisma.common.io.ByteBufferOutputStream;
 import com.clarisma.common.pbf.PbfOutputStream;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
 import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
 

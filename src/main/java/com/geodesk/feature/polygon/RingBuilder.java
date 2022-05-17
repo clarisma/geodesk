@@ -1,8 +1,6 @@
 package com.geodesk.feature.polygon;
 
 import com.geodesk.core.XY;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class RingBuilder
 {

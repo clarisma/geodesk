@@ -1,8 +1,7 @@
 package com.clarisma.common.store;
 
 import com.clarisma.common.text.Format;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.clarisma.common.util.Log;
 import org.eclipse.collections.api.list.primitive.MutableLongList;
 import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
 import org.locationtech.jts.util.Stopwatch;
@@ -12,8 +11,6 @@ import java.util.Random;
 
 public class BlobStoreTester extends BlobStore
 {
-    private static final Logger log = LogManager.getLogger();
-
     private int runs = 10_000;
     private int maxTransactionLength = 1;
     private int maxBlobSize = 25;
@@ -51,9 +48,9 @@ public class BlobStoreTester extends BlobStore
         Stopwatch timer = new Stopwatch();
         timer.start();
 
-        log.debug("Opening database");
+        Log.debug("Opening database");
         open();
-        log.debug("Database opened");
+        Log.debug("Database opened");
 
         // alloc(4591);
 
@@ -61,7 +58,7 @@ public class BlobStoreTester extends BlobStore
         {
             boolean deleteBlobs = random.nextBoolean();
             int numberOfBlobs = random.nextInt(maxTransactionLength) + 1;
-            log.debug("Run {}: {} {} blobs", run,
+            Log.debug("Run %d: %s %d blobs", run,
                 deleteBlobs ? "Freeing" : "Allocating", numberOfBlobs);
             beginTransaction();
             if (deleteBlobs)
@@ -99,9 +96,9 @@ public class BlobStoreTester extends BlobStore
         close();
 
         long ms = timer.stop();
-        log.debug("Allocated {} and freed {} in {}", totalBlobsAllocated,
+        Log.debug("Allocated %d and freed %d in %s", totalBlobsAllocated,
             totalBlobsFreed, Format.formatTimespan(ms));
-        log.debug("Avg. time of {} ms per alloc/free", ms /
+        Log.debug("Avg. time of %d ms per alloc/free", ms /
             (totalBlobsAllocated + totalBlobsFreed));
     }
 

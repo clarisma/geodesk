@@ -2,16 +2,13 @@ package com.geodesk.core;
 
 import static org.junit.Assert.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.clarisma.common.util.Log;
 import org.junit.Assert;
 import org.junit.Test;
 import static com.geodesk.core.TileQuad.*;
 
 public class TileQuadTest 
 {
-	private static final Logger log = LogManager.getLogger();
-
 	@Test
 	public void test() 
 	{
@@ -61,7 +58,7 @@ public class TileQuadTest
 			subtractQuad(Tile.fromString("8/190/221") | NW | NE | SE ,
 					Tile.fromString("8/191/222") | NW));
 			
-		
+		/*
 		log.debug("Original:     {}",  TileQuad.toString(q1));
 		log.debug("Zoomed to 11: {}",  TileQuad.toString(TileQuad.zoomedOut(q1,11)));
 		log.debug("Zoomed to 10: {}",  TileQuad.toString(TileQuad.zoomedOut(q1,10)));
@@ -88,7 +85,8 @@ public class TileQuadTest
 			TileQuad.toString(zoomedOut(q8, 1)));
 		log.debug("{}  zoomed out to 0 = {}", TileQuad.toString(q8), 
 				TileQuad.toString(zoomedOut(q8, 0)));
-		
+		*/
+
 		int q9 = Tile.fromString("12/2047/2047") | NE | SW | SE;
 		testQuadZooms(q9);
 		q9 = Tile.fromString("12/3071/2047") | NE | SW | SE;
@@ -128,7 +126,7 @@ public class TileQuadTest
 		int zoom = TileQuad.zoom(q);
 		for(int i=zoom-1; i>=0; i--)
 		{
-			log.debug("{}  zoomed out to {} = {}", TileQuad.toString(q), i, 
+			Log.debug("%s  zoomed out to %d = %s", TileQuad.toString(q), i,
 				TileQuad.toString(zoomedOut(q, i)));
 		}
 	}
@@ -176,7 +174,7 @@ public class TileQuadTest
 	
 	private void testTileAddition(int t1, int t2)
 	{
-		log.debug("{} + {} = {}", 
+		Log.debug("%s + %s = %s",
 			Tile.toString(t1), Tile.toString(t2),
 			TileQuad.toString(TileQuad.addTile(t1 | NW, t2)));
 	}

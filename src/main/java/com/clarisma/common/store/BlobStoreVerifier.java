@@ -1,7 +1,6 @@
 package com.clarisma.common.store;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.clarisma.common.util.Log;
 import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
 import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
 
@@ -15,8 +14,6 @@ import static com.clarisma.common.store.BlobStoreConstants.*;
 
 public class BlobStoreVerifier<T extends BlobStore> extends Store.Verifier<T>
 {
-    private static final Logger log = LogManager.getLogger();
-
     protected static class Blob
     {
         int firstPage;
@@ -55,14 +52,14 @@ public class BlobStoreVerifier<T extends BlobStore> extends Store.Verifier<T>
     protected void error(long ofs, String msg)
     {
         // System.out.format("%16X  %s\n", ofs, msg);
-        log.error(String.format("%16X  %s", ofs, msg));
+        Log.error("%16X  %s", ofs, msg);
         valid = false;
     }
 
     protected void error(long ofs, String msg, int val)
     {
         // System.out.format("%16X  " + msg + "\n", ofs, val);
-        log.error(String.format("%16X  " + msg, ofs, val));
+        Log.error("%16X  " + msg, ofs, val);
         valid = false;
     }
 
@@ -346,12 +343,11 @@ public class BlobStoreVerifier<T extends BlobStore> extends Store.Verifier<T>
         for(Blob blob: blobList)
         {
             // System.out.format("%8d %8d %s%s\n",
-            log.info(String.format("%8d %8d %s%s",
+            Log.debug("%8d %8d %s%s",
                 blob.firstPage,
                 blob.pages,
                 blob.isFree() ? "free" : "used",
-                blob.isReferenced() ? " * " : "   "
-                ));
+                blob.isReferenced() ? " * " : "   ");
             if(blob.isFree())
             {
                 free++;
@@ -361,7 +357,7 @@ public class BlobStoreVerifier<T extends BlobStore> extends Store.Verifier<T>
                 used++;
             }
         }
-        log.info("{} blocks ({} used, {} free)", used+free, used, free);
+        Log.debug("%d blocks (%d used, %d free)", used+free, used, free);
     }
 
     @Override public boolean verify()

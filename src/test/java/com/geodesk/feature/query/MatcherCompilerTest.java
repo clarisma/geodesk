@@ -1,11 +1,10 @@
 package com.geodesk.feature.query;
 
+import com.clarisma.common.util.Log;
 import com.geodesk.feature.match.Matcher;
 import com.clarisma.common.fab.FabException;
 import com.clarisma.common.fab.FabReader;
 import com.geodesk.feature.match.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.collections.api.map.primitive.MutableObjectIntMap;
 import org.eclipse.collections.api.map.primitive.ObjectIntMap;
 import org.eclipse.collections.impl.factory.primitive.ObjectIntMaps;
@@ -37,8 +36,6 @@ import java.util.Map;
  */
 public class MatcherCompilerTest
 {
-	public static final Logger log = LogManager.getLogger();
-	
 	String[] globalStrings;
 	ObjectIntMap<String> stringsToCodes;	
 	
@@ -132,7 +129,7 @@ public class MatcherCompilerTest
 		Selector sel;
 		MatcherParser parser = new MatcherParser(stringsToCodes, null); // TODO
 		MatcherCoder coder = new MatcherCoder(stringsToCodes.get("no"));
-		log.debug("Parsing query: {}", qtc.query);
+		Log.debug("Parsing query: %s", qtc.query);
 		try
 		{
 			parser.parse(qtc.query);
@@ -143,7 +140,7 @@ public class MatcherCompilerTest
 			// TODO: check that correct exception sub-type is thrown
 			if(qtc.error != null)
 			{
-				log.info("OK: Correctly threw {}: {}", qtc.error, ex.getMessage());
+				Log.debug("OK: Correctly threw %s: %s", qtc.error, ex.getMessage());
 			}
 			else
 			{
@@ -155,7 +152,7 @@ public class MatcherCompilerTest
 		MatcherXmlWriter out = new MatcherXmlWriter(baos);
 		out.writeQuery(sel);
 		out.flush();
-		log.debug(baos.toString());
+		Log.debug(baos.toString());
 
 		String className = "MatcherTest_" + count;
 		TestClassLoader classLoader = new TestClassLoader();
@@ -173,13 +170,13 @@ public class MatcherCompilerTest
 			boolean result = filter.accept(tags, 0);
 			if(result != expectedResult)
 			{
-				log.error("Tags {} failed for {}: Expected {}", name,
+				Log.error("Tags %s failed for %s: Expected %s", name,
 					qtc.query, expectedResult);
 				Assert.fail();
 			}
 			else
 			{
-				log.info("OK: {} ({})", name, result);
+				Log.debug("OK: %s (%s)", name, result);
 			}
 		}
 	}
@@ -189,7 +186,7 @@ public class MatcherCompilerTest
 		TagTableTester tagTableTester = new TagTableTester();
 		loadStrings();
 		List<QueryTestCase> cases = loadQueries();
-		log.debug("{} queries", cases.size());
+		Log.debug("%d queries", cases.size());
 		int count = 1;
 		for(QueryTestCase qtc: cases)
 		{
