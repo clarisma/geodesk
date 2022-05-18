@@ -643,6 +643,7 @@ public abstract class Store
         public abstract boolean verify();
     }
 
+    // TODO: decouple this
     public boolean verify(Verifier verifier)
     {
         verifier.store = this;

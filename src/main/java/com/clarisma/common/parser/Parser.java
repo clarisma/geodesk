@@ -18,9 +18,7 @@ import com.clarisma.common.text.Strings;
  */
 
 // TODO: string lexing isn't a good fit for regex expressions, because \ has a different
-// meaning for C-style strings vs. regexes
-
-// TODO: -> com.clarisma.common.parser
+//  meaning for C-style strings vs. regexes
 
 public class Parser implements CharSequence, FileLocation // TODO: remove FileLocation?
 {

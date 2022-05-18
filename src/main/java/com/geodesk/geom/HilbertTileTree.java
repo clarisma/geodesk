@@ -7,11 +7,11 @@ import java.util.List;
 /**
  * 
  * This class is based on flatbush (https://github.com/mourner/flatbush) 
- * by Vladimir Agafonkin. The original work is licensed as follows:
+ * by Volodymyr Agafonkin. The original work is licensed as follows:
  *   
  * ISC License
  * 
- * Copyright (c) 2018, Vladimir Agafonkin
+ * Copyright (c) 2018, Volodymyr Agafonkin
  * 
  * Permission to use, copy, modify, and/or distribute this software for any purpose
  * with or without fee is hereby granted, provided that the above copyright notice

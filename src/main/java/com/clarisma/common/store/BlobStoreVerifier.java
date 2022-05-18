@@ -12,6 +12,7 @@ import static com.clarisma.common.store.BlobStore.*;
 
 import static com.clarisma.common.store.BlobStoreConstants.*;
 
+// TODO: decouple the Verifier; instead, relax method visibility of BlobStore
 public class BlobStoreVerifier<T extends BlobStore> extends Store.Verifier<T>
 {
     protected static class Blob

@@ -3,6 +3,7 @@ package com.clarisma.common.parser;
 import java.util.HashMap;
 import java.util.Map;
 
+// not used
 public class JsonParser extends Parser
 {
 	public static final String COMMA = ",";

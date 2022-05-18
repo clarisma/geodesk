@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 
 public class Bytes
 {
+    // not used
     /**
      * Searches a byte array for the first occurrence 
      * of a byte array pattern.
@@ -34,6 +35,7 @@ public class Bytes
         return -1;
     }
 
+    // not used
     /**
      * Computes the failure function using a boot-strapping process,
      * where the pattern is matched against itself.

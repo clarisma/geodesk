@@ -352,13 +352,4 @@ public class FabReader
 	{
 		readFile(path.toFile());
 	}
-
-	public static void main(String args[]) throws Exception
-	{
-		FabReader reader = new FabReader(); // new EchoFabReader();
-		BufferedReader in = new BufferedReader(new FileReader(
-			"C:\\dev\\deseo2\\core\\data\\fab-test.fab"));
-		reader.read(in);
-	}
-	
 }

@@ -8,6 +8,9 @@
   <packaging>jar</packaging>
 
   <name>GeoDesk</name>
+  <description>
+	  A fast and storage-efficient geospatial database engine for OpenStreetMap data.
+  </description>
   <url>http://www.geodesk.com</url>
 
   <properties>
@@ -15,6 +18,28 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
   </properties>
+
+  <licenses>
+	<license>
+	  <name>The Apache License, Version 2.0</name>
+	  <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+	</license>
+  </licenses>
+
+  <developers>
+	<developer>
+	  <name>Martin Desmond</name>
+	  <email>martindesmond@gmail.com</email>
+	  <organization>GeoDesk</organization>
+	  <organizationUrl>http://www.geodesk.com</organizationUrl>
+	</developer>
+  </developers>
+
+  <scm>
+	<connection>scm:git:git://github.com/clarisma/geodesk.git</connection>
+	<developerConnection>scm:git:ssh://github.com:clarisma/geodesk.git</developerConnection>
+	<url>http://github.com/clarisma/geodesk/tree/main</url>
+  </scm>
 
   <dependencies>
   

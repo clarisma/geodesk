@@ -5,11 +5,11 @@ import java.util.List;
 /**
  * 
  * This class is based on rbush (https://github.com/mourner/rbush) 
- * by Vladimir Agafonkin. The original work is licensed as follows:
+ * by Volodymyr Agafonkin. The original work is licensed as follows:
  * 
  * MIT License 
  * 
- * Copyright (c) 2016 Vladimir Agafonkin
+ * Copyright (c) 2016 Volodymyr Agafonkin
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

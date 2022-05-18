@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Map;
 
+/**
+ * Methods to generate JavaScript.
+ */
 public class JavaScript 
 {
 	public static void writeMap(Appendable out, Map<?,?> v) throws IOException

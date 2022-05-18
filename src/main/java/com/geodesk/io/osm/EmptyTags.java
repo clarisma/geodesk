@@ -5,7 +5,6 @@ import com.geodesk.feature.Tags;
 import java.util.Collections;
 import java.util.Map;
 
-// merge with com.geodesk.feature
 public class EmptyTags implements Tags
 {
 	@Override public boolean isEmpty()

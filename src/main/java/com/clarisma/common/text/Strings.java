@@ -369,26 +369,4 @@ public class Strings
 		if(s.isEmpty()) return s;
 		return Character.toUpperCase(s.charAt(0)) + s.substring(1);
 	}
-
-    /*
-    public static void main(String args[])
-    {
-    	System.out.println(stripAccents("El Niño"));
-    	System.out.println(stripAccents("Haßfeld"));
-    	System.out.println(stripAccents("Kirchäckerstraße"));
-    	System.out.println(stripAccents("Humblebæk"));
-    	System.out.println(stripAccents("Résidence Garçon äèèÁ, Å, Ä"));
-    	System.out.println(makeKey("Kirchäckerstraße"));
-    	System.out.println(makeKey("Résidence äèèÁ, Å, Ä"));
-    	System.out.println(makeKey("Wiesen (Elbe)"));
-    	System.out.println(makeKey("Poulet-s.-Grillé"));
-    }
-     */
-    
-    /*
-    public static int lineIndent(CharSequence s, int tabSize)
-    {
-    	
-    }
-    */
 }

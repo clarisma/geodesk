@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Stack;
 
+// TODO: fix or scrap
 public class XmlWriter extends PrintWriter
 {
     private String indentString = "  ";

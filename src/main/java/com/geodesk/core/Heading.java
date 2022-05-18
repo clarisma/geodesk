@@ -6,8 +6,10 @@ import org.locationtech.jts.geom.LineSegment;
 import org.locationtech.jts.geom.LineString;
 
 /**
- * Compass headings. Keep in mind that unlike screen coordinates,
- * planar coordinate values *increase* as one moves "up" (north).
+ * Compass headings.
+ *
+ * Keep in mind that unlike screen coordinates, planar coordinate values
+ * *increase* as one moves "up" (north).
  */
 public enum Heading
 {

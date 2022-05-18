@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A marker on a Leaflet-based interactive map.
+ */
 public abstract class Marker
 {
     private Map<String,Object> options = new HashMap<>();
@@ -14,35 +17,73 @@ public abstract class Marker
     private String url;
     protected MapMaker map;
 
+    /**
+     * Sets the content to be displayed whenever the cursor is hovered over
+     * this Marker.
+     *
+     * @param tooltip   HTML-formatted content
+     * @return          this Marker
+     */
     public Marker tooltip(String tooltip)
     {
         this.tooltip = tooltip;
         return this;
     }
 
+    /**
+     * Sets the URL which is navigated when the user clicks on this Marker.
+     *
+     * @param url   a URL
+     * @return      this Marker
+     */
     public Marker url(String url)
     {
         this.url = url;
         return this;
     }
 
-    public void setMap(MapMaker map)
+    void setMap(MapMaker map)
     {
         this.map = map;
     }
 
+    /**
+     * Specifies options for this Marker.
+     *
+     * See the <a href="https://leafletjs.com/reference.html#path">
+     * Leaflet documentation</a> for a list of available options.
+     *
+     * @param moreOptions   a key-value map
+     * @return              this Marker
+     */
     public Marker options(Map<String,Object> moreOptions)
     {
         options.putAll(moreOptions);
         return this;
     }
 
+    /**
+     * Speficies a single option for this Marker.
+     *
+     * See the <a href="https://leafletjs.com/reference.html#path">
+     * Leaflet documentation</a> for a list of available options.
+     *
+     * @param key       the name of the option (e.g. `opacity` or `lineCap`)
+     * @param value     the value of the option
+     * @return
+     */
     public Marker option(String key, Object value)
     {
         options.put(key, value);
         return this;
     }
 
+    /**
+     * Specifies the color of this Marker.
+     *
+     * @param color     a named color or RGB spec (e.g. <code>#3388ff</code>)
+     * @return          this Marker
+     */
     public Marker color(String color)
     {
         return option("color", color);
