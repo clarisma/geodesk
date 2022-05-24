@@ -378,14 +378,12 @@ public class OsmPbfReader
          */
         protected void header(HeaderData hd)
         {
-            /*
-            log.debug("Source: {}", hd.source);
-            log.debug("Writing Program: {}", hd.writingProgram);
-            log.debug("Required features:");
-            for(String s: hd.requiredFeatures) log.debug("- {}", s);
-            log.debug("Optional features:");
-            for(String s: hd.optionalFeatures) log.debug("- {}", s);
-            */
+            Log.debug("Source: %s", hd.source);
+            Log.debug("Writing Program: %s", hd.writingProgram);
+            Log.debug("Required features:");
+            for(String s: hd.requiredFeatures) Log.debug("- %s", s);
+            Log.debug("Optional features:");
+            for(String s: hd.optionalFeatures) Log.debug("- %s", s);
         }
 
         /**
@@ -616,9 +614,13 @@ public class OsmPbfReader
                     }
                     processBlock(block);
                 }
+                catch (InterruptedException ex)
+                {
+                    break;  // stop processing
+                }
                 catch (Throwable ex)
                 {
-                    fail(ex);
+                    fail(ex);   // everything else is a real error
                 }
             }
         }
@@ -1090,6 +1092,18 @@ public class OsmPbfReader
             // do nothing
         }
         outputThread.interrupt();   // TODO: move into catch?
+        // wait for threads to finish
+        for(int i=0; i<workerThreads.length; i++)
+        {
+            try
+            {
+                workerThreads[i].switchPhase(PHASE_DONE);
+            }
+            catch(InterruptedException ex)
+            {
+                // do nothing
+            }
+        }
         in.close(); // TODO: catch ex here
         endFile();
         inputThread = null;

@@ -1,7 +1,9 @@
 package com.geodesk.feature;
 
+import com.geodesk.core.Mercator;
 import com.geodesk.feature.filter.ConnectedFilter;
 import com.geodesk.feature.filter.FalseFilter;
+import com.geodesk.feature.filter.PointDistanceFilter;
 import com.geodesk.feature.filter.WithinFilter;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
@@ -57,7 +59,7 @@ public class Filters
     }
 
     /**
-     * Creates a `Filter` that accepts a feature that has at least one common node
+     * Creates a `Filter` that accept features that has at least one common node
      * with the given `Feature`.
      *
      * @param f the `Feature` whose nodes to check against
@@ -69,7 +71,7 @@ public class Filters
     }
 
     /**
-     * Creates a `Filter` that accepts a feature that has at least one common
+     * Creates a `Filter` that accept features that have at least one common
      * vertex with the given `Geometry`. Coordinates of the `Geometry` are
      * rounded to integers.
      *
@@ -80,4 +82,63 @@ public class Filters
     {
         return new ConnectedFilter(geom);
     }
+
+    /**
+     * Creates a `Filter` that accept features whose closest point lies within
+     * a given radius.
+     *
+     * @param distance  the maximum distance (in meters)
+     * @param x         the X coordinate of the center point
+     * @param y         the Y coordinate of the center point
+     * @return
+     */
+    public static Filter maxMetersFromXY(double distance, int x, int y)
+    {
+        return new PointDistanceFilter(distance, x, y);
+    }
+
+    /**
+     * Creates a `Filter` that accept features whose closest point lies within
+     * a given radius.
+     *
+     * @param distance  the maximum distance (in meters)
+     * @param lon       the longitude of the center point
+     * @param lat       the latitude of the center point
+     * @return
+     */
+    public static Filter maxMetersFromLonLat(double distance, double lon, double lat)
+    {
+        int x = (int)Mercator.xFromLon(lon);
+        int y = (int)Mercator.yFromLat(lat);
+        return new PointDistanceFilter(distance, x, y);
+    }
+
+    /**
+     * Creates a `Filter` that accept features that lie within a given distance
+     * from a `Geometry`. The Filter measures the distance between the closest
+     * points of the Geometry and the candidate Feature.
+     *
+     * @param distance  the maximum distance (in meters)
+     * @param geom      the Geometry from which to measure
+     * @return
+     */
+    public static Filter maxMetersFrom(double distance, Geometry geom)
+    {
+        throw new RuntimeException("todo");     // TODO
+    }
+
+    /**
+     * Creates a `Filter` that accept features that lie within a given distance
+     * from another `Feature`. The Filter measures the distance between the closest
+     * points of the features.
+     *
+     * @param distance  the maximum distance (in meters)
+     * @param feature   the Feature from which to measure
+     * @return
+     */
+    public static Filter maxMetersFrom(double distance, Feature feature)
+    {
+        throw new RuntimeException("todo");     // TODO
+    }
+
 }

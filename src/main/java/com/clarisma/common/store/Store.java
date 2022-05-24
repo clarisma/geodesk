@@ -41,6 +41,11 @@ import static java.nio.file.StandardOpenOption.WRITE;
 
 // TODO: At what level should we synchronize access?
 
+/**
+ * Base class for a persistent data store that supports transactions and
+ * journaling. A Store is backed by a sparse file that is memory-mapped
+ * in segments, 1 GB each.
+ */
 public abstract class Store
 {
     // protected static final Logger log = LogManager.getLogger();
@@ -283,6 +288,7 @@ public abstract class Store
         }
     }
 
+    // TODO: use Bytes.putInt
     private static void intToBytes(byte[] ba, int v)
     {
         ba[0] = (byte)v;
@@ -291,6 +297,14 @@ public abstract class Store
         ba[3] = (byte)(v >>> 24);
     }
 
+    /**
+     * Checks whether the journal file is valid.
+     *
+     * The journal file must be open prior to calling this method.
+     *
+     * @return `true` if the journal file is complete and valid
+     * @throws IOException
+     */
     private boolean verifyJournal() throws IOException
     {
         byte[] ba = new byte[4];
@@ -322,6 +336,14 @@ public abstract class Store
         }
     }
 
+    /**
+     * Applies the edit instructions from the journal to the data store,
+     * and syncs the resulting changes to disk.
+     *
+     * The journal must be opened and verified prior to calling this method.
+     *
+     * @throws IOException
+     */
     private void applyJournal() throws IOException
     {
         MutableIntSet affectedSegments = new IntHashSet();
@@ -349,6 +371,12 @@ public abstract class Store
         syncSegments(affectedSegments);
     }
 
+    /**
+     * Ensures that modified segments are written to disk.
+     *
+     * @param affectedSegments  a set of integers which specify the segments
+     *                          to sync to disk
+     */
     private void syncSegments(IntSet affectedSegments)
     {
         IntIterator iter = affectedSegments.intIterator();
@@ -358,6 +386,12 @@ public abstract class Store
         }
     }
 
+    /**
+     * Opens the journal file.
+     *
+     * @param journalFile   the journal file
+     * @throws IOException
+     */
     private void openJournal(File journalFile) throws IOException
     {
         assert journal == null;
@@ -368,6 +402,9 @@ public abstract class Store
     //  between store and journal (e.g. process writing to store crashes,
     //  user deletes the store and re-creates it, but leaves old journal
     //  behind)
+    // TODO: Use modification timestamp instead of fingerprint;
+    //  fingerprint identifies content, timestamp & fingerprint
+    //  identify content and its representation
     protected boolean processJournal(File journalFile) throws IOException
     {
         if(journal == null) openJournal(journalFile);
@@ -403,6 +440,11 @@ public abstract class Store
         return appliedJournal;
     }
 
+    /**
+     * Resets the journal and flushes it to disk.
+     *
+     * @throws IOException
+     */
     private void clearJournal() throws IOException
     {
         journal.seek(0);

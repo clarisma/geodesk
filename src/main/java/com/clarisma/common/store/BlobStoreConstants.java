@@ -24,4 +24,11 @@ public class BlobStoreConstants
     public static final int FREE_TABLE_LEN = 2048;
 
     public static final int DEFAULT_METADATA_SIZE = TRUNK_FREE_TABLE_OFS + FREE_TABLE_LEN;
+
+    // Exports
+
+    public static int MAGIC_EXPORTED_BLOB = 0x0BB1DAAD;  // ADDAB10B = "Add a Blob"
+                                                         // C01DB10B = "Cold blob"
+    public static int EXPORTED_HEADER_LEN = 16;  // TODO
+
 }

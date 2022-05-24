@@ -125,7 +125,7 @@ public class FeatureStore extends BlobStore
         return baseMapping.getInt(TILE_INDEX_PTR_OFS) + TILE_INDEX_PTR_OFS;
     }
 
-    protected int tilePage(int tip)
+    public int tilePage(int tip)
     {
         return baseMapping.getInt(tileIndexPointer() + tip * 4) >>> 1;
     }

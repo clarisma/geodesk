@@ -1,5 +1,8 @@
 package com.geodesk.geom;
 
+import com.geodesk.core.XY;
+import com.geodesk.feature.store.StoredWay;
+
 public class PointInPolygon
 {
     /*
@@ -97,6 +100,50 @@ public class PointInPolygon
         return odd;
     }
 
+
+    /**
+     * Fast but non-robust point-in-polygon test using the ray-crossing method.
+     * Points located on a polygon edge (or very close to it) may or may not
+     * be considered "inside." Vertexes, however, are always identified correctly.
+     *
+     * This test can be applied to multiple line strings of the polygon
+     * in succession. In that case, the result of each test must be XOR'd
+     * with the previous results.
+     *
+     * @param iter      an XY iterator (consumed by this method)
+     * @param cx        the X-coordinate to test
+     * @param cy        the Y-coordinate to test
+     * @return          0 if even number of edges are crossed ("not inside")
+     *                  1 if odd number of edges are crossed ("inside")
+     */
+    public static int testFast(StoredWay.XYIterator iter, double cx, double cy)
+    {
+        int odd = 0;
+        long xy = iter.nextXY();
+        double x1 = XY.x(xy);
+        double y1 = XY.y(xy);
+
+        while(iter.hasNext())
+        {
+            xy = iter.nextXY();
+            double x2 = XY.x(xy);
+            double y2 = XY.y(xy);
+
+            if (((y1 <= cy) && (y2 > cy))     // upward crossing
+                || ((y1 > cy) && (y2 <= cy))) // downward crossing
+            {
+                // compute edge-ray intersect x-coordinate
+                double vt = (cy  - y1) / (y2 - y1);
+                if (cx <  x1 + vt * (x2 - x1)) // P.x < intersect
+                {
+                    odd ^= 1;
+                }
+            }
+            x1 = x2;
+            y1 = y2;
+        }
+        return odd;
+    }
 
     /*
 

@@ -163,6 +163,11 @@ public class StoredWay extends StoredFeature implements Way
 		return new XYIterator(buf, pBody, minX, minY, flags);
 	}
 
+	public XYIterator iterXY()
+	{
+		return iterXY(buf.getInt(ptr));
+	}
+
 	public double length()
 	{
 		if (isArea()) return 0;

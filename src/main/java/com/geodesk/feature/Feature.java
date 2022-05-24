@@ -105,8 +105,9 @@ public interface Feature
 	 * Checks whether this feature is a member of the given Relation, or
 	 * a node in the given Way.
 	 *
-	 * @param parent Way or Relation
-	 * @return true if this Feature belongs to the given Way or Relation
+	 * @param parent `Way` or `Relation`
+	 * @return `true` if this Feature belongs to the given `Way` or `Relation`
+	 * 				(always `false` if `parent` is a `Node`)
 	 */
 	boolean belongsTo(Feature parent);
 

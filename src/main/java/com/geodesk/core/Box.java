@@ -343,6 +343,21 @@ public class Box implements Bounds
 	 * Creates a bounding box whose sides extend by a specific distance relative
 	 * to a coordinate pair.
 	 *
+	 * @param d			the distance (in imps) by which each side of the original
+	 *                  bounds are buffered
+	 * @param x         X-coordinate of the center point (Mercator-projected)
+	 * @param y		    Y-coordinate of the center point (Mercator-projected)
+	 * @return			a new bounding box
+	 */
+	public static Box impsAroundXY(int d, int x, int y)
+	{
+		return new Box(x-d, trimmedSubtract(y, d), x+d, trimmedAdd(y, d));
+	}
+
+	/**
+	 * Creates a bounding box whose sides extend by a specific distance relative
+	 * to a coordinate pair.
+	 *
 	 * @param meters	the distance (in meters) by which each side of the original
 	 *                  bounds are buffered
 	 * @param lon       longitude of the center point

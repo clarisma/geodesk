@@ -126,7 +126,7 @@ public class XY
      * intersects the given segments, using the ray-casting algorithm
      * (https://en.wikipedia.org/wiki/Point_in_polygon#Ray_casting_algorithm).
      * This is suitable for a point-in-polygon test, but be aware that points
-     * that are vertexes or a re located on the edge (or very close to it)
+     * that are vertexes or are located on the edge (or very close to it)
      * may or may not be considered "inside."
      *
      * This test can be applied to multiple line strings of the polygon
