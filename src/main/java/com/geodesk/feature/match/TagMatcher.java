@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 
 public abstract class TagMatcher extends Matcher
 {
-    private final int acceptedTypes = 0;  // TODO!
+    private final int acceptedTypes = TypeBits.ALL;  // TODO!
     protected final String[] globalStrings;
     protected final int keyMask;
     protected final int keyMin;
@@ -21,6 +21,7 @@ public abstract class TagMatcher extends Matcher
 
     @Override public boolean acceptTyped(int types, ByteBuffer buf, int pos)
     {
+        types &= 1 << (buf.get(pos) >> 1);
         if((types & acceptedTypes) == 0) return false;
         return accept(buf, pos);
     }

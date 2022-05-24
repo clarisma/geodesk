@@ -26,9 +26,9 @@ public class MemberIterator implements Iterator<Feature>
     private Feature memberFeature;
 
     // TODO:
-    private int types;
+    private final int types;
     private Matcher currentMatcher;
-    private Filter filter;
+    private final Filter filter;
 
 
     // TODO: consolidate these flags?
@@ -37,12 +37,15 @@ public class MemberIterator implements Iterator<Feature>
     private static final int MF_DIFFERENT_ROLE = 4;
     private static final int MF_DIFFERENT_TILE = 8;
 
-    public MemberIterator(FeatureStore store, ByteBuffer buf, int pTable, Matcher matcher)
+    public MemberIterator(FeatureStore store, ByteBuffer buf, int pTable,
+        int types, Matcher matcher, Filter filter)
     {
         this.store = store;
         this.buf = buf;
         pCurrent = pTable;
+        this.types = types;
         this.matcher = matcher;
+        this.filter=  filter;
         fetchNextFeature();
     }
 
@@ -107,8 +110,6 @@ public class MemberIterator implements Iterator<Feature>
     {
         for(;;)
         {
-            // TODO: possible bug: pCurrent not advanced if feature not accepted?
-
             int pNext = fetchNext();
             if (pNext == 0)
             {
@@ -133,13 +134,14 @@ public class MemberIterator implements Iterator<Feature>
                 featureBuf = buf;
                 pFeature = (pCurrent & 0xffff_fffc) + ((member >> 3) << 2);
             }
-            if(matcher.accept(featureBuf, pFeature))
+            pCurrent = pNext;
+            if(matcher.acceptTyped(types, featureBuf, pFeature))
             {
                 StoredFeature f = store.getFeature(featureBuf, pFeature);
                 // TODO: allow any negative instead of -1?
                 f.setRole(role == -1 ? roleString : store.stringFromCode(role));
-                memberFeature = (Feature) f;
-                pCurrent = pNext;
+                memberFeature = f;
+                // pCurrent = pNext;
                 return;
             }
         }

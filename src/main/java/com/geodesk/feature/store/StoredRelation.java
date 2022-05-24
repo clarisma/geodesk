@@ -2,6 +2,8 @@ package com.geodesk.feature.store;
 
 import com.geodesk.feature.*;
 import com.geodesk.feature.match.Matcher;
+import com.geodesk.feature.match.MatcherSet;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.polygon.PolygonBuilder;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.feature.query.MemberIterator;
@@ -37,7 +39,7 @@ public class StoredRelation extends StoredFeature implements Relation
 		int ppMembers = ptr + 12;
 		int pMembers = ppMembers + buf.getInt(ppMembers);
 		if(isEmpty(pMembers)) return Collections.emptyIterator();
-		return new MemberIterator(store, buf, pMembers, Matcher.ALL);
+		return new MemberIterator(store, buf, pMembers, TypeBits.ALL, Matcher.ALL, null);
 	}
 
 
@@ -80,50 +82,62 @@ public class StoredRelation extends StoredFeature implements Relation
 
 	@Override public Features<?> members()
 	{
+		return members(TypeBits.ALL, Matcher.ALL);
+	}
+
+	private Features<?> members(int types, String query)
+	{
+		MatcherSet matchers = store.getMatchers(query);
+		return members(types & matchers.types(), matchers.members());
+	}
+
+	private Features<?> members(int types, Matcher matcher)
+	{
+		if(types == 0) return EmptyView.ANY;
 		int ppMembers = ptr + 12;
 		int pMembers = ppMembers + buf.getInt(ppMembers);
 		if(isEmpty(pMembers)) return EmptyView.ANY;
-		return new MemberView<>(store, buf, pMembers, Matcher.ALL);
+		return new MemberView<>(store, buf, pMembers, types, matcher);
 	}
 
 	@Override public Features<?> members(String q)
 	{
-		return null;
+		return members(TypeBits.ALL, q);
 	}
 
 	@Override public Features<Node> memberNodes()
 	{
-		return null;
+		return (Features<Node>)members(TypeBits.NODES, Matcher.ALL);
 	}
 
 	@Override public Features<Node> memberNodes(String q)
 	{
-		return null;
+		return (Features<Node>)members(TypeBits.NODES, q);
 	}
 
 	@Override public Features<Way> memberWays()
 	{
-		return null;
+		return (Features<Way>)members(TypeBits.WAYS, Matcher.ALL);
 	}
 
 	@Override public Features<Way> memberWays(String q)
 	{
-		return null;
+		return (Features<Way>)members(TypeBits.WAYS, q);
 	}
 
 	@Override public Features<Relation> memberRelations()
 	{
-		return null;
+		return (Features<Relation>)members(TypeBits.RELATIONS, Matcher.ALL);
 	}
 
 	@Override public Features<Relation> memberRelations(String q)
 	{
-		return null;
+		return (Features<Relation>)members(TypeBits.RELATIONS, q);
 	}
 
 	@Override public Set<String> memberRoles()
 	{
-		return null;
+		return null;	// TODO
 	}
 
 }

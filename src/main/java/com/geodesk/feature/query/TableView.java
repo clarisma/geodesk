@@ -38,6 +38,10 @@ public abstract class TableView<T extends Feature> implements Features<T>
         {
             matcher = new AndMatcher(other.matcher, matcher);
         }
+        else if(matcher == Matcher.ALL)
+        {
+            matcher = other.matcher;
+        }
         this.matcher = matcher;
         this.filter = other.filter;
     }
