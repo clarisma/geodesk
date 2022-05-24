@@ -15,8 +15,11 @@ public class MemberIterator implements Iterator<Feature>
 {
     private final FeatureStore store;
     private final ByteBuffer buf;
+    private final int types;
     private final Matcher matcher;
+    private final Filter filter;
     private int pCurrent;
+    private Matcher currentMatcher;
     private int role;
     private String roleString;
     private int tip = FeatureConstants.START_TIP;
@@ -24,12 +27,6 @@ public class MemberIterator implements Iterator<Feature>
     private int pForeignTile;
     private int member;
     private Feature memberFeature;
-
-    // TODO:
-    private final int types;
-    private Matcher currentMatcher;
-    private final Filter filter;
-
 
     // TODO: consolidate these flags?
     private static final int MF_LAST = 1;
@@ -45,65 +42,88 @@ public class MemberIterator implements Iterator<Feature>
         pCurrent = pTable;
         this.types = types;
         this.matcher = matcher;
-        this.filter=  filter;
+        this.filter = filter;
+        currentMatcher = matcher.acceptRole(0, null);
+            // TODO: skip call to acceptRole if first member has DIFFERENT_ROLE flag set
         fetchNextFeature();
-    }
-
-    private void roleChanged()
-    {
-        // do nothing
     }
 
     // TODO: should this return `member` and set `pCurrent` itself?
     // TODO: could get rid of `member` by using the last-flag as a mask on pCurrent?
+
+    /**
+     * Identifies the next member whose role is accepted by the Matcher.
+     *
+     * Before this call:
+     *
+     * - `pCurrent` must be set to the next potential member
+     * - `member` must contain the last-flag of the previous member
+     *   (used to determine if we've reached the end of the table)
+     *
+     * After this call:
+     *  - `member` contains the member entry (flags & pointer) of the
+     *    current member
+     *  - `pCurrent` contains the address where the data of `member` is stored
+     *
+     *  If there are no more members:
+     *  - `member` is set to 0
+     *  - `pCurrent` points to the byte after the table (and hence is invalid)
+     *
+     * @return  pointer to the member after the current, or 0 if we've
+     *          reached the end of the table
+     */
     private int fetchNext()
     {
-        int p = pCurrent;
-        if ((member & MF_LAST) != 0)
+        for(;;)
         {
-            member = 0;
-            return 0;
-        }
-        member = buf.getInt(p);
-        p += 4;
-        if ((member & MF_FOREIGN) != 0)
-        {
-            if ((member & MF_DIFFERENT_TILE) != 0)
+            int p = pCurrent;
+            if ((member & MF_LAST) != 0)
             {
-                // TODO: test wide tip delta
-                pForeignTile = 0;
-                int tipDelta = buf.getShort(p);
-                if((tipDelta & 1) != 0)
+                member = 0;
+                return 0;
+            }
+            member = buf.getInt(p);
+            p += 4;
+            if ((member & MF_FOREIGN) != 0)
+            {
+                if ((member & MF_DIFFERENT_TILE) != 0)
                 {
-                    // wide TIP delta
-                    tipDelta = buf.getInt(p);
+                    // TODO: test wide tip delta
+                    pForeignTile = 0;
+                    int tipDelta = buf.getShort(p);
+                    if ((tipDelta & 1) != 0)
+                    {
+                        // wide TIP delta
+                        tipDelta = buf.getInt(p);
+                        p += 2;
+                    }
+                    tipDelta >>= 1;     // signed
+                    p += 2;
+                    tip += tipDelta;
+                }
+            }
+            if ((member & MF_DIFFERENT_ROLE) != 0)
+            {
+                int rawRole = buf.getChar(p);
+                if ((rawRole & 1) != 0)
+                {
+                    // common role
+                    role = rawRole >>> 1;   // unsigned
+                    roleString = null;
                     p += 2;
                 }
-                tipDelta >>= 1;     // signed
-                p += 2;
-                tip += tipDelta;
+                else
+                {
+                    rawRole = buf.getInt(p);
+                    role = -1;
+                    roleString = Bytes.readString(buf, p + (rawRole >> 1)); // signed
+                    p += 4;
+                }
+                currentMatcher = matcher.acceptRole(role, roleString);
             }
+            if(currentMatcher != null) return p;
+            pCurrent = p;
         }
-        if ((member & MF_DIFFERENT_ROLE) != 0)
-        {
-            int rawRole = buf.getChar(p);
-            if ((rawRole & 1) != 0)
-            {
-                // common role
-                role = rawRole >>> 1;   // unsigned
-                roleString = null;
-                p += 2;
-            }
-            else
-            {
-                rawRole = buf.getInt(p);
-                role = -1;
-                roleString = Bytes.readString(buf, p + (rawRole >> 1)); // signed
-                p += 4;
-            }
-            roleChanged();
-        }
-        return p;
     }
 
     private void fetchNextFeature()
@@ -135,7 +155,7 @@ public class MemberIterator implements Iterator<Feature>
                 pFeature = (pCurrent & 0xffff_fffc) + ((member >> 3) << 2);
             }
             pCurrent = pNext;
-            if(matcher.acceptTyped(types, featureBuf, pFeature))
+            if(currentMatcher.acceptTyped(types, featureBuf, pFeature))
             {
                 StoredFeature f = store.getFeature(featureBuf, pFeature);
                 // TODO: allow any negative instead of -1?

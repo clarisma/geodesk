@@ -26,7 +26,7 @@ public class Matcher
      */
     public boolean acceptTyped(int types, ByteBuffer buf, int pos)
     {
-        return true;
+        return (types & (1 << (buf.get(pos) >> 1))) != 0;
     }
 
     /**

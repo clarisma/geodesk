@@ -143,7 +143,7 @@ public class FeatureStore extends BlobStore
         }
     }
 
-    protected int codeFromString(String s)
+    public int codeFromString(String s)
     {
         return stringsToCodes.get(s);
     }

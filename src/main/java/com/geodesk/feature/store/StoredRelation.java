@@ -42,6 +42,14 @@ public class StoredRelation extends StoredFeature implements Relation
 		return new MemberIterator(store, buf, pMembers, TypeBits.ALL, Matcher.ALL, null);
 	}
 
+	public Iterator<Feature> iterator(int types, Matcher matcher)
+	{
+		int ppMembers = ptr + 12;
+		int pMembers = ppMembers + buf.getInt(ppMembers);
+		if(isEmpty(pMembers)) return Collections.emptyIterator();
+		return new MemberIterator(store, buf, pMembers, types, matcher, null);
+	}
+
 
 	@Override public Geometry toGeometry()
 	{
