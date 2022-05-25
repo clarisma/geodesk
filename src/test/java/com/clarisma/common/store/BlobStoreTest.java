@@ -36,7 +36,7 @@ public class BlobStoreTest
                 freeBlob(blobs[i]);
             }
             commit();
-            Log.debug("Freed blobs at %d", blobs);
+            Log.debug("Freed blobs at %s", blobs);
         }
     }
 

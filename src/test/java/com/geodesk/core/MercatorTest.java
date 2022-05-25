@@ -114,6 +114,7 @@ public class MercatorTest
 		printScaleForLat(83.6608453, "Cape Morris Jesup, Greenland");
 	}
 
+	/*
 	@Test public void testReversability()
 	{
 		Random random = new Random();
@@ -132,6 +133,7 @@ public class MercatorTest
 			System.out.format("%.9f, %.9f => %d, %d\n", lonBack, latBack, x2, y2);
 		}
 	}
+	 */
 
 	@Test public void testDrift()
 	{

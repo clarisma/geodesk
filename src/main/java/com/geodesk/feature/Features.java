@@ -159,7 +159,7 @@ public interface Features<T extends Feature> extends Iterable<T>
      */
     default boolean isEmpty()
     {
-        return first() != null;
+        return first() == null;
     }
 
     /**
