@@ -9,17 +9,17 @@ import org.locationtech.jts.util.Stopwatch;
 import java.nio.file.Path;
 import java.util.Random;
 
-public class BlobStoreTester extends BlobStore
+public class BlobStoreTester_old extends BlobStore
 {
-    private int runs = 1_000;
-    private int maxTransactionLength = 20;
-    private int maxBlobSize = 262_144;
+    private int runs = 10_000;
+    private int maxTransactionLength = 1;
+    private int maxBlobSize = 25;
     private MutableLongList blobs = new LongArrayList();
     private long totalBlobsAllocated;
     private long totalBlobsFreed;
 
 
-    public BlobStoreTester(String filename)
+    public BlobStoreTester_old(String filename)
     {
         setPath(Path.of(filename));
     }
@@ -39,17 +39,11 @@ public class BlobStoreTester extends BlobStore
         //log.debug("  Freed blob at {}", blob);
     }
 
-    public void check()
-    {
-        Checker checker = new Checker(this);
-        checker.check();
-        checker.reportErrors(System.out);
-        if(checker.hasErrors()) throw new RuntimeException("test failed");
-    }
-
     public void run()
     {
         Random random = new Random();
+
+        TestBlobStoreVerifier verifier = new TestBlobStoreVerifier();
 
         Stopwatch timer = new Stopwatch();
         timer.start();
@@ -94,10 +88,11 @@ public class BlobStoreTester extends BlobStore
                 totalBlobsAllocated += numberOfBlobs;
             }
             commit();
-            // check();
         }
+        if(!verify(verifier)) throw new RuntimeException("Store invalid");
+        // must delete store before this test, or else verifier will
+        // report unexpected blobs (those created outside of this test)
 
-        check();
         close();
 
         long ms = timer.stop();
@@ -107,35 +102,48 @@ public class BlobStoreTester extends BlobStore
             (totalBlobsAllocated + totalBlobsFreed));
     }
 
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args)
     {
-        // Files.deleteIfExists(Path.of("c:\\geodesk\\test.store"));
-        // Files.deleteIfExists(Path.of("c:\\geodesk\\test.store-journal"));
-            // TODO: delete journal
-        BlobStoreTester test = new BlobStoreTester("c:\\geodesk\\test.store");
+        BlobStoreTester_old test = new BlobStoreTester_old("c:\\geodesk\\test.store");
         test.run();
     }
 
-    private static class Checker extends BlobStoreChecker
+    private static class TestBlobStoreVerifier extends BlobStoreVerifier<BlobStoreTester_old>
     {
-        final BlobStoreTester tester;
-
-        Checker(BlobStoreTester tester)
+        @Override protected void doVerify()
         {
-            super(tester);
-            this.tester = tester;
-        }
+            super.doVerify();
+            if(!valid) return;
 
-        @Override protected void checkIndex()
-        {
-            for (int i = 0; i < tester.blobs.size(); i++)
+            for (int i = 0; i < store.blobs.size(); i++)
             {
-                long blobInfo = tester.blobs.get(i);
-                int firstPage = (int) blobInfo;
-                int len = (int) (blobInfo >> 32);
+                long blobInfo = store.blobs.get(i);
+                int pos = (int)blobInfo;
+                int len = (int)(blobInfo >> 32);
 
-                // TODO: temporarily turned off to focus on general integrity
-                // useBlob(0, firstPage);
+                Blob blob = blobMap.get(pos);
+                if(blob == null)
+                {
+                    error(0, "Blob %d is missing", pos);
+                }
+                else
+                {
+                    blob.flags |= BLOB_REFERENCED_FLAG;
+                    if(blob.pages != len)
+                    {
+                        error(0, String.format("Blob %d should be %d pages, not %d",
+                            pos, len, blob.pages));
+                    }
+                }
+            }
+
+            for(Blob blob: blobList)
+            {
+                if(!blob.isReferenced() && !blob.isFree())
+                {
+                    error(absPosOfPage(blob.firstPage),
+                        "Unexpected blob %d", blob.firstPage);
+                }
             }
         }
     }

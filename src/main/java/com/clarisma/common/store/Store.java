@@ -46,10 +46,10 @@ import static java.nio.file.StandardOpenOption.WRITE;
  * journaling. A Store is backed by a sparse file that is memory-mapped
  * in segments, 1 GB each.
  */
+// TODO: allow writing only within a transaction
+
 public abstract class Store
 {
-    // protected static final Logger log = LogManager.getLogger();
-
     private static final Set<String> openStores = new HashSet<>();
     private Path path;
     private FileChannel channel;
@@ -110,6 +110,7 @@ public abstract class Store
                     {
                         try
                         {
+                            // Log.debug("Mapping segment %d...", i);
                             MappedByteBuffer buf = channel.map(
                                 FileChannel.MapMode.READ_WRITE,
                                 (long)i * MAPPING_SIZE, MAPPING_SIZE);
@@ -263,21 +264,21 @@ public abstract class Store
             }
             lock(lockMode);
 
-            File journalFile = getJournalFile();
-            if (journalFile.exists())
-            {
-                processJournal(journalFile);
-            }
+            // Always do this first, even if journal is present
             baseMapping = getMapping(0);
             int headerWord = baseMapping.getInt(0);
             if (headerWord == 0)
             {
                 createStore();
             }
-            else
+
+            File journalFile = getJournalFile();
+            if (journalFile.exists())
             {
-                verifyHeader();
+                processJournal(journalFile);
             }
+            verifyHeader();     // TODO: when to do this?
+            // debugCheck();
             initialize();
         }
         catch(IOException ex)
@@ -312,6 +313,8 @@ public abstract class Store
         try
         {
             journal.seek(4);
+            long timestamp = journal.readLong();
+            if(timestamp != getTimestamp()) return false;
             for (; ; )
             {
                 int patchLow = journal.readInt();
@@ -348,15 +351,19 @@ public abstract class Store
     {
         MutableIntSet affectedSegments = new IntHashSet();
 
-        journal.seek(4);
+        Log.debug("Applying journal...");
+
+        int patchCount = 0;
+        journal.seek(12);
         for (; ; )
         {
             int patchLow = journal.readInt();
             int patchHigh = journal.readInt();
             if (patchHigh == 0xffff_ffff && patchLow == 0xffff_ffff) break;
             long pos = ((long)patchHigh << 32) | ((long)patchLow & 0xffff_ffffL);
-            pos = (pos >> 10) << 2;
+            pos = (pos >> 10) << 2; // TODO: careful of sign
             int len = (patchLow & 0x3ff) + 1;
+            // Log.debug("Patching %d words at %X", len, pos);
             int segmentNumber = (int)(pos >> 30);
             int ofs = (int)pos & 0x3fff_ffff;
             MappedByteBuffer buf = getMapping(segmentNumber);
@@ -364,11 +371,15 @@ public abstract class Store
             for (int i = 0; i < len; i++)
             {
                 int v = journal.readInt();
+                // Log.debug("- %d (0x%X)", v, v);
                 buf.putInt(ofs, v);
                 ofs += 4;
+                patchCount++;
             }
         }
+        Log.debug("Syncing patches...");
         syncSegments(affectedSegments);
+        Log.debug("Patched %d words in %d segments.", patchCount, affectedSegments.size());
     }
 
     /**
@@ -382,7 +393,9 @@ public abstract class Store
         IntIterator iter = affectedSegments.intIterator();
         while(iter.hasNext())
         {
-            getMapping(iter.next()).force();
+            int segment = iter.next();
+            // Log.debug("Syncing segment %d...", segment);
+            getMapping(segment).force();
         }
     }
 
@@ -412,6 +425,8 @@ public abstract class Store
         int instruction = journal.readInt();
         if(instruction == 0) return false;
 
+        // Log.debug("Getting lock to apply journal...");
+
         // Even though we may be making modifications other than additions,
         // we only need to obtain the append lock: If another process died
         // while making additions, then exclusive read access isn't necessary.
@@ -429,16 +444,30 @@ public abstract class Store
         instruction = journal.readInt();
         if(instruction == 0) return false;
 
+        // Log.debug("Still need to apply journal...");
+
         boolean appliedJournal = false;
         if(verifyJournal())
         {
+            // Log.debug("Journal is valid.");
             applyJournal();
+            // debugCheck();
             appliedJournal = true;
+        }
+        else
+        {
+            // Log.debug("Journal is invalid.");
         }
         clearJournal();
         lock(prevLockLevel);
         return appliedJournal;
     }
+
+    /*
+    protected void debugCheck()
+    {
+    }
+     */
 
     /**
      * Resets the journal and flushes it to disk.
@@ -450,10 +479,20 @@ public abstract class Store
         journal.seek(0);
         journal.writeInt(0);
         journal.setLength(4);
-        journal.getChannel().force(false);
+        // journal.getChannel().force(false);
+        journal.getFD().sync();
     }
 
+    /**
+     * Gets the "real" size of the store file.
+     * Memory-mapping causes the file to grow, so the file size returned
+     * by the OS is typically larger than the actual space used by the file.
+     *
+     * @return file size in bytes
+     */
     protected abstract long getTrueSize();
+
+    protected abstract long getTimestamp();
 
     // TODO: do not call close() if any threads are still accessing buffers
     // implement a cleanup method?
@@ -533,6 +572,7 @@ public abstract class Store
 
     protected void beginTransaction()
     {
+        assert !isInTransaction();
         transactionBlocks = new LongObjectHashMap<>();
 
         // TODO: lock
@@ -553,6 +593,7 @@ public abstract class Store
         assert isInTransaction();
         try
         {
+            // debugCheck();
             saveJournal();
 
             MutableIntSet affectedSegments = new IntHashSet();
@@ -560,19 +601,24 @@ public abstract class Store
             {
                 int segmentNumber = (int)(block.pos >> 30);
                 int ofs = (int)block.pos & 0x3fff_ffff;
+                assert (ofs & 0xfff) == 0;
+                assert block.current.array().length == 4096;
                 block.original.put(ofs, block.current.array());
                 affectedSegments.add(segmentNumber);
             }
             syncSegments(affectedSegments);
 
-            Log.debug("Committed %d blocks in %d segments",
-                transactionBlocks.size(), affectedSegments.size());
+            // Log.debug("Committed %d blocks in %d segments",
+            //    transactionBlocks.size(), affectedSegments.size());
+
+            // throw new RuntimeException("causing commit to fail");
 
             clearJournal();
             transactionBlocks = null;
 
             // TODO: unlock
 
+            // debugCheck();
         }
         catch(IOException ex)
         {
@@ -613,6 +659,7 @@ public abstract class Store
         if(journal == null) openJournal(getJournalFile());
         journal.seek(0);
         journal.writeInt(1);    // TODO
+        journal.writeLong(getTimestamp());
         byte[] ba = new byte[4];
         CRC32 crc = new CRC32();
         for(TransactionBlock block: transactionBlocks)
@@ -639,7 +686,9 @@ public abstract class Store
                         if(oldValue == newValue) break;
                     }
                     long pos = (block.pos + pCurrentStart) << 8;
+                    assert (pos & 0x3ff) == 0; // lower 10 bits must be clear
                     int len = (pCurrent - pCurrentStart) / 4;
+                    assert len > 0 && len <= 1024;
                     int patchLow = (int)pos | (len - 1);
                     int patchHigh = (int)(pos >>> 32);
                     journal.writeInt(patchLow);
@@ -648,8 +697,9 @@ public abstract class Store
                     crc.update(ba);
                     intToBytes(ba, patchHigh);
                     crc.update(ba);
+                    // Log.debug("Journaling %d words at %X: ", len, pos >>> 8);
 
-                    ByteBuffer buf = original;
+                    // ByteBuffer buf = original;
                     int pEnd = pCurrent;
                     int p = pCurrentStart;
                     p += originalOfs;
@@ -658,6 +708,8 @@ public abstract class Store
                     {
                         int v = original.getInt(p);
                         journal.writeInt(v);
+                        // int newVal = current.getInt(p - originalOfs);
+                        // Log.debug("- %d (0x%X) -- New value: %d (0x%X)", v, v, newVal, newVal);
                         intToBytes(ba, v);
                         crc.update(ba);
                     }
@@ -670,7 +722,8 @@ public abstract class Store
         journal.writeInt(0xffff_ffff);
         journal.writeInt(0xffff_ffff);
         journal.writeInt((int)crc.getValue());
-        journal.getChannel().force(false);
+        // journal.getChannel().force(false);
+        journal.getFD().sync();
     }
 
     // TODO: The verifier mechanism seems awkward
@@ -690,5 +743,10 @@ public abstract class Store
     {
         verifier.store = this;
         return verifier.verify();
+    }
+
+    public long currentFileSize() throws IOException
+    {
+        return Files.size(path);
     }
 }

@@ -76,7 +76,7 @@ public class FabReader
 	
 	protected void beginKey(String key)
 	{
-		System.out.format("BEGIN [%s]\n", key);
+		// System.out.format("BEGIN [%s]\n", key);
 	}
 	
 	protected void keyValue(String key, String value)
@@ -86,7 +86,7 @@ public class FabReader
 	
 	protected void endKey()
 	{
-		System.out.format("END\n");
+		// System.out.format("END\n");
 	}
 	
 	protected void error(String msg)

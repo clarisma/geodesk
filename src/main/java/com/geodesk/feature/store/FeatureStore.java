@@ -32,8 +32,8 @@ public class FeatureStore extends BlobStore
     public static final int VERSION = 1_000_000;
 
     private static final int MAGIC_CODE_OFS = 32;
-    private static final int ZOOM_LEVELS_OFS = 40;
-    private static final int TILE_INDEX_PTR_OFS = 44;
+    public static final int ZOOM_LEVELS_OFS = 40;
+    public static final int TILE_INDEX_PTR_OFS = 44;
     private static final int PROPERTIES_PTR_OFS = 48;
     private static final int STRING_TABLE_PTR_OFS = 52;
     private static final int INDEX_SCHEMA_PTR_OFS = 56;

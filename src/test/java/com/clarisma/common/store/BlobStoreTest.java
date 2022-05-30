@@ -2,6 +2,11 @@ package com.clarisma.common.store;
 
 
 import com.clarisma.common.util.Log;
+import com.geodesk.core.Box;
+import com.geodesk.feature.FeatureLibrary;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -12,6 +17,8 @@ import static org.junit.Assert.*;
 
 public class BlobStoreTest
 {
+    private TestBlobStore store;
+
     public static class TestBlobStore extends BlobStore
     {
         public TestBlobStore(String filename)
@@ -31,7 +38,7 @@ public class BlobStoreTest
         public void free(int... blobs)
         {
             beginTransaction();
-            for(int i=0; i<blobs.length; i++)
+            for (int i = 0; i < blobs.length; i++)
             {
                 freeBlob(blobs[i]);
             }
@@ -40,12 +47,22 @@ public class BlobStoreTest
         }
     }
 
-    @Test public void testAllocFree() throws IOException
+    @Before public void setUp() throws IOException
     {
         String filename = "c:\\geodesk\\test-blob.store";
-        if(Files.deleteIfExists(Path.of(filename)));
-        TestBlobStore store = new TestBlobStore(filename);
+        // TODO: delete journal
+        if (Files.deleteIfExists(Path.of(filename))) ;
+        store = new TestBlobStore(filename);
         store.open();
+    }
+
+    @After public void tearDown()
+    {
+        store.close();
+    }
+
+    @Test public void testAllocFree() throws IOException
+    {
         int a = store.alloc(4);     // 1:4
         assertEquals(1, a);
         int b = store.alloc(20);    // 1:4, 5:20
@@ -65,7 +82,7 @@ public class BlobStoreTest
         assertEquals(34, g);      // c=1:2, e=3:21, f=25:10, g=34:9
         int h = store.alloc(7);
         assertEquals(43, h);      // c=1:2, e=3:21, f=25:10, g=35:9, h=43:7
-        store.free(e,g);                 // c=1:2, (3:21), f=25:10, (35:9), h=43:7
+        store.free(e, g);                 // c=1:2, (3:21), f=25:10, (35:9), h=43:7
         store.free(f);                 // c=1:2, (3:40), h=43:7
         int i = store.alloc(38);
         assertEquals(3, i);      // c=1:2, i=3:38, (41:2), h=43:7
@@ -75,10 +92,35 @@ public class BlobStoreTest
         int j = store.alloc(max);
         assertEquals(max, j);      // c=1:2, i=3:38, (41:2), h=43:7
         int k = store.alloc(max);
-        assertEquals(max*2, k);      // c=1:2, i=3:38, (41:2), h=43:7
+        assertEquals(max * 2, k);      // c=1:2, i=3:38, (41:2), h=43:7
 
-        store.free(i,j,k);          // c=1:2
+        store.free(i, j, k);          // c=1:2
+    }
 
-        store.close();
+    @Test public void testBigAllocFree() throws IOException
+    {
+        int max = 1 << 18;
+        int a = store.alloc(max);
+        check(a);
+        int b = store.alloc(max);
+        check(a,b);
+        int c = store.alloc(max);
+        check(a,b,c);
+        store.free(a);
+        check(b,c);
+        store.free(b);
+        check(c);
+        store.free(c);
+        check();
+    }
+
+    private void check(int... inUse)
+    {
+        Log.debug("---- Checking...");
+        BlobStoreChecker checker = new BlobStoreChecker(store);
+        for(int b: inUse) checker.useBlob(0, b);
+        checker.check();
+        checker.reportErrors(System.out);
+        Assert.assertFalse(checker.hasErrors());
     }
 }

@@ -5,28 +5,55 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
-import java.util.Random;
 import java.util.zip.GZIPOutputStream;
 
 import static com.clarisma.common.store.BlobStoreConstants.*;
 
+/**
+ * A Blob Store is a file containing a large numbers of individual binary
+ * objects (blobs) that span multiple contiguous file pages. Page size is
+ * configurable and must be a power-of-2 multiple of 4 KB.
+ *
+ * Blobs are identified by their starting page (a 32-bit integer).
+ * The maximum size of a Blob Store is dependent on its page size;
+ * at the 4 KB default, the file can grow to 16 TB.
+ *
+ * The maximum size of each blob (including its 4-byte header) is 1 GB
+ * (regardless of page size). Assuming 4 KB pages, a blob can contain up
+ * to 256K pages.
+ *
+ * There is no restriction on the structure and type of content of the blobs,
+ * except for the following: The first 4 bytes contain the size of the blob
+ * and two marker bits. The user must not modify this header. Apart from the
+ * blobs, the Blob Store file contains metadata that maintains allocation
+ * statistics and free lists. An additional user-defined metadata section
+ * can be used to store an index.
+ *
+ * Blob Stores allow concurrent access by multiple processes, with some
+ * restrictions. Write access is mediated through the use of locks.
+ * A process may add blobs and alter metadata while other processes are
+ * reading, but deletion or modification of blobs requires an exclusive lock.
+ *
+ * Blob Stores use the journaling mechanism of the Store baseclass to track
+ * modifications, in order to prevent data corruption due to abnormal process
+ * termination (such as power loss). Using the Journal, a Blob Store can
+ * restore itself to a consistent state by either applying the failed
+ * modifications, or rolling them back.
+ */
 public class BlobStore extends Store
 {
     /**
-     * The number of bits to shift left to turn number of pages into
-     * number of bytes (Page size is always a power of two).
+     * The number of bits to shift left to turn number of pages into number of bytes (Page size is always a power of
+     * two).
      */
     protected int pageSizeShift = 12; // 4KB default page
-
-    protected static final int FREE_BLOB_FLAG = 1 << 31;
-    protected static final int PRECEDING_BLOB_FREE_FLAG = 1 << 30;
-    private static final int PAYLOAD_SIZE_MASK = 0x3fff_ffff;
 
     protected int downloadBlob(URL url)
     {
         return 0; // TODO
     }
 
+    /*
     protected long createFingerprint()
     {
         // A belt-and-suspender approach in case the pseudo-random
@@ -36,6 +63,7 @@ public class BlobStore extends Store
         Random random = new Random();
         return currentTime ^ random.nextLong();
     }
+     */
 
     @Override protected void createStore()
     {
@@ -43,26 +71,32 @@ public class BlobStore extends Store
         ByteBuffer buf = baseMapping;
         buf.putInt(0, MAGIC);
         buf.putInt(VERSION_OFS, VERSION);
-        buf.putLong(FINGERPRINT_OFS, createFingerprint());
+        buf.putLong(TIMESTAMP_OFS, System.currentTimeMillis());
         buf.putInt(METADATA_SIZE_OFS, DEFAULT_METADATA_SIZE);
         buf.putInt(TOTAL_PAGES_OFS, 1);
         // TODO: page size
     }
 
+    @Override protected long getTimestamp()
+    {
+        return baseMapping.getLong(TIMESTAMP_OFS);
+    }
+
     @Override protected void verifyHeader()
     {
         ByteBuffer buf = baseMapping;
-        if(buf.getInt(0) != MAGIC)
+        if (buf.getInt(0) != MAGIC)
         {
             throw new StoreException("Not a BlobStore file", path());
         }
         // TODO: page size
+        // debugCheckRootFT();
     }
 
     @Override protected long getTrueSize()
     {
         assert !isInTransaction();
-        return ((long)baseMapping.getInt(TOTAL_PAGES_OFS)) << pageSizeShift;
+        return ((long) baseMapping.getInt(TOTAL_PAGES_OFS)) << pageSizeShift;
     }
 
     // TODO: naming
@@ -84,7 +118,7 @@ public class BlobStore extends Store
     private ByteBuffer getBlockOfPage(int page)
     {
         assert page >= 0;       // TODO: treat page as unsigned int?
-        return getBlock(((long)page) << pageSizeShift);
+        return getBlock(((long) page) << pageSizeShift);
         // make sure to cast to long before shifting
     }
 
@@ -96,46 +130,52 @@ public class BlobStore extends Store
     // TODO: should also make sure page does not lie in meta space
     protected void checkPage(int page)
     {
-        if(page < 0 || page >= baseMapping.getInt(TOTAL_PAGES_OFS))
+        if (page < 0 || page >= baseMapping.getInt(TOTAL_PAGES_OFS))
         {
             throw new StoreException("Invalid page: " + page, path());
         }
     }
 
+    /**
+     * Determines the number of pages needed to store a blob.
+     *
+     * @param size the size (excluding 4-byte header) of the blob
+     * @return the number of pages needed to store the blob
+     */
     private int pagesForPayloadSize(int size)
     {
+        assert size > 0 && size <= ((1 << 30) - 4);
         return (size + (1 << pageSizeShift) + 3) >> pageSizeShift;
     }
 
     /**
-     * Allocates a blob of a given size. If possible, the smallest existing
-     * free blob that can accommodate the requested number of bytes will be
-     * reused; otherwise, a new blob will be appended to the store file.
+     * Allocates a blob of a given size. If possible, the smallest existing free blob that can accommodate the requested
+     * number of bytes will be reused; otherwise, a new blob will be appended to the store file.
      *
      * TODO: guard against exceeding maximum file size
      *
-     * @param size  the size of the blob, not including its 4-byte header
-     *
+     * @param size the size of the blob, not including its 4-byte header
      * @return the first page of the blob
      */
     protected int allocateBlob(int size)
     {
-        assert size >=0 && size <= ((1 << 30) - 4);
+        // debugCheckRootFT();
+        assert size >= 0 && size <= ((1 << 30) - 4); // TODO: >0 ?
         int precedingBlobFreeFlag = 0;
         int requiredPages = pagesForPayloadSize(size);
         ByteBuffer rootBlock = getBlock(0);
         int trunkRanges = rootBlock.getInt(TRUNK_FT_RANGE_BITS_OFS);
-        if(trunkRanges != 0)
+        if (trunkRanges != 0)
         {
             // If there are free blobs, check if there is one large enough
             // to accommodate the requested size
 
             // The first slot in the trunk FT worth checking
-            int trunkSlot = (requiredPages-1) / 512;
+            int trunkSlot = (requiredPages - 1) / 512;
 
             // The first slot in the leaf FT to check (for subsequent
             // leaf FTs, we need to start at 0
-            int leafSlot = (requiredPages-1) % 512;
+            int leafSlot = (requiredPages - 1) % 512;
             int trunkOfs = TRUNK_FREE_TABLE_OFS + trunkSlot * 4;
             int trunkEnd = (trunkOfs & 0xffff_ffc0) + 64;
 
@@ -143,7 +183,7 @@ public class BlobStore extends Store
             // than the number of pages we require, so shift off those bits
             trunkRanges >>>= trunkSlot / 16;
 
-            for(;;)
+            for (; ; )
             {
                 if ((trunkRanges & 1) == 0)
                 {
@@ -151,7 +191,7 @@ public class BlobStore extends Store
                     // check free blobs in the next-larger range; if there
                     // aren't any, we quit
 
-                    if(trunkRanges == 0) break;
+                    if (trunkRanges == 0) break;
 
                     // If a range does not contain any free blobs, no need
                     // to check each of its 16 entries individually. The number
@@ -180,9 +220,13 @@ public class BlobStore extends Store
                     int leafOfs = LEAF_FREE_TABLE_OFS + leafSlot * 4;
                     int leafEnd = (leafOfs & 0xffff_ffc0) + 64;
 
+                    assert (leafBlock.getInt(0) & FREE_BLOB_FLAG) != 0 :
+                        String.format("Leaf FB blob %d must be a free blob",
+                            leafTableBlob);
+
                     leafRanges >>>= leafSlot / 16;
 
-                    for(;;)
+                    for (; ; )
                     {
                         if ((leafRanges & 1) == 0)
                         {
@@ -191,7 +235,7 @@ public class BlobStore extends Store
                             leafEnd += rangesToSkip * 64;
                             leafOfs = leafEnd - 64;
                         }
-                        for(; leafOfs<leafEnd; leafOfs+=4)
+                        for (; leafOfs < leafEnd; leafOfs += 4)
                         {
                             int freeBlob = leafBlock.getInt(leafOfs);
                             if (freeBlob == 0) continue;
@@ -229,7 +273,7 @@ public class BlobStore extends Store
 
                             ByteBuffer freeBlock = getBlockOfPage(freeBlob);
                             int header = freeBlock.getInt(0);
-                            assert (header & FREE_BLOB_FLAG) != 0:
+                            assert (header & FREE_BLOB_FLAG) != 0 :
                                 String.format("Blob %d is not free", freeBlob);
                             int freeBlobPayloadSize = header & PAYLOAD_SIZE_MASK;
                             assert (freeBlobPayloadSize + 4) >> pageSizeShift == freePages :
@@ -293,6 +337,7 @@ public class BlobStore extends Store
                             }
 
                             freeBlock.putInt(0, size | precedingBlobFreeFlag);
+                            // debugCheckRootFT();
                             return freeBlob;
                         }
                         leafRanges >>>= 1;
@@ -329,8 +374,13 @@ public class BlobStore extends Store
             precedingBlobFreeFlag = PRECEDING_BLOB_FREE_FLAG;
         }
         rootBlock.putInt(TOTAL_PAGES_OFS, totalPages + requiredPages);
+
+        // TODO: no need to journal the blob's header block if it is in
+        //  virgin space
+        //  But: need to mark the segment as dirty, so it can be forced
         ByteBuffer newBlock = getBlockOfPage(totalPages);
         newBlock.putInt(0, size | precedingBlobFreeFlag);
+        // debugCheckRootFT();
         return totalPages;
     }
 
@@ -341,25 +391,26 @@ public class BlobStore extends Store
 
     private static int getFreeTableBlob(ByteBuffer rootBlock, int pages)
     {
-        int trunkSlot = (pages-1) / 512;
+        int trunkSlot = (pages - 1) / 512;
         return rootBlock.getInt(TRUNK_FREE_TABLE_OFS + trunkSlot * 4);
     }
 
     /**
-     * Deallocates a blob. Any adjacent free blobs are coalesced, provided
-     * that they are located in the same 1-GB segment.
+     * Deallocates a blob. Any adjacent free blobs are coalesced, provided that they are located in the same 1-GB
+     * segment.
      *
      * @param firstPage the first page of the blob
      */
     protected void freeBlob(int firstPage)
     {
+        // debugCheckRootFT();
         ByteBuffer rootBlock = getBlock(0);
         ByteBuffer block = getBlockOfPage(firstPage);
         int sizeAndFlags = block.getInt(0);
         int freeFlag = sizeAndFlags & FREE_BLOB_FLAG;
         int precedingBlobFree = sizeAndFlags & PRECEDING_BLOB_FREE_FLAG;
 
-        if(freeFlag != 0)
+        if (freeFlag != 0)
         {
             throw new StoreException(
                 "Attempt to free blob that is already marked as free", path());
@@ -373,14 +424,14 @@ public class BlobStore extends Store
         int prevPages = 0;
         int nextPages = 0;
 
-        if(precedingBlobFree != 0 && !isFirstPageOfSegment(firstPage))
+        if (precedingBlobFree != 0 && !isFirstPageOfSegment(firstPage))
         {
             // If there is another free blob preceding this one,
             // and it is in the same segment, coalesce it
 
-            ByteBuffer prevTailBlock = getBlockOfPage(firstPage-1);
+            ByteBuffer prevTailBlock = getBlockOfPage(firstPage - 1);
             prevPages = prevTailBlock.getInt(TRAILER_OFS);
-            prevBlob = firstPage-prevPages;
+            prevBlob = firstPage - prevPages;
             ByteBuffer prevBlock = getBlockOfPage(prevBlob);
 
             // The preceding free blob could itself have a preceding free blob
@@ -393,14 +444,14 @@ public class BlobStore extends Store
             // log.debug("    Coalescing preceding blob at {} ({} pages})", prevBlob, prevPages);
         }
 
-        if(nextBlob < totalPages && !isFirstPageOfSegment(nextBlob))
+        if (nextBlob < totalPages && !isFirstPageOfSegment(nextBlob))
         {
             // There is another blob following this one,
             // and it is in the same segment
 
             ByteBuffer nextBlock = getBlockOfPage(nextBlob);
             int nextSizeAndFlags = nextBlock.getInt(0);
-            if((nextSizeAndFlags & FREE_BLOB_FLAG) != 0)
+            if ((nextSizeAndFlags & FREE_BLOB_FLAG) != 0)
             {
                 // The next blob is free, coalesce it
 
@@ -411,18 +462,18 @@ public class BlobStore extends Store
             }
         }
 
-        if(prevPages != 0)
+        if (prevPages != 0)
         {
             int prevFreeTableBlob = getFreeTableBlob(rootBlock, prevPages);
-            if(prevFreeTableBlob == prevBlob)
+            if (prevFreeTableBlob == prevBlob)
             {
                 relocateFreeTable(prevFreeTableBlob, prevPages);
             }
         }
-        if(nextPages != 0)
+        if (nextPages != 0)
         {
             int nextFreeTableBlob = getFreeTableBlob(rootBlock, nextPages);
-            if(nextFreeTableBlob == nextBlob)
+            if (nextFreeTableBlob == nextBlob)
             {
                 relocateFreeTable(nextFreeTableBlob, nextPages);
             }
@@ -431,13 +482,21 @@ public class BlobStore extends Store
         pages += prevPages + nextPages;
         firstPage -= prevPages;
 
-        if(firstPage + pages == totalPages)
+        /*
+        if(pages == 262144)
+        {
+            Log.debug("Freeing 1-GB blob (First page = %d @ %X)...",
+                firstPage, (long)firstPage << pageSizeShift);
+        }
+         */
+
+        if (firstPage + pages == totalPages)
         {
             // If the free blob is located at the end of the file, reduce
             // the total page count (effectively truncating the store)
 
             totalPages = firstPage;
-            while(precedingBlobFree != 0)
+            while (precedingBlobFree != 0)
             {
                 // If the preceding blob is free, that means it
                 // resides in the preceding 1-GB segment (since we cannot
@@ -446,7 +505,10 @@ public class BlobStore extends Store
                 // occupies an entire segment, and its preceding blob is
                 // free as well, keep trimming
 
-                ByteBuffer prevTailBlock = getBlockOfPage(totalPages-1);
+                // Log.debug("Trimming across segment boundary...");
+
+                ByteBuffer prevTailBlock = getBlockOfPage(totalPages - 1);
+                // TODO: this will be wrong for page size > 4KB!
                 prevPages = prevTailBlock.getInt(TRAILER_OFS);
                 totalPages -= prevPages;
                 prevBlob = totalPages;
@@ -456,16 +518,19 @@ public class BlobStore extends Store
                 // Move freetable, if necessary
 
                 int prevFreeTableBlob = getFreeTableBlob(rootBlock, prevPages);
-                if(prevFreeTableBlob == prevBlob)
+                if (prevFreeTableBlob == prevBlob)
                 {
+                    // Log.debug("Relocating free table for %d pages", prevPages);
                     relocateFreeTable(prevBlob, prevPages);
                 }
 
-                if(!isFirstPageOfSegment(totalPages)) break;
+                if (!isFirstPageOfSegment(totalPages)) break;
                 int prevSizeAndFlags = prevBlock.getInt(0);
                 precedingBlobFree = prevSizeAndFlags & PRECEDING_BLOB_FREE_FLAG;
             }
             rootBlock.putInt(TOTAL_PAGES_OFS, totalPages);
+
+            // Log.debug("Truncated store to %d pages.", totalPages);
         }
         else
         {
@@ -478,18 +543,16 @@ public class BlobStore extends Store
 
             // TODO: somewhat inefficient, since we've potentially retrieved flags
         }
+        // debugCheckRootFT();
     }
 
     /**
-     * Removes a free blob from its freetable. If this blob is the last
-     * free blob in a given size range, removes the leaf freetable from
-     * the trunk freetable. If this free blob contains the leaf freetable,
-     * and this freetable is still needed, it is the responsibility of
-     * the caller to copy it to another free blob in the same size range.
+     * Removes a free blob from its freetable. If this blob is the last free blob in a given size range, removes the
+     * leaf freetable from the trunk freetable. If this free blob contains the leaf freetable, and this freetable is
+     * still needed, it is the responsibility of the caller to copy it to another free blob in the same size range.
      *
-     * This method does not affect the PRECEDING_BLOB_FREE_FLAG of the
-     * successor blob; it is the responsibility of the caller to clear
-     * the flag, if necessary.
+     * This method does not affect the PRECEDING_BLOB_FREE_FLAG of the successor blob; it is the responsibility of the
+     * caller to clear the flag, if necessary.
      *
      * @param freeBlock
      */
@@ -500,12 +563,12 @@ public class BlobStore extends Store
 
         // Unlink the blob from its siblings
 
-        if(nextBlob != 0)
+        if (nextBlob != 0)
         {
             ByteBuffer nextBlock = getBlockOfPage(nextBlob);
             nextBlock.putInt(PREV_FREE_BLOB_OFS, prevBlob);
         }
-        if(prevBlob != 0)
+        if (prevBlob != 0)
         {
             ByteBuffer prevBlock = getBlockOfPage(prevBlob);
             prevBlock.putInt(NEXT_FREE_BLOB_OFS, nextBlob);
@@ -516,11 +579,11 @@ public class BlobStore extends Store
         // for free blobs of this size
 
         int payloadSize = freeBlock.getInt(0) & 0x3fff_ffff;
-        assert ((payloadSize+4) & (0xffff_ffff >>> (32 - pageSizeShift))) == 0:
+        assert ((payloadSize + 4) & (0xffff_ffff >>> (32 - pageSizeShift))) == 0 :
             "Payload size + 4 of a free blob must be multiple of page size";
         int pages = (payloadSize + 4) >> pageSizeShift;
-        int trunkSlot = (pages-1) / 512;
-        int leafSlot = (pages-1) % 512;
+        int trunkSlot = (pages - 1) / 512;
+        int leafSlot = (pages - 1) % 512;
 
         // log.debug("     Removing blob with {} pages", pages);
 
@@ -542,7 +605,7 @@ public class BlobStore extends Store
 
         ByteBuffer leafBlock = getBlockOfPage(leafBlob);
         leafBlock.putInt(leafOfs, nextBlob);
-        if(nextBlob != 0) return;
+        if (nextBlob != 0) return;
 
         // Check if there are any other free blobs in the same size range
 
@@ -551,9 +614,9 @@ public class BlobStore extends Store
 
         leafOfs = LEAF_FREE_TABLE_OFS + (leafRange * 64);
         int leafEnd = leafOfs + 64;
-        for(; leafOfs < leafEnd; leafOfs += 4)
+        for (; leafOfs < leafEnd; leafOfs += 4)
         {
-            if(leafBlock.getInt(leafOfs) != 0) return;
+            if (leafBlock.getInt(leafOfs) != 0) return;
         }
 
         // The range has no free blobs, clear its range bit
@@ -561,7 +624,7 @@ public class BlobStore extends Store
         int leafRangeBits = leafBlock.getInt(LEAF_FT_RANGE_BITS_OFS);
         leafRangeBits &= ~(1 << leafRange);
         leafBlock.putInt(LEAF_FT_RANGE_BITS_OFS, leafRangeBits);
-        if(leafRangeBits != 0) return;
+        if (leafRangeBits != 0) return;
 
         // No ranges are in use, which means the leaf free table is
         // no longer required
@@ -575,9 +638,9 @@ public class BlobStore extends Store
 
         trunkOfs = TRUNK_FREE_TABLE_OFS + (trunkRange * 64);
         int trunkEnd = trunkOfs + 64;
-        for(; trunkOfs < trunkEnd; trunkOfs += 4)
+        for (; trunkOfs < trunkEnd; trunkOfs += 4)
         {
-            if(rootBlock.getInt(trunkOfs) != 0) return;
+            if (rootBlock.getInt(trunkOfs) != 0) return;
         }
 
         // The trunk range has no leaf tables, clear its range bit
@@ -588,39 +651,38 @@ public class BlobStore extends Store
     }
 
     /**
-     * Adds a blob to the freetable, and sets its size, header flags
-     * and trailer.
+     * Adds a blob to the freetable, and sets its size, header flags and trailer.
      *
-     * This method does not affect the PRECEDING_BLOB_FREE_FLAG of the
-     * successor blob; it is the responsibility of the caller to set
-     * the flag, if necessary.
+     * This method does not affect the PRECEDING_BLOB_FREE_FLAG of the successor blob; it is the responsibility of the
+     * caller to set the flag, if necessary.
      *
-     * @param firstPage     the first page of the blob
-     * @param pages         the number of pages of this blob
-     * @param freeFlags     PRECEDING_BLOB_FREE_FLAG or 0
+     * @param firstPage the first page of the blob
+     * @param pages     the number of pages of this blob
+     * @param freeFlags PRECEDING_BLOB_FREE_FLAG or 0
      */
     private void addFreeBlob(int firstPage, int pages, int freeFlags)
     {
         // log.debug("      Adding free blob {} ({} pages)", firstPage, pages);
 
-        assert freeFlags==0 || freeFlags == PRECEDING_BLOB_FREE_FLAG;
+        assert freeFlags == 0 || freeFlags == PRECEDING_BLOB_FREE_FLAG;
         ByteBuffer firstBlock = getBlockOfPage(firstPage);
         int payloadSize = (pages << pageSizeShift) - 4;
         firstBlock.putInt(0, payloadSize | FREE_BLOB_FLAG | freeFlags);
         firstBlock.putInt(PREV_FREE_BLOB_OFS, 0);
         ByteBuffer lastBlock = getBlockOfPage(firstPage + pages - 1);
+        // TODO: won't work if page size > 4KB
         lastBlock.putInt(TRAILER_OFS, pages);
         ByteBuffer rootBlock = getBlock(0);
-        int trunkSlot = (pages-1) / 512;
+        int trunkSlot = (pages - 1) / 512;
         int leafBlob = rootBlock.getInt(TRUNK_FREE_TABLE_OFS + trunkSlot * 4);
         ByteBuffer leafBlock;
-        if(leafBlob == 0)
+        if (leafBlob == 0)
         {
             // If no local free table exists for the size range of this blob,
             // this blob becomes the local free table
 
             firstBlock.putInt(LEAF_FT_RANGE_BITS_OFS, 0);
-            for(int i=0; i<2048; i+=4)
+            for (int i = 0; i < 2048; i += 4)
             {
                 firstBlock.putInt(LEAF_FREE_TABLE_OFS + i, 0);
             }
@@ -630,7 +692,7 @@ public class BlobStore extends Store
             rootBlock.putInt(TRUNK_FREE_TABLE_OFS + trunkSlot * 4, firstPage);
             leafBlock = firstBlock;
 
-            // log.debug("        Created leaf FT in this blob", firstPage, pages);
+            // Log.debug("  Free blob %d: Created leaf FT for %d pages", firstPage, pages);
         }
         else
         {
@@ -640,10 +702,10 @@ public class BlobStore extends Store
         // Determine the slot in the leaf freetable where this
         // free blob will be placed
 
-        int leafSlot = (pages-1) % 512;
+        int leafSlot = (pages - 1) % 512;
         int leafOfs = LEAF_FREE_TABLE_OFS + leafSlot * 4;
         int nextBlob = leafBlock.getInt(leafOfs);
-        if(nextBlob != 0)
+        if (nextBlob != 0)
         {
             // If a free blob of the same size exists already,
             // chain this blob as a sibling
@@ -663,15 +725,12 @@ public class BlobStore extends Store
     }
 
     /**
-     * Copies a blob's free table to another free blob. The original blob's
-     * free table and the free-range bits must be valid, all other data
-     * is allowed to have been modified at this point.
+     * Copies a blob's free table to another free blob. The original blob's free table and the free-range bits must be
+     * valid, all other data is allowed to have been modified at this point.
      *
-     * @param page          the first page of the original blob
-     * @param sizeInPages   the blob's size in pages
-     *
-     * @return the page of the blob to which the free table has been assigned,
-     *  or 0 if the table has not been relocated.
+     * @param page        the first page of the original blob
+     * @param sizeInPages the blob's size in pages
+     * @return the page of the blob to which the free table has been assigned, or 0 if the table has not been relocated.
      */
 
     // TODO: give this method more responsibility, see uses
@@ -683,29 +742,30 @@ public class BlobStore extends Store
         // Make a copy of ranges, because we will modify it during search
         int originalRanges = ranges;
         int p = LEAF_FREE_TABLE_OFS;
-        while(ranges != 0)
+        while (ranges != 0)
         {
-            if((ranges & 1) != 0)
+            if ((ranges & 1) != 0)
             {
                 int pEnd = p + 64;
-                for(; p<pEnd; p+=4)
+                for (; p < pEnd; p += 4)
                 {
                     int otherPage = block.getInt(p);
-                    if(otherPage != 0 && otherPage != page)
+                    if (otherPage != 0 && otherPage != page)
                     {
                         ByteBuffer otherBlock = getBlockOfPage(otherPage);
-                        assert (otherBlock.getInt(0) & FREE_BLOB_FLAG) != 0:
-                            "Found allocated blob in FT";
+                        assert (otherBlock.getInt(0) & FREE_BLOB_FLAG) != 0 :
+                            String.format("Found allocated blob (First page = %d) in FT",
+                                otherPage);
 
-                        for(int i = LEAF_FREE_TABLE_OFS;
-                            i< LEAF_FREE_TABLE_OFS + FREE_TABLE_LEN; i+=4)
+                        for (int i = LEAF_FREE_TABLE_OFS;
+                             i < LEAF_FREE_TABLE_OFS + FREE_TABLE_LEN; i += 4)
                         {
                             otherBlock.putInt(i, block.getInt(i));
                         }
                         otherBlock.putInt(LEAF_FT_RANGE_BITS_OFS, originalRanges);
-                            // don't use `ranges`; search consumes the bits
+                        // don't use `ranges`; search consumes the bits
                         ByteBuffer rootBlock = getBlock(0);
-                        int trunkSlot = (sizeInPages-1) / 512;
+                        int trunkSlot = (sizeInPages - 1) / 512;
                         rootBlock.putInt(TRUNK_FREE_TABLE_OFS + trunkSlot * 4, otherPage);
 
                         // log.debug("      Moved free table from {} to {}", page, otherPage);
@@ -725,6 +785,7 @@ public class BlobStore extends Store
         return 0;
     }
 
+    // TODO: remove
     public void export(int page, Path path) throws IOException
     {
         final ByteBuffer buf = bufferOfPage(page);
@@ -733,15 +794,15 @@ public class BlobStore extends Store
         final int BUF_SIZE = 64 * 1024;
         byte[] b = new byte[BUF_SIZE];
         int bytesRemaining = len;
-        FileOutputStream fout  =new FileOutputStream(path.toString());
+        FileOutputStream fout = new FileOutputStream(path.toString());
         GZIPOutputStream out = new GZIPOutputStream(fout);
         byte flagMask = 0x3f;
-        while(bytesRemaining > 0)
+        while (bytesRemaining > 0)
         {
             int chunkSize = Integer.min(bytesRemaining, BUF_SIZE);
             buf.get(b, 0, chunkSize);
             b[3] &= flagMask;
-            flagMask = (byte)0xff;
+            flagMask = (byte) 0xff;
             out.write(b, 0, chunkSize);
             bytesRemaining -= chunkSize;
             p += chunkSize;
@@ -749,4 +810,52 @@ public class BlobStore extends Store
         out.close();
         fout.close();
     }
+
+    /*
+    // TODO
+    protected void debugCheck()
+    {
+        debugCheckRootFT();
+        BlobStoreChecker checker = new BlobStoreChecker(this);
+        checker.check();
+        if (checker.hasErrors())
+        {
+            checker.reportErrors(System.out);
+            throw new StoreException("BlobStore corrupted.", path());
+        }
+    }
+
+    protected void debugCheckRootFT()
+    {
+        debugCheckRootFT(getMapping(0));
+        debugCheckRootFT(getBlock(0));
+    }
+
+    protected void debugCheckRootFT(ByteBuffer buf)
+    {
+        debugLogRootFT(buf);
+        int p = TRUNK_FREE_TABLE_OFS;
+        int ranges = 0;
+        for (int slot = 0; slot < 512; slot++)
+        {
+            if (buf.getInt(p) != 0) ranges |= 1 << (slot >>> 4);
+            p += 4;
+        }
+        int actualRanges = buf.getInt(TRUNK_FT_RANGE_BITS_OFS);
+        if (actualRanges != ranges)
+        {
+            throw new StoreException(
+                String.format("trunk_free_range_mask should be %X instead of %X",
+                    ranges, actualRanges), path());
+        }
+    }
+
+    protected void debugLogRootFT(ByteBuffer buf)
+    {
+        Log.debug("trunk_free_range_mask (%s) = %X",
+            buf == getMapping(0) ? "stored" : "uncommitted",
+            buf.getInt(TRUNK_FT_RANGE_BITS_OFS));
+    }
+
+    */
 }

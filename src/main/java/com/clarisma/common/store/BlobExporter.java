@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.zip.DeflaterOutputStream;
-import java.util.zip.GZIPOutputStream;
 
 import static com.clarisma.common.store.BlobStoreConstants.*;
 
@@ -63,7 +62,7 @@ public class BlobExporter<T extends BlobStore>
         int bytesRemaining = len;
 
         // Write header
-        Bytes.putInt(b, 0, MAGIC_EXPORTED_BLOB);
+        Bytes.putInt(b, 0, EXPORTED_MAGIC);
         Bytes.putInt(b, 4, VERSION);
         // TODO: GUID
         // Bytes.putInt(b, 8, id); // TODO
