@@ -11,8 +11,8 @@ import java.util.Random;
 
 public class BlobStoreTester extends BlobStore
 {
-    private int runs = 1_000;
-    private int maxTransactionLength = 20;
+    private int runs = 100;
+    private int maxTransactionLength = 50;
     private int maxBlobSize = 262_144;
     private MutableLongList blobs = new LongArrayList();
     private long totalBlobsAllocated;

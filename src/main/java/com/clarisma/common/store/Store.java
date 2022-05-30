@@ -94,6 +94,52 @@ public abstract class Store
         this.path = path;
     }
 
+    // TODO: could map segments lazily
+    protected MappedByteBuffer getMapping(int n)
+    {
+        MappedByteBuffer[] a = mappings;
+        MappedByteBuffer buf;
+        if(n < a.length && (buf = a[n]) != null) return buf;
+
+        synchronized (mappingsLock)
+        {
+            // Read array and perform check again
+            a = mappings;
+            int len = a.length;
+            if(n >= len)
+            {
+                a = Arrays.copyOf(a, n + 1);
+            }
+            else
+            {
+                buf = a[n];
+                if (buf != null) return buf;
+                a = Arrays.copyOf(a, a.length);
+            }
+            try
+            {
+                // Log.debug("Mapping segment %d...", i);
+                buf = channel.map(
+                    FileChannel.MapMode.READ_WRITE,
+                    (long) n * MAPPING_SIZE, MAPPING_SIZE);
+            }
+            catch(IOException ex)
+            {
+                throw new StoreException(
+                    String.format("%s: Failed to map segment at %X (%s)",
+                        path, (long)n * MAPPING_SIZE, ex.getMessage()), ex);
+            }
+
+            buf.order(ByteOrder.LITTLE_ENDIAN);		// TODO: check!
+            // TODO: better: make it configurable
+            a[n] = buf;
+            mappings = a;
+            return buf;
+        }
+    }
+
+    // old version
+    /*
     protected MappedByteBuffer getMapping(int n)
     {
         MappedByteBuffer[] a = mappings;
@@ -131,6 +177,7 @@ public abstract class Store
         }
         return a[n];
     }
+     */
 
     private boolean unmapSegments()
     {
@@ -160,7 +207,8 @@ public abstract class Store
                 MappedByteBuffer[] a = mappings;
                 for (int i = 0; i < a.length; i++)
                 {
-                    clean.invoke(theUnsafe, a[i]);
+                    MappedByteBuffer buf = a[i];
+                    if(buf != null) clean.invoke(theUnsafe, buf);
                 }
                 mappings = new MappedByteBuffer[0];
                 return true;
@@ -396,6 +444,7 @@ public abstract class Store
             int segment = iter.next();
             // Log.debug("Syncing segment %d...", segment);
             getMapping(segment).force();
+            // TODO: handle UncheckedIOException
         }
     }
 

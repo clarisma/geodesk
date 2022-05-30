@@ -28,6 +28,12 @@ public class BlobStoreConstants
     public static final int VERSION_OFS = 4;
     public static final int TIMESTAMP_OFS = 8;
 
+    // TODO: GUID_OFS
+    //  PROPERTIES_PTR_OFS
+    //  INDEX_PTR_OFS
+    //  SUBTYPE_MAGIC_OFS
+    //  SUBTYPE_VERSION_OFS
+
     /**
      * Offset where the total size of the Blob Store (in pages) is stored.
      */
