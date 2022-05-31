@@ -42,11 +42,148 @@ import static java.nio.file.StandardOpenOption.WRITE;
 // TODO: At what level should we synchronize access?
 
 /**
- * Base class for a persistent data store that supports transactions and
+ * Base class for persistent data stores that supports transactions and
  * journaling. A Store is backed by a sparse file that is memory-mapped
  * in segments, 1 GB each.
+ *
+ * All updates to a Store are journaled, to prevent corruption of the Store's
+ * contents in the event updates are only partially written due to abnormal
+ * process termination or power loss.
+ *
+ * Stores are designed to be shared among processes. Multiple processes can
+ * read existing data, while one process may add new data. Modifying existing
+ * data requires exclusive access by one single process. Access is mediated
+ * via file locks. File locks are treated as advisory. The distinction between
+ * "new data" and "existing data" is left to the subclass.
+ *
+ * Adding and updating data must be done within transactions. Multiple threads
+ * may read data, but only one thread is allowed to write. Note that the Store
+ * base class does not enforce access rules, it only provides the building
+ * blocks for transactional semantics and journaling. It is up to the concrete
+ * subclasses to ensure proper concurrency.
+ *
+ * The Store base class imposes no format for the contents of the store,
+ * except for the following:
+ *
+ * - Write access that requires journaling must be performed via 4-KB blocks
+ *
+ * - Contiguous chunks of data must not cross 1-GB segment boundaries
+ *
+ * - The first 8 bytes of the store file must be metadata, or which the first
+ *   4 bytes must be the type indicator ("magic number") which cannot be zero
+ *   (zero indicates an uninitialized file). The other 4 bytes typically
+ *   store the version number of the file format.
+ *
+ * - The store file must record its creation time (as an 8-byte timestamp).
+ *   (It is recommended not to rely on the filesystem-provided metadata,
+ *   but to record this timestamp in the store file itself)
+ *
+ * - Store data assumes little-endian byte order
+ *
+ * Modifications to a Store follow this pattern:
+ *
+ * - beginTransaction()  -- either APPEND or EXCLUSIVE
+ *
+ * - One or more calls to getBlock() to obtain a 4-KB block at a specific
+ *   address. This block is represented as a ByteBuffer, which can then
+ *   be modified. When changes are committed, the original contents of these
+ *   blocks are first written to the journal, so the store file can be restored
+ *   to its original state if the transaction fails to complete. Once the
+ *   journal has been safely stored on disk, the changes are written to the
+ *   store file itself.
+ *
+ * - commit() or rollback() to apply or discard all changes since the last
+ *   call to beginTransaction(), commit() or rollback()
+ *
+ * - endTransaction()
+ *
+ * For performance reasons, changes may be written directly into the data
+ * store's buffers (without obtaining staging buffers via getBlock() ) but
+ * only for sections of the store file that are impervious to undefined data
+ * due to partially-performed writes (for example, the inner blocks of
+ * a previously freed blob in a BlobStore, since these blocks by definition
+ * contain garbage). However, at least one block in the same segment must
+ * have been obtained via getBlock(), and its contents must be actually
+ * modified, in order for the segment to be properly synched by a subsequent
+ * call to commit().
+ *
+ * Data that is appended to the end of a file does not require journaling;
+ * it can be written directly into the buffers (the above caveat regarding
+ * synching does not apply)
+ *
+ * Journal File
+ * ============
+ *
+ * The journal file has the following format:
+ *
+ * Action (4 bytes): Indicates what should happen when the store file is
+ * opened and the journal file is present: 0 = do nothing, 1 = apply changes
+ *
+ * Timestamp (8 bytes): The creation timestamp of the data store. If there
+ * is a mismatch between the timestamps of the store and the journal, the
+ * journal is discarded (for example, the store was deleted and re-created,
+ * but the journal of the old store file was left behind).
+ *
+ * Journaling Instruction (zero or more):
+ *
+ *     Offset and length (8 bytes): The top 54 bits contain the offset of the
+ *     word (*not* the byte) where the first change should be written.
+ *     The lower 10 bits contain the number of words to write (-1):
+ *      e.g. 0x8ffc04 means "write 5 words starting at offset 0x23ff0"
+ *      (0x8ffc * 4)
+ *
+ *     Value (4 bytes; one or more): The 4-byte values to write
+ *
+ * End Marker (8 bytes):   0xffff_ffff_ffff_ffff
+ * Checksum (4 bytes):     A CRC32 calculated over the Journaling Instructions
+ *
+ * - Journaling instructions never cross block boundaries
+ * - Each journaling instruction can encode up to 1024 words (one 4-KB block)
+ *
+ * File Recovery
+ * =============
+ *
+ * If a process terminates abnormally while a Store Transaction is open,
+ * it may leave behind a journal file. The next time the Store is opened,
+ * the open() method checks for presence of a "hot" journal (a journal
+ * that contains valid instructions) and resets the store file to the
+ * state after the last successful call to commit(), or its the state
+ * propor to the start of the transaction if commit() was not called
+ * (or did not complete successfully).
+ *
+ * This ensures that users of the Store class will never find the store file
+ * in an inconsistent state due to partially-executed writes.
+ *
+ * (A partially-written journal is discarded; commit() will never begin
+ * writing journaled changes to the store file until the journal is
+ * completely written to disk).
+ *
+ * TODO: byte order of journal
  */
 // TODO: allow writing only within a transaction
+
+// TODO: journal recovery may need exclusive lock
+//  Process A opens append xaction, writes journal, appends tile,
+//  enters tile into index, gets killed before synching and clearing the journal
+//  Process B reads index, sees tile, reads tile
+//  Process C opens transaction; transaction sees journal, starts to apply,
+//   rolls back the new tile written by A while B is reading it = BAD
+
+// TODO:
+//  Synching must respect write order for Append to be safe:
+//  Process A downloads a tile: allocs blob, downloads into new blob, finally
+//    enters blob into the index. But commit() applies the writes in arbitrary
+//    order! This means thread B could see the index entry before the tile
+//    is written into the store = BAD
+//  Possible solution: write blocks in the order they were obtained
+//       - may be brittle
+//    OR: make write order explicit
+//    OR: always write metadata blocks last
+//       but Store has no concept of metadata
+//    OR: let subclass determine write order
+
+// TODO: could add extra safety by also writing timestamp of journal,
+//  CRC on this timestamp as well
 
 public abstract class Store
 {
@@ -94,7 +231,8 @@ public abstract class Store
         this.path = path;
     }
 
-    // TODO: could map segments lazily
+    // maps segments lazily
+    // TODO: consider option to map in read-only mode
     protected MappedByteBuffer getMapping(int n)
     {
         MappedByteBuffer[] a = mappings;
@@ -209,6 +347,8 @@ public abstract class Store
                 {
                     MappedByteBuffer buf = a[i];
                     if(buf != null) clean.invoke(theUnsafe, buf);
+                    // TODO: set array entry to null just in case one of the
+                    //  cleaner invocations fails?
                 }
                 mappings = new MappedByteBuffer[0];
                 return true;
@@ -220,6 +360,42 @@ public abstract class Store
         }
     }
 
+    /**
+     * Locks (or unlocks) the store file. There are four lock levels:
+     *
+     * NONE:        this process may not access any data
+     * READ:        this process and others may read existing data; one other
+     *              process (but not this one) may add new data
+     * APPEND:      this process may read existing data and add new data;
+     *              other processes may only read existing data
+     * EXCLUSIVE:   this process may read and modify any data; all other
+     *              processes must wait
+     *
+     * The locking paradigm uses two file locks, covering two short regions
+     * of the file: `lockRead` (bytes 0-3) and `lockWrite` (bytes 4-7).
+     * The four lock levels use these file locks as follows:
+     *
+     *              lockRead    lockWrite
+     * NONE:        ---         ---
+     * READ:        shared      ---
+     * APPEND:      shared      exclusive
+     * EXCLUSIVE:   exclusive   ---
+     *
+     * (EXCLUSIVE does not need to hold lockWrite, because no other process
+     * can obtain lockRead)
+     *
+     * This method blocks until the desired lock level can be obtained.
+     *
+     * If the requested lock level is already active, this method does nothing.
+     *
+     * @param newLevel      NONE, READ, APPEND or EXCLUSIVE
+     * @return  the previous lock level
+     *
+     * @throws java.nio.channels.FileLockInterruptionException if the invoking
+     *      thread was interrupted while waiting for a lock
+     *
+     * @throws IOException if an I/O error occurred
+     */
     protected int lock(int newLevel) throws IOException
     {
         int oldLevel = lockLevel;
@@ -242,13 +418,24 @@ public abstract class Store
             }
             if (newLevel == LOCK_APPEND)
             {
-                lockWrite = channel.lock(4, 4, true);
+                lockWrite = channel.lock(4, 4, false);
             }
             lockLevel = newLevel;
         }
         return oldLevel;
     }
 
+    /**
+     * Attempts to obtain an exclusive lock on the store file.
+     * The store file must be unlocked.
+     * If another process holds any lock on this Store, the
+     * method returns immediately.
+     *
+     * @return  true if the exclusive lock was obtained, or false if
+     *          another process holds a lock on this Store
+     *
+     * @throws IOException if an I/O error occurred
+     */
     protected boolean tryExclusiveLock() throws IOException
     {
         assert lockLevel == LOCK_NONE;
@@ -277,6 +464,7 @@ public abstract class Store
         open(LOCK_READ);
     }
 
+    // TODO: not needed, enter exclusive transaction instead?
     public void openExclusive()
     {
         open(LOCK_EXCLUSIVE);
@@ -350,8 +538,20 @@ public abstract class Store
      * Checks whether the journal file is valid.
      *
      * The journal file must be open prior to calling this method.
+     * A journal is "invalid" if:
+     *
+     * - Its timestamp does not match the store's timestamp (This is a
+     *   journal that belonged to a previous store file with the same
+     *   name); OR
+     *
+     * - It is missing its trailer, or its checksum is invalid
+     *   (A previous process died before it could completely write the
+     *   journal; since journaled changes are only applied to the store
+     *   once the journal has been safely stored, we can ignore the
+     *   journal in this case)
      *
      * @return `true` if the journal file is complete and valid
+     *
      * @throws IOException
      */
     private boolean verifyJournal() throws IOException
@@ -436,6 +636,9 @@ public abstract class Store
      * @param affectedSegments  a set of integers which specify the segments
      *                          to sync to disk
      */
+    // TODO: order matters! see notes above re downloading tile: index entry
+    //  must be written last, else we'll get a race condition
+
     private void syncSegments(IntSet affectedSegments)
     {
         IntIterator iter = affectedSegments.intIterator();
@@ -473,6 +676,8 @@ public abstract class Store
         journal.seek(0);
         int instruction = journal.readInt();
         if(instruction == 0) return false;
+            // TODO: should we clear the journal anyway, in case
+            //  journal was reset but not truncated?
 
         // Log.debug("Getting lock to apply journal...");
 
@@ -527,7 +732,7 @@ public abstract class Store
     {
         journal.seek(0);
         journal.writeInt(0);
-        journal.setLength(4);
+        journal.setLength(4);   // TODO: just trim to 0 instead?
         // journal.getChannel().force(false);
         journal.getFD().sync();
     }

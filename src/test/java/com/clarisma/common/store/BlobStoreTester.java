@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class BlobStoreTester extends BlobStore
 {
-    private int runs = 100;
+    private int runs = 1;
     private int maxTransactionLength = 50;
     private int maxBlobSize = 262_144;
     private MutableLongList blobs = new LongArrayList();
@@ -103,8 +103,11 @@ public class BlobStoreTester extends BlobStore
         long ms = timer.stop();
         Log.debug("Allocated %d and freed %d in %s", totalBlobsAllocated,
             totalBlobsFreed, Format.formatTimespan(ms));
-        Log.debug("Avg. time of %d ms per alloc/free", ms /
-            (totalBlobsAllocated + totalBlobsFreed));
+        if(totalBlobsAllocated > 0 || totalBlobsFreed > 0)
+        {
+            Log.debug("Avg. time of %d ms per alloc/free", ms /
+                (totalBlobsAllocated + totalBlobsFreed));
+        }
     }
 
     public static void main(String[] args) throws Exception
@@ -114,6 +117,7 @@ public class BlobStoreTester extends BlobStore
             // TODO: delete journal
         BlobStoreTester test = new BlobStoreTester("c:\\geodesk\\test.store");
         test.run();
+        test.close();
     }
 
     private static class Checker extends BlobStoreChecker
