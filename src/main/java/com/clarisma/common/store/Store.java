@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.zip.CRC32;
 
 import static java.nio.file.StandardOpenOption.*;
@@ -198,15 +199,11 @@ public abstract class Store
     private volatile MappedByteBuffer[] mappings = new MappedByteBuffer[0];
     protected MappedByteBuffer baseMapping;
     private final Object mappingsLock = new Object();
-    private int transactionState;
+    private final ReentrantLock transactionLock = new ReentrantLock();
     private MutableLongObjectMap<TransactionBlock> transactionBlocks;
+    private long preTransactionFileSize;
 
     protected static final int MAPPING_SIZE = 1 << 30;
-
-    protected static final int TRANSACTION_EXCLUSIVE = 1;
-    protected static final int TRANSACTION_RETRY = 2;
-    private   static final int TRANSACTION_OPEN = 4;
-    private   static final int TRANSACTION_SAVED = 8;
 
     protected final static int LOCK_NONE = 0;
     protected final static int LOCK_READ = 1;
@@ -230,6 +227,51 @@ public abstract class Store
         if(channel != null) throw new StoreException("Store is already open", path);
         this.path = path;
     }
+
+    // === Abstract Methods / Common Overrides ===
+
+    /**
+     * Creates the metadata for an empty store. Called by open() if the
+     * file-type indicator is zero.
+     */
+    protected abstract void createStore();
+
+    /**
+     * Checks the file-type indicator and other metadata fields (e.g.
+     * file format version). Called by open().
+     *
+     * @throws StoreException if the file that is being opened isn't suitable
+     *      for use with this subclass of `Store`, or if its contents have
+     *      other problems that prevent the store from being opened.
+     */
+    protected abstract void verifyHeader();
+
+    protected void initialize() throws IOException
+    {
+        // by default, do nothing
+    }
+
+    /**
+     * Gets the "real" size of the store file.
+     * Memory-mapping causes the file to grow, so the file size returned
+     * by the OS is typically larger than the actual space used by the file.
+     *
+     * @return file size in bytes
+     */
+    protected abstract long getTrueSize();
+
+    /**
+     * Gets the creation timestamp of the Store. Where this is stored is
+     * at the discretion of subclasses; however, it should be recorded in the
+     * file itself, as OS-provided metadata is not always reliable.
+     *
+     * @return  the creation timestamp (milliseconds since
+     *          midnight, January 1, 1970 UTC)
+     */
+    protected abstract long getTimestamp();
+
+
+    // === File Mapping ===
 
     // maps segments lazily
     // TODO: consider option to map in read-only mode
@@ -445,19 +487,6 @@ public abstract class Store
         return true;
     }
 
-    protected abstract void createStore();
-
-    protected abstract void verifyHeader();
-
-    protected void initialize()
-    {
-        // by default, do nothing
-    }
-
-    protected File getJournalFile()
-    {
-        return new File(path.toString() + "-journal");
-    }
 
     public void open()
     {
@@ -534,14 +563,93 @@ public abstract class Store
         ba[3] = (byte)(v >>> 24);
     }
 
+    // === Journaling ===
+
+    protected File getJournalFile()
+    {
+        return new File(path.toString() + "-journal");
+    }
+
     /**
-     * Checks whether the journal file is valid.
+     * Opens the journal file.
      *
-     * The journal file must be open prior to calling this method.
-     * A journal is "invalid" if:
+     * @param journalFile   the journal file
+     * @throws IOException
+     */
+    private void openJournal(File journalFile) throws IOException
+    {
+        assert journal == null;
+        journal = new RandomAccessFile(journalFile, "rw");
+    }
+
+    // TODO: store fingerprint in journal to guard against mismatch
+    //  between store and journal (e.g. process writing to store crashes,
+    //  user deletes the store and re-creates it, but leaves old journal
+    //  behind)
+    // TODO: Use modification timestamp instead of fingerprint;
+    //  fingerprint identifies content, timestamp & fingerprint
+    //  identify content and its representation
+    protected boolean processJournal(File journalFile) throws IOException
+    {
+        if(journal == null) openJournal(journalFile);
+        journal.seek(0);
+        int instruction = journal.readInt();
+        if(instruction == 0) return false;
+        // TODO: should we clear the journal anyway, in case
+        //  journal was reset but not truncated?
+
+        // Log.debug("Getting lock to apply journal...");
+
+        // Even though we may be making modifications other than additions,
+        // we only need to obtain the append lock: If another process died
+        // while making additions, then exclusive read access isn't necessary.
+        // If another process made modifications that did not complete
+        // normally, it would have had to hold exclusive read access -- this
+        // means that if we are here, we have been waiting to open the file,
+        // so we are the first to see the journal instructions.
+
+        int prevLockLevel = lock(LOCK_APPEND);  // TODO: need exclusive lock!
+
+        // Check header again, because another process may have already
+        // processed the journal while we were waiting for the lock
+
+        journal.seek(0);
+        instruction = journal.readInt();
+        if(instruction == 0) return false;
+
+        // Log.debug("Still need to apply journal...");
+
+        boolean appliedJournal = false;
+        if(verifyJournal())
+        {
+            // Log.debug("Journal is valid.");
+            applyJournal();
+            // debugCheck();
+            appliedJournal = true;
+        }
+        else
+        {
+            // Log.debug("Journal is invalid.");
+        }
+        clearJournal();
+        lock(prevLockLevel);
+        return appliedJournal;
+    }
+
+    /*
+    protected void debugCheck()
+    {
+    }
+     */
+
+    /**
+     * Checks whether the Journal File is valid.
      *
-     * - Its timestamp does not match the store's timestamp (This is a
-     *   journal that belonged to a previous store file with the same
+     * The Journal File must be open prior to calling this method.
+     * A Journal is "invalid" if:
+     *
+     * - Its timestamp does not match the Store's timestamp (This is a
+     *   Journal that belonged to a previous store file with the same
      *   name); OR
      *
      * - It is missing its trailer, or its checksum is invalid
@@ -631,6 +739,100 @@ public abstract class Store
     }
 
     /**
+     * Resets the journal and flushes it to disk.
+     *
+     * @throws IOException
+     */
+    private void clearJournal() throws IOException
+    {
+        journal.seek(0);
+        journal.writeInt(0);
+        journal.setLength(4);   // TODO: just trim to 0 instead?
+        // journal.getChannel().force(false);
+        journal.getFD().sync();
+    }
+
+    /**
+     * Writes the rollback instructions for the current transaction
+     * into the Journal File.
+     *
+     * @throws IOException
+     */
+    private void saveJournal() throws IOException
+    {
+        if(journal == null) openJournal(getJournalFile());
+        journal.seek(0);
+        journal.writeInt(1);    // TODO
+        journal.writeLong(getTimestamp());
+        byte[] ba = new byte[4];
+        CRC32 crc = new CRC32();
+        for(TransactionBlock block: transactionBlocks)
+        {
+            int pCurrent = 0;
+            ByteBuffer original = block.original;
+            ByteBuffer current = block.current;
+            int originalOfs = (int)(block.pos & 0x3fff_ffff);
+            int pOriginal = originalOfs;
+            for(;;)
+            {
+                int oldValue = original.getInt(pOriginal);
+                int newValue = current.getInt(pCurrent);
+                if(oldValue != newValue)
+                {
+                    int pCurrentStart = pCurrent;
+                    for(;;)
+                    {
+                        pCurrent += 4;
+                        pOriginal += 4;
+                        if (pCurrent == 4096) break;
+                        oldValue = original.getInt(pOriginal);
+                        newValue = current.getInt(pCurrent);
+                        if(oldValue == newValue) break;
+                    }
+                    long pos = (block.pos + pCurrentStart) << 8;
+                    assert (pos & 0x3ff) == 0; // lower 10 bits must be clear
+                    int len = (pCurrent - pCurrentStart) / 4;
+                    assert len > 0 && len <= 1024;
+                    int patchLow = (int)pos | (len - 1);
+                    int patchHigh = (int)(pos >>> 32);
+                    journal.writeInt(patchLow);
+                    journal.writeInt(patchHigh);
+                    intToBytes(ba, patchLow);
+                    crc.update(ba);
+                    intToBytes(ba, patchHigh);
+                    crc.update(ba);
+                    // Log.debug("Journaling %d words at %X: ", len, pos >>> 8);
+
+                    // ByteBuffer buf = original;
+                    int pEnd = pCurrent;
+                    int p = pCurrentStart;
+                    p += originalOfs;
+                    pEnd += originalOfs;
+                    for(;p<pEnd;p+=4)
+                    {
+                        int v = original.getInt(p);
+                        journal.writeInt(v);
+                        // int newVal = current.getInt(p - originalOfs);
+                        // Log.debug("- %d (0x%X) -- New value: %d (0x%X)", v, v, newVal, newVal);
+                        intToBytes(ba, v);
+                        crc.update(ba);
+                    }
+                }
+                pCurrent += 4;
+                if(pCurrent >= 4096) break;
+                pOriginal += 4;
+            }
+        }
+        journal.writeInt(0xffff_ffff);
+        journal.writeInt(0xffff_ffff);
+        journal.writeInt((int)crc.getValue());
+        // journal.getChannel().force(false);
+        journal.getFD().sync();
+    }
+
+    // === Transactions ===
+
+    /**
      * Ensures that modified segments are written to disk.
      *
      * @param affectedSegments  a set of integers which specify the segments
@@ -651,105 +853,10 @@ public abstract class Store
         }
     }
 
-    /**
-     * Opens the journal file.
-     *
-     * @param journalFile   the journal file
-     * @throws IOException
-     */
-    private void openJournal(File journalFile) throws IOException
-    {
-        assert journal == null;
-        journal = new RandomAccessFile(journalFile, "rw");
-    }
-
-    // TODO: store fingerprint in journal to guard against mismatch
-    //  between store and journal (e.g. process writing to store crashes,
-    //  user deletes the store and re-creates it, but leaves old journal
-    //  behind)
-    // TODO: Use modification timestamp instead of fingerprint;
-    //  fingerprint identifies content, timestamp & fingerprint
-    //  identify content and its representation
-    protected boolean processJournal(File journalFile) throws IOException
-    {
-        if(journal == null) openJournal(journalFile);
-        journal.seek(0);
-        int instruction = journal.readInt();
-        if(instruction == 0) return false;
-            // TODO: should we clear the journal anyway, in case
-            //  journal was reset but not truncated?
-
-        // Log.debug("Getting lock to apply journal...");
-
-        // Even though we may be making modifications other than additions,
-        // we only need to obtain the append lock: If another process died
-        // while making additions, then exclusive read access isn't necessary.
-        // If another process made modifications that did not complete
-        // normally, it would have had to hold exclusive read access -- this
-        // means that if we are here, we have been waiting to open the file,
-        // so we are the first to see the journal instructions.
-
-        int prevLockLevel = lock(LOCK_APPEND);
-
-        // Check header again, because another process may have already
-        // processed the journal while we were waiting for the lock
-
-        journal.seek(0);
-        instruction = journal.readInt();
-        if(instruction == 0) return false;
-
-        // Log.debug("Still need to apply journal...");
-
-        boolean appliedJournal = false;
-        if(verifyJournal())
-        {
-            // Log.debug("Journal is valid.");
-            applyJournal();
-            // debugCheck();
-            appliedJournal = true;
-        }
-        else
-        {
-            // Log.debug("Journal is invalid.");
-        }
-        clearJournal();
-        lock(prevLockLevel);
-        return appliedJournal;
-    }
-
-    /*
-    protected void debugCheck()
-    {
-    }
-     */
-
-    /**
-     * Resets the journal and flushes it to disk.
-     *
-     * @throws IOException
-     */
-    private void clearJournal() throws IOException
-    {
-        journal.seek(0);
-        journal.writeInt(0);
-        journal.setLength(4);   // TODO: just trim to 0 instead?
-        // journal.getChannel().force(false);
-        journal.getFD().sync();
-    }
-
-    /**
-     * Gets the "real" size of the store file.
-     * Memory-mapping causes the file to grow, so the file size returned
-     * by the OS is typically larger than the actual space used by the file.
-     *
-     * @return file size in bytes
-     */
-    protected abstract long getTrueSize();
-
-    protected abstract long getTimestamp();
 
     // TODO: do not call close() if any threads are still accessing buffers
     // implement a cleanup method?
+    // TODO: create an awaitOperations() method
 
     public void close()
     {
@@ -824,17 +931,52 @@ public abstract class Store
         }
     }
 
-    protected void beginTransaction()
+    protected void beginTransaction(int transactionlockLevel) throws IOException
     {
-        assert !isInTransaction();
+        assert transactionlockLevel == LOCK_APPEND || transactionlockLevel == LOCK_EXCLUSIVE;
+        transactionLock.lock();
+        try
+        {
+            lock(transactionlockLevel);
+            try
+            {
+                File journalFile = getJournalFile();
+                if (journalFile.exists()) processJournal(journalFile);
+                preTransactionFileSize = getTrueSize();
+                    // do this after processing journal, because file size
+                    // may have changed as a result
+            }
+            catch(Throwable ex)
+            {
+                lock(LOCK_READ);
+                throw ex;
+            }
+        }
+        catch(Throwable ex)
+        {
+            transactionLock.unlock();
+            throw ex;
+        }
         transactionBlocks = new LongObjectHashMap<>();
+    }
 
-        // TODO: lock
-
-        // TODO: Check for presence of journal after acquiring the lock,
-        //  because another process may have crashed and left the Store
-        //  in an inconsistent state. In this case, we need to apply
-        //  the journal
+    protected void endTransaction() throws IOException
+    {
+        assert isInTransaction();
+        assert transactionLock.isHeldByCurrentThread();
+        transactionBlocks = null;
+        try
+        {
+            lock(LOCK_READ);
+        }
+        catch(Throwable ex)
+        {
+            throw ex;
+        }
+        finally
+        {
+            transactionLock.unlock();
+        }
     }
 
     protected boolean isInTransaction()
@@ -842,49 +984,47 @@ public abstract class Store
         return transactionBlocks != null;
     }
 
-    protected void commit()
+    protected void rollback()
+    {
+        assert transactionLock.isHeldByCurrentThread();
+        transactionBlocks.clear();
+    }
+
+    protected void commit() throws IOException
     {
         assert isInTransaction();
-        try
+        assert transactionLock.isHeldByCurrentThread();
+
+        saveJournal();
+
+        MutableIntSet affectedSegments = new IntHashSet();
+        for(TransactionBlock block: transactionBlocks.values())
         {
-            // debugCheck();
-            saveJournal();
-
-            MutableIntSet affectedSegments = new IntHashSet();
-            for(TransactionBlock block: transactionBlocks.values())
-            {
-                int segmentNumber = (int)(block.pos >> 30);
-                int ofs = (int)block.pos & 0x3fff_ffff;
-                assert (ofs & 0xfff) == 0;
-                assert block.current.array().length == 4096;
-                block.original.put(ofs, block.current.array());
-                affectedSegments.add(segmentNumber);
-            }
-            syncSegments(affectedSegments);
-
-            // Log.debug("Committed %d blocks in %d segments",
-            //    transactionBlocks.size(), affectedSegments.size());
-
-            // throw new RuntimeException("causing commit to fail");
-
-            clearJournal();
-            transactionBlocks = null;
-
-            // TODO: unlock
-
-            // debugCheck();
+            int segmentNumber = (int)(block.pos >> 30);
+            int ofs = (int)block.pos & 0x3fff_ffff;
+            assert (ofs & 0xfff) == 0;
+            assert block.current.array().length == 4096;
+            block.original.put(ofs, block.current.array());
+            affectedSegments.add(segmentNumber);
         }
-        catch(IOException ex)
-        {
-            throw new StoreException("Commit failed.", path, ex);
-        }
+        syncSegments(affectedSegments);
+
+        // Log.debug("Committed %d blocks in %d segments",
+        //    transactionBlocks.size(), affectedSegments.size());
+
+        // throw new RuntimeException("causing commit to fail");
+
+        clearJournal();
     }
 
     protected ByteBuffer getBlock(long pos)
     {
         assert (pos & 0xfff) == 0: String.format(
             "%d: Block must start at 4KB-aligned position", pos);
-        if(transactionBlocks != null)
+        assert isInTransaction();
+        assert transactionLock.isHeldByCurrentThread();
+
+        if(pos < preTransactionFileSize)
         {
             TransactionBlock block = transactionBlocks.get(pos);
             if(block == null)
@@ -908,96 +1048,6 @@ public abstract class Store
         return buf;
     }
 
-    protected void saveJournal() throws IOException
-    {
-        if(journal == null) openJournal(getJournalFile());
-        journal.seek(0);
-        journal.writeInt(1);    // TODO
-        journal.writeLong(getTimestamp());
-        byte[] ba = new byte[4];
-        CRC32 crc = new CRC32();
-        for(TransactionBlock block: transactionBlocks)
-        {
-            int pCurrent = 0;
-            ByteBuffer original = block.original;
-            ByteBuffer current = block.current;
-            int originalOfs = (int)(block.pos & 0x3fff_ffff);
-            int pOriginal = originalOfs;
-            for(;;)
-            {
-                int oldValue = original.getInt(pOriginal);
-                int newValue = current.getInt(pCurrent);
-                if(oldValue != newValue)
-                {
-                    int pCurrentStart = pCurrent;
-                    for(;;)
-                    {
-                        pCurrent += 4;
-                        pOriginal += 4;
-                        if (pCurrent == 4096) break;
-                        oldValue = original.getInt(pOriginal);
-                        newValue = current.getInt(pCurrent);
-                        if(oldValue == newValue) break;
-                    }
-                    long pos = (block.pos + pCurrentStart) << 8;
-                    assert (pos & 0x3ff) == 0; // lower 10 bits must be clear
-                    int len = (pCurrent - pCurrentStart) / 4;
-                    assert len > 0 && len <= 1024;
-                    int patchLow = (int)pos | (len - 1);
-                    int patchHigh = (int)(pos >>> 32);
-                    journal.writeInt(patchLow);
-                    journal.writeInt(patchHigh);
-                    intToBytes(ba, patchLow);
-                    crc.update(ba);
-                    intToBytes(ba, patchHigh);
-                    crc.update(ba);
-                    // Log.debug("Journaling %d words at %X: ", len, pos >>> 8);
-
-                    // ByteBuffer buf = original;
-                    int pEnd = pCurrent;
-                    int p = pCurrentStart;
-                    p += originalOfs;
-                    pEnd += originalOfs;
-                    for(;p<pEnd;p+=4)
-                    {
-                        int v = original.getInt(p);
-                        journal.writeInt(v);
-                        // int newVal = current.getInt(p - originalOfs);
-                        // Log.debug("- %d (0x%X) -- New value: %d (0x%X)", v, v, newVal, newVal);
-                        intToBytes(ba, v);
-                        crc.update(ba);
-                    }
-                }
-                pCurrent += 4;
-                if(pCurrent >= 4096) break;
-                pOriginal += 4;
-            }
-        }
-        journal.writeInt(0xffff_ffff);
-        journal.writeInt(0xffff_ffff);
-        journal.writeInt((int)crc.getValue());
-        // journal.getChannel().force(false);
-        journal.getFD().sync();
-    }
-
-    // TODO: The verifier mechanism seems awkward
-    //  We use this only to get around the access rules
-    //  Need to make more Store methods public, use wrapper
-    //  class as the actual public API
-
-    public static abstract class Verifier<T extends Store>
-    {
-        public T store;
-
-        public abstract boolean verify();
-    }
-
-    // TODO: decouple this
-    public boolean verify(Verifier verifier)
-    {
-        verifier.store = this;
-        return verifier.verify();
-    }
 
     public long currentFileSize() throws IOException
     {

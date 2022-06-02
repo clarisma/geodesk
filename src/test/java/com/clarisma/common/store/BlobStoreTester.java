@@ -6,13 +6,14 @@ import org.eclipse.collections.api.list.primitive.MutableLongList;
 import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
 import org.locationtech.jts.util.Stopwatch;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Random;
 
 public class BlobStoreTester extends BlobStore
 {
-    private int runs = 1;
-    private int maxTransactionLength = 50;
+    private int runs = 10;
+    private int maxTransactionLength = 500;
     private int maxBlobSize = 262_144;
     private MutableLongList blobs = new LongArrayList();
     private long totalBlobsAllocated;
@@ -47,7 +48,7 @@ public class BlobStoreTester extends BlobStore
         if(checker.hasErrors()) throw new RuntimeException("test failed");
     }
 
-    public void run()
+    public void run() throws IOException
     {
         Random random = new Random();
 
@@ -66,7 +67,7 @@ public class BlobStoreTester extends BlobStore
             int numberOfBlobs = random.nextInt(maxTransactionLength) + 1;
             Log.debug("Run %d: %s %d blobs", run,
                 deleteBlobs ? "Freeing" : "Allocating", numberOfBlobs);
-            beginTransaction();
+            beginTransaction(deleteBlobs ? LOCK_EXCLUSIVE : LOCK_APPEND);
             if (deleteBlobs)
             {
                 if(numberOfBlobs > blobs.size()) numberOfBlobs = blobs.size();
@@ -94,11 +95,9 @@ public class BlobStoreTester extends BlobStore
                 totalBlobsAllocated += numberOfBlobs;
             }
             commit();
+            endTransaction();
             // check();
         }
-
-        check();
-        close();
 
         long ms = timer.stop();
         Log.debug("Allocated %d and freed %d in %s", totalBlobsAllocated,
@@ -108,6 +107,9 @@ public class BlobStoreTester extends BlobStore
             Log.debug("Avg. time of %d ms per alloc/free", ms /
                 (totalBlobsAllocated + totalBlobsFreed));
         }
+
+        check();
+        close();
     }
 
     public static void main(String[] args) throws Exception

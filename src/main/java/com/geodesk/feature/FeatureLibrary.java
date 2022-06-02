@@ -18,15 +18,7 @@ public class FeatureLibrary extends WorldView<Feature>
      */
     public FeatureLibrary(String path)
     {
-        super(new FeatureStore());
-        store.setPath(Path.of(path));
-        store.open();
-        store.enableQueries();
-    }
-
-    public GeometryFactory geometryFactory()
-    {
-        return store.geometryFactory();
+        this(path, null);
     }
 
     /**
@@ -38,9 +30,18 @@ public class FeatureLibrary extends WorldView<Feature>
      */
     public FeatureLibrary(String path, String url)
     {
-        this(path);
-        // TODO: set repository URL
+        super(new FeatureStore());
+        store.setPath(Path.of(path));
+        if(url != null) store.setRepository(url);
+        store.open();
+        store.enableQueries();
     }
+
+    public GeometryFactory geometryFactory()
+    {
+        return store.geometryFactory();
+    }
+
 
     /**
      * Closes the library and releases its resources. **Important**: Do not call

@@ -32,8 +32,8 @@ public class BlobExporter<T extends BlobStore>
     protected void export(Path path, /* int id, */ int page) throws IOException
     {
         final ByteBuffer buf;
-        final int p;
-        final int len;
+        int p;
+        int len;
         if(page == 0)
         {
             len = store.baseMapping.getInt(METADATA_SIZE_OFS);
@@ -41,16 +41,24 @@ public class BlobExporter<T extends BlobStore>
             buf.put(0, store.baseMapping, 0, len);
             resetMetadata(buf);
             p = 0;
+            len -= 8;
+
+            // for metadata, include all
         }
         else
         {
             buf = store.bufferOfPage(page);
             p = store.offsetOfPage(page);
             len = buf.getInt(p) & 0x3fff_ffff;
+
+            // TODO: assumes word at pos 4 is checksum, not included in exported payload
+            //  len includes length of checksum itself
+
+            p += 8;
+            len -= 4;
         }
-        export(path, /* id, */ buf, p+8, len-4);
-        // TODO: assumes word at pos 4 is checksum, not included in exported payload
-        //  len includes length of checksum itself
+        export(path, /* id, */ buf, p, len);
+
     }
 
     private void export(Path path, /* int id, */

@@ -47,10 +47,17 @@ public class BlobStore extends Store
      * two).
      */
     protected int pageSizeShift = 12; // 4KB default page
+    protected Downloader downloader;
 
     protected int downloadBlob(URL url)
     {
         return 0; // TODO
+    }
+
+    public void setRepository(String url)
+    {
+        assert downloader == null;
+        downloader = new Downloader(this, url);
     }
 
     /*
@@ -93,6 +100,35 @@ public class BlobStore extends Store
         // debugCheckRootFT();
     }
 
+    /**
+     * Checks whether this BlobStore is *empty*. An empty store is valid,
+     * but has no contents.
+     *
+     * @return
+     */
+    protected boolean isEmpty()
+    {
+        return baseMapping.getInt(INDEX_PTR_OFS) == 0;      // TODO
+    }
+
+    @Override protected void initialize() throws IOException
+    {
+        super.initialize();
+        if(isEmpty() && downloader != null)
+        {
+            try
+            {
+                Downloader.Ticket ticket = downloader.request(Downloader.METADATA_ID, null);
+                ticket.awaitCompletion();
+                ticket.throwError();
+            }
+            catch(InterruptedException ex)
+            {
+                // do nothing
+            }
+        }
+    }
+
     @Override protected long getTrueSize()
     {
         assert !isInTransaction();
@@ -115,7 +151,12 @@ public class BlobStore extends Store
         return (page << pageSizeShift) & 0x3fff_ffff;
     }
 
-    private ByteBuffer getBlockOfPage(int page)
+    public long absoluteOffsetOfPage(int page)
+    {
+        return ((long)page) << pageSizeShift;
+    }
+
+    protected ByteBuffer getBlockOfPage(int page)
     {
         assert page >= 0;       // TODO: treat page as unsigned int?
         return getBlock(((long) page) << pageSizeShift);
@@ -126,6 +167,12 @@ public class BlobStore extends Store
     {
         return 1 << pageSizeShift;
     }
+
+    public int indexPointer()
+    {
+        return baseMapping.getInt(INDEX_PTR_OFS) + INDEX_PTR_OFS;
+    }
+        // TODO: make absolute
 
     // TODO: should also make sure page does not lie in meta space
     protected void checkPage(int page)
@@ -142,7 +189,7 @@ public class BlobStore extends Store
      * @param size the size (excluding 4-byte header) of the blob
      * @return the number of pages needed to store the blob
      */
-    private int pagesForPayloadSize(int size)
+    protected int pagesForPayloadSize(int size)
     {
         assert size > 0 && size <= ((1 << 30) - 4);
         return (size + (1 << pageSizeShift) + 3) >> pageSizeShift;
@@ -858,4 +905,10 @@ public class BlobStore extends Store
     }
 
     */
+
+    @Override public void close()
+    {
+        if(downloader != null) downloader.shutdown();
+        super.close();
+    }
 }

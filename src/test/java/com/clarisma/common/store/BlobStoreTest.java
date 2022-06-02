@@ -26,23 +26,25 @@ public class BlobStoreTest
             setPath(Path.of(filename));
         }
 
-        public int alloc(int pages)
+        public int alloc(int pages) throws IOException
         {
-            beginTransaction();
+            beginTransaction(LOCK_APPEND);
             int blob = allocateBlob((pages << pageSizeShift) - 4);
             commit();
+            endTransaction();
             Log.debug("Allocated blob with %d pages at %d", pages, blob);
             return blob;
         }
 
-        public void free(int... blobs)
+        public void free(int... blobs) throws IOException
         {
-            beginTransaction();
+            beginTransaction(LOCK_EXCLUSIVE);
             for (int i = 0; i < blobs.length; i++)
             {
                 freeBlob(blobs[i]);
             }
             commit();
+            endTransaction();
             Log.debug("Freed blobs at %s", blobs);
         }
     }

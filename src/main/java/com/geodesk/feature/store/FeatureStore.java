@@ -12,6 +12,7 @@ import org.eclipse.collections.impl.map.mutable.primitive.IntIntHashMap;
 import org.eclipse.collections.impl.map.mutable.primitive.ObjectIntHashMap;
 import org.locationtech.jts.geom.GeometryFactory;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
@@ -40,7 +41,7 @@ public class FeatureStore extends BlobStore
 
     // TODO: move to subclass, don't need full functionality
     //  for the GolTool
-    @Override protected void initialize()
+    @Override protected void initialize() throws IOException
     {
         super.initialize();
         readStringTable();  // TODO: re-enable
@@ -199,6 +200,7 @@ public class FeatureStore extends BlobStore
         return new StoredRelation(this, buf, p);
     }
 
+    // TODO: create an awaitOperations() method
     @Override public void close()
     {
         if(executor != null)

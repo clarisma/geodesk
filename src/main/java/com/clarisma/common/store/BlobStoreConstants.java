@@ -28,6 +28,8 @@ public class BlobStoreConstants
     public static final int VERSION_OFS = 4;
     public static final int TIMESTAMP_OFS = 8;
 
+    public static final int INDEX_PTR_OFS = 44;
+
     // TODO: GUID_OFS
     //  PROPERTIES_PTR_OFS
     //  INDEX_PTR_OFS
@@ -116,11 +118,14 @@ public class BlobStoreConstants
      */
     public static final int TRAILER_OFS = BLOCK_LEN - 4;
 
+    public static final int FREE_BLOB_TRAILER_LEN = 4;
+
 
     // === EXPORTED BLOB ===
 
     public static int EXPORTED_MAGIC = 0x0BB1DAAD;  // ADDAB10B = "Add a Blob"
                                                          // C01DB10B = "Cold blob"
     public static int EXPORTED_HEADER_LEN = 16;  // TODO
+    public static int EXPORTED_ORIGINAL_LEN_OFS = 12;  // TODO
 
 }
