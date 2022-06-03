@@ -1,5 +1,8 @@
 package com.clarisma.common.store;
 
+import org.eclipse.collections.api.iterator.IntIterator;
+import org.eclipse.collections.api.list.primitive.IntList;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -133,7 +136,8 @@ public class BlobStore extends Store
 
     @Override protected long getTrueSize()
     {
-        assert !isInTransaction();
+        // assert !isInTransaction();
+        // Can also be called from commit()
         return ((long) baseMapping.getInt(TOTAL_PAGES_OFS)) << pageSizeShift;
     }
 
@@ -960,5 +964,19 @@ public class BlobStore extends Store
     {
         if(downloader != null) downloader.shutdown();
         super.close();
+    }
+
+    public void removeBlobs(IntIterator iter) throws IOException
+    {
+        beginTransaction(LOCK_EXCLUSIVE);
+        while(iter.hasNext())
+        {
+            int id = iter.next();
+            int page = getIndexEntry(id);
+            freeBlob(page);
+            setIndexEntry(id, 0);
+        }
+        commit();
+        endTransaction();
     }
 }

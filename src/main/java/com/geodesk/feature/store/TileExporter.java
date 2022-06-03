@@ -24,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 //  - tiles already present
 //  - tiles actually written
 
+// TODO: move more functionality to BlobExporter
+
 public class TileExporter extends BlobExporter<FeatureStore>
 {
     private volatile Throwable error;
@@ -49,6 +51,9 @@ public class TileExporter extends BlobExporter<FeatureStore>
         {
             buf.putInt(pTileIndex + walker.tip() * 4, 0);
         }
+
+        // reset the purgatory tile
+        buf.putInt(pTileIndex, 0);
     }
 
     private synchronized void updateProgress(int exported)

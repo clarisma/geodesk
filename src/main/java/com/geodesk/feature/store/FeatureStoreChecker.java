@@ -48,7 +48,8 @@ public class FeatureStoreChecker extends BlobStoreChecker
 
     public static void main(String[] args)
     {
-        FeatureLibrary features = new FeatureLibrary("c:\\geodesk\\tests\\de2.gol");
+        // FeatureLibrary features = new FeatureLibrary("c:\\geodesk\\tests\\de2.gol");
+        FeatureLibrary features = new FeatureLibrary("c:\\geodesk\\empty.store");
         FeatureStoreChecker checker = new FeatureStoreChecker(features.store());
         checker.check();
         checker.reportErrors(System.out);

@@ -931,13 +931,13 @@ public abstract class Store
         }
     }
 
-    protected void beginTransaction(int transactionlockLevel) throws IOException
+    protected void beginTransaction(int transactionLockLevel) throws IOException
     {
-        assert transactionlockLevel == LOCK_APPEND || transactionlockLevel == LOCK_EXCLUSIVE;
+        assert transactionLockLevel == LOCK_APPEND || transactionLockLevel == LOCK_EXCLUSIVE;
         transactionLock.lock();
         try
         {
-            lock(transactionlockLevel);
+            lock(transactionLockLevel);
             try
             {
                 File journalFile = getJournalFile();
@@ -990,23 +990,56 @@ public abstract class Store
         transactionBlocks.clear();
     }
 
+    /**
+     * Returns the number of the segment in which the given file position
+     * is located.
+     *
+     * @param pos   the absolute position in the file
+     * @return      the corresponding segment number
+     */
+    protected static int segmentOfPos(long pos)
+    {
+        return (int)(pos >> 30);
+    }
+
     protected void commit() throws IOException
     {
         assert isInTransaction();
         assert transactionLock.isHeldByCurrentThread();
 
+        // Save the rollback instructions and make sure the journal file
+        // is safely written to disk
         saveJournal();
 
+        // Copy the contents of all journaled blocks into their segments
+        // (each semgent is a 1-GB MappedByteBuffer); track which segments
+        // have been modified
         MutableIntSet affectedSegments = new IntHashSet();
         for(TransactionBlock block: transactionBlocks.values())
         {
-            int segmentNumber = (int)(block.pos >> 30);
+            int segment = segmentOfPos(block.pos);
             int ofs = (int)block.pos & 0x3fff_ffff;
             assert (ofs & 0xfff) == 0;
             assert block.current.array().length == 4096;
             block.original.put(ofs, block.current.array());
-            affectedSegments.add(segmentNumber);
+            affectedSegments.add(segment);
         }
+
+        // Blocks that are appended to the file during the transaction are
+        // not journaled (they are simply truncated in case of a rollback);
+        // nevertheless, we need to record their segments as well
+        long currentFileSize = getTrueSize();
+        if(currentFileSize > preTransactionFileSize)
+        {
+            int firstSegment = segmentOfPos(preTransactionFileSize);
+            int lastSegment = segmentOfPos(currentFileSize - 1);
+            for(int segment=firstSegment; segment<=lastSegment; segment++)
+            {
+                affectedSegments.add(segment);
+            }
+        }
+
+        // Ensure that the modified segments are written to disk
         syncSegments(affectedSegments);
 
         // Log.debug("Committed %d blocks in %d segments",
@@ -1014,6 +1047,7 @@ public abstract class Store
 
         // throw new RuntimeException("causing commit to fail");
 
+        // Now that all changes are safely stored, we can reset the journal
         clearJournal();
     }
 

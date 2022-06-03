@@ -178,10 +178,8 @@ public class BlobStoreChecker
     {
         // TODO: temporarily turned off to focus on general integrity
 
-        /*
         error(absPosOfPage(start), "%d page%s of unreferenced data",
             end-start, end-start == 1 ? "" : "s");
-         */
         // TODO: try to recover these blobs
     }
 
