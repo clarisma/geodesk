@@ -47,7 +47,7 @@ public class TileExporter extends BlobExporter<FeatureStore>
         walker.start(Box.ofWorld());
         while(walker.next())
         {
-            buf.putInt(pTileIndex + walker.tip(), 0);
+            buf.putInt(pTileIndex + walker.tip() * 4, 0);
         }
     }
 

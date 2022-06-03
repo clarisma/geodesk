@@ -5,7 +5,7 @@ import com.clarisma.common.util.Bytes;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.file.Path;
+import java.nio.file.*;
 import java.util.zip.DeflaterOutputStream;
 
 import static com.clarisma.common.store.BlobStoreConstants.*;
@@ -41,8 +41,6 @@ public class BlobExporter<T extends BlobStore>
             buf.put(0, store.baseMapping, 0, len);
             resetMetadata(buf);
             p = 0;
-            len -= 8;
-
             // for metadata, include all
         }
         else
@@ -55,7 +53,7 @@ public class BlobExporter<T extends BlobStore>
             //  len includes length of checksum itself
 
             p += 8;
-            len -= 4;
+            len -= 4;       // skip not only the header word, but also checksum word
         }
         export(path, /* id, */ buf, p, len);
 
@@ -64,7 +62,8 @@ public class BlobExporter<T extends BlobStore>
     private void export(Path path, /* int id, */
         ByteBuffer buf, int p, int len) throws IOException
     {
-        FileOutputStream fout = new FileOutputStream(path.toString());
+        Path tempPath = Paths.get(path.toString() + ".tmp");
+        FileOutputStream fout = new FileOutputStream(tempPath.toFile());
         final int BUF_SIZE = 64 * 1024;
         final byte[] b = new byte[BUF_SIZE];
         int bytesRemaining = len;
@@ -83,7 +82,7 @@ public class BlobExporter<T extends BlobStore>
         while(bytesRemaining > 0)
         {
             int chunkSize = Integer.min(bytesRemaining, BUF_SIZE);
-            buf.get(b, 0, chunkSize);
+            buf.get(p, b, 0, chunkSize);
             out.write(b, 0, chunkSize);
             bytesRemaining -= chunkSize;
             p += chunkSize;
@@ -93,5 +92,9 @@ public class BlobExporter<T extends BlobStore>
 
         out.close();
         fout.close();
+
+        // TODO: sync needed?
+
+        Files.move(tempPath, path, StandardCopyOption.REPLACE_EXISTING);
     }
 }

@@ -38,6 +38,12 @@ public class Query implements Iterator<Feature>, Bounds
     private int pendingTiles;
     private boolean allTilesRequested;
     private BlockingQueue<TileQueryTask> queue;
+    private volatile RuntimeException error;
+
+    // TODO: We're only tracking the last exception that was thrown, which
+    //  is non-deterministic. Do we need something more sophisticated?
+    //  If multiple tiles are missing, should we accumulate the tile numbers?
+    //  What would the API user do differently based on this information?
 
     public Query(WorldView<?> view)
     {
@@ -143,6 +149,13 @@ public class Query implements Iterator<Feature>, Bounds
         }
     }
 
+    void setError(Throwable error)
+    {
+        this.error = error instanceof RuntimeException ? (RuntimeException)error :
+            new RuntimeException(error);
+            // TODO: proper type for query-related exceptions
+    }
+
     TileQueryTask take()
     {
         try
@@ -204,6 +217,9 @@ public class Query implements Iterator<Feature>, Bounds
                     {
                         // no further tasks are pending, we're done
                         nextFeature = null;
+                        // Throw exceptions last; if tiles are missing, this allows
+                        // the user to at least get partial query results
+                        if(error != null) throw error;
                         return;
                     }
 

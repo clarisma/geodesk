@@ -22,6 +22,8 @@ import java.util.zip.InflaterInputStream;
 
 import static com.clarisma.common.store.BlobStoreConstants.*;
 
+// TODO: We cannot mark a ticket as "completed" until the transaction has been comitted!
+
 public class Downloader
 {
     private final BlobStore store;
@@ -60,6 +62,12 @@ public class Downloader
             this.id = id;
         }
 
+        public int page()
+        {
+            return page;
+        }
+
+        // don't call this directly; must be called by Downloader.ticketCompleted()
         synchronized void complete(int page, Throwable error)
         {
             this.page = page;
@@ -158,11 +166,13 @@ public class Downloader
 
     private synchronized void cancelTickets(Throwable ex)
     {
-        for(Ticket ticket: ticketMap.values())
+        // make a copy because complete() modifies ticketMap
+        List<Ticket> remainingTickets = new ArrayList<>(ticketMap.values());
+        for(Ticket ticket: remainingTickets)
         {
-            ticket.complete(0, ex);
+            ticketCompleted(ticket, 0, ex);
         }
-        ticketMap.clear();
+        assert ticketMap.size() == 0;
         ticketQueue.clear();
         thread = null;
     }
@@ -185,41 +195,30 @@ public class Downloader
             baseUrl, id >>> 12, id & 0xfff));
     }
 
-    protected void download(Ticket ticket)
+    // TODO: don't complete tickets here
+    protected int download(Ticket ticket) throws IOException
     {
-        if(ticket.id == METADATA_ID)
+        int id = ticket.id;
+        if(id == METADATA_ID)
         {
             if(!store.isEmpty())
             {
-                // If store already has metadata, don't download again
-
-                ticket.complete(0, null);
-                return;
+                return 0;
             }
         }
+        else
+        {
+            int page = store.getIndexEntry(id);
+            if(page != 0) return page;
+        }
 
-        URL url;
-        try
-        {
-            url = urlOf(ticket.id);
-        }
-        catch(MalformedURLException ex)
-        {
-            ticket.complete(0, ex);
-            return;
-        }
+        URL url = urlOf(id);
 
         // TODO: retry
 
-        try
-        {
-            int page = download(ticket.id, url);
-            ticket.complete(page, null);
-        }
-        catch(Throwable ex)
-        {
-            ticket.complete(0, ex);
-        }
+        int page = download(id, url);
+        if(id != METADATA_ID) store.setIndexEntry(id, page);
+        return page;
     }
 
     private void invalidTileFile(String reason)
@@ -254,11 +253,7 @@ public class Downloader
                 invalidTileFile("Uncompressed size invalid");
             }
 
-            // TODO: different approach for metadata vs. tiles
-
             InflaterInputStream zipIn = new InflaterInputStream(in);
-
-            // TODO: data may be less than block_len!!!
 
             if (id == METADATA_ID)
             {
@@ -268,11 +263,18 @@ public class Downloader
 
                 firstPage = 0;
                 int firstBlockLen = Math.min(uncompressedSize, BLOCK_LEN);
-                read(zipIn, buf, store.getBlockOfPage(0), 0, firstBlockLen);
+                ByteBuffer rootBlock = store.getBlockOfPage(0);
+                read(zipIn, buf, rootBlock, 0, firstBlockLen);
                 if (uncompressedSize > BLOCK_LEN)
                 {
                     read(zipIn, buf, store.baseMapping, BLOCK_LEN, uncompressedSize - BLOCK_LEN);
                 }
+
+                // Set total number of pages based on the metadata length
+                // (This cannot be included as part of the downloaded metadata itself,
+                // since it varies based on the BlobStore's page size)
+                int metadataSize = rootBlock.getInt(METADATA_SIZE_OFS);
+                rootBlock.putInt(TOTAL_PAGES_OFS, store.bytesToPages(metadataSize));
             }
             else
             {
@@ -287,7 +289,7 @@ public class Downloader
                 // raw MappedByteBuffer if the blob lies above `preTransactionFileSize`
 
                 // TODO: must enforce that we never allocate the space of a blob that
-                //  as freed within the same transaction!
+                //  is freed within the same transaction!
 
                 int headerLen = 8;  // blob header word + checksum word
                 firstPage = store.allocateBlob(payloadSize);
@@ -367,8 +369,9 @@ public class Downloader
                     store.beginTransaction(Store.LOCK_APPEND);
                     for (; ; )
                     {
-                        download(ticket);
+                        int page = download(ticket);
                         store.commit();
+                        ticketCompleted(ticket, page, null);
                         ticket = takeTicket(false);
                         if (ticket == null) break;
                     }

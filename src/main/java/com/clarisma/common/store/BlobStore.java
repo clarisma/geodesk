@@ -9,6 +9,8 @@ import java.util.zip.GZIPOutputStream;
 
 import static com.clarisma.common.store.BlobStoreConstants.*;
 
+// TODO: sync segments above preTransactionFileSize !!!!
+
 /**
  * A Blob Store is a file containing a large numbers of individual binary
  * objects (blobs) that span multiple contiguous file pages. Page size is
@@ -193,6 +195,20 @@ public class BlobStore extends Store
     {
         assert size > 0 && size <= ((1 << 30) - 4);
         return (size + (1 << pageSizeShift) + 3) >> pageSizeShift;
+    }
+
+    /**
+     * Determines the number of pages needed to store the given number
+     * of bytes. (The range of bytes is assumed to start at the beginning
+     * of the first page.)
+     *
+     * @param len  the number of bytes
+     * @return the number of pages needed to store the bytes
+     */
+    protected int bytesToPages(int len)
+    {
+        assert len > 0 && len <= (1 << 30);
+        return (len + (1 << pageSizeShift) - 1) >> pageSizeShift;
     }
 
     /**
@@ -905,6 +921,40 @@ public class BlobStore extends Store
     }
 
     */
+
+    protected int getIndexEntry(int id)
+    {
+        // TODO: should this use journaled blocks instead of raw access?
+        return baseMapping.getInt(indexPointer() + id * 4);
+    }
+
+    protected void setIndexEntry(int id, int page)
+    {
+        int pIndexEntry = indexPointer() + id * 4;
+        ByteBuffer indexBlock = getBlock(pIndexEntry & 0xffff_f000);    // TODO: assumes block length 4096
+        indexBlock.putInt(pIndexEntry % BLOCK_LEN, page);
+    }
+
+    public int fetchBlob(int id)
+    {
+        int page = getIndexEntry(id);
+        if (page != 0) return page;
+        if(downloader == null)
+        {
+            throw new StoreException("Cannot download; repository URL must be specified", path());
+        }
+        try
+        {
+            Downloader.Ticket ticket = downloader.request(id, null);
+            ticket.awaitCompletion();
+            ticket.throwError();
+            return ticket.page();
+        }
+        catch(InterruptedException ex)
+        {
+            throw new RuntimeException(ex);     // TODO
+        }
+    }
 
     @Override public void close()
     {

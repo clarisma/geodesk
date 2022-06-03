@@ -44,8 +44,8 @@ public class FeatureStore extends BlobStore
     @Override protected void initialize() throws IOException
     {
         super.initialize();
-        readStringTable();  // TODO: re-enable
-        readIndexSchema();  // TODO: re-enable
+        readStringTable();
+        readIndexSchema();
         // enableQueries();
         int zoomLevels = zoomLevels();
         minZoom = ZoomLevels.minZoom(zoomLevels);
@@ -126,6 +126,7 @@ public class FeatureStore extends BlobStore
         return baseMapping.getInt(TILE_INDEX_PTR_OFS) + TILE_INDEX_PTR_OFS;
     }
 
+    // TODO: consolidate with getIndexEntry
     public int tilePage(int tip)
     {
         return baseMapping.getInt(tileIndexPointer() + tip * 4) >>> 1;
@@ -162,6 +163,22 @@ public class FeatureStore extends BlobStore
         }
     }
 
+    @Override protected int getIndexEntry(int id)
+    {
+        return super.getIndexEntry(id) >>> 1;
+    }
+
+    @Override protected void setIndexEntry(int id, int page)
+    {
+        super.setIndexEntry(id, page << 1);
+    }
+
+    public int fetchTile(int tip)
+    {
+        return fetchBlob(tip);
+    }
+
+    /*
     public int fetchTile(int tip)
     {
         assert tip >= 0 && tip < (1 << 24) : String.format("Invalid TIP: %d", tip);
@@ -172,7 +189,10 @@ public class FeatureStore extends BlobStore
         int page;
         if (entry == 0)
         {
-            // TODO: download tile (must be synchronized)
+            // TODO: we need a method to download asynchronously,
+            //  and re-submit the TileQueryTask; this way, we can process
+            //  other tiles while we're waiting for the download to finish
+
             page = 0;
             assert false;
         }
@@ -183,6 +203,7 @@ public class FeatureStore extends BlobStore
         }
         return page;
     }
+     */
 
     public StoredFeature getFeature(ByteBuffer buf, int p)
     {
