@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.*;
+import java.util.zip.CRC32;
 import java.util.zip.DeflaterOutputStream;
 
 import static com.clarisma.common.store.BlobStoreConstants.*;
@@ -73,24 +74,27 @@ public class BlobExporter<T extends BlobStore>
         Bytes.putInt(b, 4, VERSION);
         // TODO: GUID
         // Bytes.putInt(b, 8, id); // TODO
-        Bytes.putInt(b, 12, len);
+        Bytes.putInt(b, EXPORTED_ORIGINAL_LEN_OFS, len);
         fout.write(b, 0, EXPORTED_HEADER_LEN);
 
-        // TODO: calculate checksum
-
+        CRC32 checksum = new CRC32();
         DeflaterOutputStream out = new DeflaterOutputStream(fout);
         while(bytesRemaining > 0)
         {
             int chunkSize = Integer.min(bytesRemaining, BUF_SIZE);
             buf.get(p, b, 0, chunkSize);
             out.write(b, 0, chunkSize);
+            checksum.update(b, 0, chunkSize);
             bytesRemaining -= chunkSize;
             p += chunkSize;
         }
 
-        // TODO: write checksum at end of file
-
+        out.finish();       // TODO: needed?
         out.close();
+
+        // write checksum at end
+        Bytes.putInt(b,0, (int)checksum.getValue());
+        fout.write(b,0,4);
         fout.close();
 
         // TODO: sync needed?

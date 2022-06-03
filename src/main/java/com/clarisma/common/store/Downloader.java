@@ -303,7 +303,7 @@ public class Downloader
 
                     int pages = store.pagesForPayloadSize(payloadSize);
                     int pTail = store.offsetOfPage(firstPage + pages) - FREE_BLOB_TRAILER_LEN;
-                    int pPayloadEnd = p + uncompressedSize - headerLen;
+                    int pPayloadEnd = p + uncompressedSize + headerLen;
                     ByteBuffer blobBuf = store.bufferOfPage(firstPage);
                     int pUnprotectedStart = p + BLOCK_LEN;
                     if (pPayloadEnd >= pTail)
@@ -337,7 +337,7 @@ public class Downloader
      * Reads compressed data from a stream and writes it into a target buffer.
      *
      * @param zipIn     the stream of compressed data
-     * @param buf       the intermedidate buffer to use
+     * @param buf       the intermediate buffer to use
      * @param target    the target buffer
      * @param p         the starting position within the target buffer
      * @param len       the uncompressed length of the data to be read

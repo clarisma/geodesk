@@ -155,7 +155,7 @@ public class MemberIterator implements Iterator<Feature>
                 pFeature = (pCurrent & 0xffff_fffc) + ((member >> 3) << 2);
             }
             pCurrent = pNext;
-            if(currentMatcher.acceptTyped(types, featureBuf, pFeature))
+            if (currentMatcher.acceptTyped(types, featureBuf, pFeature))
             {
                 StoredFeature f = store.getFeature(featureBuf, pFeature);
                 // TODO: allow any negative instead of -1?
