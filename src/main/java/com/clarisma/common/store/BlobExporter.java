@@ -90,7 +90,9 @@ public class BlobExporter<T extends BlobStore>
         }
 
         out.finish();       // TODO: needed?
-        out.close();
+        // out.close();
+            // Don't close ZIP stream; on Linux, this closes
+            // the underlying FileOutputStream as well
 
         // write checksum at end
         Bytes.putInt(b,0, (int)checksum.getValue());

@@ -167,6 +167,7 @@ public class TagTableTester
 				e.printStackTrace();
 			}
 			// TODO: fix
+			/*
 			try
 			{
 				writeFile(Path.of("c:\\velojoe\\debug\\tags", name + ".bin"));
@@ -175,6 +176,7 @@ public class TagTableTester
 			{
 				e.printStackTrace();
 			}
+			 */
 			ByteBuffer buf = ByteBuffer.wrap(baos.toByteArray());
 			buf.order(ByteOrder.LITTLE_ENDIAN);
 			return buf;

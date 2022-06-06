@@ -302,11 +302,15 @@ public class Downloader
                     // Blob is longer than one block (can still be single-page)
 
                     int pages = store.pagesForPayloadSize(payloadSize);
-                    int pTail = store.offsetOfPage(firstPage + pages) - FREE_BLOB_TRAILER_LEN;
+
+                    // We can't use store.offsetOfPage(firstPage + pages)
+                    // because it returns 0 if blob sits at end of 1-GB segment;
+                    // that's why we calculate explicitly
+                    int pTail = p + (pages << store.pageSizeShift) - FREE_BLOB_TRAILER_LEN;
                     int pPayloadEnd = p + uncompressedSize + headerLen;
                     ByteBuffer blobBuf = store.bufferOfPage(firstPage);
                     int pUnprotectedStart = p + BLOCK_LEN;
-                    if (pPayloadEnd >= pTail)
+                    if (pPayloadEnd > pTail)
                     {
                         int pUnprotectedEnd = pTail & 0xffff_f000; // TODO: assumes 4096 block len
                         int unprotectedLen = pUnprotectedEnd - pUnprotectedStart;
@@ -316,8 +320,11 @@ public class Downloader
                         }
                         long absoluteTailBlockPos = store.absoluteOffsetOfPage(firstPage)
                             + pUnprotectedEnd - p;
-                        read(zipIn, buf, store.getBlock(absoluteTailBlockPos), 0,
-                            pPayloadEnd - pUnprotectedEnd);
+                        ByteBuffer tailBlock = store.getBlock(absoluteTailBlockPos);
+                        int tailBlockLen = pPayloadEnd - pUnprotectedEnd;
+                        assert tailBlockLen > 0;
+                        assert tailBlockLen <= 4096;
+                        read(zipIn, buf, tailBlock,0, tailBlockLen);
                     }
                     else
                     {

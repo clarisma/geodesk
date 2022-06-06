@@ -138,6 +138,7 @@ public class TileQueryTask extends QueryTask
         catch(Throwable ex)
         {
             Log.error("Failed: %s", ex);
+            ex.printStackTrace();
         }
         return true;
     }
