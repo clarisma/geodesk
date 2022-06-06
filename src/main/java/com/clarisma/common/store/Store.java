@@ -1027,7 +1027,8 @@ public abstract class Store
 
         // Blocks that are appended to the file during the transaction are
         // not journaled (they are simply truncated in case of a rollback);
-        // nevertheless, we need to record their segments as well
+        // nevertheless, we need to record their segments as well, so we
+        // can force them to be written to disk
         long currentFileSize = getTrueSize();
         if(currentFileSize > preTransactionFileSize)
         {

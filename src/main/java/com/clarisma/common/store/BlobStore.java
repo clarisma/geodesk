@@ -12,8 +12,6 @@ import java.util.zip.GZIPOutputStream;
 
 import static com.clarisma.common.store.BlobStoreConstants.*;
 
-// TODO: sync segments above preTransactionFileSize !!!!
-
 /**
  * A Blob Store is a file containing a large numbers of individual binary
  * objects (blobs) that span multiple contiguous file pages. Page size is
@@ -45,6 +43,7 @@ import static com.clarisma.common.store.BlobStoreConstants.*;
  * restore itself to a consistent state by either applying the failed
  * modifications, or rolling them back.
  */
+
 public class BlobStore extends Store
 {
     /**
