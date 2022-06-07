@@ -944,7 +944,8 @@ public class BlobStore extends Store
         if (page != 0) return page;
         if(downloader == null)
         {
-            throw new StoreException("Cannot download; repository URL must be specified", path());
+            throw new StoreException(String.format("Cannot download %06X; " +
+                "repository URL must be specified", id), path());
         }
         try
         {

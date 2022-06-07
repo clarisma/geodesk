@@ -2,6 +2,7 @@ package com.geodesk.feature.store;
 
 import com.clarisma.common.pbf.PbfDecoder;
 import com.clarisma.common.store.BlobStore;
+import com.clarisma.common.store.StoreException;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.MatcherCompiler;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
@@ -44,6 +45,14 @@ public class FeatureStore extends BlobStore
     @Override protected void initialize() throws IOException
     {
         super.initialize();
+
+        // TODO: when should this check be done?
+        if(isEmpty() && downloader == null)
+        {
+            throw new StoreException("Empty library; " +
+                "specify a URL from which its data can be downloaded.", path());
+        }
+
         readStringTable();
         readIndexSchema();
         // enableQueries();

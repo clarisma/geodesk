@@ -5,6 +5,7 @@ import com.geodesk.feature.query.WorldView;
 import org.locationtech.jts.geom.GeometryFactory;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * A Geographic Object Library containing features.
@@ -18,6 +19,16 @@ public class FeatureLibrary extends WorldView<Feature>
      */
     public FeatureLibrary(String path)
     {
+        this(Paths.get(path), null);
+    }
+
+    /**
+     * Creates a `FeatureLibrary` instance associated with an existing GOL file.
+     *
+     * @param path the path of the GOL file.
+     */
+    public FeatureLibrary(Path path)
+    {
         this(path, null);
     }
 
@@ -30,8 +41,20 @@ public class FeatureLibrary extends WorldView<Feature>
      */
     public FeatureLibrary(String path, String url)
     {
+        this(Paths.get(path), url);
+    }
+
+    /**
+     * Creates a `FeatureLibrary` instance associated with the given GOL file;
+     * if the file does not exist, an empty library will be created.
+     *
+     * @param path the path of the GOL file
+     * @param url  the URL from which missing tiles are downloaded into the library
+     */
+    public FeatureLibrary(Path path, String url)
+    {
         super(new FeatureStore());
-        store.setPath(Path.of(path));
+        store.setPath(path);
         if(url != null) store.setRepository(url);
         store.open();
         store.enableQueries();

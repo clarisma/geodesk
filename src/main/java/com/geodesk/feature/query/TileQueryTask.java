@@ -132,14 +132,18 @@ public class TileQueryTask extends QueryTask
                 task = task.next;
             }
             results = res;
-            tilesProcessed = 1;
-            query.put(this);
         }
         catch(Throwable ex)
         {
+            /*
             Log.error("Failed: %s", ex);
             ex.printStackTrace();
+             */
+            query.setError(ex);
+            results = QueryResults.EMPTY;
         }
+        tilesProcessed = 1;
+        query.put(this);
         return true;
     }
 

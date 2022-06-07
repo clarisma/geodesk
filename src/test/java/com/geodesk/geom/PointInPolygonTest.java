@@ -136,6 +136,7 @@ public class PointInPolygonTest
         testPointsFast(P, points);
     }
 
+    /*
     @Test
     public void testPointsFastPerformance()
     {
@@ -152,6 +153,7 @@ public class PointInPolygonTest
         }
 
     }
+     */
 
 
     private void testPoints(int[] polygon, int[] points)
