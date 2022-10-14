@@ -8,6 +8,8 @@ import org.locationtech.jts.geom.impl.CoordinateArraySequence;
 /**
  * A {@link CoordinateSequence} that provides integer-based coordinates
  * in a compact format.
+ *
+ * TODO: rename to XYCoordinateSequence?
  */
 // TODO: is this applicable to geometries other than Way features?
 public class WayCoordinateSequence implements CoordinateSequence

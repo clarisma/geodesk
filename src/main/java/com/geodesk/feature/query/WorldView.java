@@ -99,6 +99,10 @@ public class WorldView<T extends Feature> implements Features<T>
      *
      * Optimize for common case: unconstrained type with new FilterSet
      *
+     * TODO: possibly broken. What happens for
+     *    world.relations().features("a")?
+     *    We would need to create a TypeMatcher, to only return area-relations
+     *
      * @param newTypes
      * @param indexesCovered
      * @param query

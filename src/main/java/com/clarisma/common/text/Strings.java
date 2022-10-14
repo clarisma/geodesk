@@ -1,5 +1,6 @@
 package com.clarisma.common.text;
 
+import java.io.PrintStream;
 import java.lang.reflect.Type;
 import java.text.Normalizer;
 import java.util.StringJoiner;
@@ -87,8 +88,29 @@ public class Strings
         }
         return buf.toString ();
     }
-    
-    public static String unescape (String s, boolean trimQuotes)
+
+	// This method is much slower than building a new String via StringBuffer
+	/*
+	public static void printEscaped (PrintStream out, String s)
+	{
+		for (int i=0; i<s.length(); i++)
+		{
+			char ch = s.charAt(i);
+			char chEscaped = escape(ch);
+			if(chEscaped != Character.MAX_VALUE)
+			{
+				out.append('\\');
+				out.append(chEscaped);
+			}
+			else
+			{
+				out.append (ch);
+			}
+		}
+	}
+	*/
+
+	public static String unescape (String s, boolean trimQuotes)
     {
     	StringBuilder buf = new StringBuilder ();
     	int len = s.length() - (trimQuotes ? 1 : 0);

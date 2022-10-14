@@ -1,10 +1,7 @@
 package com.geodesk.feature;
 
 import com.geodesk.core.Mercator;
-import com.geodesk.feature.filter.ConnectedFilter;
-import com.geodesk.feature.filter.FalseFilter;
-import com.geodesk.feature.filter.PointDistanceFilter;
-import com.geodesk.feature.filter.WithinFilter;
+import com.geodesk.feature.filter.*;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
@@ -58,8 +55,13 @@ public class Filters
         return new WithinFilter(prepared);
     }
 
+    public static Filter crosses(Feature f)
+    {
+        return new CrossesFilter(f);
+    }
+
     /**
-     * Creates a `Filter` that accept features that has at least one common node
+     * Creates a `Filter` that accept features that have at least one common node
      * with the given `Feature`.
      *
      * @param f the `Feature` whose nodes to check against

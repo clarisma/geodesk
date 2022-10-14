@@ -22,6 +22,7 @@ public interface Feature
 	 *
 	 * @return `NODE`, `WAY` or `RELATION`
 	 */
+	// TODO: Drop? instanceof does the job just fine!
 	FeatureType type();
 
 	// TODO: geometryType(): POINT, LINE, POLYGON, COLLECTION
@@ -140,6 +141,10 @@ public interface Feature
 	 * 				or has a value that cannot be converted to an integer
 	 */
 	int intValue(String key);
+
+	// TODO: call this isTagged(key) instead?
+	boolean booleanValue(String key);
+
 	// TODO
 	// boolean hasKey(String k);
 	// boolean isTagged(String k);
@@ -193,6 +198,8 @@ public interface Feature
 	 * Measures the length of a feature.
 	 *
 	 * @return length (in meters), or 0 if the feature is not lineal.
+	 *
+	 * TODO: should return circumference for areas
 	 */
 	default double length() { return 0; }
 
@@ -202,9 +209,6 @@ public interface Feature
 	 * @return area (in square meters), or 0 if the feature is not polygonal
 	 */
 	default double area() { return 0; }
-
-	// TODO: remove? Or combine with length()?
-	// default double circumference() { return 0; }
 
 	/**
 	 * Creates a JTS {@link Geometry} object for this feature. The returned

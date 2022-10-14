@@ -42,6 +42,13 @@ import static java.nio.file.StandardOpenOption.WRITE;
 
 // TODO: At what level should we synchronize access?
 
+// TODO: check what happens if Process A opens the Store, the Process B opens
+//  the Store as well. Process A write to store but fails, do we risk that
+//  Process B is working with an inconsistent copy?
+//  We should process the journal each time a write operation is attempted,
+//  not just whenever the Store is opened!
+//  --> Looks like beginTransaction() does this
+
 /**
  * Base class for persistent data stores that supports transactions and
  * journaling. A Store is backed by a sparse file that is memory-mapped
@@ -597,6 +604,9 @@ public abstract class Store
         if(instruction == 0) return false;
         // TODO: should we clear the journal anyway, in case
         //  journal was reset but not truncated?
+
+        // TODO: Is it possible that another process writes (and fails)
+        //  while we were checking the journal and concluded it was empty?
 
         // Log.debug("Getting lock to apply journal...");
 

@@ -93,6 +93,11 @@ public class AnonymousWayNode implements Node
         return 0;
     }
 
+    @Override public boolean booleanValue(String key)
+    {
+        return false;
+    }
+
     /**
      * Always returns `false`, because this type of `Node` by definition
      * does not belong to any relation.

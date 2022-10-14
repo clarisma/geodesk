@@ -5,6 +5,7 @@ import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineSegment;
 
 /**
  * An axis-aligned bounding box. A `Box` represents minimum and maximum
@@ -14,7 +15,7 @@ import org.locationtech.jts.geom.GeometryFactory;
  */
 // TODO: should this be immutable?
 //  can't, because we need `expandToInclude`
-//  we could have a separate MutableBox type
+//  we could have a separate MutableBox type (or RubberBox)
 public class Box implements Bounds
 {
 	private int minX;
@@ -389,14 +390,27 @@ public class Box implements Bounds
 	{
 		return new Box(
 			(int) Math.floor(env.getMinX()),
-			(int) Math.round(env.getMinY()),
+			(int) Math.round(env.getMinY()),	// TODO: why not floor?
 			(int) Math.ceil(env.getMaxX()),
-			(int) Math.round(env.getMaxY()));
+			(int) Math.round(env.getMaxY()));	// TODO: why not ceil?
 	}
 
 	public static Box of(Geometry geom)
 	{
 		return fromEnvelope(geom.getEnvelopeInternal());
+	}
+
+	public static Box of(LineSegment seg)
+	{
+		double x1 = seg.p0.x;
+		double y1 = seg.p0.y;
+		double x2 = seg.p1.x;
+		double y2 = seg.p1.y;
+		return new Box(
+			(int) Math.floor(x1 < x2 ? x1 : x2),
+			(int) Math.floor(y1 < y2 ? y1 : y2),
+			(int) Math.ceil(x1 > x2 ? x1 : x2),
+			(int) Math.ceil(y1 > y2 ? y1 : y2));
 	}
 
 	private static double parseCoordinate(String s, String name, double max)

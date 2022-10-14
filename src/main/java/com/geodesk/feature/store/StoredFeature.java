@@ -322,6 +322,21 @@ public abstract class StoredFeature implements Feature
 		return valueAsInt(value);
 	}
 
+	@Override public boolean booleanValue(String key)
+	{
+		long value = getKeyValue(key);
+		if(value == 0) return false;
+		int typeAndSize = (int) value & 3;
+		if (typeAndSize == 1)
+		{
+			// narrow string
+			return !store.stringFromCode((char) (value >> 16)).equals("no");
+			// TODO: could be more efficient; we already determine
+			//  the value of "no" for use in the MatcherCoder
+		}
+		return true;
+	}
+
 	@Override public String tag(String key)
 	{
 		return stringValue(key);

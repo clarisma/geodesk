@@ -287,12 +287,15 @@ public class OsmPbfReader
                     block.length = 4 + headerLength + dataLength;
                     inputQueue.put(block);
                     bytesRead += block.length;
+
+                    /*
                     int currentPercentage = (int)((bytesRead-1) * 100 / fileSize);
                     if(currentPercentage != percentageReported)
                     {
                         System.out.format("Reading... %d%%\r", currentPercentage);
                         percentageReported = currentPercentage;
                     }
+                    */
                 }
                 for(int i=0; i<threadCount; i++) inputQueue.put(END_INPUT);
                 in.close();
@@ -378,12 +381,14 @@ public class OsmPbfReader
          */
         protected void header(HeaderData hd)
         {
+            /*
             Log.debug("Source: %s", hd.source);
             Log.debug("Writing Program: %s", hd.writingProgram);
             Log.debug("Required features:");
             for(String s: hd.requiredFeatures) Log.debug("- %s", s);
             Log.debug("Optional features:");
             for(String s: hd.optionalFeatures) Log.debug("- %s", s);
+             */
         }
 
         /**

@@ -134,6 +134,8 @@ public class Mercator
 		return EARTH_CIRCUMFERENCE / MAP_WIDTH / scale(y);
 	}
 
+	// TODO: move to "Measure" class
+	// TODO: provide overloaded version that takes Features
 	/**
 	 * Calculates the Euclidean distance between two projected 
 	 * points. A simple method that is sufficiently accurate only

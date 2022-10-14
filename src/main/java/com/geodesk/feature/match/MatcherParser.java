@@ -429,8 +429,10 @@ public class MatcherParser extends Parser
 	private Selector selector()
 	{
 		int types;
-		if (acceptAndConsume(STAR))
+		if(accept(LBRACKET) || acceptAndConsume(STAR))
 		{
+			// Type indicator can be omitted (implies '*')
+			// we don't consume '[', because it is part of a TagClause
 			types = TypeBits.ALL;
 		}
 		else
