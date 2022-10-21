@@ -1,5 +1,6 @@
 package com.geodesk.io;
 
+import com.clarisma.common.util.Log;
 import org.eclipse.collections.api.list.primitive.MutableDoubleList;
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 import org.locationtech.jts.geom.*;
@@ -72,9 +73,14 @@ public class PolyReader
             {
                 line++;
                 String coordPair = in.readLine();
-                if(coordPair == null) error("Unexpected end of file", line);
+                if(coordPair == null)
+                {
+                    if(!coords.isEmpty()) error("Unexpected end of file", line);
+                    break;
+                }
                 coordPair = coordPair.trim();
                 if(coordPair.equals("END")) break;
+                if(coordPair.isEmpty()) continue;
                 int n = coordPair.indexOf(' ');
                 if(n < 0) n = coordPair.indexOf('\t');
                 if(n > 0)
@@ -93,8 +99,9 @@ public class PolyReader
                 error("Expected <lon> <lat>", line);
             }
             int len = coords.size();
+            if(len == 0) break;
             int coordinateCount = len / 2;
-            if(coordinateCount < 6) error("Must specify at least 3 coordinate pairs", line);
+            if(coordinateCount < 3) error("Must specify at least 3 coordinate pairs", line);
             double firstX = coords.get(0);
             double firstY = coords.get(1);
             boolean closed = firstX == coords.get(len-2) && firstY == coords.get(len-1);
@@ -119,6 +126,7 @@ public class PolyReader
             {
                 holes.add(ring);
             }
+            coords.clear();
         }
         if(polygons.size() == 1) return polygons.get(0);
         return factory.createMultiPolygon(polygons.toArray(new Polygon[0]));
