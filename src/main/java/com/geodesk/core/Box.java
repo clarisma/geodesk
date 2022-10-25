@@ -306,6 +306,13 @@ public class Box implements Bounds
 			(int) Mercator.xFromLon(east), (int) Mercator.yFromLat(north));
 	}
 
+	/**
+	 * Creates a `Box` that covers a single point.
+	 *
+	 * @param lon  the longitude of the point
+	 * @param lat  the latitude of the point
+	 * @return a `Box` that is 1 imp wide and 1 imp tall
+	 */
 	public static Box atLonLat(double lon, double lat)
 	{
 		int x = (int) Mercator.xFromLon(lon);

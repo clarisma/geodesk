@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: perform projection
+
 public class PolyReader
 {
     private final BufferedReader in;

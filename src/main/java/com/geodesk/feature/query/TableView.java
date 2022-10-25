@@ -10,6 +10,11 @@ import com.geodesk.geom.Bounds;
 
 import java.nio.ByteBuffer;
 
+/**
+ * A Feature Collection that is materialized by scanning a table.
+ *
+ * @param <T>
+ */
 public abstract class TableView<T extends Feature> implements Features<T>
 {
     protected final FeatureStore store;

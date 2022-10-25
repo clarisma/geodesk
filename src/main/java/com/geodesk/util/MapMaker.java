@@ -254,17 +254,21 @@ public class MapMaker
     public void save(String path) throws IOException
     {
         PrintWriter out = new PrintWriter(path);
-        out.print("<html><head><link rel=\"stylesheet\" href=\"");
-        out.print(leafletStyleSheetUrl);
-        out.print("\">\n<script src=\"");
-        out.print(leafletScriptUrl);
-        out.print("\"></script>\n<style>#map {height: 100%;}</style>\n");
-        out.print("</head>\n<body>\n<div id=\"map\"> </div>\n");
-        out.print("<script>");
-        writeScript(out);
-        out.print("</script></body></html>");
+        write(out);
         out.close();
+    }
 
+    public void write(Appendable out) throws IOException
+    {
+        out.append("<html><head><link rel=\"stylesheet\" href=\"");
+        out.append(leafletStyleSheetUrl);
+        out.append("\">\n<script src=\"");
+        out.append(leafletScriptUrl);
+        out.append("\"></script>\n<style>\n#map {height: 100%;}\nbody {margin:0;}\n</style>\n");
+        out.append("</head>\n<body>\n<div id=\"map\"> </div>\n");
+        out.append("<script>");
+        writeScript(out);
+        out.append("</script></body></html>");
     }
 
     private void writeScript(Appendable out) throws IOException

@@ -12,6 +12,7 @@ import java.util.Iterator;
 import static com.geodesk.feature.match.TypeBits.*;
 
 // TODO: do we need to create a defensive copy of the bbox?
+//  --> need to resolve mutability of Box
 
 // Queries that don't target a Relation ignore "role" clauses
 // Be sure to construct filter combos for e.g.:
@@ -25,7 +26,12 @@ import static com.geodesk.feature.match.TypeBits.*;
 //  the bboxes themselves must intersect
 //  (rarely used, only needed to fulfill the API contract)
 
-
+/**
+ * A Feature Collection that is materialized by running a query against
+ * a FeatureStore.
+ *
+ * @param <T>
+ */
 public class WorldView<T extends Feature> implements Features<T>
 {
     protected final FeatureStore store;

@@ -378,6 +378,10 @@ public class Downloader
                     {
                         int page = download(ticket);
                         store.commit();
+
+                        // TODO: ticketCompleted should not be called until
+                        //  transaction is committed!
+
                         ticketCompleted(ticket, page, null);
                         ticket = takeTicket(false);
                         if (ticket == null) break;

@@ -104,6 +104,12 @@ public class XY
         return xy;
     }
 
+    /**
+     * Checks whether a given set of coordinates represents a linear ring.
+     *
+     * @param coords    array of X/Y coordinates
+     * @return
+     */
     public static boolean isClosed(int[] coords)
     {
         int len = coords.length;

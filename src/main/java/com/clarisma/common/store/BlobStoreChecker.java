@@ -20,6 +20,9 @@ import static com.clarisma.common.store.BlobStoreConstants.*;
 
 // TODO: Always apply journal before checking!
 
+/**
+ * A class that verifies the integrity of a BlobStore.
+ */
 public class BlobStoreChecker
 {
     protected final BlobStore store;

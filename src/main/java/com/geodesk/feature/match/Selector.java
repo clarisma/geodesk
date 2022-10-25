@@ -4,6 +4,13 @@ import com.clarisma.common.ast.AstVisitor;
 import com.clarisma.common.ast.Expression;
 import com.geodesk.feature.query.IndexBits;
 
+/**
+ * A class that represents a parsed GOQL selector expression
+ * (e.g. "na[amenity=restaurant][cuisine=pizza]")
+ *
+ * A Selector can have zero or more TagClauses, which are arranged
+ * in table-scan order.
+ */
 public class Selector extends Expression
 {
 	/**
@@ -17,8 +24,16 @@ public class Selector extends Expression
 	public static final int CLAUSE_GLOBAL_REQUIRED = 4;
 	public static final int CLAUSE_GLOBAL_OPTIONAL = 8;
 
+	/**
+	 * The types of features this selector matches -- any combination of
+	 * n/w/a/r. Uses the bitsets defined in the TypeBits class.
+	 */
 	private int matchTypes;
 	private int clauseTypes;
+	/**
+	 * The key categories an index bucket must possess in order to
+	 * match this selector (zero or more bits)
+	 */
 	private int indexBits;
 	private Selector next;
 	private TagClause firstClause;

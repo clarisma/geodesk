@@ -21,6 +21,7 @@ public class TileIndexWalker
     private int currentTip;
     // private int currentTilePage;
 
+    // TODO: could the col/rows be shorts? Performance impact?
     private static class Level
     {
         Level parent;
@@ -30,7 +31,7 @@ public class TileIndexWalker
         int topLeftChildTile;
         int extent;     // TODO: do we need to store this?
         int startCol;
-        int startRow;
+        int startRow;   // TODO: could drop this
         int endCol;
         int endRow;
         int currentCol;

@@ -5,6 +5,10 @@ import com.clarisma.common.ast.Expression;
 import com.clarisma.common.ast.Operator;
 import com.clarisma.common.ast.Variable;
 
+/**
+ * A class that represents a parsed GOQL tag clause
+ * (e.g. "[amenity=restaurant]")
+ */
 public class TagClause extends Variable implements Comparable<TagClause>
 {
 	private int flags;

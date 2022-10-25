@@ -11,7 +11,7 @@ import org.eclipse.collections.impl.map.mutable.primitive.ObjectIntHashMap;
 
 import java.util.regex.Pattern;
 
-// TODO: Parser is not threadsafe!
+// TODO: Parser is not threadsafe! (ok, used only in synchronized way)
 
 // TODO: It is possible (though rare) that a wildcard string is turned into a CommonString,
 //  in which case it is not turned into a startsWith/endsWith expression
