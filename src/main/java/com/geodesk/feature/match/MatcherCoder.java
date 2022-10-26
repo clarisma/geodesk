@@ -1851,10 +1851,25 @@ public class MatcherCoder extends ExpressionCoder
 
 	public byte[] createMatcherClass(String className, Selector first)
 	{
-		// TODO
-		int keyMask = first.indexBits();
+		// Calculate keyMask/keyMin for one or more selectors
+		// A selector may target one or more indexes, represented by a bit field
+		// All keys must be present in a bucket for a selector to match
+		// If there are multiple selectors, only a subset of keys is
+		// required in order to attempt matching
+
+		int keyMask = 0;
+		int keyMin = Integer.MAX_VALUE;
+		Selector s = first;
+		while(s != null)
+		{
+			int indexBits = s.indexBits();
+			keyMask |= indexBits;
+			if(indexBits < keyMin) keyMin = indexBits;
+			s = s.next();
+		}
+
 		beginClass(className, MATCHER_BASE_CLASS, null);
-		createConstructor(keyMask, keyMask);	// TODO: keyMin
+		createConstructor(keyMask, keyMin);
 		createAcceptMethod("accept", first);
 		endClass();
 		return cw.toByteArray();
