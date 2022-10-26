@@ -284,3 +284,44 @@ long_name:
 
 highway_applecherry:
     highway=applecherry
+
+bad_random_zurich:
+    operator=Zurich
+    ref=1
+    leisure=fitness_station
+    tourism=information
+    information=route_marker
+    opening_hours="24/7"
+    wheelchair=no
+    sport=fitness
+    fitness_station_local=rings
+    fitness_trail=yes
+
+bad_random_zurich_single_local:
+    operator=Zurich
+    ref=1
+    leisure=fitness_station
+    tourism=information
+    information=route_marker
+    opening_hours="24/7"
+    wheelchair=no
+    sport=fitness
+    fitness_trail=yes
+
+local_keys1:
+    highway=primary
+    apple_local=yes
+    banana_local=yes
+
+local_keys2:
+    highway=primary
+    apple_local=yes
+    banana_local=yes
+    fitness_station_local=yes
+
+// TODO: test does not check if multiple tags with same name!
+
+jarbour:
+    name="Java Harbor"
+    natural=water
+    jarbour=yes

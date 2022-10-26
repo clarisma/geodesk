@@ -1110,13 +1110,18 @@ public class MatcherCoder extends ExpressionCoder
 		mv.visitInsn(DUP);				// Store a copy of the tagged pointer,
 		mv.visitVarInsn(ISTORE, $tag);	// since we will need the flag bits later
 		mv.visitIntInsn(BIPUSH, 0xfff8); // Clear the 3 lower bits
+			// TODO: check, should be 0xffff_fff8, sign extended?
 		mv.visitInsn(IAND);						// (type, size, and last-tag flags)
 		mv.visitInsn(ICONST_1);			// right-shift by 1 bit, preserving sign
 		mv.visitInsn(ISHR);
 		// Now we have the relative pointer to the key string; this pointer
 		// is relative to the 4-byte aligned tag table pointer
+		// However, since tag-tables are only 2-byte aligned, we force the
+		// tag-table pointer into alignment by clearing the bottom 2 bits
 		mv.visitVarInsn(ILOAD, $tagtable_ptr);
 		mv.visitIntInsn(BIPUSH, 0xfffc);
+			// TODO: wrong, must be 0xffff_fffc!
+			// does it sign-extent??
 		mv.visitInsn(IAND);
 		mv.visitInsn(IADD);
 		// Store the resulting pointer to the local key string
@@ -1809,7 +1814,7 @@ public class MatcherCoder extends ExpressionCoder
 
 		// At this point, the tagged tag-table pointer is on the stack
 		// Mask off the uncommon-keys flag and get the absolute pointer
-		loadIntConstant(0xffff_fffe);
+		loadIntConstant(0xffff_fffe);	// TODO: should use BIPUSH?
 		mv.visitInsn(IAND);
 		mv.visitVarInsn(ILOAD, $pos);
 		mv.visitInsn(IADD);

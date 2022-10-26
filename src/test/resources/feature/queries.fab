@@ -1,3 +1,9 @@
+query:  *[jarbour]
+    jarbour: true
+
+query:  *[!jarbour]
+    jarbour: false
+
 //
 //  RegEx
 //
@@ -928,3 +934,33 @@ query: w[name="*Ca*"]
 
 query: *[height="3.5"]
     bad_random1: true
+
+query:  *[apple_local]
+    local_keys1: true
+
+query:  *[banana_local]
+    local_keys1: true
+
+
+query:  *[apple_local][banana_local]
+    local_keys1: true
+    local_keys2: true
+
+query:  *[apple_local][fitness_station_local][banana_local]
+    local_keys1: false
+    local_keys2: true
+
+query:  *[fitness_trail]
+    bad_random_zurich_single_local: true
+
+query:  *[!fitness_station_local][fitness_trail]
+    bad_random_zurich_single_local: true
+
+query:  *[fitness_station_local]
+    bad_random_zurich: true
+
+query:  *[fitness_trail]
+    bad_random_zurich: true
+
+query:  *[fitness_station_local][fitness_trail]
+    bad_random_zurich: true
