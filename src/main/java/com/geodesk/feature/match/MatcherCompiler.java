@@ -1,5 +1,6 @@
 package com.geodesk.feature.match;
 
+import com.clarisma.common.util.Log;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
 import org.eclipse.collections.api.map.primitive.ObjectIntMap;
 
@@ -79,7 +80,7 @@ public class MatcherCompiler extends ClassLoader
                 {
                     do
                     {
-                        commonType |= type;
+                        commonType |= sel.matchTypes();
                         sel = sel.next();
                     }
                     while (sel != null);
@@ -124,28 +125,33 @@ public class MatcherCompiler extends ClassLoader
             int selectorTypes = sel.matchTypes();
             if((selectorTypes & type) == type)
             {
+                Selector extracted;
                 if(selectorTypes == type)
                 {
                     // If the Selector matches only the selected type,
                     // take it from the chain
                     prev.setNext(next);
                     sel.setNext(null);
+                    extracted = sel;
+                    // Log.debug("took %s", sel);
                 }
                 else
                 {
                     // Otherwise, split off a copy
-                    sel = sel.split(type);
+                    extracted = sel.split(type);
+                    // Log.debug("made a copy of %s", sel);
                 }
                 if(firstExtracted == null)
                 {
-                    firstExtracted = sel;
+                    firstExtracted = extracted;
                 }
                 else
                 {
-                    lastExtracted.setNext(sel);
+                    lastExtracted.setNext(extracted);
                 }
-                lastExtracted = sel;
+                lastExtracted = extracted;
             }
+            prev = sel;
         }
         return firstExtracted;
     }
@@ -157,11 +163,28 @@ public class MatcherCompiler extends ClassLoader
         Selector head = new Selector(0);
         head.setNext(selectors);
 
+        // Log.debug("extracting selectors...");
         Selector selNodes     = extractSelectors(head, TypeBits.NODES);
+        assert selNodes == null || selNodes.matchTypes() == TypeBits.NODES;
         Selector selWays      = extractSelectors(head, TypeBits.NONAREA_WAYS);
+        assert selWays == null || selWays.matchTypes() == TypeBits.NONAREA_WAYS;
         Selector selAreas     = extractSelectors(head, TypeBits.AREAS);
+        assert selAreas == null || selAreas.matchTypes() == TypeBits.AREAS;
         Selector selRelations = extractSelectors(head, TypeBits.NONAREA_RELATIONS);
-        assert head.next() == null: "All selectors must be extracted";
+        assert selRelations == null || selRelations.matchTypes() == TypeBits.NONAREA_RELATIONS;
+
+        /*
+        int testTypes = 0;
+        if(selNodes != null) testTypes |= TypeBits.NODES;
+        if(selWays != null) testTypes |= TypeBits.NONAREA_WAYS;
+        if(selAreas != null) testTypes |= TypeBits.AREAS;
+        if(selRelations != null) testTypes |= TypeBits.NONAREA_RELATIONS;
+        assert types == testTypes;
+         */
+
+        // It's possible to leave the original selectors behind; it's easier
+        // to make a type-specific copy -- so no assert
+        // assert head.next() == null: "All selectors must be extracted";
 
         return new MatcherSet(types,
             selNodes     != null ? createMatcher(selNodes)     : null,
