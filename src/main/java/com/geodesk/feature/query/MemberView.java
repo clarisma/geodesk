@@ -48,7 +48,7 @@ public class MemberView<T extends Feature> extends TableView<T>
         return new MemberView<>(this, types, matcher);
     }
 
-    @Override public Features<?> features(String query)
+    @Override public Features<?> select(String query)
     {
         return select(TypeBits.ALL, query);
     }

@@ -35,7 +35,7 @@ public class ParentRelationView extends TableView<Relation>
         return false;
     }
 
-    @Override public Features<?> features(String query)
+    @Override public Features<?> select(String query)
     {
         return relations(query);
     }

@@ -28,7 +28,7 @@ public class EmptyView<T extends Feature> implements Features<T>
         return false;
     }
 
-    @Override public Features<?> features(String filter)
+    @Override public Features<?> select(String filter)
     {
         return ANY;
     }

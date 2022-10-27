@@ -149,7 +149,7 @@ public class WorldView<T extends Feature> implements Features<T>
         return count;
     }
 
-    @Override public Features<?> features(String query)
+    @Override public Features<?> select(String query)
     {
         return select(ALL, ALL, query);
     }
