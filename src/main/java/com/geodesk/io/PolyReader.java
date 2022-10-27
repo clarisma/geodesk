@@ -1,6 +1,7 @@
 package com.geodesk.io;
 
 import com.clarisma.common.util.Log;
+import com.geodesk.util.CoordinateTransformer;
 import org.eclipse.collections.api.list.primitive.MutableDoubleList;
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 import org.locationtech.jts.geom.*;
@@ -16,11 +17,14 @@ public class PolyReader
 {
     private final BufferedReader in;
     private final GeometryFactory factory;
+    private final CoordinateTransformer transformer;
 
-    public PolyReader(BufferedReader in, GeometryFactory factory)
+    public PolyReader(BufferedReader in, GeometryFactory factory,
+        CoordinateTransformer transformer)
     {
         this.in = in;
         this.factory = factory;
+        this.transformer = transformer;
     }
 
     private static void error(String msg, int line)
@@ -89,8 +93,10 @@ public class PolyReader
                 {
                     try
                     {
-                        coords.add(Double.parseDouble(coordPair.substring(0,n).trim()));
-                        coords.add(Double.parseDouble(coordPair.substring(n+1).trim()));
+                        double x = Double.parseDouble(coordPair.substring(0,n).trim());
+                        double y = Double.parseDouble(coordPair.substring(n+1).trim());
+                        coords.add(transformer.transformX(x));
+                        coords.add(transformer.transformY(y));
                         continue;
                     }
                     catch(NumberFormatException ex)

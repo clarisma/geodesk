@@ -1,5 +1,7 @@
 package com.geodesk.util;
 
+import com.geodesk.core.Mercator;
+
 import java.io.IOException;
 
 // OSM standard precision is 7 digits (100 nano-degrees)
@@ -40,5 +42,41 @@ public class CoordinateTransformer
     public void writeY(Appendable out, double y) throws IOException
     {
         out.append(toString(transformY(y)));
+    }
+
+    public static class FromMercator extends CoordinateTransformer
+    {
+        public FromMercator(int precision)
+        {
+            super(precision);
+        }
+
+        @Override public double transformX(double x)
+        {
+            return Mercator.lonFromX(x);
+        }
+
+        @Override public double transformY(double y)
+        {
+            return Mercator.latFromY(y);
+        }
+    }
+
+    public static class ToMercator extends CoordinateTransformer
+    {
+        public ToMercator()
+        {
+            super(6);   // TODO: technically, imps are always integer
+        }
+
+        @Override public double transformX(double x)
+        {
+            return Mercator.xFromLon(x);
+        }
+
+        @Override public double transformY(double y)
+        {
+            return Mercator.yFromLat(y);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.geodesk.io;
 
 import com.clarisma.common.util.Log;
+import com.geodesk.util.CoordinateTransformer;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.jts.geom.Geometry;
@@ -21,7 +22,8 @@ public class PolyReaderTest
         BufferedReader in = new BufferedReader(
             new InputStreamReader(
                 getClass().getResourceAsStream("/io/poly/bremen.poly")));
-        PolyReader reader = new PolyReader(in, factory);
+        CoordinateTransformer transformer = new CoordinateTransformer(6);
+        PolyReader reader = new PolyReader(in, factory, transformer);
         Geometry geom = reader.read();
 
         // We should have read 2 polygons
@@ -39,7 +41,7 @@ public class PolyReaderTest
         in = new BufferedReader(
             new InputStreamReader(
                 getClass().getResourceAsStream("/io/poly/holes.poly")));
-        reader = new PolyReader(in, factory);
+        reader = new PolyReader(in, factory, transformer);
         geom = reader.read();
 
         Assert.assertTrue(geom instanceof MultiPolygon);
