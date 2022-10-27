@@ -93,7 +93,7 @@ public class Downloader
             {
                 RuntimeException ex = error instanceof RuntimeException ?
                     (RuntimeException)error :
-                    new StoreException("Error while downloading", error);
+                    new StoreException("Download failed: " + error.getMessage(), error);
                 throw ex;
             }
         }
