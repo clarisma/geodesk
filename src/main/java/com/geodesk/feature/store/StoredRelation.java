@@ -59,31 +59,53 @@ public class StoredRelation extends StoredFeature implements Relation
 		}
 		else
 		{
-			return toGeometryCollection(new LongHashSet());
+			return toGeometryCollection();
 		}
 	}
 
-	private Geometry toGeometryCollection(MutableLongSet includedRelations)
+	/**
+	 * Recursively gathers the geometries of the relation's members
+	 *
+	 * @param geoms		list where to add the member geometries
+	 * @param processedRelations	set of relations (IDs) we've already processed
+	 *                              (used to guard against circular refs)
+	 */
+	private void gatherGeometries(List<Geometry> geoms, MutableLongSet processedRelations)
 	{
-		// FeatureStoreBase.log.debug("Creating GeometryCollection for {} ...", this);
-		includedRelations.add(id());
-		List<Geometry> geoms = new ArrayList<>();
+		processedRelations.add(id());
+
 		for(Feature member: this)
 		{
-			if(member instanceof StoredRelation rel)
+			if(member instanceof StoredRelation memberRel && !memberRel.isArea())
 			{
-				if (!includedRelations.contains(rel.id()))
+				// Gather geometries from sub-relations that aren't areas
+
+				if (!processedRelations.contains(memberRel.id()))
 				{
 					// avoid endless recursion in case relations are in
 					// a reference cycle
-					geoms.add(rel.toGeometryCollection(includedRelations));
+					memberRel.gatherGeometries(geoms, processedRelations);
 				}
 			}
 			else
 			{
+				// Add points, lines, (multi)polygons
 				geoms.add(member.toGeometry());
 			}
 		}
+
+	}
+
+	/**
+	 * Creates a GeometryCollection (used to represent non-area relations)
+	 *
+	 * @return a GeometryCollection 
+	 */
+	private Geometry toGeometryCollection()
+	{
+		// FeatureStoreBase.log.debug("Creating GeometryCollection for {} ...", this);
+		List<Geometry> geoms = new ArrayList<>();
+		gatherGeometries(geoms, new LongHashSet());
 		return store.geometryFactory().createGeometryCollection(
 			geoms.toArray(new Geometry[0]));
 	}
