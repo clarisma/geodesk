@@ -219,7 +219,11 @@ public class Query implements Iterator<Feature>, Bounds
                         nextFeature = null;
                         // Throw exceptions last; if tiles are missing, this allows
                         // the user to at least get partial query results
-                        if(error != null) throw error;
+
+                        // Moved to next() to ensure last "good" result will be returned
+                        // in case of error
+
+                        // if(error != null) throw error;
                         return;
                     }
 
@@ -305,7 +309,12 @@ public class Query implements Iterator<Feature>, Bounds
 
     @Override public boolean hasNext()
     {
-        return nextFeature != null;
+        // This is very hot code subject to inlining
+        // verify that fix for #22 does not slow it down
+
+        if(nextFeature != null) return true;
+        if(error != null) throw error;
+        return false;
     }
 
     @Override public Feature next()

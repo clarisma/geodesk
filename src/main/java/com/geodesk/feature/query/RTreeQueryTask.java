@@ -52,7 +52,7 @@ public class RTreeQueryTask extends QueryTask
         }
         catch(Throwable ex)
         {
-            Log.error("Failed: %s", ex);
+            query.setError(ex);
         }
         return true;
     }
