@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
+import java.util.UUID;
 import java.util.zip.GZIPOutputStream;
 
 import static com.clarisma.common.store.BlobStoreConstants.*;
@@ -91,6 +92,13 @@ public class BlobStore extends Store
     @Override protected long getTimestamp()
     {
         return baseMapping.getLong(TIMESTAMP_OFS);
+    }
+
+    public UUID getGuid()
+    {
+        long lower64 = baseMapping.getLong(GUID_OFS);
+        long upper64 = baseMapping.getLong(GUID_OFS+8);
+        return new UUID(upper64, lower64); // notice order: (high, low)
     }
 
     @Override protected void verifyHeader()

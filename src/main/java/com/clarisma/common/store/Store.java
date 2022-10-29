@@ -368,6 +368,8 @@ public abstract class Store
 
     private boolean unmapSegments()
     {
+        // Log.debug("unmapping segments");
+
         synchronized (mappingsLock)
         {
             try

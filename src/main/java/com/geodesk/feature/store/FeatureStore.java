@@ -3,6 +3,7 @@ package com.geodesk.feature.store;
 import com.clarisma.common.pbf.PbfDecoder;
 import com.clarisma.common.store.BlobStore;
 import com.clarisma.common.store.StoreException;
+import com.clarisma.common.util.Log;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.MatcherCompiler;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
@@ -241,6 +242,8 @@ public class FeatureStore extends BlobStore
             executor.shutdown();
             try
             {
+                // Log.debug("close(): Waiting for query threads to shut down...");
+                // new Exception().printStackTrace();
                 executor.awaitTermination(24, TimeUnit.HOURS);
             }
             catch (InterruptedException e)

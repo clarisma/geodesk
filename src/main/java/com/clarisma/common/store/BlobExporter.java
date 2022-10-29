@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.*;
+import java.util.UUID;
 import java.util.zip.CRC32;
 import java.util.zip.DeflaterOutputStream;
 
@@ -72,8 +73,11 @@ public class BlobExporter<T extends BlobStore>
         // Write header
         Bytes.putInt(b, 0, EXPORTED_MAGIC);
         Bytes.putInt(b, 4, VERSION);
-        // TODO: GUID
-        // Bytes.putInt(b, 8, id); // TODO
+
+        UUID guid = store.getGuid();
+        Bytes.putLong(b, EXPORTED_HEADER_GUID, guid.getLeastSignificantBits());
+        Bytes.putLong(b, EXPORTED_HEADER_GUID + 8, guid.getMostSignificantBits());
+
         Bytes.putInt(b, EXPORTED_ORIGINAL_LEN_OFS, len);
         fout.write(b, 0, EXPORTED_HEADER_LEN);
 

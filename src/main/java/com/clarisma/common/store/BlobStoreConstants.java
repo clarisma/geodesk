@@ -64,7 +64,16 @@ public class BlobStoreConstants
      */
     public static final int TRUNK_FREE_TABLE_OFS = 64;     // must be divisible by 64
 
-    public static final int DEFAULT_METADATA_SIZE = TRUNK_FREE_TABLE_OFS + FREE_TABLE_LEN;
+    /**
+     * TODO: temporary location of GUID until new file spec is finalized
+     * For now, we place it right after the trunk freetable
+     */
+    public static final int GUID_OFS = TRUNK_FREE_TABLE_OFS + FREE_TABLE_LEN;
+    public static final int GUID_LEN = 16;
+
+    // TODO: we've added the GUID into the previously empty space after the trunk FT
+    public static final int DEFAULT_METADATA_SIZE = TRUNK_FREE_TABLE_OFS + FREE_TABLE_LEN
+        + GUID_LEN;
 
     // === BLOB ===
 
@@ -122,9 +131,15 @@ public class BlobStoreConstants
 
     // === EXPORTED BLOB ===
 
+    /*
     public static int EXPORTED_MAGIC = 0x0BB1DAAD;  // ADDAB10B = "Add a Blob"
                                                          // C01DB10B = "Cold blob"
-    public static int EXPORTED_HEADER_LEN = 16;  // TODO
-    public static int EXPORTED_ORIGINAL_LEN_OFS = 12;  // TODO
+     */
+    public static int EXPORTED_MAGIC = 0x0BB11DC0;  //  C01DB10B = "Cold blob"
+
+    public static int EXPORTED_HEADER_LEN = 32;  // TODO: review
+    public static int EXPORTED_HEADER_GUID = 8;  // 16-byte GUID of origin BlobStore
+    // TODO: word at 24 reserved: do we need a tile id?
+    public static int EXPORTED_ORIGINAL_LEN_OFS = 28;  // TODO
 
 }
