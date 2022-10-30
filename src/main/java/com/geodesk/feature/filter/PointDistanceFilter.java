@@ -15,18 +15,23 @@ import org.locationtech.jts.operation.distance.DistanceOp;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 
-// TODO: need a way to create geometries without reference
-//  to a factory
-
-// TODO: Don't use IndexedFacetDistance, calculates only distance to edges,
-//  not useful for Polygons
-
+/**
+ * Spatial predicate that accepts only features that are within a given
+ * distance from a point.
+ */
+// TODO: check if we need to increase bbox size to account for distortion
+//  intriduced by the Mercator projection
 public class PointDistanceFilter implements Filter
 {
     private final Bounds bounds;
     private final int px;
     private final int py;
     private final double distanceSquared;
+
+    @Override public Bounds bounds()
+    {
+        return bounds;
+    }
 
     private boolean segmentsWithinDistance(StoredWay way, int areaFlag)
     {
@@ -51,6 +56,9 @@ public class PointDistanceFilter implements Filter
         if (way.isArea())
         {
             if (segmentsWithinDistance(way, FeatureFlags.AREA_FLAG)) return true;
+            // The distance of a point that lies within a polygon is zero;
+            // we need to perform p-in-p check because the edges themselves
+            // may be far away from the comparison point
             return PointInPolygon.testFast(way.iterXY(0), px, py) != 0;
         }
         return segmentsWithinDistance(way, 0);
@@ -78,11 +86,31 @@ public class PointDistanceFilter implements Filter
         }
         assert feature instanceof Relation;
         Relation rel = (Relation)feature;
-        for(Feature Member: rel)
+        if(rel.isArea())
         {
-            if(accept(feature)) return true;
+            // measure distance to the ways that define shell and holes, and
+            // also perform point in polygon test
+            int odd = 0;
+            for(Way member: rel.memberWays())   // TODO: use role filter
+            {
+                String role = member.role();
+                if(role.equals("outer") || role.equals("inner"))
+                {
+                    StoredWay way = (StoredWay)member;
+                    if (segmentsWithinDistance(way, 0)) return true;
+                    odd ^= PointInPolygon.testFast(
+                        ((StoredWay)member).iterXY(0), px, py);
+                }
+            }
+            return odd != 0;
         }
-        // TODO: point in polygon test
+        else
+        {
+            for(Feature member: rel)
+            {
+                if(accept(member)) return true;
+            }
+        }
         return false;
     }
 }

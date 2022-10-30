@@ -4,9 +4,11 @@ import com.geodesk.core.Mercator;
 
 import java.io.IOException;
 
-// OSM standard precision is 7 digits (100 nano-degrees)
+// OSM standard precision is 7 digits (100 nano-degrees; 1cm)
 // reasonable precision is 6 digits (10cm resolution)
 
+// TODO: rename class to CoordinateConverter?
+// TODO: rename write to format?
 public class CoordinateTransformer
 {
     private final double scale;

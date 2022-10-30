@@ -164,27 +164,7 @@ public class Tile
 		int delta = currentZoom-zoom;
 		return fromColumnRowZoom(column(tile) >> delta, row(tile) >> delta, zoom);
 	}
-	
 
-	// TODO: zoom
-	// TODO: remove
-	public static int fromClusterIndex(int index)
-	{
-		int highX = index & 0x1fc00;
-		int lowY = index & 0x3e0;
-		return ((index ^ highX) ^ lowY) | (highX >> 5) | (lowY << 7) | (12 << 24); 
-	}
-	
-	// TODO: zoom
-	// TODO: remove
-	public static int toClusterIndex(int tile)
-	{
-		int highX = tile & 0xfe0;
-		int lowY = tile & 0x1f000;
-		return ((tile ^ highX) ^ lowY) | (highX << 5) | (lowY >> 7); 
-	}
-	
-	
 	/**
 	 * Returns the tile number of an adjacent tile that lies
 	 * in the specified direction.
