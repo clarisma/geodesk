@@ -118,6 +118,6 @@ int numberOfEntrances = building.nodes("[entrance]").size();
 
 ## Related Repositories
 
-- [gol-tool](http://www.github/gol-tool) &mdash; command-line utility for building, maintaining and querying GOL files
-- [geodesk-examples](http://www.github/geodesk-examples) &mdash; example applications
-- [geodesk-tests](http://www.github/geodesk-tests) &mdash; integration tests
+- [gol-tool](http://www.github.com/clarisma/gol-tool) &mdash; command-line utility for building, maintaining and querying GOL files
+- [geodesk-examples](http://www.github.com/clarisma/geodesk-examples) &mdash; example applications
+- [geodesk-tests](http://www.github.com/clarisma/geodesk-tests) &mdash; integration tests
