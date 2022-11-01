@@ -18,7 +18,7 @@ GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap da
 
 - **Modest hardware requirements** &mdash; If it can run a 64-bit JVM, it'll run GeoDesk.
  
-## Get started
+## Get Started
 
 ### Maven
 
@@ -116,4 +116,8 @@ Count the number of entrances of a building:
 int numberOfEntrances = building.nodes("[entrance]").size();
 ```
 
+## Related Repositories
 
+- [gol-tool](http://www.github/gol-tool) &mdash; command-line utility for building, maintaining and querying GOL files
+- [geodesk-examples](http://www.github/geodesk-examples) &mdash; example applications
+- [geodesk-tests](http://www.github/geodesk-tests) &mdash; integration tests
