@@ -9,6 +9,8 @@ import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 
 // TOOD: decide whether to check for validity
 
+// TODO: move to gol-tool, limited use in core
+
 /**
  * Methods for dealing with numeric values that represent Tile Quads, a
  * collection of one to four tiles that is at most 2 tiles wide and 2 tiles tall,

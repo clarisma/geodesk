@@ -1,13 +1,7 @@
 package com.clarisma.common.store;
 
-import com.clarisma.common.util.Log;
-import com.geodesk.feature.FeatureLibrary;
-import org.eclipse.collections.api.list.primitive.MutableIntList;
 import org.eclipse.collections.api.map.primitive.MutableIntObjectMap;
-import org.eclipse.collections.api.set.primitive.MutableIntSet;
-import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 import org.eclipse.collections.impl.map.mutable.primitive.IntObjectHashMap;
-import org.eclipse.collections.impl.set.mutable.primitive.IntHashSet;
 
 import java.io.IOException;
 import java.io.PrintStream;

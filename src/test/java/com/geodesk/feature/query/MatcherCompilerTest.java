@@ -129,7 +129,7 @@ public class MatcherCompilerTest
 		Selector sel;
 		MatcherParser parser = new MatcherParser(stringsToCodes, null); // TODO
 		MatcherCoder coder = new MatcherCoder(stringsToCodes.get("no"));
-		Log.debug("Parsing query: %s", qtc.query);
+		// Log.debug("Parsing query: %s", qtc.query);
 		try
 		{
 			parser.parse(qtc.query);
@@ -148,17 +148,23 @@ public class MatcherCompilerTest
 			}
 			return;
 		}
+
+		// Uncomment this part to dump the parsed query for debugging
+		/*
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		MatcherXmlWriter out = new MatcherXmlWriter(baos);
 		out.writeQuery(sel);
 		out.flush();
 		Log.debug(baos.toString());
+		 */
 
 		String className = "MatcherTest_" + count;
 		TestClassLoader classLoader = new TestClassLoader();
 		byte[] code = coder.createMatcherClass(className, sel);
 
-		Files.write(Path.of("c:\\geodesk\\debug\\classes\\" + className + ".class"), code);
+		// Uncomment this part to write class files for debugging
+		// Don't hardcode paths
+		// Files.write(Path.of("c:\\geodesk\\debug\\classes\\" + className + ".class"), code);
 
 		Matcher filter = classLoader.loadMatcherClass(className, code, globalStrings);
 
@@ -176,7 +182,7 @@ public class MatcherCompilerTest
 			}
 			else
 			{
-				Log.debug("OK: %s (%s)", name, result);
+				// Log.debug("OK: %s (%s)", name, result);
 			}
 		}
 	}
@@ -186,7 +192,7 @@ public class MatcherCompilerTest
 		TagTableTester tagTableTester = new TagTableTester();
 		loadStrings();
 		List<QueryTestCase> cases = loadQueries();
-		Log.debug("%d queries", cases.size());
+		Log.debug("Testing %d queries", cases.size());
 		int count = 1;
 		for(QueryTestCase qtc: cases)
 		{

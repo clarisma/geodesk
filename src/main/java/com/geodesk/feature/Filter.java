@@ -24,5 +24,11 @@ public interface Filter
         return true;
     }
 
+    /**
+     * The maximum bounding box in which acceptable candidates can be found.
+     *
+     * @return a bounding box, or`null` if the filter does not use
+     *   the spatial index
+     */
     default Bounds bounds() { return null; }
 }

@@ -106,6 +106,8 @@ public class StoredRelation extends StoredFeature implements Relation
 		// FeatureStoreBase.log.debug("Creating GeometryCollection for {} ...", this);
 		List<Geometry> geoms = new ArrayList<>();
 		gatherGeometries(geoms, new LongHashSet());
+			// TODO: could create set lazily, and also replace it with
+			//  HashSet<Relation> to get rid of Eclipse Collections dependency
 		return store.geometryFactory().createGeometryCollection(
 			geoms.toArray(new Geometry[0]));
 	}

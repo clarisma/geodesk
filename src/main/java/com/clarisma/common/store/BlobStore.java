@@ -1,7 +1,6 @@
 package com.clarisma.common.store;
 
 import org.eclipse.collections.api.iterator.IntIterator;
-import org.eclipse.collections.api.list.primitive.IntList;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

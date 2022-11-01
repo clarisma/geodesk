@@ -32,6 +32,14 @@ Include this dependency in your project's `pom.xml`:
 </dependency>
 ```
 
+Alternatively, to build the latest version from source:
+
+```
+git clone https://github.com/clarisma/geodesk.git
+cd geodesk
+mvn install
+```
+
 ### Example Application
 
 ```java

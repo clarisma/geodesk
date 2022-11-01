@@ -17,6 +17,8 @@ import static org.junit.Assert.*;
 
 public class BlobStoreTest
 {
+    private Path testFolder;
+    private Path storePath;
     private TestBlobStore store;
 
     public static class TestBlobStore extends BlobStore
@@ -32,7 +34,7 @@ public class BlobStoreTest
             int blob = allocateBlob((pages << pageSizeShift) - 4);
             commit();
             endTransaction();
-            Log.debug("Allocated blob with %d pages at %d", pages, blob);
+            // Log.debug("Allocated blob with %d pages at %d", pages, blob);
             return blob;
         }
 
@@ -45,22 +47,24 @@ public class BlobStoreTest
             }
             commit();
             endTransaction();
-            Log.debug("Freed blobs at %s", blobs);
+            // Log.debug("Freed blobs at %s", blobs);
         }
     }
 
     @Before public void setUp() throws IOException
     {
-        String filename = "c:\\geodesk\\test-blob.store";
-        // TODO: delete journal
-        if (Files.deleteIfExists(Path.of(filename))) ;
-        store = new TestBlobStore(filename);
+        testFolder = Files.createTempDirectory("blobstore-test");
+        storePath = testFolder.resolve("test.store");
+        // Log.debug("Test store: " + storePath);
+        store = new TestBlobStore(storePath.toString());
         store.open();
     }
 
-    @After public void tearDown()
+    @After public void tearDown() throws IOException
     {
         store.close();
+        Files.delete(storePath);
+        Files.delete(testFolder);
     }
 
     @Test public void testAllocFree() throws IOException
@@ -118,7 +122,7 @@ public class BlobStoreTest
 
     private void check(int... inUse)
     {
-        Log.debug("---- Checking...");
+        // Log.debug("---- Checking...");
         BlobStoreChecker checker = new BlobStoreChecker(store);
         for(int b: inUse) checker.useBlob(0, b);
         checker.check();

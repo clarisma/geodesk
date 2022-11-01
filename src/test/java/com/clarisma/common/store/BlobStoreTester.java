@@ -10,6 +10,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Random;
 
+/**
+ * A long-running test; not suitable for unit testing.
+ *
+ * TODO: Move this into the integration test harness.
+ */
 public class BlobStoreTester extends BlobStore
 {
     private int runs = 10;

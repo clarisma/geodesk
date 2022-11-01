@@ -52,9 +52,12 @@ public class QueryParserTest
 
     private void dumpQuery()
     {
+        // Uncomment for debugging
+        /*
         MatcherXmlWriter out = new MatcherXmlWriter(System.out);
         out.writeQuery(parser.query());
         out.flush();
+         */
     }
 
     @Test
