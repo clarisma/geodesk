@@ -194,7 +194,7 @@ public class PolygonBuilder
             if(outerRings == null)
             {
                 // log.warn("Failed to build outer rings for {}", rel);
-                return null;
+                return factory.createEmpty(2);
             }
         }
         if (innerSegments != null)
