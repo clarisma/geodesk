@@ -47,21 +47,22 @@
   	<dependency>
 		<groupId>org.eclipse.collections</groupId>
   		<artifactId>eclipse-collections</artifactId>
-  		<version>9.0.0</version>
+  		<version>RELEASE</version>
 	</dependency>
 
 	<!-- geometry -->
 	<dependency>
     	<groupId>org.locationtech.jts</groupId>
     	<artifactId>jts-core</artifactId>
-    	<version>1.18.2</version>
+    	<!-- <version>1.18.2</version> -->
+		<version>RELEASE</version>
 	</dependency>
 
 	  <!-- Java Bytecode Manipulation -->
 	  <dependency>
 		  <groupId>org.ow2.asm</groupId>
 		  <artifactId>asm</artifactId>
-		  <version>9.0</version>
+		  <version>RELEASE</version>
 	  </dependency>
 
     <!-- Testing -->
