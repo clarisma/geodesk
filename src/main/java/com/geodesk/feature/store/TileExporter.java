@@ -8,14 +8,20 @@
 package com.geodesk.feature.store;
 
 import com.clarisma.common.store.BlobExporter;
+import com.clarisma.common.util.Log;
+import com.clarisma.common.util.ProgressListener;
 import com.geodesk.core.Box;
 import com.geodesk.feature.Filter;
 import com.geodesk.geom.Bounds;
+import org.eclipse.collections.api.iterator.IntIterator;
+import org.eclipse.collections.api.list.primitive.IntList;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -33,17 +39,19 @@ import java.util.concurrent.TimeUnit;
 
 // TODO: move more functionality to BlobExporter
 
+// TODO: move to gol-tool?
+
 public class TileExporter extends BlobExporter<FeatureStore>
 {
-    private volatile Throwable error;
-    private int currentSuperFolder;
-    private Path exportPath;
-    private ThreadPoolExecutor executor;
-    private int tilesExported;
+    private volatile Exception error;
+    private final Path exportPath;
+    private final ProgressListener progress;
 
-    public TileExporter(FeatureStore store)
+    public TileExporter(FeatureStore store, Path exportPath, ProgressListener progress)
     {
         super(store);
+        this.exportPath = exportPath;
+        this.progress = progress;
     }
 
     @Override protected void resetMetadata(ByteBuffer buf)
@@ -63,103 +71,90 @@ public class TileExporter extends BlobExporter<FeatureStore>
         buf.putInt(pTileIndex, 0);
     }
 
-    private synchronized void updateProgress(int exported)
+    public void exportTiles(IntList tiles) throws IOException
     {
-        tilesExported += exported;
-        System.err.format("%d tile%s saved...\r", tilesExported,
-            tilesExported==1 ? "" : "s");
-    }
-
-    private void report()
-    {
-        System.err.format("%d tile%s saved.  \n", tilesExported,
-            tilesExported==1 ? "" : "s");
-    }
-
-    private void exportTile(int tip, int tilePage) throws IOException
-    {
-        int superFolder = tip >>> 12;
-        if(superFolder != currentSuperFolder)
-        {
-            currentSuperFolder = superFolder;
-            Path folder = Tip.folder(exportPath, tip);
-            if(!Files.exists(folder))
-            {
-                Files.createDirectories(folder);
-            }
-        }
-        Path filePath = Tip.path(exportPath, tip, ".tile");
-        executor.submit(new Task(filePath, tilePage));
-    }
-
-    public void export(Path exportPath, Bounds bbox, Filter filter) throws IOException
-    {
-        this.exportPath = exportPath;
-        error = null;
-        currentSuperFolder = -1;
-        tilesExported = 0;
-
+        Set<Integer> foldersChecked = new HashSet<>();
         int threadCount = Runtime.getRuntime().availableProcessors();
-        executor = new ThreadPoolExecutor(
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(
             threadCount, threadCount, 1, TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(threadCount * 4),
             new ThreadPoolExecutor.CallerRunsPolicy());
 
-        if(Files.notExists(exportPath)) Files.createDirectories(exportPath);
-
-        // TODO: Check presence of meta, and if compatible
-        executor.submit(new Task(exportPath.resolve("meta.tile"), 0));
-
-        int purgatoryPage = store.tilePage(0);
-        if(purgatoryPage > 0)
-        {
-            exportTile(0, purgatoryPage);
-        }
-
-        TileIndexWalker walker = new TileIndexWalker(store);
-        // TODO: bbox and/or filter
-        walker.start(bbox);
-        while(walker.next())
-        {
-            int tilePage = walker.tilePage();
-            if (tilePage != 0) exportTile(walker.tip(), tilePage);
-        }
-
-        executor.shutdown();
+        executor.submit(new Task(exportPath.resolve("meta.tile"), -1));
+        IntIterator iter = tiles.intIterator();
         try
         {
-            executor.awaitTermination(30, TimeUnit.DAYS);
+            while (iter.hasNext())
+            {
+                int tip = iter.next();
+                Integer folder = tip >>> 12;
+                if (!foldersChecked.contains(folder))
+                {
+                    Path folderPath = Tip.folder(exportPath, tip);
+                    if(!Files.exists(folderPath))
+                    {
+                        Files.createDirectory(folderPath);
+                    }
+                    foldersChecked.add(folder);
+                }
+                executor.submit(new Task(Tip.path(exportPath, tip, ".tile"), tip));
+            }
         }
-        catch(InterruptedException ex)
+        finally
         {
-            // do nothing
+            executor.shutdown();
+            try
+            {
+                executor.awaitTermination(30, TimeUnit.DAYS);
+            }
+            catch (InterruptedException ex)
+            {
+                // don't care about being interrupted, we're done anyway
+            }
+            progress.finished();
         }
-        report();
-        executor = null;
     }
 
     private class Task implements Runnable
     {
         private final Path path;
-        private final int startPage;
+        private final int id;
 
-        public Task(Path path, int startPage)
+        public Task(Path path, int id)
         {
             this.path = path;
-            this.startPage = startPage;
+            this.id = id;
         }
 
         @Override public void run()
         {
             try
             {
-                export(path, startPage);
+                if(Files.exists(path)) return;
+                int startPage;
+                if(id == -1)
+                {
+                    startPage = 0;
+                }
+                else
+                {
+                    startPage = store.fetchTile(id);
+                    assert startPage != 0;
+                }
+                // Log.debug("%d: %d", id, startPage);
+                export(path, id, startPage);
             }
-            catch(Throwable ex)
+            catch(Exception ex)
             {
                 error = ex;
+                // Log.error(ex.toString());
             }
-            updateProgress(1);      // TODO: errors, skipped tiles
+            progress.progress(1);      // TODO: errors, skipped tiles
         }
+    }
+
+    public Exception error()
+    {
+        return error;
     }
 }

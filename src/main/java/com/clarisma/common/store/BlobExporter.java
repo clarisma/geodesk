@@ -38,7 +38,7 @@ public class BlobExporter<T extends BlobStore>
         buf.putInt(TOTAL_PAGES_OFS, 0);
     }
 
-    protected void export(Path path, /* int id, */ int page) throws IOException
+    protected void export(Path path, int id, int page) throws IOException
     {
         final ByteBuffer buf;
         int p;
@@ -64,11 +64,11 @@ public class BlobExporter<T extends BlobStore>
             p += 8;
             len -= 4;       // skip not only the header word, but also checksum word
         }
-        export(path, /* id, */ buf, p, len);
+        export(path, id, buf, p, len);
 
     }
 
-    private void export(Path path, /* int id, */
+    private void export(Path path, int id,
         ByteBuffer buf, int p, int len) throws IOException
     {
         Path tempPath = Paths.get(path.toString() + ".tmp");
@@ -85,6 +85,7 @@ public class BlobExporter<T extends BlobStore>
         Bytes.putLong(b, EXPORTED_HEADER_GUID, guid.getLeastSignificantBits());
         Bytes.putLong(b, EXPORTED_HEADER_GUID + 8, guid.getMostSignificantBits());
 
+        Bytes.putInt(b, EXPORTED_BLOB_ID, id);
         Bytes.putInt(b, EXPORTED_ORIGINAL_LEN_OFS, len);
         fout.write(b, 0, EXPORTED_HEADER_LEN);
 

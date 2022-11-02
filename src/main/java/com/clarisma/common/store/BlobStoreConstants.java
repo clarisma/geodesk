@@ -147,6 +147,7 @@ public class BlobStoreConstants
     public static int EXPORTED_HEADER_LEN = 32;  // TODO: review
     public static int EXPORTED_HEADER_GUID = 8;  // 16-byte GUID of origin BlobStore
     // TODO: word at 24 reserved: do we need a tile id?
+    public static int EXPORTED_BLOB_ID = 24;  // TODO
     public static int EXPORTED_ORIGINAL_LEN_OFS = 28;  // TODO
 
 }
