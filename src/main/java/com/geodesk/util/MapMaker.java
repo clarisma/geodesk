@@ -7,6 +7,7 @@
 
 package com.geodesk.util;
 
+import com.clarisma.common.util.Log;
 import com.geodesk.core.Box;
 import com.geodesk.core.Mercator;
 import com.geodesk.feature.Feature;
@@ -63,6 +64,7 @@ public class MapMaker
 
         GeometryMarker(Geometry geom)
         {
+            assert geom != null;
             this.geom = geom;
         }
 
@@ -248,7 +250,10 @@ public class MapMaker
         // TODO: could optimize for node & way, read coordinates directly
         //  without need to create a JTS Geometry
         // TODO: if(feature.isPlaceholder)
-        return add(new GeometryMarker(feature.toGeometry()));
+
+        Geometry geom = feature.toGeometry();
+        assert geom != null: "Null geometry for " + feature;
+        return add(new GeometryMarker(geom));
     }
 
     /**

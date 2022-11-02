@@ -191,7 +191,7 @@ public class PolygonBuilder
             }
         }
 
-        if (outerSegments == null) return null;
+        if (outerSegments == null) return factory.createEmpty(2);
         // Ring outerRings = null; // RingBuilder.buildFast(outerSegments);
         Ring outerRings = null; // RingBuilder.buildFast(outerSegments);
         if (outerRings == null)
