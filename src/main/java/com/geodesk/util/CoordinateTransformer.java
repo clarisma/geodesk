@@ -35,7 +35,7 @@ public class CoordinateTransformer
         return y;
     }
 
-    private String toString(double v)
+    public String toString(double v)
     {
         v = Math.round(v * scale) / scale;
         long lv = (long)v;

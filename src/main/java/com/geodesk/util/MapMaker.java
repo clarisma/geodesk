@@ -256,6 +256,11 @@ public class MapMaker
         return add(new GeometryMarker(geom));
     }
 
+    public void add(Iterable<? extends Feature> features)
+    {
+        for(Feature f: features) add(f);
+    }
+
     /**
      * Generates a self-contained HTML file that displays the interactive map
      * and all its markers.
