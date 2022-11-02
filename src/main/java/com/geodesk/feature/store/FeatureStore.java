@@ -23,6 +23,8 @@ import org.locationtech.jts.geom.GeometryFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
@@ -259,5 +261,15 @@ public class FeatureStore extends BlobStore
             }
         }
         super.close();
+    }
+
+    public Map<String,Integer> indexedKeys()
+    {
+        Map<String,Integer> indexedKeys  =new HashMap<>(keysToCategories.size());
+        keysToCategories.forEachKeyValue((k,category) ->
+        {
+            indexedKeys.put(codesToStrings[k], category);
+        });
+        return indexedKeys;
     }
 }

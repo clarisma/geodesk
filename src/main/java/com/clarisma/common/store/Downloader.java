@@ -260,6 +260,8 @@ public class Downloader
     {
         // TODO: checksums
 
+        // Log.debug("Downloading: %s", url);
+
         byte[] buf = new byte[BUFFER_SIZE];
         final int firstPage;
 
