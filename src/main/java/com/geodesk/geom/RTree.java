@@ -13,6 +13,9 @@ import java.util.function.Consumer;
 
 import com.geodesk.core.Box;
 
+/**
+ * A generic r-tree. Supports querying via bounding box.
+ */
 public abstract class RTree
 {
 	protected Node root;

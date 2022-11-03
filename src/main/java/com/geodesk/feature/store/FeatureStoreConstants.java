@@ -11,7 +11,7 @@ import com.clarisma.common.store.BlobStoreConstants;
 
 public class FeatureStoreConstants extends BlobStoreConstants
 {
-    public static final int MAGIC = 0x1CE50D6E;  // "geodesic"
+    public static final int MAGIC = 0x1CE50D6E;  // 6E0DE51C "geodesic/geodesk"
     public static final int VERSION = 1_000_000;
 
     public static final int MAGIC_CODE_OFS = 32;

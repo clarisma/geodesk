@@ -7,6 +7,7 @@
 
 package com.geodesk.io;
 
+// TODO: use a more general class
 public class ParseException extends RuntimeException
 {
     public ParseException(String msg)

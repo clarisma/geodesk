@@ -1,8 +1,3 @@
-query:  *[jarbour]
-    jarbour: true
-
-query:  *[!jarbour]
-    jarbour: false
 
 //
 //  RegEx
@@ -941,6 +936,9 @@ query:  *[apple_local]
 query:  *[banana_local]
     local_keys1: true
 
+//
+//  Mixing local/global key
+//
 
 query:  *[apple_local][banana_local]
     local_keys1: true
@@ -964,3 +962,9 @@ query:  *[fitness_trail]
 
 query:  *[fitness_station_local][fitness_trail]
     bad_random_zurich: true
+
+query:  *[jarbour]
+    jarbour: true
+
+query:  *[!jarbour]
+    jarbour: false

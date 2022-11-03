@@ -80,7 +80,7 @@ import static com.geodesk.io.osm.OsmPbf.*;
  *
  * <h2>Current limitations</h2>
  *
- * Decoding of single node messages is not supported, as all major OSM-related
+ * Decoding of single-node messages is not supported, as all major OSM-related
  * software uses the more efficient DenseNodes groups to encode nodes.
  *
  */

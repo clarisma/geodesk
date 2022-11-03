@@ -2,8 +2,6 @@ package com.clarisma.common.store;
 
 
 import com.clarisma.common.util.Log;
-import com.geodesk.core.Box;
-import com.geodesk.feature.FeatureLibrary;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +13,9 @@ import java.nio.file.Path;
 
 import static org.junit.Assert.*;
 
+/**
+ * A basic test that allocates and frees blobs.
+ */
 public class BlobStoreTest
 {
     private Path testFolder;

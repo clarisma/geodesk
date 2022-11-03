@@ -8,9 +8,7 @@
 package com.geodesk.io.osm;
 
 import com.geodesk.feature.Tags;
-import org.locationtech.jts.util.Stopwatch;
 
-import java.io.IOException;
 
 public class BaseOsmPbfReader extends OsmPbfReader
 {
@@ -65,24 +63,6 @@ public class BaseOsmPbfReader extends OsmPbfReader
         {
             log("Finished reading relations.");
         }
-    }
-
-    public static void test(String mapDataFile) throws IOException
-    {
-        System.out.println("Counting nodes...");
-        Stopwatch timer = new Stopwatch();
-        timer.start();
-        BaseOsmPbfReader reader = new BaseOsmPbfReader();
-        reader.read(mapDataFile);
-        System.out.format("Completed in %d ms\n", timer.stop());
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-        // test("c:\\velojoe\\mapdata\\planet.osm.pbf");
-        // test("c:\\geodesk\\mapdata\\planet.osm.pbf");
-        test("c:\\geodesk\\mapdata\\de-2021-01-29.osm.pbf");
-        // test("/home/md/geodesk/mapdata/planet.osm.pbf");
     }
 
 }
