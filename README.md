@@ -40,6 +40,8 @@ cd geodesk
 mvn install
 ```
 
+*If you get weird exceptions during `mvn install`, you should [upgrade Maven](https://maven.apache.org/download.cgi) to version **3.8.5** or above.*
+
 ### Example Application
 
 ```java
