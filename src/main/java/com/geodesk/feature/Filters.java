@@ -150,4 +150,10 @@ public class Filters
         throw new RuntimeException("todo");     // TODO
     }
 
+    public static Filter containsLonLat(double lon, double lat)
+    {
+        int x = (int)Mercator.xFromLon(lon);
+        int y = (int)Mercator.yFromLat(lat);
+        return new ContainsPointFilter(x, y);
+    }
 }
