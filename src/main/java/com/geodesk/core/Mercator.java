@@ -22,7 +22,7 @@ import org.locationtech.jts.operation.distance.DistanceOp;
  * except that instead of meters at the Equator, it uses a made-up
  * unit called "imp" ("integer, Mercator-projected").
  *
- * See <a href=/core-concepts#coordinate-system">Coordinate System</a>
+ * See <a href="http://docs.geodesk.com/core-concepts#coordinate-system">Coordinate System</a>
  */
 
 //  TODO -- decide on unit name:

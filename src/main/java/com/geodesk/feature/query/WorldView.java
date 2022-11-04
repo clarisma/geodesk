@@ -37,7 +37,7 @@ import static com.geodesk.feature.match.TypeBits.*;
  * A Feature Collection that is materialized by running a query against
  * a FeatureStore.
  *
- * @param <T>
+ * @param <T> subtype of Feature
  */
 public class WorldView<T extends Feature> implements Features<T>
 {

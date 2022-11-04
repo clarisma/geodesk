@@ -11,6 +11,9 @@ import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
 import org.locationtech.jts.geom.Geometry;
 
+/**
+ * A Filter that combined two Filters.
+ */
 public class AndFilter implements Filter
 {
     private final Filter a;

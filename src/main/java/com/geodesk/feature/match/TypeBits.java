@@ -17,12 +17,15 @@ import com.clarisma.common.util.Log;
  * - whether way has feature nodes, or a feature node belongs to a way
  *
  * We can obtain these bits from the feature flags like this:
- *   (flags >> 1) & 0x1F
+ *
+ * <pre>
+ *   (flags >> 1) &amp; 0x1F
  *
  *   0   = area flag
  *   1   = relmember flag
  *   2/3 = type
  *   4   = way-node flag
+ * </pre>
  *
  * This gives us 32 combinations, which neatly fit in an int.
  * Not all flag combinations are valid:

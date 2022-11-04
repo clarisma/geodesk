@@ -30,6 +30,9 @@ public class Box implements Bounds
 	private int maxX;
 	private int maxY;
 
+	/**
+	 * Creates a null Box.
+	 */
 	public Box()
 	{
 		setNull();
@@ -197,7 +200,7 @@ public class Box implements Bounds
 	 * this bounding box and another.
 	 *
 	 * @param o  the other bounding box
-	 * @return
+	 * @return   new Box
 	 */
 	// TODO: fix: what happens if empty or boxes don't overlap?
 	public Box intersection(Bounds o)
@@ -282,8 +285,8 @@ public class Box implements Bounds
 	 * polar regions result in the box being trimmed. If the bounding box is
 	 * empty, the result is undefined.
 	 *
-	 * @param deltaX
-	 * @param deltaY
+	 * @param deltaX	X-offset (imps)
+	 * @param deltaY    Y-offset (imps)
 	 */
 	public void translate(int deltaX, int deltaY)
 	{
