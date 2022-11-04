@@ -330,6 +330,18 @@ public class Box implements Bounds
 		return new Box(x,y,x,y);
 	}
 
+	/**
+	 * Creates a `Box` that covers a single point.
+	 *
+	 * @param x  X-coordinate (Mercator-projected) of the point
+	 * @param y  Y-coordinate (Mercator-projected) of the point
+	 * @return a `Box` that is 1 imp wide and 1 imp tall
+	 */
+	public static Box atXY(int x, int y)
+	{
+		return new Box(x,y,x,y);
+	}
+
 	public static Box ofXYXY(int x1, int y1, int x2, int y2)
 	{
 		return new Box(x1,y1,x2,y2);
