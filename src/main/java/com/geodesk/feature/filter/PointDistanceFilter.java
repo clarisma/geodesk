@@ -66,7 +66,7 @@ public class PointDistanceFilter implements Filter
             // The distance of a point that lies within a polygon is zero;
             // we need to perform p-in-p check because the edges themselves
             // may be far away from the comparison point
-            return PointInPolygon.testFast(way.iterXY(0), px, py) != 0;
+            return PointInPolygon.testFast(way.iterXY(FeatureFlags.AREA_FLAG), px, py) != 0;
         }
         return segmentsWithinDistance(way, 0);
     }
@@ -104,9 +104,10 @@ public class PointDistanceFilter implements Filter
                 if(role.equals("outer") || role.equals("inner"))
                 {
                     StoredWay way = (StoredWay)member;
-                    if (segmentsWithinDistance(way, 0)) return true;
+                    int flags = way.flags();
+                    if (segmentsWithinDistance(way, flags)) return true;
                     odd ^= PointInPolygon.testFast(
-                        ((StoredWay)member).iterXY(0), px, py);
+                        ((StoredWay)member).iterXY(flags), px, py);
                 }
             }
             return odd != 0;

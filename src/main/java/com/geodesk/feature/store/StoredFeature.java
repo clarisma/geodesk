@@ -63,11 +63,6 @@ public abstract class StoredFeature implements Feature
 			((long) (buf.getInt(ptr + 4)) & 0xffff_ffffL);
 	}
 
-	protected int getFlags()
-	{
-		return buf.getInt(ptr);
-	}
-
 	/*
 	public static int type(ByteBuffer buf, int ptr)
 	{

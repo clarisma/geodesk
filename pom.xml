@@ -154,6 +154,7 @@
 			<artifactId>maven-surefire-plugin</artifactId>
 			<version>2.22.2</version>
 		</plugin>
+		<!--
 		<plugin>
 			<groupId>org.sonatype.plugins</groupId>
 			<artifactId>nexus-staging-maven-plugin</artifactId>
@@ -165,6 +166,7 @@
 				<autoReleaseAfterClose>true</autoReleaseAfterClose>
 			</configuration>
 		</plugin>
+		-->
 	</plugins>
 </build>
 
@@ -200,7 +202,6 @@
 	</profile>
 </profiles>
 
-<!--
 <distributionManagement>
 	<snapshotRepository>
 		<id>ossrh</id>
@@ -211,15 +212,15 @@
 		<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 	</repository>
 </distributionManagement>
--->
 
+<!--
 <distributionManagement>
 	<snapshotRepository>
 		<id>ossrh</id>
 		<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
 	</snapshotRepository>
 </distributionManagement>
-
+-->
 
 <reporting>
 	<plugins>
@@ -248,30 +249,6 @@
 					<link>https://locationtech.github.io/jts/javadoc/</link>
 				</links>
 			</configuration>
-
-			<!--
-			<configuration>
-				<doclet>fr.faylixe.marklet.Marklet</doclet>
-				<docletArtifact>
-					<groupId>fr.faylixe</groupId>
-					<artifactId>marklet</artifactId>
-					<version>1.1.0</version>
-				</docletArtifact>
-				<reportOutputDirectory>./</reportOutputDirectory>
-				<destDir>./</destDir>
-				<useStandardDocletOptions>false</useStandardDocletOptions>
-			</configuration>
-
-			<configuration>
-				<doclet>ch.raffael.mddoclet.MarkdownDoclet</doclet>
-				<docletArtifact>
-					<groupId>ch.raffael.markdown-doclet</groupId>
-					<artifactId>markdown-doclet</artifactId>
-					<version>1.4</version>
-				</docletArtifact>
-				<useStandardDocletOptions>true</useStandardDocletOptions>
-			</configuration>
-			-->
 		</plugin>
 
 		<plugin>

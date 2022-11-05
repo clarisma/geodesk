@@ -161,6 +161,16 @@ public class StoredWay extends StoredFeature implements Way
 		// TODO: LinearRing?
 	}
 
+	/**
+	 * Returns an iterator to obtain the coordinates of this Way.
+	 *
+	 * If the AREA_FLAG is set, the starting coordinate is returned
+	 * again as the last coordinate.
+	 *
+	 * @param flags		the feature's flags (only `AREA_FLAG` is
+	 *                  of significance)
+	 * @return
+	 */
 	public XYIterator iterXY(int flags)
 	{
 		int ppBody = ptr + 12;
