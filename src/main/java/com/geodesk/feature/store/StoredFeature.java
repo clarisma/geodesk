@@ -20,6 +20,9 @@ import java.nio.ByteBuffer;
 import java.util.*;
 
 
+// TODO: check instances when we get feature's flags, prefer get() over
+//  getInt() -- or just use flags()
+
 public abstract class StoredFeature implements Feature
 {
 	protected final FeatureStore store;
