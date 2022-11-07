@@ -54,6 +54,7 @@ public class Filters
 
     public static Filter within(Geometry geom)
     {
+        // TODO: accept null?
         return geom==null ? FalseFilter.INSTANCE : within(PreparedGeometryFactory.prepare(geom));
     }
 
@@ -61,6 +62,22 @@ public class Filters
     {
         return new WithinFilter(prepared);
     }
+
+    public static Filter intersects(Feature f)
+    {
+        return intersects(f.toGeometry());
+    }
+
+    public static Filter intersects(Geometry geom)
+    {
+        return new IntersectsFilter(geom);
+    }
+
+    public static Filter intersects(PreparedGeometry prepared)
+    {
+        return new IntersectsFilter(prepared);
+    }
+
 
     public static Filter crosses(Feature f)
     {
