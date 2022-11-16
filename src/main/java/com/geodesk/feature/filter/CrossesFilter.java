@@ -21,6 +21,22 @@ import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A Filter for the `crosses` spatial predicate.
+ *
+ * Tile acceleration:
+ * - If tile is disjoint, reject all
+ * - If tile is containedProperly:
+ *   - if a feature lies entirely within tile, reject it
+ *     (a crossing feature must lie partially outside of test geometry)
+ *   - if a feature is multi-tile, must test it
+ *
+ * Accepted types:
+ * - dimension of intersection must be less than maximum dimension of candidate and test
+ *   - if test is polygonal, don't accept areas
+ *   - if test is puntal, don't accept nodes
+ *
+ */
 public class CrossesFilter extends SpatialFilter
 {
     private final PreparedGeometry prepared;

@@ -167,6 +167,11 @@ public class Filters
         throw new RuntimeException("todo");     // TODO
     }
 
+    public static Filter containsXY(int x, int y)
+    {
+        return new ContainsPointFilter(x, y);
+    }
+
     public static Filter containsLonLat(double lon, double lat)
     {
         int x = (int)Mercator.xFromLon(lon);

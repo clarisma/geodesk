@@ -40,6 +40,7 @@ public class ContainsPointFilter implements Filter
 
     @Override public boolean accept(Feature feature)
     {
+        if(!feature.isArea()) return false; // TODO: should set as pre-filter
         if(feature instanceof StoredWay way)
         {
             return PointInPolygon.testFast(way.iterXY(FeatureFlags.AREA_FLAG), px, py) != 0;
