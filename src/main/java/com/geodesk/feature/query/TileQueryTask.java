@@ -34,6 +34,7 @@ public class TileQueryTask extends QueryTask
         this.tile = tile;
         this.tip = tip;
         this.filter = filter;
+        // Log.debug("Tile %s with filter %s", Tile.toString(tile), filter);
     }
 
     private RTreeQueryTask searchRTree(int ppTree, Matcher matcher, RTreeQueryTask task)
