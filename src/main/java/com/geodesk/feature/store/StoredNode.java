@@ -40,6 +40,8 @@ public class StoredNode extends StoredFeature implements Node
 		return buffer().getInt(ptr - 4);
 	}
 
+	@Override public int minY() { return y(); }
+
 	@Override public Box bounds()
 	{
 		int x = x();

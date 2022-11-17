@@ -88,6 +88,10 @@ public abstract class StoredFeature implements Feature
 		return (buf.getInt(ptr - 12) + buf.getInt(ptr - 4)) / 2;
 	}
 
+	public int maxX() { return buf.getInt(ptr - 8); }
+
+	public int minY() { return buf.getInt(ptr - 12); }
+
 	@Override public boolean equals(Object other)
 	{
 		if(!(other instanceof Feature)) return false;

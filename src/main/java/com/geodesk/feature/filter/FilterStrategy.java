@@ -11,35 +11,39 @@ public class FilterStrategy
 {
     /**
      * Filter uses spatial index.
+     *
+     * If set, `Filter ` must implement `bounds()`.
      */
     public static final int USES_BBOX = 1;
 
     /**
-     * Features accepted by the Filter must be fully contained within thre
-     * bounding box (implies USES_BBOX)
+     * Features accepted by the Filter must be fully contained within the
+     * bounding box (USES_BBOX must be set as well)
      */
     public static final int STRICT_BBOX = 2;
 
     /**
-     * The Filter is able to reject specific tiles entirely.
+     * Given a specific tile, the Filter is able to accept all features
+     * within this tile, reject the tile entirely, or at least offer
+     * a simplified filter.
+     *
+     * If set, `Filter` must implement `filterForTile()`
      */
-    public static final int FAST_REJECT = 4;
+    public static final int FAST_TILE_FILTER = 4;
 
     /**
-     * For specific tiles, the Filter will accept all features (or can
-     * use a simplified acceptance test)
+     * A flag to indicate that this Filter expects the Geometry of the
+     * feature passed to `accept()`. If this flag is not set, the `Geometry`
+     * argument may be `null` (in which case the Filter has to obtain the
+     * feature's geometry explicitly).
      */
-    public static final int FAST_ACCEPT = 8;
-
-    /**
-     * In order to test whether a Feature is accepted, the Filter needs the
-     * Feature's Geometry.
-     */
-    public static final int NEEDS_GEOMETRY = 16;
+    public static final int NEEDS_GEOMETRY = 8;
 
     /**
      * The filter accepts only a subset of types (e.g. only areas, only
      * relation members).
+     *
+     * If set, `Filter` must implement `acceptedTypes()`
      */
-    public static final int RESTRICTS_TYPES = 32;
+    public static final int RESTRICTS_TYPES = 16;
 }

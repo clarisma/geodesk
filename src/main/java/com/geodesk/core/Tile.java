@@ -130,6 +130,21 @@ public class Tile
 	}
 
 	/**
+	 * Returns the rightmost (highest) x-coordinate that lies within
+	 * the given tile
+	 *
+	 * @param tile
+	 * @return
+	 */
+	public static int rightX(int tile)
+	{
+		int left = leftX(tile);
+		int zoom = zoom(tile);
+		long extent = 1L << (32 - zoom);
+		return (int) (left + extent - 1);
+	}
+
+	/**
 	 * Returns the bottom (lowest) y-coordinate that lies within 
 	 * the given tile. Remember, going from top to bottom, tile
 	 * rows *increase*, while y-coordinates *decrease*. 

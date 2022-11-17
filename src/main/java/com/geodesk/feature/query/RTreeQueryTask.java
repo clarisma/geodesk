@@ -16,8 +16,6 @@ import com.geodesk.feature.store.StoredNode;
 import java.nio.ByteBuffer;
 
 // TODO: make Nodes the base class, Ways/Relations the specialization?
-// TODO: constructor is too unwieldy, pass TileQueryTask?
-// TODO: instead of "query", simply needs "bounds"!
 
 public class RTreeQueryTask extends QueryTask
 {
@@ -28,14 +26,14 @@ public class RTreeQueryTask extends QueryTask
     protected final Filter filter;
     protected final RTreeQueryTask next;
 
-    public RTreeQueryTask(Query query, ByteBuffer buf, int ppTree, int bboxFlags, Matcher matcher, RTreeQueryTask next)
+    public RTreeQueryTask(TileQueryTask parent, int ppTree, Matcher matcher, RTreeQueryTask next)
     {
-        super(query);
-        this.buf = buf;
+        super(parent.query);
+        this.buf = parent.buf;
         this.ppTree = ppTree;
-        this.bboxFlags = bboxFlags;
+        this.bboxFlags = parent.bboxFlags;
         this.matcher = matcher;
-        this.filter = query.filter;
+        this.filter = query.filter;  // TODO: use tile-specific filter
         this.next = next;
     }
 
@@ -195,9 +193,9 @@ public class RTreeQueryTask extends QueryTask
 
     public static class Nodes extends RTreeQueryTask
     {
-        public Nodes(Query query, ByteBuffer buf, int pos, Matcher filter, RTreeQueryTask next)
+        public Nodes(TileQueryTask parent, int ppTree, Matcher matcher, RTreeQueryTask next)
         {
-            super(query, buf, pos, 0, filter, next);
+            super(parent, ppTree, matcher, next);
         }
 
         @Override protected void searchLeaf(int p)

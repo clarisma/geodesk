@@ -22,8 +22,9 @@ public class TileQueryTask extends QueryTask
 {
     private final int tile;
     private final int tip;
-    private int bboxFlags;
+    protected int bboxFlags;
     private int tilesProcessed;
+    protected ByteBuffer buf;
 
     public TileQueryTask(Query query, int tile, int tip)
     {
@@ -32,13 +33,13 @@ public class TileQueryTask extends QueryTask
         this.tip = tip;
     }
 
-    private RTreeQueryTask searchRTree(ByteBuffer buf, int ppTree, Matcher filter, RTreeQueryTask task)
+    private RTreeQueryTask searchRTree(int ppTree, Matcher matcher, RTreeQueryTask task)
     {
         int p = buf.getInt(ppTree);
         if(p == 0) return task;
         if((p & 1) == 0)
         {
-            task = new RTreeQueryTask(query, buf, ppTree, bboxFlags, filter, task);
+            task = new RTreeQueryTask(this, ppTree, matcher, task);
             task.fork();
             return task;
         }
@@ -48,9 +49,9 @@ public class TileQueryTask extends QueryTask
         {
             int last = buf.getInt(p) & 1;
             int keyBits = buf.getInt(p+4);
-            if(filter.acceptIndex(keyBits))
+            if(matcher.acceptIndex(keyBits))
             {
-                task = new RTreeQueryTask(query, buf, p, bboxFlags, filter, task);
+                task = new RTreeQueryTask(this, p, matcher, task);
                 task.fork();
             }
             if(last != 0) break;
@@ -59,13 +60,13 @@ public class TileQueryTask extends QueryTask
         return task;
     }
 
-    private RTreeQueryTask searchNodeRTree(ByteBuffer buf, int ppTree, Matcher filter, RTreeQueryTask task)
+    private RTreeQueryTask searchNodeRTree(int ppTree, Matcher matcher, RTreeQueryTask task)
     {
         int p = buf.getInt(ppTree);
         if(p == 0) return task;
         if((p & 1) == 0)
         {
-            task = new RTreeQueryTask.Nodes(query, buf, ppTree, filter, task);
+            task = new RTreeQueryTask.Nodes(this, ppTree, matcher, task);
             task.fork();
             return task;
         }
@@ -74,9 +75,9 @@ public class TileQueryTask extends QueryTask
         {
             int last = buf.getInt(p) & 1;
             int keyBits = buf.getInt(p+4);
-            if(filter.acceptIndex(keyBits))
+            if(matcher.acceptIndex(keyBits))
             {
-                task = new RTreeQueryTask.Nodes(query, buf, p, filter, task);
+                task = new RTreeQueryTask.Nodes(this, p, matcher, task);
                 task.fork();
             }
             if(last != 0) break;
@@ -93,7 +94,7 @@ public class TileQueryTask extends QueryTask
         {
             FeatureStore store = query.store();
             int tilePage = store.fetchTile(tip);
-            ByteBuffer buf = store.bufferOfPage(tilePage);
+            buf = store.bufferOfPage(tilePage);
             int pTile = store.offsetOfPage(tilePage);
 
             // TODO: could calculate these without branching:
@@ -117,19 +118,19 @@ public class TileQueryTask extends QueryTask
             int types = query.types();
             if ((types & NODES) != 0)
             {
-                task = searchNodeRTree(buf, pTile + 8, filters.nodes(), task);
+                task = searchNodeRTree(pTile + 8, filters.nodes(), task);
             }
             if ((types & NONAREA_WAYS) != 0)
             {
-                task = searchRTree(buf, pTile + 12, filters.ways(), task);
+                task = searchRTree(pTile + 12, filters.ways(), task);
             }
             if ((types & AREAS) != 0)
             {
-                task = searchRTree(buf, pTile + 16, filters.areas(), task);
+                task = searchRTree(pTile + 16, filters.areas(), task);
             }
             if ((types & NONAREA_RELATIONS) != 0)
             {
-                task = searchRTree(buf, pTile + 20, filters.relations(), task);
+                task = searchRTree(pTile + 20, filters.relations(), task);
             }
 
             QueryResults res = QueryResults.EMPTY;

@@ -7,16 +7,12 @@
 
 package com.geodesk.feature.filter;
 
-import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
+import org.locationtech.jts.geom.prep.PreparedGeometry;
 
-public class FalseFilter implements Filter
+// TODO
+
+public abstract class RelateFilter implements Filter
 {
-    public static final Filter INSTANCE = new FalseFilter();
-        // TODO: move to Filters
-
-    @Override public boolean accept(Feature f)
-    {
-        return false;
-    }
+    // protected final PreparedGeometry prepared;
 }

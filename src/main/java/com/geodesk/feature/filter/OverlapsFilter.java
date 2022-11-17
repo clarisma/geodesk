@@ -7,16 +7,8 @@
 
 package com.geodesk.feature.filter;
 
-import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
 
-public class FalseFilter implements Filter
+public class OverlapsFilter implements Filter
 {
-    public static final Filter INSTANCE = new FalseFilter();
-        // TODO: move to Filters
-
-    @Override public boolean accept(Feature f)
-    {
-        return false;
-    }
 }

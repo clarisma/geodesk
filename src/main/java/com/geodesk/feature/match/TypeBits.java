@@ -69,6 +69,7 @@ import com.clarisma.common.util.Log;
  *
  *
  */
+// TODO: move to Filters
 public class TypeBits
 {
     public static final int NODES        = 0b00000000_00000101_00000000_00000101;

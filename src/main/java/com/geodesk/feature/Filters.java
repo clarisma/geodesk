@@ -178,4 +178,34 @@ public class Filters
         int y = (int)Mercator.yFromLat(lat);
         return new ContainsPointFilter(x, y);
     }
+
+    public static Filter coveredBy(Feature feature)
+    {
+        return new CoveredByFilter(feature);
+    }
+
+    public static Filter coveredBy(Geometry geom)
+    {
+        return new CoveredByFilter(geom);
+    }
+
+    public static Filter coveredBy(PreparedGeometry prepared)
+    {
+        return new CoveredByFilter(prepared);
+    }
+
+    public static Filter disjoint(Feature feature)
+    {
+        return new DisjointFilter(feature);
+    }
+
+    public static Filter disjoint(Geometry geom)
+    {
+        return new DisjointFilter(geom);
+    }
+
+    public static Filter disjoint(PreparedGeometry prepared)
+    {
+        return new DisjointFilter(prepared);
+    }
 }
