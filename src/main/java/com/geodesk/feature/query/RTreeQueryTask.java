@@ -33,7 +33,7 @@ public class RTreeQueryTask extends QueryTask
         this.ppTree = ppTree;
         this.bboxFlags = parent.bboxFlags;
         this.matcher = matcher;
-        this.filter = query.filter;  // TODO: use tile-specific filter
+        this.filter = parent.filter;
         this.next = next;
     }
 

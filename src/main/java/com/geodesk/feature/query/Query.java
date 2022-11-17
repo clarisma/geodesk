@@ -32,7 +32,6 @@ public class Query implements Iterator<Feature>, Bounds
     private final int maxY;
     private final int types;
     private final MatcherSet matchers;
-    final Filter filter;
     private ExecutorService executor;
     // private TileQueryTask head;     // access must be synchronized
         // TODO: maybe put last, so we reduce false sharing (may be in
@@ -58,7 +57,6 @@ public class Query implements Iterator<Feature>, Bounds
         this.executor = store.executor();
         this.types = view.types;
         this.matchers = view.matchers;
-        this.filter = view.filter;
         Bounds bbox = view.bbox;
         minX = bbox.minX();
         minY = bbox.minY();
@@ -67,7 +65,7 @@ public class Query implements Iterator<Feature>, Bounds
         queue = new LinkedBlockingQueue<>();
         tileWalker = new TileIndexWalker(store.baseMapping(),
             store.tileIndexPointer(), store.zoomLevels());
-        start();
+        start(view.filter);
     }
 
     public FeatureStore store()
@@ -176,9 +174,9 @@ public class Query implements Iterator<Feature>, Bounds
         }
     }
 
-    public void start()
+    public void start(Filter filter)
     {
-        tileWalker.start(this);
+        tileWalker.start(this, filter);
         currentResults = QueryResults.EMPTY;
         currentPos = -1;
 
@@ -200,7 +198,8 @@ public class Query implements Iterator<Feature>, Bounds
     private void requestTile()
     {
         ForkJoinPool pool = (ForkJoinPool)executor; // TODO!
-        pool.submit(new TileQueryTask(this, tileWalker.tile(), tileWalker.tip()));
+        pool.submit(new TileQueryTask(this, tileWalker.tile(),
+            tileWalker.tip(), tileWalker.filter()));
         pendingTiles++;
         // if(pendingTiles > 10) log.debug("Requesting tile, {} pending", pendingTiles);
     }

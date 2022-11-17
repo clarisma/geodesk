@@ -9,6 +9,7 @@ package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
 import com.geodesk.core.Tile;
+import com.geodesk.feature.Filter;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.store.FeatureFlags;
@@ -25,12 +26,14 @@ public class TileQueryTask extends QueryTask
     protected int bboxFlags;
     private int tilesProcessed;
     protected ByteBuffer buf;
+    protected Filter filter;
 
-    public TileQueryTask(Query query, int tile, int tip)
+    public TileQueryTask(Query query, int tile, int tip, Filter filter)
     {
         super(query);
         this.tile = tile;
         this.tip = tip;
+        this.filter = filter;
     }
 
     private RTreeQueryTask searchRTree(int ppTree, Matcher matcher, RTreeQueryTask task)

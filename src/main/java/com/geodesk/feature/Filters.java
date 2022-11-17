@@ -208,4 +208,19 @@ public class Filters
     {
         return new DisjointFilter(prepared);
     }
+
+    public static Filter fastIntersects(Feature feature)
+    {
+        return new FastIntersectsFilter(feature);
+    }
+
+    public static Filter fastIntersects(Geometry geom)
+    {
+        return new FastIntersectsFilter(geom);
+    }
+
+    public static Filter fastIntersects(PreparedGeometry prepared)
+    {
+        return new FastIntersectsFilter(prepared);
+    }
 }
