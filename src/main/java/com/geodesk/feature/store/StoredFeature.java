@@ -368,6 +368,14 @@ public abstract class StoredFeature implements Feature
 		return (buf.getInt(ptr) & FeatureFlags.AREA_FLAG) != 0;
 	}
 
+	@Override public boolean isPlaceholder()
+	{
+		// bbox height for Way/Relation is negative
+		int minY = buf.getInt(ptr-12);
+		int maxY = buf.getInt(ptr-4);
+		return maxY < minY;
+	}
+
 	@Override public Box bounds()
 	{
 		// bbox for Way/Relation

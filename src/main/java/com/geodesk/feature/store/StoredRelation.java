@@ -98,7 +98,7 @@ public class StoredRelation extends StoredFeature implements Relation
 					commonType = memberRel.gatherGeometries(geoms, processedRelations, commonType);
 				}
 			}
-			else
+			else if(!member.isPlaceholder())		// skip placeholders
 			{
 				// Add points, lines, (multi)polygons
 				Geometry g = member.toGeometry();

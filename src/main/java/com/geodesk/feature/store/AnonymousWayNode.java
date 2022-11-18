@@ -50,6 +50,11 @@ public class AnonymousWayNode implements Node
         return y;
     }
 
+    @Override public boolean isPlaceholder()
+    {
+        return false;
+    }
+
     @Override public Box bounds()
     {
         return new Box(x,y);

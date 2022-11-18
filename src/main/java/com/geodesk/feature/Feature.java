@@ -188,17 +188,14 @@ public interface Feature
 	 */
 	boolean isArea();
 
-	// TODO: call it "isPlaceholder"
 	/**
-	 * Checks whether this feature is valid.
-	 * --> Used to determine Purgatory features
-	 * TODO: maybe use concept other than "validity"
-	 *   isPresent? isVisible?
-	 * Nodes at 0/0 are invalid, ways/relations with zero-extend bbox are invalid
+	 * Checks whether this feature is a *placeholder*. A placeholder is a
+	 * feature that is referenced by a relation, but is not actually
+	 * present in a dataset.
 	 *
 	 * @return
 	 */
-	// boolean isValid();
+	boolean isPlaceholder();
 
 	// TODO: Should this return circumference for areas?
 	/**
