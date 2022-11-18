@@ -254,6 +254,21 @@ public class Filters
         return new OverlapsFilter(prepared);
     }
 
+    public static Filter touches(Feature feature)
+    {
+        return new TouchesFilter(feature);
+    }
+
+    public static Filter touches(Geometry geom)
+    {
+        return new TouchesFilter(geom);
+    }
+
+    public static Filter touches(PreparedGeometry prepared)
+    {
+        return new TouchesFilter(prepared);
+    }
+
     public static Filter fastWithin(Feature feature)
     {
         return new FastWithinFilter(feature);
