@@ -21,18 +21,19 @@ import static com.geodesk.feature.match.TypeBits.*;
 
 public class TileQueryTask extends QueryTask
 {
-    private final int tile;
+    // private final int tile;     // TODO: not needed, drop
     private final int tip;
     protected int bboxFlags;
     private int tilesProcessed;
     protected ByteBuffer buf;
     protected Filter filter;
 
-    public TileQueryTask(Query query, int tile, int tip, Filter filter)
+    public TileQueryTask(Query query, /* int tile, */ int tip, int northwestFlags, Filter filter)
     {
         super(query);
-        this.tile = tile;
+        // this.tile = tile;
         this.tip = tip;
+        this.bboxFlags = northwestFlags;
         this.filter = filter;
         // Log.debug("Tile %s with filter %s", Tile.toString(tile), filter);
     }
@@ -101,13 +102,14 @@ public class TileQueryTask extends QueryTask
             buf = store.bufferOfPage(tilePage);
             int pTile = store.offsetOfPage(tilePage);
 
+            /*
             // TODO: could calculate these without branching:
             //  north - maxY, shift sign bit to flag
-
             int north = Tile.topY(tile);
             int west = Tile.leftX(tile);
             bboxFlags = ((query.maxY() > north) ? FeatureFlags.MULTITILE_NORTH : 0) |
                 ((query.minX() < west) ? FeatureFlags.MULTITILE_WEST : 0);
+             */
 
             MatcherSet filters = query.matchers();
             RTreeQueryTask task = null;

@@ -8,6 +8,7 @@
 package com.geodesk.feature.store;
 
 import com.clarisma.common.util.Log;
+import com.geodesk.core.Heading;
 import com.geodesk.core.Tile;
 import com.geodesk.feature.Filter;
 import com.geodesk.feature.filter.FalseFilter;
@@ -35,7 +36,7 @@ public class TileIndexWalker
     private int currentTile;
     private int currentTip;
     private Filter filter;
-    // private int currentTilePage;
+    private int northwestFlags;
     private MutableIntSet acceptedTiles;
     private boolean tileBasedAcceleration;
 
@@ -124,6 +125,7 @@ public class TileIndexWalker
         root.init(0, bounds, filter);
         current = root;
         acceptedTiles = null;
+        northwestFlags = 0;
         if(filter != null)
         {
             int strategy = filter.strategy();
@@ -156,6 +158,11 @@ public class TileIndexWalker
     public Filter filter()
     {
         return filter;
+    }
+
+    public int northwestFlags()
+    {
+        return northwestFlags;
     }
 
     public int tilePage()
@@ -245,9 +252,30 @@ public class TileIndexWalker
                         filter = level.filter.filterForTile(currentTile, Tile.polygon(currentTile));
                         if (filter == FalseFilter.INSTANCE) continue;
                     }
-                    if (acceptedTiles != null) acceptedTiles.add(currentTile);
+                    if (acceptedTiles != null)
+                    {
+                        northwestFlags =
+                            (acceptedTiles.contains(Tile.neighbor(currentTile, Heading.NORTH)) ?
+                                FeatureFlags.MULTITILE_NORTH : 0) |
+                            (acceptedTiles.contains(Tile.neighbor(currentTile, Heading.WEST)) ?
+                                FeatureFlags.MULTITILE_WEST : 0);
+                        acceptedTiles.add(currentTile);
+                    }
+                    // If we're not tracking accepted NW tiles (for fitlers that
+                    // use a strict bbox), keep northwestFlags at 0
                 }
+                else
+                {
+                    // If we're processing a dense set of tiles, calculate the
+                    // northwestFlags based on query bbox
+                    // TODO: There's probably a cheaper way to calculate this
 
+                    northwestFlags =
+                        ((bounds.maxY() > Tile.topY(currentTile)) ?
+                            FeatureFlags.MULTITILE_NORTH : 0) |
+                        ((bounds.minX() < Tile.leftX(currentTile)) ?
+                            FeatureFlags.MULTITILE_WEST : 0);
+                }
                 int pEntry = level.pChildEntries + childEntry * 4;
                 int pageOrPtr = buf.getInt(pEntry);
                 if((pageOrPtr & 1) != 0)

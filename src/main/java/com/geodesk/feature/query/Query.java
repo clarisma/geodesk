@@ -198,8 +198,8 @@ public class Query implements Iterator<Feature>, Bounds
     private void requestTile()
     {
         ForkJoinPool pool = (ForkJoinPool)executor; // TODO!
-        pool.submit(new TileQueryTask(this, tileWalker.tile(),
-            tileWalker.tip(), tileWalker.filter()));
+        pool.submit(new TileQueryTask(this, /* tileWalker.tile(), */
+            tileWalker.tip(), tileWalker.northwestFlags(), tileWalker.filter()));
         pendingTiles++;
         // if(pendingTiles > 10) log.debug("Requesting tile, {} pending", pendingTiles);
     }
