@@ -38,6 +38,11 @@ public class FastTileFilter implements Filter
         tileMinY = Tile.bottomY(tile);
     }
 
+    @Override public boolean accept(Feature feature)
+    {
+        return accept(feature, null);
+    }
+
     @Override public boolean accept(Feature feature, Geometry geom)
     {
         // TODO: Should we explicitly check for nodes first?
@@ -52,6 +57,6 @@ public class FastTileFilter implements Filter
             if(sf.minY() >= tileMinY && sf.maxX() <= tileMaxX) return fastAccept;
         }
         if(geom==null) geom=feature.toGeometry();
-        return accept(feature, null);
+        return slowFilter.accept(feature, geom);
     }
 }

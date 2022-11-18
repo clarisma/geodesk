@@ -223,4 +223,19 @@ public class Filters
     {
         return new FastIntersectsFilter(prepared);
     }
+
+    public static Filter fastWithin(Feature feature)
+    {
+        return new FastWithinFilter(feature);
+    }
+
+    public static Filter fastWithin(Geometry geom)
+    {
+        return new FastWithinFilter(geom);
+    }
+
+    public static Filter fastWithin(PreparedGeometry prepared)
+    {
+        return new FastWithinFilter(prepared);
+    }
 }
