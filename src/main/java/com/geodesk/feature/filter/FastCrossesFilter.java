@@ -16,6 +16,15 @@ import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
+/**
+ * A Filter that only accepts features whose geometry crosses the
+ * test geometry.
+ *
+ * Dimension of intersection must be less than maximum dimension of candidate and test
+ * - if test is polygonal, don't accept areas
+ * - if test is puntal, don't accept nodes
+ */
+
 public class FastCrossesFilter implements Filter
 {
     private final PreparedGeometry prepared;

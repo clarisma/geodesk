@@ -239,6 +239,21 @@ public class Filters
         return new FastIntersectsFilter(prepared);
     }
 
+    public static Filter overlaps(Feature feature)
+    {
+        return new OverlapsFilter(feature);
+    }
+
+    public static Filter overlaps(Geometry geom)
+    {
+        return new OverlapsFilter(geom);
+    }
+
+    public static Filter overlaps(PreparedGeometry prepared)
+    {
+        return new OverlapsFilter(prepared);
+    }
+
     public static Filter fastWithin(Feature feature)
     {
         return new FastWithinFilter(feature);

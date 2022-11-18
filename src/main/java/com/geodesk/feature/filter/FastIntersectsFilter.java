@@ -17,6 +17,10 @@ import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
+/**
+ * A Filter that only accepts features whose geometry intersects the
+ * test geometry.
+ */
 public class FastIntersectsFilter implements Filter
 {
     private final PreparedGeometry prepared;
