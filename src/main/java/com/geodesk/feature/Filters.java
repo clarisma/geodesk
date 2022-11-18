@@ -194,6 +194,21 @@ public class Filters
         return new CoveredByFilter(prepared);
     }
 
+    public static Filter fastCrosses(Feature feature)
+    {
+        return new FastCrossesFilter(feature);
+    }
+
+    public static Filter fastCrosses(Geometry geom)
+    {
+        return new FastCrossesFilter(geom);
+    }
+
+    public static Filter fastCrosses(PreparedGeometry prepared)
+    {
+        return new FastCrossesFilter(prepared);
+    }
+
     public static Filter disjoint(Feature feature)
     {
         return new DisjointFilter(feature);

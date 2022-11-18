@@ -125,6 +125,7 @@ public class MapMaker
                     out.append('[');
                     for(int i=0; i<geometryCount; i++)
                     {
+                        if(i>0) out.append(',');
                         writeCoordinates(out, ((LineString)g.getGeometryN(i))
                             .getCoordinateSequence());
                     }
