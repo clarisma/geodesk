@@ -34,7 +34,7 @@ public interface Filter
      */
     default boolean accept(Feature feature)
     {
-        return true;
+        return accept(feature, feature.toGeometry());
     }
 
     /**
@@ -47,7 +47,7 @@ public interface Filter
      */
     default boolean accept(Feature feature, Geometry geom)
     {
-        return true;
+        return accept(feature);
     }
 
     default boolean acceptGeometry(Geometry geom)

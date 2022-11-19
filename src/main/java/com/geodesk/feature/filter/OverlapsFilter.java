@@ -69,11 +69,6 @@ public class OverlapsFilter implements Filter
         return this;
     }
 
-    @Override public boolean accept(Feature feature)
-    {
-        return accept(feature, feature.toGeometry());
-    }
-
     @Override public boolean accept(Feature feature, Geometry geom)
     {
         return prepared.overlaps(geom);
