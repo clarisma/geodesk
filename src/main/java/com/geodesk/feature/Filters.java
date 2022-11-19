@@ -179,6 +179,25 @@ public class Filters
         return new ContainsPointFilter(x, y);
     }
 
+    public static Filter contains(Feature feature)
+    {
+        if(feature instanceof Node)
+        {
+            return new ContainsPointFilter(feature.x(), feature.y());
+        }
+        return new ContainsFilter(feature);
+    }
+
+    public static Filter contains(Geometry geom)
+    {
+        return new ContainsFilter(geom);
+    }
+
+    public static Filter contains(PreparedGeometry prepared)
+    {
+        return new ContainsFilter(prepared);
+    }
+
     public static Filter coveredBy(Feature feature)
     {
         return new CoveredByFilter(feature);
