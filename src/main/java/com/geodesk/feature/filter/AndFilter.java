@@ -34,4 +34,17 @@ public class AndFilter implements Filter
     {
         return a.acceptGeometry(geom) && b.acceptGeometry(geom);
     }
+
+    public static Filter create(Filter left, Filter right)
+    {
+        int leftStrategy = left.strategy();
+        int rightStrategy = right.strategy();
+        int leftStrictBounds = leftStrategy & FilterStrategy.STRICT_BBOX;
+        int rightStrictBounds = rightStrategy & FilterStrategy.STRICT_BBOX;
+
+        int combinedStrategy = ((leftStrategy | rightStrategy)
+            & ~FilterStrategy.STRICT_BBOX) | leftStrictBounds;
+
+        return null; // TODO
+    }
 }

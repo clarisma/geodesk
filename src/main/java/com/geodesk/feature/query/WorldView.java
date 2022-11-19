@@ -121,14 +121,14 @@ public class WorldView<T extends Feature> implements Features<T>
      * @param query
      * @return
      */
-    private Features<?> select(int newTypes, int indexesCovered, String query)
+    private Features<T> select(int newTypes, int indexesCovered, String query)
     {
         MatcherSet newMatchers;
         if(query != null)
         {
             newMatchers = store.getMatchers(query);
             newTypes &= types & newMatchers.types();
-            if(newTypes == 0) return EmptyView.ANY;
+            if(newTypes == 0) return (Features<T>)EmptyView.ANY;
 
             if(matchers != MatcherSet.ALL)
             {
@@ -139,7 +139,7 @@ public class WorldView<T extends Feature> implements Features<T>
         {
             newTypes &= types;
             if (newTypes == types) return this;
-            if (newTypes == 0) return EmptyView.ANY;
+            if (newTypes == 0) return (Features<T>)EmptyView.ANY;
             newMatchers = matchers;
         }
         if(newTypes != (newMatchers.types() & indexesCovered))
@@ -156,7 +156,7 @@ public class WorldView<T extends Feature> implements Features<T>
         return count;
     }
 
-    @Override public Features<?> select(String query)
+    @Override public Features<T> select(String query)
     {
         return select(ALL, ALL, query);
     }

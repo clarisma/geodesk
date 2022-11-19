@@ -50,7 +50,7 @@ public class WayNodeView extends TableView<Node>
         this.flags = other.flags;
     }
 
-    @Override public Features<?> select(String query)
+    @Override public Features<Node> select(String query)
     {
         return nodes(query);
     }

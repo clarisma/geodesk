@@ -212,6 +212,22 @@ public class Box implements Bounds
 		return new Box(x1, y1, x2, y2);
 	}
 
+	/*
+	public static Box intersect(Bounds a, Bounds b)
+	{
+
+	}
+
+
+	public static Box intersection(Bounds a, Bounds b)
+	{
+		int aMinX = a.minX();
+		int aMinY = a.minY();
+		if(aMinX > b.maxX() || aMinY > )
+	}
+
+	 */
+
 	/**
 	 * Overflow-safe subtraction
 	 *

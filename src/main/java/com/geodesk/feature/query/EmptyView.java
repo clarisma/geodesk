@@ -35,9 +35,9 @@ public class EmptyView<T extends Feature> implements Features<T>
         return false;
     }
 
-    @Override public Features<?> select(String filter)
+    @Override public Features<T> select(String filter)
     {
-        return ANY;
+        return (Features<T>)ANY;
     }
 
     @Override public Features<Node> nodes()
