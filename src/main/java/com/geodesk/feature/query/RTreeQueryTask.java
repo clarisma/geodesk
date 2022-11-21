@@ -8,9 +8,11 @@
 package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
+import com.geodesk.feature.FeatureType;
 import com.geodesk.feature.Filter;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureFlags;
+import com.geodesk.feature.store.StoredFeature;
 import com.geodesk.feature.store.StoredNode;
 
 import java.nio.ByteBuffer;
@@ -107,12 +109,10 @@ public class RTreeQueryTask extends QueryTask
         for(;;)
         {
             int flags = buf.getInt(p + 16);
-
             /*
-            if(StoredFeature.id(buf, p+16) == 4544515 &&
-                StoredFeature.type(buf, p+16) == 2)
+            if(StoredFeature.id(buf, p+16) == 128815778)
             {
-                log.debug("relation/4544515");
+                Log.debug("way/128815778");
             }
              */
 

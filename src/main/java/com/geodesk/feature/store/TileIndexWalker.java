@@ -125,7 +125,6 @@ public class TileIndexWalker
         root.init(0, bounds, filter);
         current = root;
         acceptedTiles = null;
-        northwestFlags = 0;
         if(filter != null)
         {
             int strategy = filter.strategy();
@@ -261,8 +260,16 @@ public class TileIndexWalker
                                 FeatureFlags.MULTITILE_WEST : 0);
                         acceptedTiles.add(currentTile);
                     }
-                    // If we're not tracking accepted NW tiles (for fitlers that
-                    // use a strict bbox), keep northwestFlags at 0
+                    // If we're not tracking accepted NW tiles (for filters that
+                    // use a strict bbox), pretend that NW tiles exist
+                    // If a feature extends into a N/W tile, the query bbox must
+                    // extend into the N/W tile as well, else it cannot be fully
+                    // within the bbox
+                    // (For simplicity, we could track tiles for strict-bbox filters
+                    // as well; in that case, remove "tileBasedAcceleration", use
+                    // only "acceptedTiles != null" as switch between NW-tile method
+
+                    northwestFlags = FeatureFlags.MULTITILE_NORTH | FeatureFlags.MULTITILE_WEST;
                 }
                 else
                 {
