@@ -80,6 +80,8 @@ public class StoredRelation extends StoredFeature implements Relation
 	 * @param processedRelations	set of relations (IDs) we've already processed
 	 *                              (used to guard against circular refs)
 	 */
+	// TODO: could OR type bits of members instead of checking geometry type,
+	//  avoid branching
 	private Class<?> gatherGeometries(List<Geometry> geoms,
 		MutableLongSet processedRelations, Class<?> commonType)
 	{

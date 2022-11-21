@@ -10,16 +10,11 @@ package com.geodesk.feature.filter;
 import com.geodesk.core.Box;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Relation;
-import com.geodesk.feature.Way;
 import com.geodesk.geom.Bounds;
 import com.geodesk.util.GeometryBuilder;
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A Filter for the `crosses` spatial predicate.
@@ -37,22 +32,22 @@ import java.util.List;
  *   - if test is puntal, don't accept nodes
  *
  */
-public class CrossesFilter extends SpatialFilter
+public class SlowCrossesFilter extends SpatialFilter
 {
     private final PreparedGeometry prepared;
 
-    public CrossesFilter(PreparedGeometry prepared)
+    public SlowCrossesFilter(PreparedGeometry prepared)
     {
         this.prepared = prepared;
     }
 
-    public CrossesFilter(Geometry geom)
+    public SlowCrossesFilter(Geometry geom)
     {
         this(PreparedGeometryFactory.prepare(geom));
     }
 
 
-    public CrossesFilter(Feature f)
+    public SlowCrossesFilter(Feature f)
     {
         Geometry g;
         if(f instanceof Relation rel)

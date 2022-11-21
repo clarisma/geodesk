@@ -13,16 +13,16 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
-public class WithinFilter extends SpatialFilter
+public class SlowWithinFilter extends SpatialFilter
 {
     private final PreparedGeometry prepared;
 
-    public WithinFilter(PreparedGeometry prepared)
+    public SlowWithinFilter(PreparedGeometry prepared)
     {
         this.prepared = prepared;
     }
 
-    public WithinFilter(Geometry geom)
+    public SlowWithinFilter(Geometry geom)
     {
         this(PreparedGeometryFactory.prepare(geom));
     }

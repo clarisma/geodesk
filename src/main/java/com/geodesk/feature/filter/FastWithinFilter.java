@@ -10,9 +10,9 @@ package com.geodesk.feature.filter;
 import com.geodesk.core.Box;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.geom.Bounds;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
@@ -20,6 +20,7 @@ public class FastWithinFilter implements Filter
 {
     private final PreparedGeometry prepared;
     private final Box bounds;
+    private final int acceptedTypes;
 
     public FastWithinFilter(Feature feature)
     {
@@ -36,6 +37,19 @@ public class FastWithinFilter implements Filter
         this.prepared = prepared;
         Geometry geom = prepared.getGeometry();
         bounds = Box.fromEnvelope(geom.getEnvelopeInternal());
+        if(geom instanceof Polygonal)
+        {
+            acceptedTypes = TypeBits.ALL;
+        }
+        else if(geom instanceof Lineal)
+        {
+            acceptedTypes = TypeBits.ALL & ~TypeBits.AREAS;
+        }
+        else
+        {
+            assert geom instanceof Puntal;
+            acceptedTypes = TypeBits.NODES | TypeBits.NONAREA_RELATIONS;
+        }
     }
 
     @Override public int strategy()
@@ -47,19 +61,21 @@ public class FastWithinFilter implements Filter
             FilterStrategy.RESTRICTS_TYPES;
     }
 
+    @Override public int acceptedTypes()
+    {
+        return acceptedTypes;
+    }
+
     @Override public Filter filterForTile(int tile, Polygon tileGeometry)
     {
         if(prepared.disjoint(tileGeometry))
         {
-            // Log.debug("Rejected: %s", Tile.toString(tile));
             return FalseFilter.INSTANCE;
         }
         if(prepared.containsProperly(tileGeometry))
         {
-            // Log.debug("Fully inside: %s", Tile.toString(tile));
             return new FastTileFilter(tile, true, this);
         }
-        // Log.debug("Normal test: %s", Tile.toString(tile));
         return this;
     }
 

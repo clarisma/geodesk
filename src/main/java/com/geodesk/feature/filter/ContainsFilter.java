@@ -74,6 +74,10 @@ public class ContainsFilter implements Filter
         Box featureBounds = feature.bounds();
         if(!featureBounds.contains(bounds)) return false;
         if(geom == null) geom = feature.toGeometry();
+
+        // TODO: for non-area relations, pre-check dimension of member
+        //  (e.g. lineal way can't contain area, no need to do full test)
+
         try
         {
             for (int i = 0; i < geom.getNumGeometries(); i++)

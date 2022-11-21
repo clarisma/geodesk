@@ -47,41 +47,41 @@ import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
 public class Filters
 {
-    public static Filter within(Feature f)
+    public static Filter slowWithin(Feature f)
     {
-        return within(f.toGeometry());
+        return slowWithin(f.toGeometry());
     }
 
-    public static Filter within(Geometry geom)
+    public static Filter slowWithin(Geometry geom)
     {
         // TODO: accept null?
-        return geom==null ? FalseFilter.INSTANCE : within(PreparedGeometryFactory.prepare(geom));
+        return geom==null ? FalseFilter.INSTANCE : slowWithin(PreparedGeometryFactory.prepare(geom));
     }
 
-    public static Filter within(PreparedGeometry prepared)
+    public static Filter slowWithin(PreparedGeometry prepared)
     {
-        return new WithinFilter(prepared);
+        return new SlowWithinFilter(prepared);
     }
 
-    public static Filter intersects(Feature f)
+    public static Filter slowIntersects(Feature f)
     {
-        return intersects(f.toGeometry());
+        return slowIntersects(f.toGeometry());
     }
 
-    public static Filter intersects(Geometry geom)
+    public static Filter slowIntersects(Geometry geom)
     {
-        return new IntersectsFilter(geom);
+        return new SlowIntersectsFilter(geom);
     }
 
-    public static Filter intersects(PreparedGeometry prepared)
+    public static Filter slowIntersects(PreparedGeometry prepared)
     {
-        return new IntersectsFilter(prepared);
+        return new SlowIntersectsFilter(prepared);
     }
 
 
     public static Filter crosses(Feature f)
     {
-        return new CrossesFilter(f);
+        return new SlowCrossesFilter(f);
     }
 
     /**
