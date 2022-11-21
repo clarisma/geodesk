@@ -7,6 +7,8 @@
 
 package com.geodesk.feature.polygon;
 
+import com.clarisma.common.store.StoreException;
+import com.clarisma.common.util.Log;
 import com.geodesk.core.XY;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Relation;
@@ -176,19 +178,31 @@ public class PolygonBuilder
 
         // segments are ordered in reverse
 
-        for (Feature member : rel)
+        try
         {
-            if (member instanceof Way way)
+            for (Feature member : rel)
             {
-                if (way.role().equals("outer"))
+                if (member instanceof Way way)
                 {
-                    outerSegments = new Segment(++outerSegmentCount, way, outerSegments);
-                }
-                else if (way.role().equals("inner"))
-                {
-                    innerSegments = new Segment(++innerSegmentCount, way, innerSegments);
+                    if (way.role().equals("outer"))
+                    {
+                        outerSegments = new Segment(++outerSegmentCount, way, outerSegments);
+                    }
+                    else if (way.role().equals("inner"))
+                    {
+                        innerSegments = new Segment(++innerSegmentCount, way, innerSegments);
+                    }
                 }
             }
+        }
+        catch(StoreException ex)
+        {
+            // TODO: we should distinguish between
+            //  - can't load tile because no repository specified
+            //  - problems with the repository (connection lost, bad tile file, etc.)
+            // suppress exception and continue, try to assemble polygon from the ways
+            // we've been able to fetch
+            // Log.debug("Failed to fetch members for %s", rel);
         }
 
         if (outerSegments == null) return factory.createEmpty(2);
