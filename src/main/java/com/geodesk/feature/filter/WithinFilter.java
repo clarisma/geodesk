@@ -10,41 +10,46 @@ package com.geodesk.feature.filter;
 import com.geodesk.core.Box;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.geom.Bounds;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
-/**
- * A Filter that only accepts features whose geometry crosses the
- * test geometry.
- *
- * Dimension of intersection must be less than maximum dimension of candidate and test
- * - if test is polygonal, don't accept areas
- * - if test is puntal, don't accept nodes
- */
-
-public class FastCrossesFilter implements Filter
+public class WithinFilter implements Filter
 {
     private final PreparedGeometry prepared;
     private final Box bounds;
+    private final int acceptedTypes;
 
-    public FastCrossesFilter(Feature feature)
+    public WithinFilter(Feature feature)
     {
         this(feature.toGeometry());
     }
 
-    public FastCrossesFilter(Geometry geom)
+    public WithinFilter(Geometry geom)
     {
         this(PreparedGeometryFactory.prepare(geom));
     }
 
-    public FastCrossesFilter(PreparedGeometry prepared)
+    public WithinFilter(PreparedGeometry prepared)
     {
         this.prepared = prepared;
         Geometry geom = prepared.getGeometry();
         bounds = Box.fromEnvelope(geom.getEnvelopeInternal());
+        if(geom instanceof Polygonal)
+        {
+            acceptedTypes = TypeBits.ALL;
+        }
+        else if(geom instanceof Lineal)
+        {
+            acceptedTypes = TypeBits.ALL & ~TypeBits.AREAS;
+        }
+        else
+        {
+            assert geom instanceof Puntal;
+            acceptedTypes = TypeBits.NODES | TypeBits.NONAREA_RELATIONS;
+        }
     }
 
     @Override public int strategy()
@@ -52,7 +57,13 @@ public class FastCrossesFilter implements Filter
         return FilterStrategy.FAST_TILE_FILTER |
             FilterStrategy.NEEDS_GEOMETRY |
             FilterStrategy.USES_BBOX |
+            FilterStrategy.STRICT_BBOX |
             FilterStrategy.RESTRICTS_TYPES;
+    }
+
+    @Override public int acceptedTypes()
+    {
+        return acceptedTypes;
     }
 
     @Override public Filter filterForTile(int tile, Polygon tileGeometry)
@@ -63,14 +74,14 @@ public class FastCrossesFilter implements Filter
         }
         if(prepared.containsProperly(tileGeometry))
         {
-            return new FastTileFilter(tile, false, this);
+            return new FastTileFilter(tile, true, this);
         }
         return this;
     }
 
     @Override public boolean accept(Feature feature, Geometry geom)
     {
-        return prepared.crosses(geom);
+        return prepared.contains(geom);
     }
 
     @Override public Bounds bounds() { return bounds; }

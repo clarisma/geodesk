@@ -8,6 +8,7 @@
 package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
+import com.geodesk.core.Tile;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
 import com.geodesk.feature.match.MatcherSet;
@@ -198,6 +199,11 @@ public class Query implements Iterator<Feature>, Bounds
     private void requestTile()
     {
         ForkJoinPool pool = (ForkJoinPool)executor; // TODO!
+        /*
+        Log.debug("Requesting tile %s (%s)",
+            Tile.toString(tileWalker.tile()),
+            Tip.toString(tileWalker.tip()));
+         */
         pool.submit(new TileQueryTask(this, /* tileWalker.tile(), */
             tileWalker.tip(), tileWalker.northwestFlags(), tileWalker.filter()));
         pendingTiles++;

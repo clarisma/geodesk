@@ -12,6 +12,7 @@ import com.geodesk.core.Box;
 import com.geodesk.core.Tile;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
@@ -21,26 +22,21 @@ import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
  * A Filter that only accepts features whose geometry intersects the
  * test geometry.
  */
-public class FastIntersectsFilter implements Filter
+public class IntersectsFilter extends AbstractRelateFilter
 {
-    private final PreparedGeometry prepared;
-    private final Box bounds;
-
-    public FastIntersectsFilter(Feature feature)
+    public IntersectsFilter(Feature feature)
     {
         this(feature.toGeometry());
     }
 
-    public FastIntersectsFilter(Geometry geom)
+    public IntersectsFilter(Geometry geom)
     {
         this(PreparedGeometryFactory.prepare(geom));
     }
 
-    public FastIntersectsFilter(PreparedGeometry prepared)
+    public IntersectsFilter(PreparedGeometry prepared)
     {
-        this.prepared = prepared;
-        Geometry geom = prepared.getGeometry();
-        bounds = Box.fromEnvelope(geom.getEnvelopeInternal());
+        super(prepared, TypeBits.ALL);
     }
 
     @Override public int strategy()
@@ -54,15 +50,13 @@ public class FastIntersectsFilter implements Filter
     {
         if(prepared.disjoint(tileGeometry))
         {
-            // Log.debug("Rejected: %s", Tile.toString(tile));
             return FalseFilter.INSTANCE;
         }
-        if(prepared.containsProperly(tileGeometry))
+        if(testDimension == 2 && prepared.containsProperly(tileGeometry))
         {
-            // Log.debug("Fully inside: %s", Tile.toString(tile));
             return null;
         }
-        // Log.debug("Normal test: %s", Tile.toString(tile));
+        // Log.debug("Must test: %s", Tile.toString(tile));
         return this;
     }
 
@@ -70,8 +64,6 @@ public class FastIntersectsFilter implements Filter
     {
         return prepared.intersects(geom);
     }
-
-    @Override public Bounds bounds() { return bounds; }
 }
 
 

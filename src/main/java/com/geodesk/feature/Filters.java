@@ -79,7 +79,7 @@ public class Filters
     }
 
 
-    public static Filter crosses(Feature f)
+    public static Filter slowCrosses(Feature f)
     {
         return new SlowCrossesFilter(f);
     }
@@ -213,19 +213,19 @@ public class Filters
         return new CoveredByFilter(prepared);
     }
 
-    public static Filter fastCrosses(Feature feature)
+    public static Filter crosses(Feature feature)
     {
-        return new FastCrossesFilter(feature);
+        return new CrossesFilter(feature);
     }
 
-    public static Filter fastCrosses(Geometry geom)
+    public static Filter crosses(Geometry geom)
     {
-        return new FastCrossesFilter(geom);
+        return new CrossesFilter(geom);
     }
 
-    public static Filter fastCrosses(PreparedGeometry prepared)
+    public static Filter crosses(PreparedGeometry prepared)
     {
-        return new FastCrossesFilter(prepared);
+        return new CrossesFilter(prepared);
     }
 
     public static Filter disjoint(Feature feature)
@@ -243,19 +243,19 @@ public class Filters
         return new DisjointFilter(prepared);
     }
 
-    public static Filter fastIntersects(Feature feature)
+    public static Filter intersects(Feature feature)
     {
-        return new FastIntersectsFilter(feature);
+        return new IntersectsFilter(feature);
     }
 
-    public static Filter fastIntersects(Geometry geom)
+    public static Filter intersects(Geometry geom)
     {
-        return new FastIntersectsFilter(geom);
+        return new IntersectsFilter(geom);
     }
 
-    public static Filter fastIntersects(PreparedGeometry prepared)
+    public static Filter intersects(PreparedGeometry prepared)
     {
-        return new FastIntersectsFilter(prepared);
+        return new IntersectsFilter(prepared);
     }
 
     public static Filter overlaps(Feature feature)
@@ -288,18 +288,18 @@ public class Filters
         return new TouchesFilter(prepared);
     }
 
-    public static Filter fastWithin(Feature feature)
+    public static Filter within(Feature feature)
     {
-        return new FastWithinFilter(feature);
+        return new WithinFilter(feature);
     }
 
-    public static Filter fastWithin(Geometry geom)
+    public static Filter within(Geometry geom)
     {
-        return new FastWithinFilter(geom);
+        return new WithinFilter(geom);
     }
 
-    public static Filter fastWithin(PreparedGeometry prepared)
+    public static Filter within(PreparedGeometry prepared)
     {
-        return new FastWithinFilter(prepared);
+        return new WithinFilter(prepared);
     }
 }

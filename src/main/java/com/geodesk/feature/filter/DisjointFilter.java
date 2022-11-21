@@ -10,6 +10,7 @@ package com.geodesk.feature.filter;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
@@ -21,6 +22,7 @@ import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 public class DisjointFilter implements Filter
 {
     private final PreparedGeometry prepared;
+    private final int testDimension;
 
     public DisjointFilter(Feature feature)
     {
@@ -35,6 +37,9 @@ public class DisjointFilter implements Filter
     public DisjointFilter(PreparedGeometry prepared)
     {
         this.prepared = prepared;
+        Geometry geom = prepared.getGeometry();
+        testDimension = (geom.getClass() == GeometryCollection.class) ?
+            AbstractRelateFilter.MIXED_DIMENSION : geom.getDimension();
     }
 
     @Override public int strategy()
@@ -48,7 +53,7 @@ public class DisjointFilter implements Filter
         {
             return new FastTileFilter(tile, false, this);
         }
-        if(prepared.containsProperly(tileGeometry)) return FalseFilter.INSTANCE;
+        if(testDimension == 2 && prepared.containsProperly(tileGeometry)) return FalseFilter.INSTANCE;
         return this;
     }
 
