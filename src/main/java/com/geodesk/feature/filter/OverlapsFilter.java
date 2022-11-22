@@ -10,9 +10,9 @@ package com.geodesk.feature.filter;
 import com.geodesk.core.Box;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.geom.Bounds;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
@@ -25,12 +25,12 @@ import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
  * - Test and candidate each have at least one point not shared by the other.
  *
  * - The intersection of their interiors has the same dimension.
+ *
+ * This Filter does not accept generic GeometryCollections, neither as test nor as candidate
+ * (result is always `false`).
  */
-public class OverlapsFilter implements Filter
+public class OverlapsFilter extends AbstractRelateFilter
 {
-    private final PreparedGeometry prepared;
-    private final Box bounds;
-
     public OverlapsFilter(Feature feature)
     {
         this(feature.toGeometry());
@@ -43,34 +43,21 @@ public class OverlapsFilter implements Filter
 
     public OverlapsFilter(PreparedGeometry prepared)
     {
-        this.prepared = prepared;
+        super(prepared, acceptedType(prepared));
+    }
+
+    private static int acceptedType(PreparedGeometry prepared)
+    {
         Geometry geom = prepared.getGeometry();
-        bounds = Box.fromEnvelope(geom.getEnvelopeInternal());
-    }
-
-    @Override public int strategy()
-    {
-        return FilterStrategy.FAST_TILE_FILTER |
-            FilterStrategy.NEEDS_GEOMETRY |
-            FilterStrategy.USES_BBOX |
-            FilterStrategy.RESTRICTS_TYPES;
-    }
-
-    @Override public Filter filterForTile(int tile, Polygon tileGeometry)
-    {
-        if(prepared.disjoint(tileGeometry))
-        {
-            return FalseFilter.INSTANCE;
-        }
-        if(prepared.containsProperly(tileGeometry))
-        {
-            return new FastTileFilter(tile, false, this);
-        }
-        return this;
+        if(geom instanceof Polygonal) return TypeBits.AREAS | TypeBits.NONAREA_RELATIONS;
+        if(geom instanceof Lineal) return TypeBits.NONAREA_WAYS | TypeBits.NONAREA_RELATIONS;
+        if(geom instanceof Puntal) return TypeBits.NODES | TypeBits.NONAREA_RELATIONS;
+        return 0;   // don't accept generic GeometryCollection
     }
 
     @Override public boolean accept(Feature feature, Geometry geom)
     {
+        if(geom.getClass() == GeometryCollection.class) return false;
         return prepared.overlaps(geom);
     }
 

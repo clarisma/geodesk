@@ -23,6 +23,9 @@ import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
  * Dimension of intersection must be less than maximum dimension of candidate and test
  * - if test is polygonal, don't accept areas
  * - if test is puntal, don't accept nodes
+ *
+ * This Filter does not accept generic GeometryCollections, neither as test nor as candidate
+ * (result is always `false`).
  */
 
 public class CrossesFilter extends AbstractRelateFilter
@@ -47,11 +50,13 @@ public class CrossesFilter extends AbstractRelateFilter
         Geometry geom = prepared.getGeometry();
         if(geom instanceof Polygonal) return TypeBits.ALL & ~TypeBits.AREAS;
         if(geom instanceof Puntal) return TypeBits.ALL & ~TypeBits.NODES;
+        if(geom.getClass() == GeometryCollection.class) return 0;
         return TypeBits.ALL;
     }
 
     @Override public boolean acceptGeometry(Geometry geom)
     {
+        if(geom.getClass() == GeometryCollection.class) return false;
         return prepared.crosses(geom);
     }
 }

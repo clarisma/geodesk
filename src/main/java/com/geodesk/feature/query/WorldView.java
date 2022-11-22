@@ -10,6 +10,7 @@ package com.geodesk.feature.query;
 import com.geodesk.core.Box;
 import com.geodesk.feature.*;
 import com.geodesk.feature.filter.AndFilter;
+import com.geodesk.feature.filter.FilterStrategy;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredFeature;
@@ -241,6 +242,16 @@ public class WorldView<T extends Feature> implements Features<T>
 
     @Override public Features<T> select(Filter filter)
     {
+        int strategy = filter.strategy();
+        if((strategy & FilterStrategy.RESTRICTS_TYPES) != 0)
+        {
+            int newTypes = types & filter.acceptedTypes();
+            if(newTypes != types)
+            {
+                if(newTypes == 0) return (Features<T>)EmptyView.ANY;
+                // TODO: restrict matchers
+            }
+        }
         Bounds filterBounds = filter.bounds();
         if(this.filter != null) filter = new AndFilter(this.filter, filter);
         // TODO: proper combining of bboxes

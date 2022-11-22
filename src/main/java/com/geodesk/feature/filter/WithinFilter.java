@@ -39,7 +39,7 @@ public class WithinFilter extends AbstractRelateFilter
         if(geom instanceof Polygonal) return TypeBits.ALL;
         if(geom instanceof Lineal) return TypeBits.ALL & ~TypeBits.AREAS;
         if(geom instanceof Puntal) return TypeBits.NODES | TypeBits.NONAREA_RELATIONS;
-        return TypeBits.ALL;
+        return 0;   // don't accept generic GeometryCollection
     }
 
     @Override public int strategy()

@@ -7,6 +7,7 @@
 
 package com.geodesk.feature.filter;
 
+import com.clarisma.common.util.Log;
 import com.geodesk.core.Box;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
@@ -20,12 +21,8 @@ import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
  * A Filter that only accepts features whose geometry is covered by the
  * test geometry.
  */
-public class CoveredByFilter implements Filter
+public class CoveredByFilter extends AbstractRelateFilter
 {
-    private final PreparedGeometry prepared;
-    private final Box bounds;
-    private final int acceptedTypes;
-
     public CoveredByFilter(Feature feature)
     {
         this(feature.toGeometry());
@@ -38,22 +35,16 @@ public class CoveredByFilter implements Filter
 
     public CoveredByFilter(PreparedGeometry prepared)
     {
-        this.prepared = prepared;
+        super(prepared, acceptedType(prepared));
+    }
+
+    private static int acceptedType(PreparedGeometry prepared)
+    {
         Geometry geom = prepared.getGeometry();
-        bounds = Box.fromEnvelope(geom.getEnvelopeInternal());
-        if(geom instanceof Polygonal)
-        {
-            acceptedTypes = TypeBits.ALL;
-        }
-        else if(geom instanceof Lineal)
-        {
-            acceptedTypes = TypeBits.ALL & ~TypeBits.AREAS;
-        }
-        else
-        {
-            assert geom instanceof Puntal;
-            acceptedTypes = TypeBits.NODES | TypeBits.NONAREA_RELATIONS;
-        }
+        if(geom instanceof Polygonal) return TypeBits.ALL;
+        if(geom instanceof Lineal) return TypeBits.ALL & ~TypeBits.AREAS;
+        if(geom instanceof Puntal) return TypeBits.NODES | TypeBits.NONAREA_RELATIONS;
+        return 0;   // don't accept generic GeometryCollection
     }
 
     @Override public int strategy()
@@ -68,7 +59,7 @@ public class CoveredByFilter implements Filter
     @Override public Filter filterForTile(int tile, Polygon tileGeometry)
     {
         if(prepared.disjoint(tileGeometry)) return FalseFilter.INSTANCE;
-        if(prepared.containsProperly(tileGeometry))
+        if(testDimension == 2 && prepared.containsProperly(tileGeometry))
         {
             return new FastTileFilter(tile, true, this);
         }
@@ -77,12 +68,19 @@ public class CoveredByFilter implements Filter
 
     @Override public boolean accept(Feature feature, Geometry geom)
     {
-        return prepared.covers(geom);
+        // try
+        // {
+            if (geom.getClass() == GeometryCollection.class) return false;
+            return prepared.covers(geom);
+        /*
+        }
+        catch(Exception ex)
+        {
+            Log.debug("Exception (%s) for %s: %s", ex.getMessage(), feature,
+                geom.toString().substring(0,200));
+            throw new RuntimeException(ex);
+        }
+         */
     }
-
-    @Override public Bounds bounds() { return bounds; }
-
-    @Override public int acceptedTypes() { return acceptedTypes; }
-
 }
 
