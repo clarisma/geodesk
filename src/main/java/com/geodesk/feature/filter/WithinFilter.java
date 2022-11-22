@@ -16,12 +16,8 @@ import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
-public class WithinFilter implements Filter
+public class WithinFilter extends AbstractRelateFilter
 {
-    private final PreparedGeometry prepared;
-    private final Box bounds;
-    private final int acceptedTypes;
-
     public WithinFilter(Feature feature)
     {
         this(feature.toGeometry());
@@ -34,22 +30,16 @@ public class WithinFilter implements Filter
 
     public WithinFilter(PreparedGeometry prepared)
     {
-        this.prepared = prepared;
+        super(prepared, acceptedType(prepared));
+    }
+
+    private static int acceptedType(PreparedGeometry prepared)
+    {
         Geometry geom = prepared.getGeometry();
-        bounds = Box.fromEnvelope(geom.getEnvelopeInternal());
-        if(geom instanceof Polygonal)
-        {
-            acceptedTypes = TypeBits.ALL;
-        }
-        else if(geom instanceof Lineal)
-        {
-            acceptedTypes = TypeBits.ALL & ~TypeBits.AREAS;
-        }
-        else
-        {
-            assert geom instanceof Puntal;
-            acceptedTypes = TypeBits.NODES | TypeBits.NONAREA_RELATIONS;
-        }
+        if(geom instanceof Polygonal) return TypeBits.ALL;
+        if(geom instanceof Lineal) return TypeBits.ALL & ~TypeBits.AREAS;
+        if(geom instanceof Puntal) return TypeBits.NODES | TypeBits.NONAREA_RELATIONS;
+        return TypeBits.ALL;
     }
 
     @Override public int strategy()
@@ -61,18 +51,13 @@ public class WithinFilter implements Filter
             FilterStrategy.RESTRICTS_TYPES;
     }
 
-    @Override public int acceptedTypes()
-    {
-        return acceptedTypes;
-    }
-
     @Override public Filter filterForTile(int tile, Polygon tileGeometry)
     {
         if(prepared.disjoint(tileGeometry))
         {
             return FalseFilter.INSTANCE;
         }
-        if(prepared.containsProperly(tileGeometry))
+        if(testDimension == 2 && prepared.containsProperly(tileGeometry))
         {
             return new FastTileFilter(tile, true, this);
         }
@@ -81,10 +66,19 @@ public class WithinFilter implements Filter
 
     @Override public boolean accept(Feature feature, Geometry geom)
     {
+        /*
+        if(geom.getClass() == GeometryCollection.class)
+        {
+            int geomCount = geom.getNumGeometries();
+            for(int n=0; n< geomCount; n++)
+            {
+                if(!prepared.contains(geom.getGeometryN(n))) return false;
+            }
+            return false;
+        }
+         */
         return prepared.contains(geom);
     }
-
-    @Override public Bounds bounds() { return bounds; }
 }
 
 

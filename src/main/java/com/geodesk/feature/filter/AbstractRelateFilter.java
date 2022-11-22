@@ -80,6 +80,7 @@ abstract class AbstractRelateFilter implements Filter
         return false;
     }
 
+    // TODO: this is wrong, may need to test if true for every geometry in collection
     public boolean accept(Feature feature, Geometry geom)
     {
         if(geom.getClass() == GeometryCollection.class)
