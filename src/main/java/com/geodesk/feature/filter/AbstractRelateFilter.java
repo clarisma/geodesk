@@ -75,11 +75,14 @@ abstract class AbstractRelateFilter implements Filter
         return this;
     }
 
+    /*
     public boolean acceptGeometry(Geometry geom)
     {
         return false;
     }
+     */
 
+    /*
     // TODO: this is wrong, may need to test if true for every geometry in collection
     public boolean accept(Feature feature, Geometry geom)
     {
@@ -93,15 +96,14 @@ abstract class AbstractRelateFilter implements Filter
             return false;
         }
         return acceptGeometry(geom);
-        /*
-        catch(Exception ex)
-        {
-            Log.debug("Exception %s involving class %s: %s",
-                ex.getMessage(), geom.getClass(), geom.toString().substring(0,200));
-            throw new RuntimeException(ex);
-        }
-         */
+//        catch(Exception ex)
+//        {
+//            Log.debug("Exception %s involving class %s: %s",
+//                ex.getMessage(), geom.getClass(), geom.toString().substring(0,200));
+//            throw new RuntimeException(ex);
+//        }
     }
+     */
 
     @Override public Bounds bounds() { return bounds; }
 }

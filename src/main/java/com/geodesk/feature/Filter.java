@@ -7,6 +7,7 @@
 
 package com.geodesk.feature;
 
+import com.geodesk.core.Box;
 import com.geodesk.feature.match.TypeBits;
 import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Geometry;
@@ -50,10 +51,12 @@ public interface Filter
         return accept(feature);
     }
 
+    /*
     default boolean acceptGeometry(Geometry geom)
     {
         return true;
     }
+     */
 
     /**
      * Returns the Filter that should be used for the given tile.
@@ -79,8 +82,10 @@ public interface Filter
      *
      * @return a bounding box, or`null` if the filter does not use
      *   the spatial index
+     *
+     *   TODO: would it be easier to just return a World bbox?
      */
-    default Bounds bounds() { return null; }
+    default Bounds bounds() { return Box.ofWorld(); }   // TODO: use singleton
 
     default int acceptedTypes() { return TypeBits.ALL; }
 }

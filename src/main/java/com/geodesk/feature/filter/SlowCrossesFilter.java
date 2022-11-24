@@ -32,7 +32,7 @@ import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
  *   - if test is puntal, don't accept nodes
  *
  */
-public class SlowCrossesFilter extends SpatialFilter
+public class SlowCrossesFilter extends SlowSpatialFilter
 {
     private final PreparedGeometry prepared;
 

@@ -56,6 +56,8 @@ public interface Bounds
 			other.minY() >= minY() && other.maxY() <= maxY();
 	}
 
+	// TODO: check these, calculations are not consistent
+
 	default long width()
 	{
 		return (maxY() < minY()) ? 0 : ((((long)maxX() - minX()) & 0xffff_ffffL) + 1);

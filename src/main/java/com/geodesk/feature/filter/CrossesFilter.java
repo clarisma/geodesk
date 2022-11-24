@@ -54,7 +54,7 @@ public class CrossesFilter extends AbstractRelateFilter
         return TypeBits.ALL;
     }
 
-    @Override public boolean acceptGeometry(Geometry geom)
+    @Override public boolean accept(Feature feature, Geometry geom)
     {
         if(geom.getClass() == GeometryCollection.class) return false;
         return prepared.crosses(geom);

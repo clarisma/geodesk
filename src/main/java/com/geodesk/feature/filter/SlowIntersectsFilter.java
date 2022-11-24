@@ -13,7 +13,7 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
-public class SlowIntersectsFilter extends SpatialFilter
+public class SlowIntersectsFilter extends SlowSpatialFilter
 {
     private final PreparedGeometry prepared;
 
