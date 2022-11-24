@@ -8,6 +8,7 @@
 package com.geodesk.feature.store;
 
 import com.clarisma.common.math.Decimal;
+import com.clarisma.common.math.MathUtils;
 import com.clarisma.common.util.Bytes;
 import com.geodesk.core.Mercator;
 import com.geodesk.feature.*;
@@ -190,6 +191,8 @@ public abstract class StoredFeature implements Feature
 				return (((long) (p - 2) << 32) | flags |
 					(((long) ((char) tag)) << 16));
 				// careful, sign extension when Or-ing long and int
+				// TODO: should this return the actual pointer instead of
+				//  pointer-to-pointer, to simplify callers?
 			}
 			if ((flags & 4) != 0) return 0;
 			p -= 6 + (flags & 2);
@@ -263,13 +266,43 @@ public abstract class StoredFeature implements Feature
 			int ppValue = (int) (value >> 32);    // preserve sign? (TODO: should be absolute ptr)
 			int pValueString = buf.getInt(ppValue) + ppValue;
 			String s = Bytes.readString(buf, pValueString);
-			// TODO: should be: return MathUtils.doubleFromString(s);
+			// TODO: should be: return MathUtils.doubleFromString(s); // (Issue #64)
 			return TagValues.toInt(s);
 		}
 		// narrow string
 		String s = store.stringFromCode((char) (value >> 16));
-		// TODO: should be: return MathUtils.doubleFromString(s);
+		// TODO: should be: return MathUtils.doubleFromString(s); // (Issue #64)
 		return TagValues.toInt(s);
+	}
+
+	private double valueAsDouble(long value)
+	{
+		if (value == 0) return 0;
+		int typeAndSize = (int) value & 3;
+		if (typeAndSize == 0)
+		{
+			// narrow number
+			return (double) ((char) (value >> 16)) + TagValues.MIN_NUMBER;
+		}
+		if (typeAndSize == 2)
+		{
+			// wide number
+			int number = buf.getInt((int) (value >> 32));    // preserve sign? (TODO: should be absolute ptr)
+			int mantissa = (number >>> 2) + TagValues.MIN_NUMBER;
+			int scale = number & 3;
+			return Decimal.toDouble(Decimal.of(mantissa, scale));
+		}
+		if (typeAndSize == 3)
+		{
+			// wide string
+			int ppValue = (int) (value >> 32);    // preserve sign? (TODO: should be absolute ptr)
+			int pValueString = buf.getInt(ppValue) + ppValue;
+			String s = Bytes.readString(buf, pValueString);
+			return MathUtils.doubleFromString(s);
+		}
+		// narrow string
+		String s = store.stringFromCode((char) (value >> 16));
+		return MathUtils.doubleFromString(s);
 	}
 
 	private Object valueAsObject(long value)
@@ -319,7 +352,7 @@ public abstract class StoredFeature implements Feature
 	}
 
 	/**
-	 * Returns the value of the given key as a integer.
+	 * Returns the value of the given key as an integer.
 	 *
 	 * @param key
 	 * @return the key's value, or 0 if the key does not
@@ -329,6 +362,19 @@ public abstract class StoredFeature implements Feature
 	{
 		long value = getKeyValue(key);
 		return valueAsInt(value);
+	}
+
+	/**
+	 * Returns the value of the given key as a double.
+	 *
+	 * @param key
+	 * @return the key's value, or 0 if the key does not
+	 * exist, or its value is not a valid number
+	 */
+	@Override public double doubleValue(String key)
+	{
+		long value = getKeyValue(key);
+		return valueAsDouble(value);
 	}
 
 	@Override public boolean booleanValue(String key)

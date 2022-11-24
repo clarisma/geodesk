@@ -84,7 +84,7 @@ public class AnonymousWayNode implements Node
     {
         if(parent instanceof Way)
         {
-            // TODO: execute query
+            // TODO: execute query (Issue #63)
             return false;
         }
         return false;
@@ -101,6 +101,11 @@ public class AnonymousWayNode implements Node
     }
 
     @Override public int intValue(String key)
+    {
+        return 0;
+    }
+
+    @Override public double doubleValue(String key)
     {
         return 0;
     }

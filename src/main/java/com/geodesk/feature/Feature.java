@@ -149,6 +149,15 @@ public interface Feature
 	 */
 	int intValue(String key);
 
+	/**
+	 * Returns the value of the given key as a double.
+	 *
+	 * @param key
+	 * @return the key's value, or 0 if the key does not
+	 * exist, or its value is not a valid number
+	 */
+	double doubleValue(String key);
+
 	// TODO: call this isTagged(key) instead?
 	boolean booleanValue(String key);
 
