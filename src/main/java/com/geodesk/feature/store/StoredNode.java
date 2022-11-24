@@ -85,6 +85,9 @@ public class StoredNode extends StoredFeature implements Node
 		return new WorldView<>(store, types,
 			bounds(), new MatcherSet(types, matcher),
 			new ParentWayFilter(id()));
+
+		// TODO: This could be more efficient; we can create singleton matchers
+		//  Also don't need TypeMatcher on lineal way index
 	}
 
 	@Override protected int getRelationTablePtr()
