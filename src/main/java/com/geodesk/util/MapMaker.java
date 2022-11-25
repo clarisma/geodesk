@@ -118,7 +118,8 @@ public class MapMaker
                 int geometryCount = g.getNumGeometries();
                 if(geometryCount == 1) // single polyline
                 {
-                    writeCoordinates(out, ((LineString)g).getCoordinateSequence());
+                    writeCoordinates(out, ((LineString)g.getGeometryN(0))
+                        .getCoordinateSequence());
                 }
                 else // multipolyline
                 {

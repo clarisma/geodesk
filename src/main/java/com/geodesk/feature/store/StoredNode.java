@@ -97,6 +97,12 @@ public class StoredNode extends StoredFeature implements Node
 		return buf.getInt(ppBody) + ppBody;
 	}
 
+	// TODO: No need to dereference the nodes in a way;
+	//  we could simply check for same buffer and pointer
+	//  (Nodes always live in one tile only)
+	//  Could use existing iterator and receive StoredNode objects
+	//  But instead of checking ID (which requires a memory access and
+	//  potentially requires a page load), we simple compare buf/ptr
 	private static class ParentWayFilter extends IdMatcher implements Filter
 	{
 		public ParentWayFilter(long nodeId)
