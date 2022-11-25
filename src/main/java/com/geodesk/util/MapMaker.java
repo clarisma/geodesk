@@ -144,6 +144,11 @@ public class MapMaker
                 {
                     if(i>0) out.append(',');
                     writeStub(out, g.getGeometryN(i));
+                    if(options.size() > 0)
+                    {
+                        out.append(',');
+                        JavaScript.writeMap(out, options);
+                    }
                     out.append(')');
                 }
                 out.append(']');

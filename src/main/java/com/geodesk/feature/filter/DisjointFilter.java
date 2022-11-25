@@ -7,6 +7,7 @@
 
 package com.geodesk.feature.filter;
 
+import com.clarisma.common.util.Log;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
 import org.locationtech.jts.geom.Geometry;
@@ -51,7 +52,7 @@ public class DisjointFilter implements Filter
     {
         if(prepared.disjoint(tileGeometry))
         {
-            return new FastTileFilter(tile, false, this);
+            return new FastTileFilter(tile, true, this);
         }
         if(testDimension == 2 && prepared.containsProperly(tileGeometry)) return FalseFilter.INSTANCE;
         return this;
@@ -59,6 +60,7 @@ public class DisjointFilter implements Filter
 
     @Override public boolean accept(Feature feature, Geometry geom)
     {
+        // Log.debug("Testing %s", feature);
         return prepared.disjoint(geom);
     }
 }
