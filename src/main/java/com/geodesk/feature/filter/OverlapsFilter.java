@@ -17,30 +17,31 @@ import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
 /**
- * A Filter that only accepts features whose geometry crosses the
+ * A Filter that only accepts features whose geometry overlaps the
  * test geometry.
  *
- * Dimension of intersection must be less than maximum dimension of candidate and test
- * - if test is polygonal, don't accept areas
- * - if test is puntal, don't accept nodes
+ * - The geometries of test and candidate must have the same dimension.
+ *
+ * - Test and candidate each have at least one point not shared by the other.
+ *
+ * - The intersection of their interiors has the same dimension.
  *
  * This Filter does not accept generic GeometryCollections, neither as test nor as candidate
  * (result is always `false`).
  */
-
-public class CrossesFilter extends AbstractRelateFilter
+public class OverlapsFilter extends AbstractRelateFilter
 {
-    public CrossesFilter(Feature feature)
+    public OverlapsFilter(Feature feature)
     {
         this(feature.toGeometry());
     }
 
-    public CrossesFilter(Geometry geom)
+    public OverlapsFilter(Geometry geom)
     {
         this(PreparedGeometryFactory.prepare(geom));
     }
 
-    public CrossesFilter(PreparedGeometry prepared)
+    public OverlapsFilter(PreparedGeometry prepared)
     {
         super(prepared, acceptedType(prepared));
     }
@@ -48,17 +49,19 @@ public class CrossesFilter extends AbstractRelateFilter
     private static int acceptedType(PreparedGeometry prepared)
     {
         Geometry geom = prepared.getGeometry();
-        if(geom instanceof Polygonal) return TypeBits.ALL & ~TypeBits.AREAS;
-        if(geom instanceof Puntal) return TypeBits.ALL & ~TypeBits.NODES;
-        if(geom.getClass() == GeometryCollection.class) return 0;
-        return TypeBits.ALL;
+        if(geom instanceof Polygonal) return TypeBits.AREAS | TypeBits.NONAREA_RELATIONS;
+        if(geom instanceof Lineal) return TypeBits.NONAREA_WAYS | TypeBits.NONAREA_RELATIONS;
+        if(geom instanceof Puntal) return TypeBits.NODES | TypeBits.NONAREA_RELATIONS;
+        return 0;   // don't accept generic GeometryCollection
     }
 
     @Override public boolean accept(Feature feature, Geometry geom)
     {
         if(geom.getClass() == GeometryCollection.class) return false;
-        return prepared.crosses(geom);
+        return prepared.overlaps(geom);
     }
+
+    @Override public Bounds bounds() { return bounds; }
 }
 
 

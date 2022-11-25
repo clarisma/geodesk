@@ -40,6 +40,13 @@ public class StoredNode extends StoredFeature implements Node
 		return buffer().getInt(ptr - 4);
 	}
 
+	@Override public int minY() { return y(); }
+
+	@Override public boolean isPlaceholder()
+	{
+		return (x() | y()) == 0;
+	}
+
 	@Override public Box bounds()
 	{
 		int x = x();
@@ -78,6 +85,9 @@ public class StoredNode extends StoredFeature implements Node
 		return new WorldView<>(store, types,
 			bounds(), new MatcherSet(types, matcher),
 			new ParentWayFilter(id()));
+
+		// TODO: This could be more efficient; we can create singleton matchers
+		//  Also don't need TypeMatcher on lineal way index
 	}
 
 	@Override protected int getRelationTablePtr()
@@ -87,6 +97,12 @@ public class StoredNode extends StoredFeature implements Node
 		return buf.getInt(ppBody) + ppBody;
 	}
 
+	// TODO: No need to dereference the nodes in a way;
+	//  we could simply check for same buffer and pointer
+	//  (Nodes always live in one tile only)
+	//  Could use existing iterator and receive StoredNode objects
+	//  But instead of checking ID (which requires a memory access and
+	//  potentially requires a page load), we simple compare buf/ptr
 	private static class ParentWayFilter extends IdMatcher implements Filter
 	{
 		public ParentWayFilter(long nodeId)

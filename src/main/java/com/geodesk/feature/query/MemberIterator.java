@@ -18,6 +18,12 @@ import com.geodesk.feature.store.StoredFeature;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
+// TODO: filter
+// TODO: fix lazy tile loading
+//  pForeignTile needs two special values:
+//    a) no attempt has yet been made to fetch the foreign tile
+//    b) tried to fetch foreign tile, but it was missing
+
 public class MemberIterator implements Iterator<Feature>
 {
     private final FeatureStore store;
@@ -96,7 +102,7 @@ public class MemberIterator implements Iterator<Feature>
                 if ((member & MF_DIFFERENT_TILE) != 0)
                 {
                     // TODO: test wide tip delta
-                    pForeignTile = 0;
+                    pForeignTile = 0;       // TODO: set to other value, 0 if valid tile start
                     int tipDelta = buf.getShort(p);
                     if ((tipDelta & 1) != 0)
                     {
@@ -147,7 +153,7 @@ public class MemberIterator implements Iterator<Feature>
             int pFeature;
             if ((member & MF_FOREIGN) != 0)
             {
-                if (pForeignTile == 0)
+                if (pForeignTile == 0)  // TODO: Tile could start at segment start!
                 {
                     int tilePage = store.fetchTile(tip);
                     foreignBuf = store.bufferOfPage(tilePage);

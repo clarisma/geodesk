@@ -47,41 +47,41 @@ import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
 public class Filters
 {
-    public static Filter within(Feature f)
+    public static Filter slowWithin(Feature f)
     {
-        return within(f.toGeometry());
+        return slowWithin(f.toGeometry());
     }
 
-    public static Filter within(Geometry geom)
+    public static Filter slowWithin(Geometry geom)
     {
         // TODO: accept null?
-        return geom==null ? FalseFilter.INSTANCE : within(PreparedGeometryFactory.prepare(geom));
+        return geom==null ? FalseFilter.INSTANCE : slowWithin(PreparedGeometryFactory.prepare(geom));
     }
 
-    public static Filter within(PreparedGeometry prepared)
+    public static Filter slowWithin(PreparedGeometry prepared)
     {
-        return new WithinFilter(prepared);
+        return new SlowWithinFilter(prepared);
     }
 
-    public static Filter intersects(Feature f)
+    public static Filter slowIntersects(Feature f)
     {
-        return intersects(f.toGeometry());
+        return slowIntersects(f.toGeometry());
     }
 
-    public static Filter intersects(Geometry geom)
+    public static Filter slowIntersects(Geometry geom)
     {
-        return new IntersectsFilter(geom);
+        return new SlowIntersectsFilter(geom);
     }
 
-    public static Filter intersects(PreparedGeometry prepared)
+    public static Filter slowIntersects(PreparedGeometry prepared)
     {
-        return new IntersectsFilter(prepared);
+        return new SlowIntersectsFilter(prepared);
     }
 
 
-    public static Filter crosses(Feature f)
+    public static Filter slowCrosses(Feature f)
     {
-        return new CrossesFilter(f);
+        return new SlowCrossesFilter(f);
     }
 
     /**
@@ -167,10 +167,139 @@ public class Filters
         throw new RuntimeException("todo");     // TODO
     }
 
+    public static Filter containsXY(int x, int y)
+    {
+        return new ContainsPointFilter(x, y);
+    }
+
     public static Filter containsLonLat(double lon, double lat)
     {
         int x = (int)Mercator.xFromLon(lon);
         int y = (int)Mercator.yFromLat(lat);
         return new ContainsPointFilter(x, y);
+    }
+
+    public static Filter contains(Feature feature)
+    {
+        if(feature instanceof Node)
+        {
+            return new ContainsPointFilter(feature.x(), feature.y());
+        }
+        return new ContainsFilter(feature);
+    }
+
+    public static Filter contains(Geometry geom)
+    {
+        return new ContainsFilter(geom);
+    }
+
+    public static Filter contains(PreparedGeometry prepared)
+    {
+        return new ContainsFilter(prepared);
+    }
+
+    public static Filter coveredBy(Feature feature)
+    {
+        return new CoveredByFilter(feature);
+    }
+
+    public static Filter coveredBy(Geometry geom)
+    {
+        return new CoveredByFilter(geom);
+    }
+
+    public static Filter coveredBy(PreparedGeometry prepared)
+    {
+        return new CoveredByFilter(prepared);
+    }
+
+    public static Filter crosses(Feature feature)
+    {
+        return new CrossesFilter(feature);
+    }
+
+    public static Filter crosses(Geometry geom)
+    {
+        return new CrossesFilter(geom);
+    }
+
+    public static Filter crosses(PreparedGeometry prepared)
+    {
+        return new CrossesFilter(prepared);
+    }
+
+    public static Filter disjoint(Feature feature)
+    {
+        return new DisjointFilter(feature);
+    }
+
+    public static Filter disjoint(Geometry geom)
+    {
+        return new DisjointFilter(geom);
+    }
+
+    public static Filter disjoint(PreparedGeometry prepared)
+    {
+        return new DisjointFilter(prepared);
+    }
+
+    public static Filter intersects(Feature feature)
+    {
+        return new IntersectsFilter(feature);
+    }
+
+    public static Filter intersects(Geometry geom)
+    {
+        return new IntersectsFilter(geom);
+    }
+
+    public static Filter intersects(PreparedGeometry prepared)
+    {
+        return new IntersectsFilter(prepared);
+    }
+
+    public static Filter overlaps(Feature feature)
+    {
+        return new OverlapsFilter(feature);
+    }
+
+    public static Filter overlaps(Geometry geom)
+    {
+        return new OverlapsFilter(geom);
+    }
+
+    public static Filter overlaps(PreparedGeometry prepared)
+    {
+        return new OverlapsFilter(prepared);
+    }
+
+    public static Filter touches(Feature feature)
+    {
+        return new TouchesFilter(feature);
+    }
+
+    public static Filter touches(Geometry geom)
+    {
+        return new TouchesFilter(geom);
+    }
+
+    public static Filter touches(PreparedGeometry prepared)
+    {
+        return new TouchesFilter(prepared);
+    }
+
+    public static Filter within(Feature feature)
+    {
+        return new WithinFilter(feature);
+    }
+
+    public static Filter within(Geometry geom)
+    {
+        return new WithinFilter(geom);
+    }
+
+    public static Filter within(PreparedGeometry prepared)
+    {
+        return new WithinFilter(prepared);
     }
 }

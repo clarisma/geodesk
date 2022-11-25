@@ -149,6 +149,15 @@ public interface Feature
 	 */
 	int intValue(String key);
 
+	/**
+	 * Returns the value of the given key as a double.
+	 *
+	 * @param key
+	 * @return the key's value, or 0 if the key does not
+	 * exist, or its value is not a valid number
+	 */
+	double doubleValue(String key);
+
 	// TODO: call this isTagged(key) instead?
 	boolean booleanValue(String key);
 
@@ -188,17 +197,14 @@ public interface Feature
 	 */
 	boolean isArea();
 
-	// TODO: call it "isPlaceholder"
 	/**
-	 * Checks whether this feature is valid.
-	 * --> Used to determine Purgatory features
-	 * TODO: maybe use concept other than "validity"
-	 *   isPresent? isVisible?
-	 * Nodes at 0/0 are invalid, ways/relations with zero-extend bbox are invalid
+	 * Checks whether this feature is a *placeholder*. A placeholder is a
+	 * feature that is referenced by a relation, but is not actually
+	 * present in a dataset.
 	 *
 	 * @return
 	 */
-	// boolean isValid();
+	boolean isPlaceholder();
 
 	// TODO: Should this return circumference for areas?
 	/**

@@ -9,6 +9,7 @@ package com.geodesk.feature.query;
 
 import java.util.concurrent.ForkJoinTask;
 
+// TODO: do we need this base class?
 public abstract class QueryTask extends ForkJoinTask<QueryResults>
 {
     protected final Query query;

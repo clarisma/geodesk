@@ -7,8 +7,17 @@
 
 package com.geodesk.feature.store;
 
+import com.clarisma.common.util.Log;
+import com.geodesk.core.Heading;
 import com.geodesk.core.Tile;
+import com.geodesk.feature.Filter;
+import com.geodesk.feature.filter.FalseFilter;
+import com.geodesk.feature.filter.FilterStrategy;
 import com.geodesk.geom.Bounds;
+import com.geodesk.util.GeometryBuilder;
+import org.eclipse.collections.api.set.primitive.MutableIntSet;
+import org.eclipse.collections.impl.set.mutable.primitive.IntHashSet;
+import org.locationtech.jts.geom.Geometry;
 
 import java.nio.ByteBuffer;
 
@@ -26,7 +35,10 @@ public class TileIndexWalker
     private Level current;
     private int currentTile;
     private int currentTip;
-    // private int currentTilePage;
+    private Filter filter;
+    private int northwestFlags;
+    private MutableIntSet acceptedTiles;
+    private boolean tileBasedAcceleration;
 
     // TODO: could the col/rows be shorts? Performance impact?
     private static class Level
@@ -43,9 +55,11 @@ public class TileIndexWalker
         int endRow;
         int currentCol;
         int currentRow;
+        Filter filter;
 
-        void init(int parentTile, Bounds bounds)
+        void init(int parentTile, Bounds bounds, Filter filter)
         {
+            this.filter = filter;
             int zoom = Tile.zoom(topLeftChildTile);
             int step = zoom - Tile.zoom(parentTile);
             // int extent = 1 << step;     // TODO: could take it from Level object
@@ -101,9 +115,28 @@ public class TileIndexWalker
 
     public void start(Bounds bounds)
     {
+        start(bounds, null);
+    }
+
+    public void start(Bounds bounds, Filter filter)
+    {
         this.bounds = bounds;
-        root.init(0, bounds);
+        this.filter = filter;
+        root.init(0, bounds, filter);
         current = root;
+        acceptedTiles = null;
+        if(filter != null)
+        {
+            int strategy = filter.strategy();
+            if((strategy & FilterStrategy.FAST_TILE_FILTER) != 0)
+            {
+                tileBasedAcceleration = true;
+                if ((strategy & FilterStrategy.STRICT_BBOX) == 0)
+                {
+                    acceptedTiles = new IntHashSet();
+                }
+            }
+        }
     }
 
     protected int tileIndexPointer()
@@ -119,6 +152,16 @@ public class TileIndexWalker
     public int tip()
     {
         return currentTip;
+    }
+
+    public Filter filter()
+    {
+        return filter;
+    }
+
+    public int northwestFlags()
+    {
+        return northwestFlags;
     }
 
     public int tilePage()
@@ -186,15 +229,73 @@ public class TileIndexWalker
 
                 currentTile = Tile.relative(level.topLeftChildTile,
                     level.currentCol, level.currentRow);
+                // Log.debug("TIW: Current tile %s, Filter = %s", Tile.toString(currentTile), filter);
+
+                if(tileBasedAcceleration)
+                {
+                    // If the Filter allows for tile-based acceleration (rejecting
+                    // a tile, waiving the filter, or substituting the filter for
+                    // a cheaper one), create a polygon for the current tile and
+                    // check with the Filter
+
+                    // We need to check the strategy flags of each filter (not just the
+                    // original one), because a shortcut filter may not perform further
+                    // substitution -- this saves us from needlessly checking
+
+                    // TODO: check current tile bounds to see if they completely enclose
+                    //  the query bbox; we can skip the disjoint/containsProperly test.
+                    //   which is expensive for this case
+
+                    if(level.filter != null && (level.filter.strategy() & FilterStrategy.FAST_TILE_FILTER) != 0)
+                    {
+                        filter = level.filter.filterForTile(currentTile, Tile.polygon(currentTile));
+                        if (filter == FalseFilter.INSTANCE) continue;
+                    }
+                    if (acceptedTiles != null)
+                    {
+                        northwestFlags =
+                            (acceptedTiles.contains(Tile.neighbor(currentTile, Heading.NORTH)) ?
+                                FeatureFlags.MULTITILE_NORTH : 0) |
+                            (acceptedTiles.contains(Tile.neighbor(currentTile, Heading.WEST)) ?
+                                FeatureFlags.MULTITILE_WEST : 0);
+                        acceptedTiles.add(currentTile);
+                    }
+                    else
+                    {
+                        // If we're not tracking accepted NW tiles (for filters that
+                        // use a strict bbox), pretend that NW tiles exist
+                        // If a feature extends into a N/W tile, the query bbox must
+                        // extend into the N/W tile as well, else it cannot be fully
+                        // within the bbox
+                        // (For simplicity, we could track tiles for strict-bbox filters
+                        // as well; in that case, remove "tileBasedAcceleration", use
+                        // only "acceptedTiles != null" as switch between NW-tile method
+
+                        northwestFlags = FeatureFlags.MULTITILE_NORTH | FeatureFlags.MULTITILE_WEST;
+                    }
+                }
+                else
+                {
+                    // If we're processing a dense set of tiles, calculate the
+                    // northwestFlags based on query bbox
+                    // TODO: There's probably a cheaper way to calculate this
+
+                    northwestFlags =
+                        ((bounds.maxY() > Tile.topY(currentTile)) ?
+                            FeatureFlags.MULTITILE_NORTH : 0) |
+                        ((bounds.minX() < Tile.leftX(currentTile)) ?
+                            FeatureFlags.MULTITILE_WEST : 0);
+                }
                 int pEntry = level.pChildEntries + childEntry * 4;
                 int pageOrPtr = buf.getInt(pEntry);
                 if((pageOrPtr & 1) != 0)
                 {
-                    // current tile has children
+                    // current tile has children: prepare to move up to the
+                    // next level in the tile tree
+
                     current = level = level.child;
                     pEntry += (pageOrPtr ^ 1);
-                    // currentTilePage = buf.getInt(pBranch);
-                    level.init(currentTile, bounds);
+                    level.init(currentTile, bounds, filter);
                     level.childTileMask = buf.getLong(pEntry + 4);
                     level.pChildEntries = pEntry + (level.extent==8 ? 12 : 8);
                 }

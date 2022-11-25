@@ -39,7 +39,7 @@ public class Strings
     			case '\r': return 'r';
     			case '\0': return '0';
     		}
-    		return Character.MAX_VALUE;
+    		return Character.MAX_VALUE;	// TODO: check
     	}
     	switch(ch)
     	{

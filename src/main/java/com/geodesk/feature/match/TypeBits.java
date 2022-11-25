@@ -35,9 +35,9 @@ import com.clarisma.common.util.Log;
  *   (but may used to indicate special kind of relations in the future)
  *
  * 0   node
- * 1   n/a (node cannot be area)
+ * 1   --- (node cannot be area)
  * 2   member node
- * 3   n/a
+ * 3   --- (node cannot be area)
  * 4   way
  * 5   area way
  * 6   member way
@@ -46,14 +46,14 @@ import com.clarisma.common.util.Log;
  * 9   area relation
  * 10  member relation
  * 11  member area relation
- * 12  n/a (invalid type)
- * 13  n/a (invalid type)
- * 14  n/a (invalid type)
- * 15  n/a (invalid type)
+ * 12  (reserved for shape)
+ * 13  (reserved for shape)
+ * 14  (reserved for shape)
+ * 15  (reserved for shape)
  * 16  way-node
- * 17  n/a
+ * 17  --- (node cannot be an area)
  * 18  member way-node
- * 19  n/a
+ * 19  --- (node cannot be an area)
  * 20  way with feature nodes
  * 21  area way with feature nodes
  * 22  member way with feature nodes
@@ -62,13 +62,14 @@ import com.clarisma.common.util.Log;
  * 25  area relation (extra flag)
  * 26  member relation (extra flag)
  * 27  member area relation (extra flag)
- * 28  n/a (invalid type)
- * 29  n/a (invalid type)
- * 30  n/a (invalid type)
- * 31  n/a (invalid type)
+ * 28  (reserved for shape)
+ * 29  (reserved for shape)
+ * 30  (reserved for shape)
+ * 31  (reserved for shape)
  *
  *
  */
+// TODO: move to Filters
 public class TypeBits
 {
     public static final int NODES        = 0b00000000_00000101_00000000_00000101;

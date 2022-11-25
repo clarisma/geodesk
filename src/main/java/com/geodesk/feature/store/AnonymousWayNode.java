@@ -7,9 +7,15 @@
 
 package com.geodesk.feature.store;
 
+import com.geodesk.core.XY;
 import com.geodesk.feature.*;
 import com.geodesk.core.Box;
+import com.geodesk.feature.match.Matcher;
+import com.geodesk.feature.match.MatcherSet;
+import com.geodesk.feature.match.TypeBits;
+import com.geodesk.feature.match.TypeMatcher;
 import com.geodesk.feature.query.EmptyView;
+import com.geodesk.feature.query.WorldView;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 
@@ -50,6 +56,11 @@ public class AnonymousWayNode implements Node
         return y;
     }
 
+    @Override public boolean isPlaceholder()
+    {
+        return false;
+    }
+
     @Override public Box bounds()
     {
         return new Box(x,y);
@@ -77,10 +88,14 @@ public class AnonymousWayNode implements Node
 
     @Override public boolean belongsTo(Feature parent)
     {
-        if(parent instanceof Way)
+        if(parent instanceof StoredWay way)     // TODO: other possible types?
         {
-            // TODO: execute query
-            return false;
+            long xy = XY.of(x,y);
+            StoredWay.XYIterator iter = way.iterXY(0);
+            while (iter.hasNext())
+            {
+                if(iter.nextXY() == xy) return true;
+            }
         }
         return false;
     }
@@ -96,6 +111,11 @@ public class AnonymousWayNode implements Node
     }
 
     @Override public int intValue(String key)
+    {
+        return 0;
+    }
+
+    @Override public double doubleValue(String key)
     {
         return 0;
     }
@@ -142,12 +162,6 @@ public class AnonymousWayNode implements Node
         return true;
     }
 
-    @Override public Features<Way> parentWays()
-    {
-        // TODO: execute query
-        return null;
-    }
-
     @Override public boolean equals(Object other)
     {
         if(!(other instanceof Node otherNode)) return false;
@@ -162,5 +176,35 @@ public class AnonymousWayNode implements Node
     @Override public String toString()
     {
         return "node@" + x + "," + y;
+    }
+
+    @Override public Features<Way> parentWays()
+    {
+        final Matcher matcher = new TypeMatcher(TypeBits.WAYS, Matcher.ALL);
+        return new WorldView<>(store, TypeBits.WAYS,
+            bounds(), new MatcherSet(TypeBits.WAYS, null, Matcher.ALL, matcher, null, null),
+            new ParentWayFilter(x,y));
+            // TODO: these should be singletons
+    }
+
+    private static class ParentWayFilter implements Filter
+    {
+        private long xy;
+
+        public ParentWayFilter(int x, int y)
+        {
+            this.xy = XY.of(x,y);
+        }
+
+        @Override public boolean accept(Feature feature)
+        {
+            StoredWay way = (StoredWay)feature;
+            StoredWay.XYIterator iter = way.iterXY(0);
+            while (iter.hasNext())
+            {
+                if(iter.nextXY() == xy) return true;
+            }
+            return false;
+        }
     }
 }

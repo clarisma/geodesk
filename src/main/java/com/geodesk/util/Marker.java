@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public abstract class Marker
 {
-    private Map<String,Object> options = new HashMap<>();
+    protected Map<String,Object> options = new HashMap<>();
     private String tooltip;
     private String url;
     protected MapMaker map;

@@ -19,6 +19,9 @@ import com.geodesk.geom.PointInPolygon;
 
 /**
  * Spatial predicate that accepts only features that contain a given point.
+ *
+ * TODO: Are points on boundary considered "inside"?
+ *  (Definition of "within" says no.)
  */
 public class ContainsPointFilter implements Filter
 {
@@ -40,6 +43,8 @@ public class ContainsPointFilter implements Filter
 
     @Override public boolean accept(Feature feature)
     {
+        // TODO: ways and nodes can also "contain" a point!
+        if(!feature.isArea()) return false; // TODO: should set as pre-filter
         if(feature instanceof StoredWay way)
         {
             return PointInPolygon.testFast(way.iterXY(FeatureFlags.AREA_FLAG), px, py) != 0;

@@ -9,9 +9,12 @@ package com.geodesk.feature.filter;
 
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
+import org.locationtech.jts.geom.Geometry;
 
-public class SpatialFilter implements Filter
+public abstract class SlowSpatialFilter implements Filter
 {
+    protected abstract boolean acceptGeometry(Geometry geom);
+
     @Override public boolean accept(Feature feature)
     {
         return acceptGeometry(feature.toGeometry());

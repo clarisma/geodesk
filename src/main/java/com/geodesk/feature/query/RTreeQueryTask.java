@@ -8,16 +8,16 @@
 package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
+import com.geodesk.feature.FeatureType;
 import com.geodesk.feature.Filter;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureFlags;
+import com.geodesk.feature.store.StoredFeature;
 import com.geodesk.feature.store.StoredNode;
 
 import java.nio.ByteBuffer;
 
 // TODO: make Nodes the base class, Ways/Relations the specialization?
-// TODO: constructor is too unwieldy, pass TileQueryTask?
-// TODO: instead of "query", simply needs "bounds"!
 
 public class RTreeQueryTask extends QueryTask
 {
@@ -28,14 +28,14 @@ public class RTreeQueryTask extends QueryTask
     protected final Filter filter;
     protected final RTreeQueryTask next;
 
-    public RTreeQueryTask(Query query, ByteBuffer buf, int ppTree, int bboxFlags, Matcher matcher, RTreeQueryTask next)
+    public RTreeQueryTask(TileQueryTask parent, int ppTree, Matcher matcher, RTreeQueryTask next)
     {
-        super(query);
-        this.buf = buf;
+        super(parent.query);
+        this.buf = parent.buf;
         this.ppTree = ppTree;
-        this.bboxFlags = bboxFlags;
+        this.bboxFlags = parent.bboxFlags;
         this.matcher = matcher;
-        this.filter = query.filter;
+        this.filter = parent.filter;
         this.next = next;
     }
 
@@ -109,12 +109,10 @@ public class RTreeQueryTask extends QueryTask
         for(;;)
         {
             int flags = buf.getInt(p + 16);
-
             /*
-            if(StoredFeature.id(buf, p+16) == 4544515 &&
-                StoredFeature.type(buf, p+16) == 2)
+            if(StoredFeature.id(buf, p+16) == 128815778)
             {
-                log.debug("relation/4544515");
+                Log.debug("way/128815778");
             }
              */
 
@@ -195,9 +193,9 @@ public class RTreeQueryTask extends QueryTask
 
     public static class Nodes extends RTreeQueryTask
     {
-        public Nodes(Query query, ByteBuffer buf, int pos, Matcher filter, RTreeQueryTask next)
+        public Nodes(TileQueryTask parent, int ppTree, Matcher matcher, RTreeQueryTask next)
         {
-            super(query, buf, pos, 0, filter, next);
+            super(parent, ppTree, matcher, next);
         }
 
         @Override protected void searchLeaf(int p)

@@ -23,6 +23,10 @@ import org.locationtech.jts.geom.LineSegment;
 // TODO: should this be immutable?
 //  can't, because we need `expandToInclude`
 //  we could have a separate MutableBox type (or RubberBox)
+
+// TODO: instead of "empty" Box, could we just use null?
+//  If Box is immutable, an empty Box can never turn into anything else
+//  Would simplify intersection logic
 public class Box implements Bounds
 {
 	private int minX;
@@ -87,6 +91,11 @@ public class Box implements Bounds
 	public boolean isNull()
 	{
 		return maxY < minY;
+	}
+
+	public static boolean isNull(Bounds b)
+	{
+		return b.maxY() < b.minY();
 	}
 
 	public int minX()
@@ -202,15 +211,50 @@ public class Box implements Bounds
 	 * @param o  the other bounding box
 	 * @return   new Box
 	 */
-	// TODO: fix: what happens if empty or boxes don't overlap?
+	// TODO: fix: what happens if boxes are empty?
 	public Box intersection(Bounds o)
 	{
 		int x1 = minX > o.minX() ? minX : o.minX();
 		int y1 = minY > o.minY() ? minY : o.minY();
 		int x2 = maxX < o.maxX() ? maxX : o.maxX();
 		int y2 = maxY < o.maxY() ? maxY : o.maxY();
+		if (x2 < x1 || y2 < y1) return new Box();		// no intersection
 		return new Box(x1, y1, x2, y2);
 	}
+
+	public static Box intersection(Bounds a, Bounds b)
+	{
+		int x1 = Math.max(a.minX(), b.minX());
+		int y1 = Math.max(a.minY(), b.minY());
+		int x2 = Math.min(a.maxX(), b.maxX());
+		int y2 = Math.min(a.maxY(), b.maxY());
+		if (x2 < x1 || y2 < y1) return new Box();		// no intersection
+		return new Box(x1, y1, x2, y2);
+	}
+
+	public static Bounds smaller(Bounds a, Bounds b)
+	{
+		double areaA = (double)a.width() * a.height();
+		double areaB = (double)b.width() * b.height();
+		return (areaA < areaB) ? a : b;
+	}
+
+
+	/*
+	public static Box intersect(Bounds a, Bounds b)
+	{
+
+	}
+
+
+	public static Box intersection(Bounds a, Bounds b)
+	{
+		int aMinX = a.minX();
+		int aMinY = a.minY();
+		if(aMinX > b.maxX() || aMinY > )
+	}
+
+	 */
 
 	/**
 	 * Overflow-safe subtraction

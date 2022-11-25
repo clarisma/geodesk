@@ -40,7 +40,7 @@ public interface Features<T extends Feature> extends Iterable<T>
      * @param query a query in <a href="/goql">GOQL</a> format
      * @return a feature collection
      */
-    Features<?> select(String query);
+    Features<T> select(String query);
 
     /**
      * Returns a view of this collection that contains only nodes.

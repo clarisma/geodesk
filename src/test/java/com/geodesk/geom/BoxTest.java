@@ -47,8 +47,6 @@ public class BoxTest
         testContain(box2, Integer.MIN_VALUE,-3000, true);
         testContain(box2, Integer.MAX_VALUE,-3000, true);
         testContain(box2, 0,0, false);
-
-
     }
 
     Box EMPTY = new Box();
@@ -61,8 +59,40 @@ public class BoxTest
     Box G = new Box(600, 300, MAX_VALUE, 600);
     Box H = new Box(-800, -300, 500, 300);
 
-    @Test
-    public void testIntersects()
+    Box AE = new Box(-300, 600, -100, 800);
+    Box MAX = new Box(MIN_VALUE, MIN_VALUE, MAX_VALUE, MAX_VALUE);
+    Box INVALID = new Box(MAX_VALUE, MAX_VALUE,MIN_VALUE, MIN_VALUE);
+    Box INVALID2 = new Box(200, 200, 100, 100);
+
+
+    @Test public void testIntersection()
+    {
+        testIntersection(A,B,EMPTY);
+        testIntersection(A,EMPTY,EMPTY);
+        testIntersection(EMPTY,B,EMPTY);
+        testIntersection(A,E,AE);
+        testIntersection(A,MAX,A);
+        testIntersection(B,MAX,B);
+        testIntersection(MAX,EMPTY,EMPTY);
+        testIntersection(MAX,MAX,MAX);
+        testIntersection(INVALID,EMPTY,EMPTY);
+        testIntersection(INVALID,INVALID,EMPTY);
+        testIntersection(A,INVALID,EMPTY);
+        testIntersection(MAX,INVALID,EMPTY);
+        testIntersection(INVALID2,INVALID,EMPTY);
+        testIntersection(INVALID2,A,EMPTY);
+        testIntersection(INVALID2,MAX,EMPTY);
+        testIntersection(INVALID2,INVALID2,EMPTY);
+    }
+
+    private void testIntersection(Box a, Box b, Box c)
+    {
+        assertEquals(c, a.intersection(b));
+        assertEquals(c, b.intersection(a));
+        assertEquals(c, Box.intersection(a,b));
+    }
+
+    @Test public void testIntersects()
     {
         testIntersect(A,B,false);
         testIntersect(A,C,false);

@@ -118,13 +118,15 @@ public class MapMaker
                 int geometryCount = g.getNumGeometries();
                 if(geometryCount == 1) // single polyline
                 {
-                    writeCoordinates(out, ((LineString)g).getCoordinateSequence());
+                    writeCoordinates(out, ((LineString)g.getGeometryN(0))
+                        .getCoordinateSequence());
                 }
                 else // multipolyline
                 {
                     out.append('[');
                     for(int i=0; i<geometryCount; i++)
                     {
+                        if(i>0) out.append(',');
                         writeCoordinates(out, ((LineString)g.getGeometryN(i))
                             .getCoordinateSequence());
                     }
@@ -142,6 +144,11 @@ public class MapMaker
                 {
                     if(i>0) out.append(',');
                     writeStub(out, g.getGeometryN(i));
+                    if(options.size() > 0)
+                    {
+                        out.append(',');
+                        JavaScript.writeMap(out, options);
+                    }
                     out.append(')');
                 }
                 out.append(']');

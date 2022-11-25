@@ -18,6 +18,9 @@ import com.geodesk.feature.query.MemberView;
 import org.eclipse.collections.api.set.primitive.MutableLongSet;
 import org.eclipse.collections.impl.set.mutable.primitive.LongHashSet;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Point;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -77,7 +80,10 @@ public class StoredRelation extends StoredFeature implements Relation
 	 * @param processedRelations	set of relations (IDs) we've already processed
 	 *                              (used to guard against circular refs)
 	 */
-	private void gatherGeometries(List<Geometry> geoms, MutableLongSet processedRelations)
+	// TODO: could OR type bits of members instead of checking geometry type,
+	//  avoid branching
+	private Class<?> gatherGeometries(List<Geometry> geoms,
+		MutableLongSet processedRelations, Class<?> commonType)
 	{
 		processedRelations.add(id());
 
@@ -91,16 +97,27 @@ public class StoredRelation extends StoredFeature implements Relation
 				{
 					// avoid endless recursion in case relations are in
 					// a reference cycle
-					memberRel.gatherGeometries(geoms, processedRelations);
+					commonType = memberRel.gatherGeometries(geoms, processedRelations, commonType);
 				}
 			}
-			else
+			else if(!member.isPlaceholder())		// skip placeholders
 			{
 				// Add points, lines, (multi)polygons
-				geoms.add(member.toGeometry());
+				Geometry g = member.toGeometry();
+				Class<?> geomType = g.getClass();
+				if(geomType != commonType)
+				{
+					commonType = (commonType==null) ? geomType : Geometry.class;
+
+					// TODO: This won't work if spec changed so Way returns LinearRing
+					//  as well as LineString)
+					//  (but for now, it always returns LineString)
+					//  See Issue #58
+				}
+				geoms.add(g);
 			}
 		}
-
+		return commonType;
 	}
 
 	/**
@@ -112,9 +129,22 @@ public class StoredRelation extends StoredFeature implements Relation
 	{
 		// FeatureStoreBase.log.debug("Creating GeometryCollection for {} ...", this);
 		List<Geometry> geoms = new ArrayList<>();
-		gatherGeometries(geoms, new LongHashSet());
+		Class<?> commonType = gatherGeometries(geoms, new LongHashSet(), null);
 			// TODO: could create set lazily, and also replace it with
 			//  HashSet<Relation> to get rid of Eclipse Collections dependency
+		GeometryFactory factory = store.geometryFactory();
+		if(commonType == LineString.class)
+		{
+			return factory.createMultiLineString(geoms.toArray(new LineString[0]));
+		}
+		if(commonType == Point.class)
+		{
+			return factory.createMultiPoint(geoms.toArray(new Point[0]));
+		}
+
+		// TODO: should a collection of polygons be treated as a MultiPolygon,
+		//  even though it is not a relation with type=multipolygon ?
+
 		return store.geometryFactory().createGeometryCollection(
 			geoms.toArray(new Geometry[0]));
 	}

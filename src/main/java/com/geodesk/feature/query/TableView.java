@@ -49,6 +49,7 @@ public abstract class TableView<T extends Feature> implements Features<T>
         if(other.matcher != Matcher.ALL)
         {
             matcher = new AndMatcher(other.matcher, matcher);
+            // TODO: do this elesewhere, combining matchers may result in an empty view
         }
         else if(matcher == Matcher.ALL)
         {
@@ -67,7 +68,8 @@ public abstract class TableView<T extends Feature> implements Features<T>
         assert filter != null;
         if(other.filter != null)
         {
-            filter = new AndFilter(other.filter, filter);
+            filter = AndFilter.create(other.filter, filter);
+            // TODO: do this elsewhere, combining filters may result in an empty view
         }
         this.filter = filter;
     }

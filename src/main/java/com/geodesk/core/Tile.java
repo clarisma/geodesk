@@ -7,9 +7,13 @@
 
 package com.geodesk.core;
 
+import com.geodesk.feature.store.BoxCoordinateSequence;
+import com.geodesk.util.GeometryBuilder;
 import org.locationtech.jts.geom.Envelope;
 
 import com.geodesk.geom.Bounds;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Polygon;
 
 
 public class Tile 
@@ -130,6 +134,21 @@ public class Tile
 	}
 
 	/**
+	 * Returns the rightmost (highest) x-coordinate that lies within
+	 * the given tile
+	 *
+	 * @param tile
+	 * @return
+	 */
+	public static int rightX(int tile)
+	{
+		int left = leftX(tile);
+		int zoom = zoom(tile);
+		long extent = 1L << (32 - zoom);
+		return (int) (left + extent - 1);
+	}
+
+	/**
 	 * Returns the bottom (lowest) y-coordinate that lies within 
 	 * the given tile. Remember, going from top to bottom, tile
 	 * rows *increase*, while y-coordinates *decrease*. 
@@ -203,7 +222,18 @@ public class Tile
 	
 		return new Box(left, bottom, (int)(left+extent-1), (int)(bottom+extent-1));
 	}
-	
+
+	public static Polygon polygon(int tile)
+	{
+		int zoom = zoom(tile);
+		int left = leftX(tile);
+		int bottom = bottomY(tile);
+		long extent = 1L << (32-zoom);
+		return GeometryBuilder.instance.createPolygon(
+			new BoxCoordinateSequence(left, bottom,
+				(int)(left+extent-1), (int)(bottom+extent-1)));
+	}
+
 	/**
 	 * Returns the top-left tile occupied by a bounding box.
 	 * 
@@ -360,5 +390,5 @@ public class Tile
 	{
 		return tile + (deltaRow << 12) + deltaCol;
 	}
-	
+
 }

@@ -13,6 +13,7 @@ import com.geodesk.feature.Filter;
 public class FalseFilter implements Filter
 {
     public static final Filter INSTANCE = new FalseFilter();
+        // TODO: move to Filters
 
     @Override public boolean accept(Feature f)
     {

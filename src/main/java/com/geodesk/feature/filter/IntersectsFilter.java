@@ -7,19 +7,26 @@
 
 package com.geodesk.feature.filter;
 
+import com.clarisma.common.util.Log;
 import com.geodesk.core.Box;
+import com.geodesk.core.Tile;
+import com.geodesk.feature.Feature;
+import com.geodesk.feature.Filter;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.geom.Bounds;
-import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
-public class IntersectsFilter extends SpatialFilter
+/**
+ * A Filter that only accepts features whose geometry intersects the
+ * test geometry.
+ */
+public class IntersectsFilter extends AbstractRelateFilter
 {
-    private final PreparedGeometry prepared;
-
-    public IntersectsFilter(PreparedGeometry prepared)
+    public IntersectsFilter(Feature feature)
     {
-        this.prepared = prepared;
+        this(feature.toGeometry());
     }
 
     public IntersectsFilter(Geometry geom)
@@ -27,15 +34,36 @@ public class IntersectsFilter extends SpatialFilter
         this(PreparedGeometryFactory.prepare(geom));
     }
 
-    @Override public boolean acceptGeometry(Geometry geom)
+    public IntersectsFilter(PreparedGeometry prepared)
     {
-        return geom != null && prepared.intersects(geom);
+        super(prepared, TypeBits.ALL);
     }
 
-    @Override public Bounds bounds()
+    @Override public int strategy()
     {
-        // TODO: if using Feature, get the bbox of feature
-        //  but Envelope will be calculated anyway, so only minor savings
-        return Box.fromEnvelope(prepared.getGeometry().getEnvelopeInternal());
+        return FilterStrategy.FAST_TILE_FILTER |
+            FilterStrategy.NEEDS_GEOMETRY |
+            FilterStrategy.USES_BBOX;
+    }
+
+    @Override public Filter filterForTile(int tile, Polygon tileGeometry)
+    {
+        if(prepared.disjoint(tileGeometry))
+        {
+            return FalseFilter.INSTANCE;
+        }
+        if(testDimension == 2 && prepared.containsProperly(tileGeometry))
+        {
+            return null;
+        }
+        // Log.debug("Must test: %s", Tile.toString(tile));
+        return this;
+    }
+
+    @Override public boolean accept(Feature feature, Geometry geom)
+    {
+        return prepared.intersects(geom);
     }
 }
+
+

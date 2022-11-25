@@ -42,20 +42,20 @@ public class MemberView<T extends Feature> extends TableView<T>
     }
 
 
-    private Features<?> select(int types, String query)
+    private Features<T> select(int types, String query)
     {
         MatcherSet matchers = store.getMatchers(query);
         return select(types & matchers.types(), matchers.members());
     }
 
-    private Features<?> select(int types, Matcher matcher)
+    private Features<T> select(int types, Matcher matcher)
     {
         types &= this.types;
-        if(types == 0) return EmptyView.ANY;
+        if(types == 0) return (Features<T>)EmptyView.ANY;
         return new MemberView<>(this, types, matcher);
     }
 
-    @Override public Features<?> select(String query)
+    @Override public Features<T> select(String query)
     {
         return select(TypeBits.ALL, query);
     }
