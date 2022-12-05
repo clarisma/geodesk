@@ -106,6 +106,8 @@ public class RTreeQueryTask extends QueryTask
         int minY = query.minY();
         int maxX = query.maxX();
         int maxY = query.maxY();
+        int acceptedTypes = query.types();
+
         for(;;)
         {
             int flags = buf.getInt(p + 16);
@@ -119,6 +121,10 @@ public class RTreeQueryTask extends QueryTask
             int multiTileFlags = flags & FeatureFlags.MULTITILE_FLAGS;
             for(;;)
             {
+                // Check for acceptable type (way, relation, member, way-node, etc.)
+                // (No need for AND with 0x1f, as int-shift only considers lower 5 bits)
+                if(((1 << (flags >> 1)) & acceptedTypes) == 0) break;
+
                 // TODO: we could use masks and save the coordinate comparison step!
                 // we only have to make one check
 
