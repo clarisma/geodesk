@@ -110,6 +110,7 @@ public class TypeBits
         return s.toString();
     }
 
+    // TODO: remove
     public static void main(String[] args)
     {
         Log.debug("%d", 1 << -1);
