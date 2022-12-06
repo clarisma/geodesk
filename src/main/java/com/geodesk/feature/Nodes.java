@@ -7,9 +7,8 @@
 
 package com.geodesk.feature;
 
-/**
- * A {@link Feature} that represents a single point.
- */
-public interface Node extends Feature
+public interface Nodes extends Iterable<Node>
 {
+    long count();
+    boolean contains(Feature node);
 }

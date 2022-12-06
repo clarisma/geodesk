@@ -27,11 +27,8 @@ import java.util.List;
 
 /**
  * A collection of features.
- *
- * @param <T> the subtype of features ({@link Node}, {@link Way} or
- *            {@link Relation}) or `?` for any type of feature
  */
-public interface Features<T extends Feature> extends Iterable<T>
+public interface Features extends Iterable<Feature>
 {
     /**
      * Returns a view of this collection that only contains features
@@ -40,59 +37,8 @@ public interface Features<T extends Feature> extends Iterable<T>
      * @param query a query in <a href="/goql">GOQL</a> format
      * @return a feature collection
      */
-    Features<T> select(String query);
+    Features select(String query);
 
-    /**
-     * Returns a view of this collection that contains only nodes.
-     *
-     * @return a collection of {@link Node} objects
-     */
-    Features<Node> nodes();
-
-    /**
-     * Returns a view of this collection that contains only nodes matching
-     * the given query.
-     *
-     * @param query a query in <a href="/goql">GOQL</a> format
-     * @return a collection of {@link Node} objects
-     */
-    Features<Node> nodes(String query);
-
-    /**
-     * Returns a view of this collection that contains only ways.
-     *
-     * @return a collection of {@link Way} objects
-     */
-    Features<Way> ways();
-
-    /**
-     * Returns a view of this collection that contains only ways matching
-     * the given query.
-     *
-     * @param query a query in <a href="/goql">GOQL</a> format
-     * @return a collection of {@link Way} objects
-     */
-    Features<Way> ways(String query);
-    /*
-    Features<?> areas();
-    Features<?> areas(String query);
-     */
-
-    /**
-     * Returns a view of this collection that contains only relations.
-     *
-     * @return a collection of {@link Relation} objects
-     */
-    Features<Relation> relations();
-
-    /**
-     * Returns a view of this collection that contains only relations matching
-     * the given query.
-     *
-     * @param query a query in <a href="/goql">GOQL</a> format
-     * @return a collection of {@link Relation} objects
-     */
-    Features<Relation> relations(String query);
 
     /**
      * Returns a sub-view that contains only the features that are nodes of the
@@ -102,10 +48,10 @@ public interface Features<T extends Feature> extends Iterable<T>
      * @param parent    a way or relation
      * @return          a collection of features
      */
-    default Features<T> of(Feature parent)
+    default Features of(Feature parent)
     {
         // TODO: placehodler only
-        return (Features<T>)EmptyView.ANY;
+        return EmptyView.ANY;
     };
 
     /**
@@ -115,10 +61,10 @@ public interface Features<T extends Feature> extends Iterable<T>
      * @param child     a way or relation
      * @return          a collection of features
      */
-    default Features<T> with(Feature child)
+    default Features with(Feature child)
     {
         // TODO: placehodler only
-        return (Features<T>)EmptyView.ANY;
+        return EmptyView.ANY;
     };
 
     /**
@@ -128,7 +74,7 @@ public interface Features<T extends Feature> extends Iterable<T>
      * @param bbox the bounding box to use as a filter
      * @return a collection of {@link Relation} objects
      */
-    Features<T> in(Bounds bbox);
+    Features in(Bounds bbox);
 
     /**
      * Returns the first feature in the collection. If the collection is unordered,
@@ -136,9 +82,9 @@ public interface Features<T extends Feature> extends Iterable<T>
      *
      * @return the first feature, or `null` if the collection is empty
      */
-    default T first()
+    default Feature first()
     {
-        Iterator<T> iter = iterator();
+        Iterator<Feature> iter = iterator();
         return(iter.hasNext() ? iter.next() : null);
     }
 
@@ -150,7 +96,7 @@ public interface Features<T extends Feature> extends Iterable<T>
     default long count()
     {
         long count = 0;
-        Iterator<T> iter = iterator();
+        Iterator<Feature> iter = iterator();
         while(iter.hasNext())
         {
             iter.next();
@@ -174,10 +120,10 @@ public interface Features<T extends Feature> extends Iterable<T>
      *
      * @return  a list containing all features
      */
-    default List<T> toList()
+    default List<Feature> toList()
     {
-        List<T> list = new ArrayList<>();
-        for(T f: this) list.add(f);
+        List<Feature> list = new ArrayList<>();
+        for(Feature f: this) list.add(f);
         return list;
     }
 
@@ -191,7 +137,7 @@ public interface Features<T extends Feature> extends Iterable<T>
         return toList().toArray();
     }
 
-    default T[] toArray(T[] a)
+    default Feature[] toArray(Feature[] a)
     {
         return toList().toArray(a);
     }
@@ -211,7 +157,7 @@ public interface Features<T extends Feature> extends Iterable<T>
     //   no need to execute the query
     default boolean contains(Object f)
     {
-        Iterator<T> iter = iterator();
+        Iterator<Feature> iter = iterator();
         while(iter.hasNext())
         {
             if(f.equals(iter.next())) return true;
@@ -219,5 +165,5 @@ public interface Features<T extends Feature> extends Iterable<T>
         return false;
     }
 
-    Features<T> select(Filter filter);
+    Features select(Filter filter);
 }

@@ -19,6 +19,9 @@ import com.geodesk.feature.query.WorldView;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 
+import java.util.Collections;
+import java.util.Iterator;
+
 /**
  * A Node without tags that doesn't belong to a Relation, i.e. one
  * that isn't a proper feature, but merely defines the geometry of a Way.
@@ -142,9 +145,9 @@ public class AnonymousWayNode implements Node
      *
      * @return an empty feature collection
      */
-    @Override public Features<Relation> parentRelations()
+    @Override public Features parentRelations()
     {
-        return (Features<Relation>) EmptyView.ANY;
+        return EmptyView.ANY;
     }
 
     @Override public boolean isArea()
@@ -155,11 +158,6 @@ public class AnonymousWayNode implements Node
     @Override public Geometry toGeometry()
     {
         return store.geometryFactory().createPoint(new Coordinate(x(), y()));
-    }
-
-    @Override public boolean belongsToWay()
-    {
-        return true;
     }
 
     @Override public boolean equals(Object other)
@@ -178,13 +176,28 @@ public class AnonymousWayNode implements Node
         return "node@" + x + "," + y;
     }
 
-    @Override public Features<Way> parentWays()
+    @Override public int[] toXY()
+    {
+        return new int[] { x,y };
+    }
+
+    @Override public Nodes nodes()
+    {
+        return null; // TODO: return a Nodes collection with only this node
+    }
+
+    @Override public Features parentWays()
     {
         final Matcher matcher = new TypeMatcher(TypeBits.WAYS, Matcher.ALL);
-        return new WorldView<>(store, TypeBits.WAYS,
+        return new WorldView(store, TypeBits.WAYS,
             bounds(), new MatcherSet(TypeBits.WAYS, null, Matcher.ALL, matcher, null, null),
             new ParentWayFilter(x,y));
             // TODO: these should be singletons
+    }
+
+    @Override public Iterator<Feature> iterator()
+    {
+        return Collections.emptyIterator();
     }
 
     private static class ParentWayFilter implements Filter
@@ -207,4 +220,5 @@ public class AnonymousWayNode implements Node
             return false;
         }
     }
+
 }

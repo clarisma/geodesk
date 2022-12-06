@@ -52,7 +52,7 @@ public class Query implements Iterator<Feature>, Bounds
     //  If multiple tiles are missing, should we accumulate the tile numbers?
     //  What would the API user do differently based on this information?
 
-    public Query(WorldView<?> view)
+    public Query(WorldView view)
     {
         this.store = view.store;
         this.executor = store.executor();

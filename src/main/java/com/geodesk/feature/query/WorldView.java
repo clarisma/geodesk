@@ -41,7 +41,7 @@ import static com.geodesk.feature.match.TypeBits.*;
  *
  * @param <T> subtype of Feature
  */
-public class WorldView<T extends Feature> implements Features<T>
+public class WorldView implements Features
 {
     protected final FeatureStore store;
     protected final int types;
@@ -69,7 +69,7 @@ public class WorldView<T extends Feature> implements Features<T>
         this.filter = filter;
     }
 
-    private WorldView(WorldView<?> other, Bounds bbox)
+    private WorldView(WorldView other, Bounds bbox)
     {
         this.store = other.store;
         this.types = other.types;
@@ -80,7 +80,7 @@ public class WorldView<T extends Feature> implements Features<T>
 
     // TODO: decide if matchers should be merged or replaced
     //  (Tableview merges)
-    private WorldView(WorldView<?> other, int types, MatcherSet matchers)
+    private WorldView(WorldView other, int types, MatcherSet matchers)
     {
         this.store = other.store;
         this.bbox = other.bbox;
@@ -89,7 +89,7 @@ public class WorldView<T extends Feature> implements Features<T>
         this.filter = other.filter;
     }
 
-    private WorldView(WorldView<?> other, Bounds bbox, Filter filter)
+    private WorldView(WorldView other, Bounds bbox, Filter filter)
     {
         this.store = other.store;
         this.types = other.types;
@@ -123,14 +123,14 @@ public class WorldView<T extends Feature> implements Features<T>
      * @param query
      * @return
      */
-    private Features<T> select(int newTypes, int indexesCovered, String query)
+    private Features select(int newTypes, int indexesCovered, String query)
     {
         MatcherSet newMatchers;
         if(query != null)
         {
             newMatchers = store.getMatchers(query);
             newTypes &= types & newMatchers.types();
-            if(newTypes == 0) return (Features<T>)EmptyView.ANY;
+            if(newTypes == 0) return EmptyView.ANY;
 
             if(matchers != MatcherSet.ALL)
             {
@@ -141,14 +141,14 @@ public class WorldView<T extends Feature> implements Features<T>
         {
             newTypes &= types;
             if (newTypes == types) return this;
-            if (newTypes == 0) return (Features<T>)EmptyView.ANY;
+            if (newTypes == 0) return EmptyView.ANY;
             newMatchers = matchers;
         }
         if(newTypes != (newMatchers.types() & indexesCovered))
         {
             newMatchers = newMatchers.and(newTypes);
         }
-        return new WorldView<>(this, newTypes, newMatchers);
+        return new WorldView(this, newTypes, newMatchers);
     }
 
     @Override public long count()
@@ -158,42 +158,12 @@ public class WorldView<T extends Feature> implements Features<T>
         return count;
     }
 
-    @Override public Features<T> select(String query)
+    @Override public Features select(String query)
     {
         return select(ALL, ALL, query);
     }
 
-    @Override public Features<Node> nodes()
-    {
-        return (Features<Node>)select(NODES, NODES, null);
-    }
-
-    @Override public Features<Node> nodes(String query)
-    {
-        return (Features<Node>)select(NODES, NODES, query);
-    }
-
-    @Override public Features<Way> ways()
-    {
-        return (Features<Way>) select(WAYS, WAYS | AREAS, null);
-    }
-
-    @Override public Features<Way> ways(String query)
-    {
-        return (Features<Way>) select(WAYS, WAYS | AREAS, query);
-    }
-
-    @Override public Features<Relation> relations()
-    {
-        return (Features<Relation>) select(RELATIONS, RELATIONS | AREAS, null);
-    }
-
-    @Override public Features<Relation> relations(String query)
-    {
-        return (Features<Relation>) select(RELATIONS, RELATIONS | AREAS, query);
-    }
-
-    @Override public Features<T> in(Bounds bbox)
+    @Override public Features in(Bounds bbox)
     {
         return new WorldView(this, bbox);
     }
@@ -241,12 +211,12 @@ public class WorldView<T extends Feature> implements Features<T>
         return false;
     }
 
-    @Override public Features<T> select(Filter filter)
+    @Override public Features select(Filter filter)
     {
         if(this.filter != null)
         {
             filter = AndFilter.create(this.filter, filter);
-            if (filter == FalseFilter.INSTANCE) return (Features<T>)EmptyView.ANY;
+            if (filter == FalseFilter.INSTANCE) return EmptyView.ANY;
         }
         int strategy = filter.strategy();
         if((strategy & FilterStrategy.RESTRICTS_TYPES) != 0)
@@ -254,7 +224,7 @@ public class WorldView<T extends Feature> implements Features<T>
             int newTypes = types & filter.acceptedTypes();
             if(newTypes != types)
             {
-                if(newTypes == 0) return (Features<T>)EmptyView.ANY;
+                if(newTypes == 0) return EmptyView.ANY;
                 // TODO: restrict matchers (e.g. Filter only selects relations,
                 //  members, etc.)
             }
@@ -262,11 +232,11 @@ public class WorldView<T extends Feature> implements Features<T>
 
         Bounds filterBounds = filter.bounds();
         // TODO: proper combining of bboxes
-        return new WorldView<>(this, filterBounds != null ? filterBounds : bbox, filter);
+        return new WorldView(this, filterBounds != null ? filterBounds : bbox, filter);
     }
 
-    @Override public Iterator<T> iterator()
+    @Override public Iterator<Feature> iterator()
     {
-        return (Iterator<T>)new Query(this);
+        return new Query(this);
     }
 }

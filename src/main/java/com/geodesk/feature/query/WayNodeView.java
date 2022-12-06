@@ -20,17 +20,9 @@ import com.geodesk.feature.store.StoredWay;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
-public class WayNodeView extends TableView<Node>
+public class WayNodeView extends TableView
 {
     private final int flags;
-
-    private static final int INCLUDE_GEOMETRY_NODES = 256;
-
-    public WayNodeView(FeatureStore store, ByteBuffer buf, int ptr)
-    {
-        super(store, buf, ptr, Matcher.ALL);
-        flags = (buf.get(ptr) & 0xff) | INCLUDE_GEOMETRY_NODES;
-    }
 
     public WayNodeView(FeatureStore store, ByteBuffer buf, int ptr, Matcher matcher)
     {
@@ -50,25 +42,15 @@ public class WayNodeView extends TableView<Node>
         this.flags = other.flags;
     }
 
-    @Override public Features<Node> select(String query)
+    @Override public Features select(String query)
     {
-        return nodes(query);
-    }
-
-    @Override public Features<Node> nodes()
-    {
-        return this;
-    }
-
-    @Override public Features<Node> nodes(String query)
-    {
-        if((flags & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.NODES;
+        if((flags & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.ANY;
         MatcherSet filters = store.getMatchers(query);
-        if((filters.types() & TypeBits.NODES) == 0) return EmptyView.NODES;
-        return new WayNodeView(this, filters.nodes(), flags & ~INCLUDE_GEOMETRY_NODES);
+        if((filters.types() & TypeBits.NODES) == 0) return EmptyView.ANY;
+        return new WayNodeView(this, filters.nodes(), flags);
     }
 
-    @Override public Features<Node> select(Filter filter)
+    @Override public Features select(Filter filter)
     {
         return new WayNodeView(this, filter);
     }
@@ -79,16 +61,13 @@ public class WayNodeView extends TableView<Node>
         return buf.getInt(ppBody) + ppBody;
     }
 
-    @Override public Iterator<Node> iterator()
+    @Override public Iterator<Feature> iterator()
     {
-        if((flags & INCLUDE_GEOMETRY_NODES) == 0)
-        {
-            return new StoredWay.Iter(store, buf, bodyPtr() - 4 -
-                (flags & FeatureFlags.RELATION_MEMBER_FLAG), matcher);
-        }
-        return new AllNodesIter(bodyPtr());
+        return new StoredWay.Iter(store, buf, bodyPtr() - 4 -
+            (flags & FeatureFlags.RELATION_MEMBER_FLAG), matcher);
     }
 
+    /*
     // TODO: apply spatial filters to geometric nodes
     // TODO: inverse this: derive from feature iterator instead?
     private class AllNodesIter extends StoredWay.XYIterator implements Iterator<Node>
@@ -125,4 +104,5 @@ public class WayNodeView extends TableView<Node>
             return new AnonymousWayNode(store, x, y);
         }
     }
+     */
 }

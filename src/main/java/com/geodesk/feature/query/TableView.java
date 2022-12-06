@@ -19,10 +19,8 @@ import java.nio.ByteBuffer;
 
 /**
  * A Feature Collection that is materialized by scanning a table.
- *
- * @param <T>
  */
-public abstract class TableView<T extends Feature> implements Features<T>
+public abstract class TableView implements Features
 {
     protected final FeatureStore store;
     protected final ByteBuffer buf;
@@ -74,38 +72,7 @@ public abstract class TableView<T extends Feature> implements Features<T>
         this.filter = filter;
     }
 
-    @Override public Features<Node> nodes()
-    {
-        return EmptyView.NODES;
-    }
-
-    @Override public Features<Node> nodes(String filter)
-    {
-        return EmptyView.NODES;
-    }
-
-    @Override public Features<Way> ways()
-    {
-        return EmptyView.WAYS;
-    }
-
-    @Override public Features<Way> ways(String query)
-    {
-        return EmptyView.WAYS;
-    }
-
-    @Override public Features<Relation> relations()
-    {
-        return EmptyView.RELATIONS;
-    }
-
-    @Override public Features<Relation> relations(String query)
-    {
-        return EmptyView.RELATIONS;
-    }
-
-
-    @Override public Features<T> in(Bounds bbox)
+    @Override public Features in(Bounds bbox)
     {
         return select(new BoundsFilter(bbox));
     }

@@ -676,10 +676,10 @@ public abstract class StoredFeature implements Feature
 		return (buf.getInt(ptr) & FeatureFlags.RELATION_MEMBER_FLAG) != 0;
 	}
 
-	@Override public Features<Relation> parentRelations()
+	@Override public Features parentRelations()
 	{
 		return belongsToRelation() ? new ParentRelationView(store, buf, getRelationTablePtr()) :
-			(Features<Relation>) EmptyView.ANY;
+			EmptyView.ANY;
 	}
 
 	/**

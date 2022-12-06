@@ -19,7 +19,7 @@ import com.geodesk.geom.Bounds;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
-public class ParentRelationView extends TableView<Relation>
+public class ParentRelationView extends TableView
 {
     public ParentRelationView(FeatureStore store, ByteBuffer buf, int ptr)
     {
@@ -42,35 +42,26 @@ public class ParentRelationView extends TableView<Relation>
         return false;
     }
 
-    @Override public Features<Relation> select(String query)
-    {
-        return relations(query);
-    }
-
-    @Override public Features<Relation> relations()
-    {
-        return this;
-    }
-
-    @Override public Features<Relation> relations(String query)
+    @Override public Features select(String query)
     {
         MatcherSet filters = store.getMatchers(query);
-        if((filters.types() & TypeBits.RELATIONS) == 0) return EmptyView.RELATIONS;
+        if((filters.types() & TypeBits.RELATIONS) == 0) return EmptyView.ANY;
         Matcher newFilter = filters.relations();
+            // TODO: This is wrong, need to include areas!
         return new ParentRelationView(this, newFilter);
     }
 
-    @Override public Features<Relation> select(Filter filter)
+    @Override public Features select(Filter filter)
     {
         return new ParentRelationView(this, filter);
     }
 
-    @Override public Iterator<Relation> iterator()
+    @Override public Iterator<Feature> iterator()
     {
         return new Iter();
     }
 
-    private class Iter extends TableIterator<Relation>
+    private class Iter extends TableIterator
     {
         private int p;
         private int rel;

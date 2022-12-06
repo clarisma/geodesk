@@ -8,6 +8,7 @@
 package com.geodesk.util;
 
 import com.geodesk.core.Mercator;
+import com.geodesk.feature.Feature;
 import com.geodesk.feature.Relation;
 import com.geodesk.feature.Way;
 import com.geodesk.feature.store.WayCoordinateSequence;
@@ -33,9 +34,12 @@ public class GeometryBuilder extends GeometryFactory
     public MultiLineString createMultiLineString(Relation rel)
     {
         List<LineString> lines = new ArrayList<>();
-        for (Way way : rel.memberWays())
+        for (Feature member: rel.members())
         {
-            lines.add(GeometryBuilder.instance.createLineString(way));
+            if(member instanceof Way way)
+            {
+                lines.add(createLineString(way));
+            }
         }
         return createMultiLineString(lines.toArray(new LineString[0]));
     }

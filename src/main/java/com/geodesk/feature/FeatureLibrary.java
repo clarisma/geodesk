@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 /**
  * A Geographic Object Library containing features.
  */
-public class FeatureLibrary extends WorldView<Feature>
+public class FeatureLibrary extends WorldView
 {
     /**
      * Creates a `FeatureLibrary` instance associated with an existing GOL file.

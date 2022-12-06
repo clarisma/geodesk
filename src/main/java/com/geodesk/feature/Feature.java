@@ -9,12 +9,13 @@ package com.geodesk.feature;
 
 import com.geodesk.core.Mercator;
 import com.geodesk.core.Box;
+import com.geodesk.feature.query.EmptyView;
 import org.locationtech.jts.geom.Geometry;
 
 /**
  * A geographic feature.
  */
-public interface Feature
+public interface Feature extends Iterable<Feature>
 {
 	/**
 	 * Returns the OSM ID of the feature. For nodes that have no tags and are
@@ -184,8 +185,11 @@ public interface Feature
 	 *
 	 * @return a collection of relations (may be empty)
 	 */
-	Features<Relation> parentRelations();
-	// Features<Relation> parentRelations(String q);
+	Features parentRelations();
+
+	Features parentWays();
+
+	// TODO: consolidate to "parents"
 
 	/**
 	 * Checks whether this Feature represents an area. Areas are closed ways
@@ -241,6 +245,43 @@ public interface Feature
 	 * @return a newly created Geometry.
 	 */
 	Geometry toGeometry();
-	// String toGeoJson();
-	// String toWkt();
+
+	/**
+	 * Returns the way's coordinates as an array of integers. X coordinates are
+	 * stored at even index positions, Y at odd.
+	 *
+	 * @return an array of coordinate pairs
+	 */
+	int[] toXY();
+
+	/**
+	 * Returns the way's nodes.
+	 *
+	 * @return an ordered collection of {@link Node} objects
+	 */
+	Nodes nodes();
+
+	/**
+	 * Returns the members of this `Relation`.
+	 *
+	 * @return a collection of features that belong to this relation,
+	 *   or an empty collection if this relation has no members
+	 */
+	default Features members()
+	{
+		return EmptyView.ANY;
+	}
+
+	/**
+	 * Returns the members of this `Relation` that match the given query.
+	 *
+	 * @param  q  a query in <a href="/goql">GOQL</a> format
+	 *
+	 * @return a collection of member features that match the given query
+	 *   (may be empty)
+	 */
+	default Features members(String q)
+	{
+		return EmptyView.ANY;
+	}
 }

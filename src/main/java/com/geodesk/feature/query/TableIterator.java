@@ -13,7 +13,7 @@ import com.geodesk.feature.store.FeatureConstants;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
-public abstract class TableIterator<T extends Feature> implements Iterator<T>
+public abstract class TableIterator implements Iterator<Feature>
 {
     protected int tip = FeatureConstants.START_TIP;
     protected ByteBuffer foreignBuf;

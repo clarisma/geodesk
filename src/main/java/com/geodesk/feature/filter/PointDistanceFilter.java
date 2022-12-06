@@ -98,16 +98,18 @@ public class PointDistanceFilter implements Filter
             // measure distance to the ways that define shell and holes, and
             // also perform point in polygon test
             int odd = 0;
-            for(Way member: rel.memberWays())   // TODO: use role filter
+            for(Feature member: rel.members())   // TODO: use role filter
             {
-                String role = member.role();
-                if(role.equals("outer") || role.equals("inner"))
+                if(member instanceof StoredWay memberWay)
                 {
-                    StoredWay way = (StoredWay)member;
-                    int flags = way.flags();
-                    if (segmentsWithinDistance(way, flags)) return true;
-                    odd ^= PointInPolygon.testFast(
-                        ((StoredWay)member).iterXY(flags), px, py);
+                    String role = member.role();
+                    if (role.equals("outer") || role.equals("inner"))
+                    {
+                        StoredWay way = (StoredWay) member;
+                        int flags = way.flags();
+                        if (segmentsWithinDistance(way, flags)) return true;
+                        odd ^= PointInPolygon.testFast(memberWay.iterXY(flags), px, py);
+                    }
                 }
             }
             return odd != 0;

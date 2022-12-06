@@ -17,6 +17,8 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 
 import java.nio.ByteBuffer;
+import java.util.Collections;
+import java.util.Iterator;
 
 public class StoredNode extends StoredFeature implements Node
 {
@@ -67,22 +69,34 @@ public class StoredNode extends StoredFeature implements Node
 		return store.geometryFactory().createPoint(new Coordinate(x(), y()));
 	}
 
+	@Override public int[] toXY()
+	{
+		return new int[] { x(), y() };
+	}
+
+	@Override public Nodes nodes()
+	{
+		return null;	// TODO
+	}
+
 	@Override public String toString()
 	{
 		return "node/" + id();
 	}
 
+	/*
 	@Override public boolean belongsToWay()
 	{
 		return (buf.getInt(ptr) & FeatureFlags.WAYNODE_FLAG) != 0;
 	}
+	 */
 
-	@Override public Features<Way> parentWays()
+	@Override public Features parentWays()
 	{
-		if ((buf.getInt(ptr) & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.WAYS;
+		if ((buf.getInt(ptr) & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.ANY;
 		int types = TypeBits.WAYS & TypeBits.WAYNODE_FLAGGED;
 		final Matcher matcher = new TypeMatcher(types, Matcher.ALL);
-		return new WorldView<>(store, types,
+		return new WorldView(store, types,
 			bounds(), new MatcherSet(types, matcher),
 			new ParentWayFilter(id()));
 
@@ -95,6 +109,11 @@ public class StoredNode extends StoredFeature implements Node
 		// A Node's body pointer is the pointer to its reltable
 		int ppBody = ptr + 12;
 		return buf.getInt(ppBody) + ppBody;
+	}
+
+	@Override public Iterator<Feature> iterator()
+	{
+		return Collections.emptyIterator();
 	}
 
 	// TODO: No need to dereference the nodes in a way;

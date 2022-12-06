@@ -34,6 +34,11 @@ public class StoredRelation extends StoredFeature implements Relation
 
 	@Override public FeatureType type() { return FeatureType.RELATION; }
 
+	@Override public Features parentWays()
+	{
+		return EmptyView.ANY;
+	}
+
 	@Override public String toString()
 	{
 		return "relation/" + id();
@@ -71,6 +76,16 @@ public class StoredRelation extends StoredFeature implements Relation
 		{
 			return toGeometryCollection();
 		}
+	}
+
+	@Override public int[] toXY()
+	{
+		return new int[0];		// TODO
+	}
+
+	@Override public Nodes nodes()
+	{
+		return null;   // TODO
 	}
 
 	/**
@@ -149,64 +164,28 @@ public class StoredRelation extends StoredFeature implements Relation
 			geoms.toArray(new Geometry[0]));
 	}
 
-	@Override public Features<?> members()
+	@Override public Features members()
 	{
 		return members(TypeBits.ALL, Matcher.ALL);
 	}
 
-	private Features<?> members(int types, String query)
+	private Features members(int types, String query)
 	{
 		MatcherSet matchers = store.getMatchers(query);
 		return members(types & matchers.types(), matchers.members());
 	}
 
-	private Features<?> members(int types, Matcher matcher)
+	private Features members(int types, Matcher matcher)
 	{
 		if(types == 0) return EmptyView.ANY;
 		int ppMembers = ptr + 12;
 		int pMembers = ppMembers + buf.getInt(ppMembers);
 		if(isEmpty(pMembers)) return EmptyView.ANY;
-		return new MemberView<>(store, buf, pMembers, types, matcher);
+		return new MemberView(store, buf, pMembers, types, matcher);
 	}
 
-	@Override public Features<?> members(String q)
+	@Override public Features members(String q)
 	{
 		return members(TypeBits.ALL, q);
 	}
-
-	@Override public Features<Node> memberNodes()
-	{
-		return (Features<Node>)members(TypeBits.NODES, Matcher.ALL);
-	}
-
-	@Override public Features<Node> memberNodes(String q)
-	{
-		return (Features<Node>)members(TypeBits.NODES, q);
-	}
-
-	@Override public Features<Way> memberWays()
-	{
-		return (Features<Way>)members(TypeBits.WAYS, Matcher.ALL);
-	}
-
-	@Override public Features<Way> memberWays(String q)
-	{
-		return (Features<Way>)members(TypeBits.WAYS, q);
-	}
-
-	@Override public Features<Relation> memberRelations()
-	{
-		return (Features<Relation>)members(TypeBits.RELATIONS, Matcher.ALL);
-	}
-
-	@Override public Features<Relation> memberRelations(String q)
-	{
-		return (Features<Relation>)members(TypeBits.RELATIONS, q);
-	}
-
-	@Override public Set<String> memberRoles()
-	{
-		return null;	// TODO
-	}
-
 }

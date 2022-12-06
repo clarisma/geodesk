@@ -59,14 +59,17 @@ public class ContainsPointFilter implements Filter
     private boolean isInsideRelation(StoredRelation rel)
     {
         int crossings = 0;
-        for(Way member: rel.memberWays())
+        for(Feature member: rel.members())
         {
-            String role = member.role();
-            if(!role.equals("outer") && !role.equals("inner")) continue;
-            Box memberBox = member.bounds();
-            if(py < memberBox.minY() || py > memberBox.maxY()) continue;
-            crossings ^= PointInPolygon.testFast(
-                ((StoredWay)member).iterXY(0), px, py);
+            if(member instanceof StoredWay memberWay)
+            {
+                String role = member.role();
+                if (!role.equals("outer") && !role.equals("inner")) continue;
+                Box memberBox = member.bounds();
+                if (py < memberBox.minY() || py > memberBox.maxY()) continue;
+                crossings ^= PointInPolygon.testFast(
+                    memberWay.iterXY(0), px, py);
+            }
         }
         return crossings != 0;
     }
