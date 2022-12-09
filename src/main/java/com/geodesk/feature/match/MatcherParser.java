@@ -42,7 +42,8 @@ public class MatcherParser extends Parser
 	private static final String RBRACKET = "]";
 
 	private final static Pattern KEY_IDENTIFIER_PATTERN =
-		Pattern.compile("[a-zA-Z_][\\w:]*");
+		// Pattern.compile("[a-zA-Z_][\\w:]*");
+		Pattern.compile("\\p{L}[[\\p{L}\\p{N}]:_]*");
 	// TODO: make pattern stricter?
 	//  No, should make more lenient:
 	//    "[a-zA-Z_\u00C0-\u1FFF\u2C00-\uD7FF][\\w:\u00C0-\u1FFF\u2C00-\uD7FF]*"
