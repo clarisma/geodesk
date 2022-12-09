@@ -9,6 +9,11 @@ package com.geodesk.feature.match;
 
 import static com.geodesk.feature.match.TypeBits.*;
 
+// TODO: Could we consolidate Matcher and MatcherSet?
+//  (For polyform selectors, we would need to create additional classes)
+//  For uniform matchers, we would eliminate one object allocation,
+//  but we would still have the reference indirection
+
 public class MatcherSet
 {
     private final int types;

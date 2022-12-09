@@ -3,6 +3,9 @@
 //  RegEx
 //
 
+query:  w[highway][name="Löwengrube"]
+    highway3: false
+
 query: w[name~".*str.*", ".*house$"]
     highway_residential: false
     highway3: true
@@ -968,3 +971,4 @@ query:  *[jarbour]
 
 query:  *[!jarbour]
     jarbour: false
+
