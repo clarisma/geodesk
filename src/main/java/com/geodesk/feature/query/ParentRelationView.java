@@ -133,4 +133,10 @@ public class ParentRelationView extends TableView
             return next;
         }
     }
+
+    @Override public Features select(Class<? extends Feature> type)
+    {
+        if(type == Relation.class) return this;
+        return EmptyView.ANY;
+    }
 }

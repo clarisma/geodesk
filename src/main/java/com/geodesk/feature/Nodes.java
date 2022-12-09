@@ -7,8 +7,6 @@
 
 package com.geodesk.feature;
 
-public interface Nodes extends Iterable<Node>
+public interface Nodes extends View<Node>
 {
-    long count();
-    boolean contains(Feature node);
 }

@@ -42,10 +42,6 @@ public class EmptyView implements Features
         return this;
     }
 
-    @Override public Features of(Feature parent) { return this; }
-
-    @Override public Features with(Feature child) { return this; }
-
     @Override public Iterator<Feature> iterator()
     {
         return Collections.emptyIterator();
