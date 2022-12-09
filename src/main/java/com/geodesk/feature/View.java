@@ -125,8 +125,8 @@ public interface View<T extends Feature> extends Iterable<T>
 
     View<T> select(Filter filter);
 
-    default View<T> select(Class<? extends T> type)
+    default <U extends T> View<U> select(Class<U> type)
     {
-        return this;
+        return (View<U>)this;
     }
 }

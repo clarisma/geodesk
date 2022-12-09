@@ -13,6 +13,7 @@ import com.geodesk.feature.filter.AndFilter;
 import com.geodesk.feature.filter.FalseFilter;
 import com.geodesk.feature.filter.FilterStrategy;
 import com.geodesk.feature.match.MatcherSet;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredFeature;
 import com.geodesk.geom.Bounds;
@@ -38,8 +39,6 @@ import static com.geodesk.feature.match.TypeBits.*;
 /**
  * A Feature Collection that is materialized by running a query against
  * a FeatureStore.
- *
- * @param <T> subtype of Feature
  */
 public class WorldView implements Features
 {
@@ -233,6 +232,28 @@ public class WorldView implements Features
         Bounds filterBounds = filter.bounds();
         // TODO: proper combining of bboxes
         return new WorldView(this, filterBounds != null ? filterBounds : bbox, filter);
+    }
+
+    // TODO: consolidate this
+    @Override public <U extends Feature> View<U> select(Class<U> type)
+    {
+        int newTypes;
+        if(type == Way.class)
+        {
+            newTypes = types & WAYS;
+        }
+        else if(type == Relation.class)
+        {
+            newTypes = types & RELATIONS;
+        }
+        else
+        {
+            assert type == Node.class;
+            newTypes = types & NODES;
+        }
+        if(newTypes == types) return (View<U>)this;
+        if(newTypes == 0) return (View<U>)EmptyView.ANY;
+        return (View<U>) new WorldView(this, newTypes, matchers);
     }
 
     @Override public Iterator<Feature> iterator()

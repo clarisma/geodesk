@@ -19,6 +19,8 @@ import com.geodesk.geom.Bounds;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
+import static com.geodesk.feature.match.TypeBits.*;
+
 public class MemberView extends TableView
 {
     private final int types;
@@ -70,4 +72,25 @@ public class MemberView extends TableView
         throw new RuntimeException("todo");
     }
 
+    // TODO: consolidate this
+    @Override public <U extends Feature> View<U> select(Class<U> type)
+    {
+        int newTypes;
+        if(type == Way.class)
+        {
+            newTypes = types & WAYS;
+        }
+        else if(type == Relation.class)
+        {
+            newTypes = types & RELATIONS;
+        }
+        else
+        {
+            assert type == Node.class;
+            newTypes = types & NODES;
+        }
+        if(newTypes == types) return (View<U>)this;
+        if(newTypes == 0) return (View<U>)EmptyView.ANY;
+        return (View<U>) new MemberView(this, newTypes, matcher);
+    }
 }

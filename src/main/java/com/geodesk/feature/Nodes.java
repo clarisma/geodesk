@@ -7,6 +7,11 @@
 
 package com.geodesk.feature;
 
+import com.geodesk.geom.Bounds;
+
 public interface Nodes extends View<Node>
 {
+    Nodes select(String query);
+    Nodes in(Bounds bbox);
+    Nodes select(Filter filter);
 }
