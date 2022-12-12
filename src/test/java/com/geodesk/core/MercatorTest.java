@@ -173,6 +173,8 @@ public class MercatorTest
 		Assert.assertEquals(lon100nd, Math.round(Mercator.lonFromX(x) * 10_000_000));
 		Assert.assertEquals(lat100nd, Math.round(Mercator.latFromY(y) * 10_000_000));
 
+		Log.debug("lon, lat %f,%f -> x,y %d,%d", lon, lat, x, y);
+
 		int x2 = Mercator.xFromLon100nd(lon100nd);
 		int y2 = Mercator.yFromLat100nd(lat100nd);
 		Assert.assertEquals(x, x2);
@@ -186,6 +188,17 @@ public class MercatorTest
 		testMercatorConversion(1_800_000_000, 0);
 		testMercatorConversion(0, -850_500_000);
 		testMercatorConversion(0, 850_500_000);
+		testMercatorConversion(91481598,487725903);
+		// Failed to convert from 109141798,581879667 back to WGS-84-100nd (91481598,487725903) --Got lon,lat 9.148160,43.766251 instead.
+		testMercatorConversion(113229885,481728684);
+
+		Log.debug("Minimum lon: %f", Mercator.lonFromX(Integer.MIN_VALUE));
+		Log.debug("Maximum lon: %f", Mercator.lonFromX(Integer.MAX_VALUE));
+		Log.debug("Minimum lat: %f", Mercator.latFromY(Integer.MIN_VALUE));
+		Log.debug("Maximum lat: %f", Mercator.latFromY(Integer.MAX_VALUE));
+		// Failed to convert from 135088515,574724706 back to WGS-84-100nd (113229885,481728684) --Got lon,lat 11.322989,43.331583 instead.
+		// 12:59:22 lon, lat 11.322989,48.172868 -> x,y 135088515,657578490
+
 	}
 
 	@Test public void testDrift()
