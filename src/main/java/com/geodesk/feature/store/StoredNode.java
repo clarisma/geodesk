@@ -62,6 +62,8 @@ public class StoredNode extends StoredFeature implements Node
 		return new Box(x, y);
 	}
 
+	// TODO: create CoordinateSequence instead of Coordinate here, because
+	//  that's what GeometryFactory does anyway
 	@Override public Geometry toGeometry()
 	{
 		return store.geometryFactory().createPoint(new Coordinate(x(), y()));

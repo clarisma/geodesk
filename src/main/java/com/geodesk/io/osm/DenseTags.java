@@ -19,6 +19,8 @@ import com.clarisma.common.pbf.PbfBuffer;
 
 // TODO: This entire class is not very robust, redesign
 
+// TODO: fails if client does not read all the tags
+
 public class DenseTags implements Tags
 {
 	private PbfBuffer buf;
