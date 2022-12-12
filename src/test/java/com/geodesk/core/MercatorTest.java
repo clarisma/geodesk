@@ -1,5 +1,6 @@
 package com.geodesk.core;
 
+import com.clarisma.common.util.Log;
 import org.junit.Test;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
@@ -114,23 +115,50 @@ public class MercatorTest
 		printScaleForLat(83.6608453, "Cape Morris Jesup, Greenland");
 	}
 
+	private static double roundDegrees(double deg)
+	{
+		final double round = 10_000_000d;	// 100-nanodegree precision
+		return (double)Math.round(deg * round) / round;
+	}
+
 	/*
 	@Test public void testReversability()
 	{
+		double epsilon = 0.0000001d;
 		Random random = new Random();
-		for(int i=0; i<10_000; i++)
+		for(int i=0; i<100_000_000; i++)
 		{
+			double round = 10_000_000d;
 			double lat = random.nextDouble(170) - 85;
 			double lon = random.nextDouble(360) - 180;
+
+			lon = roundDegrees(lon);
+			lat = roundDegrees(lat);
 
 			int x = (int) Math.round(Mercator.xFromLon(lon));
 			int y = (int) Math.round(Mercator.yFromLat(lat));
 			double lonBack = Mercator.lonFromX(x);
 			double latBack = Mercator.latFromY(y);
+
+			lonBack = roundDegrees(lonBack);
+			latBack = roundDegrees(latBack);
+
 			int x2 = (int) Math.round(Mercator.xFromLon(lonBack));
 			int y2 = (int) Math.round(Mercator.yFromLat(latBack));
-			System.out.format("%.9f, %.9f -> %d, %d\n", lon, lat, x, y);
-			System.out.format("%.9f, %.9f => %d, %d\n", lonBack, latBack, x2, y2);
+
+			// if(Math.abs(lon - lonBack) > epsilon || Math.abs(lat - latBack) > epsilon)
+			if(lon != lonBack || lat != latBack)
+			{
+				Log.debug("Original =     %.9f, %.9f\n", lon, lat);
+				Log.debug(" Reconverted = %.9f, %.9f\n", lonBack, latBack);
+				if(x2 != x || y2 != y)
+				{
+					Log.debug("X/Y =   %d, %d", x, y);
+					Log.debug("X2/Y2 = %d, %d", x2, y2);
+				}
+			}
+			// System.out.format("%.9f, %.9f -> %d, %d\n", lon, lat, x, y);
+			// System.out.format("%.9f, %.9f => %d, %d\n", lonBack, latBack, x2, y2);
 		}
 	}
 	 */
