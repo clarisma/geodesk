@@ -1,6 +1,7 @@
 package com.geodesk.core;
 
 import com.clarisma.common.util.Log;
+import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
@@ -162,6 +163,30 @@ public class MercatorTest
 		}
 	}
 	 */
+
+	private void testMercatorConversion(int lon100nd, int lat100nd)
+	{
+		double lon = (double)lon100nd / 10_000_000;
+		double lat = (double)lat100nd / 10_000_000;
+		int x = (int) Math.round(Mercator.xFromLon(lon));
+		int y = (int) Math.round(Mercator.yFromLat(lat));
+		Assert.assertEquals(lon100nd, Math.round(Mercator.lonFromX(x) * 10_000_000));
+		Assert.assertEquals(lat100nd, Math.round(Mercator.latFromY(y) * 10_000_000));
+
+		int x2 = Mercator.xFromLon100nd(lon100nd);
+		int y2 = Mercator.yFromLat100nd(lat100nd);
+		Assert.assertEquals(x, x2);
+		Assert.assertEquals(y, y2);
+	}
+
+	@Test public void testMercatorConversion()
+	{
+		testMercatorConversion(83704807, 500588692);
+		testMercatorConversion(-1_800_000_000, 0);
+		testMercatorConversion(1_800_000_000, 0);
+		testMercatorConversion(0, -850_500_000);
+		testMercatorConversion(0, 850_500_000);
+	}
 
 	@Test public void testDrift()
 	{

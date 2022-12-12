@@ -75,9 +75,15 @@ public class Mercator
 	 * @param lon longitude (in 100-nanodegree increments)
 	 * @return equivalent imps
 	 */
+	/*
 	public static int xFromLon100nd(int lon)
 	{
 		return (int)(xFromLon(lon) / 10_000_000 + .5);
+	}
+	 */
+	public static int xFromLon100nd(int lon)
+	{
+		return (int)Math.round(xFromLon((double)lon / 10_000_000));
 	}
 	// TODO: check rounding
 	// TODO: divide lon before passing to method; we may change xFromLon to int
@@ -102,9 +108,15 @@ public class Mercator
 	 * @param lat latitude (in 100-nanodegree increments)
 	 * @return equivalent imps
 	 */
+	/*
 	public static int yFromLat100nd(int lat)
 	{
 		return (int)(yFromLat((double)lat / 10_000_000) + .5);
+	}
+	 */
+	public static int yFromLat100nd(int lat)
+	{
+		return (int)Math.round(yFromLat((double)lat / 10_000_000));
 	}
 	// TODO: check rounding
 	
