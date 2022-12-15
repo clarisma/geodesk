@@ -103,8 +103,7 @@ public class Table
 
     public void newRow()
     {
-        if(currentCol==0) return;
-        while (currentCol < columns.size()) add("");
+        while (currentCol != 0) add("");
     }
 
     public void divider(String div)
@@ -115,6 +114,7 @@ public class Table
 
     protected void layout()
     {
+        newRow();   // add remaining cells in case last row was not completed
         for(Column col: columns)
         {
             totalWidth += col.width + col.gap;
