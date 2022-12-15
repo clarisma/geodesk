@@ -43,6 +43,7 @@ public class MapMaker
      *
      * @param url  the URL template
      */
+    // TODO: rename basemap?
     public void tiles(String url)
     {
         this.tileServerUrl = url;
