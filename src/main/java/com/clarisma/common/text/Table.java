@@ -13,14 +13,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+// TODO: don't shrink column to less than header text width!
+
 public class Table
 {
     private final List<Column> columns = new ArrayList<>();
     private final List<String> values = new ArrayList<>();
     private int currentCol;
+    private int currentRow;
     private int totalWidth;
-    private int maxWidth = 80;
+    private int maxWidth = 100;
     private boolean ready;
+
+    public void maxWidth(int maxWidth)
+    {
+        this.maxWidth = maxWidth;
+    }
 
     public static class Column implements Comparable<Column>
     {
@@ -88,11 +96,19 @@ public class Table
         ready = false;
         if (currentCol == 0) beginRow();
         values.add(s);
-        Column c = columns.get(currentCol);
-        int len = s.length();
-        if(c.width < len) c.width = len;
+        adjustColumnSize(currentCol, s.length());
         currentCol++;
-        if (currentCol == columns.size()) currentCol = 0;
+        if (currentCol == columns.size())
+        {
+            currentCol = 0;
+            currentRow++;
+        }
+    }
+
+    private void adjustColumnSize(int col, int w)
+    {
+        Column c = columns.get(col);
+        if(c.width < w) c.width = w;
     }
 
     public void add(double v)
@@ -101,15 +117,30 @@ public class Table
         add(c.format.format(v));
     }
 
-    public void newRow()
+    public void cell(int row, int col, String value)
+    {
+        int cell = row * (columns.size() + 1) + col + 1;
+        while(cell >= values.size()) add("");
+        values.set(cell, value);
+        adjustColumnSize(col, value.length());
+    }
+
+    public int currentRow()
+    {
+        return currentRow;
+    }
+
+    public int newRow()
     {
         while (currentCol != 0) add("");
+        return currentRow;
     }
 
     public void divider(String div)
     {
         newRow();
         for(int i=0; i<=columns.size(); i++) values.add(div);
+        currentRow++;
     }
 
     protected void layout()
@@ -175,21 +206,32 @@ public class Table
         while(needToTrim > 0)
         {
             int excess = startCol.widthVariance;
-            if(excess <= 0)
-            {
-                // As final step, trim all columns by equal amount
-                trimColumns(elasticColumns, elasticColumns.size(), needToTrim);
-                break;
-            }
+            if(excess <= 0) break;
             int trimColCount = 1;
             for (; trimColCount < elasticColumns.size(); trimColCount++)
             {
                 Column col = elasticColumns.get(trimColCount);
-                if (col.widthVariance < excess) break;
+                if (col.widthVariance < excess)
+                {
+                    // In this round, the maximum we trim off these columns
+                    // is the *difference* between the excess over their
+                    // averages and the excess over the next-excessive column
+                    // (Otherwise, trimming would be too greedy and column
+                    // widths would become imbalanced)
+                    excess -= col.widthVariance;
+                    break;
+                }
             }
             excess *= trimColCount;
             int trimNow = Math.min(excess, needToTrim);
-            needToTrim -= trimColumns(elasticColumns, trimColCount, trimNow);
+            int trimmed = trimColumns(elasticColumns, trimColCount, trimNow);
+            if(trimmed == 0) break;
+            needToTrim -= trimmed;
+        }
+        if(needToTrim > 0)
+        {
+            // As final step, trim all columns by equal amount
+            trimColumns(elasticColumns, elasticColumns.size(), needToTrim);
         }
     }
 
