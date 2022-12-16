@@ -75,7 +75,8 @@ public class CoordinateTransformer
     {
         public ToMercator()
         {
-            super(6);   // TODO: technically, imps are always integer
+            super(7);
+            // TODO: technically, imps are always integer
         }
 
         @Override public double transformX(double x)
