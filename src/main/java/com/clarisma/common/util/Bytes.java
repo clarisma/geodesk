@@ -8,6 +8,7 @@
 package com.clarisma.common.util;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 public class Bytes
 {
@@ -130,7 +131,7 @@ public class Bytes
         buf.get(p, chars);
         try
         {
-            return new String(chars, "UTF-8");
+            return new String(chars, StandardCharsets.UTF_8);
         }
         catch (Exception ex)
         {

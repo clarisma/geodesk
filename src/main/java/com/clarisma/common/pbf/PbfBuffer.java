@@ -10,6 +10,7 @@ package com.clarisma.common.pbf;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 // TODO: unify these under an interface, so we can read ByteBuffer, byte array
 //  and InputStream the same way
@@ -282,7 +283,7 @@ public class PbfBuffer
 		String val;
 		try
 		{
-			val = new String(buf, pos, len, "UTF-8");
+			val = new String(buf, pos, len, StandardCharsets.UTF_8);
 			// System.out.println("  String: " + val);
 		}
 		catch (Exception ex)

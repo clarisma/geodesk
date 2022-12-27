@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 // static methods are not threadsafe
 
@@ -219,25 +220,18 @@ public class PbfDecoder
 		byte[] bytes = new byte[len];
 		buf.get(bytes);
 		pos += len;
-		return new String(bytes, "UTF-8");
+		return new String(bytes, StandardCharsets.UTF_8);
 	}
 
 	public String readString()
 	{
 		int len = (int)readVarint();
-		try
+		byte[] bytes = new byte[len];
+		for(int i=0; i<len; i++)
 		{
-			byte[] bytes = new byte[len];
-			for(int i=0; i<len; i++)
-			{
-				bytes[i] = buf.get(pos++);
-			}
-			return new String(bytes, "UTF-8");
+			bytes[i] = buf.get(pos++);
 		}
-		catch (Exception ex) 
-		{
-			throw new PbfException("Unable to read string.", ex);
-		}
+		return new String(bytes, StandardCharsets.UTF_8);
 	}
 
 	public int readFixed32()
@@ -257,17 +251,9 @@ public class PbfDecoder
 	public static String readString(ByteBuffer buf) throws PbfException
 	{
 		int len = (int)readVarint(buf);
-		try 
-		{
-			byte[] bytes = new byte[len];
-			buf.get(bytes);
-			return new String(bytes, "UTF-8");
-			// System.out.println("  String: " + val);
-		} 
-		catch (Exception ex) 
-		{
-			throw new PbfException("Unable to read string.", ex);
-		}
+		byte[] bytes = new byte[len];
+		buf.get(bytes);
+		return new String(bytes, StandardCharsets.UTF_8);
 	}
 
 	// TODO: improve

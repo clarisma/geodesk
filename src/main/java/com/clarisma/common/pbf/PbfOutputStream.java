@@ -10,6 +10,7 @@ package com.clarisma.common.pbf;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 public class PbfOutputStream extends ByteArrayOutputStream
 {
@@ -31,16 +32,9 @@ public class PbfOutputStream extends ByteArrayOutputStream
 	
 	public void writeString(String val)
 	{
-		try
-		{	
-			byte[] bytes = val.getBytes("UTF-8");
-			writeVarint(bytes.length);
-			write(bytes);
-		}
-		catch (Exception ex)
-		{
-			throw new PbfException("Unable to write string: " + val, ex);
-		}
+		byte[] bytes = val.getBytes(StandardCharsets.UTF_8);
+		writeVarint(bytes.length);
+		writeBytes(bytes);
 	}
 	
 	public void writeString (PbfOutputStream other)
