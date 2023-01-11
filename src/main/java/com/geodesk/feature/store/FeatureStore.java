@@ -121,12 +121,13 @@ public class FeatureStore extends BlobStore
         //  (But higher capacity may reduce hash collisions and make lookup more efficient)
         MutableObjectIntMap<String> stringMap =
             new ObjectIntHashMap<>(count + (count >> 1));
+        stringMap.put("", 0);
 
         // TODO: Check if we need to have "" in this map (currently not included)
         //  1/11/23: Changed to include "" as entry 0
         //  (to determine if a key is not in the table, must supply -1 as default)
 
-        for (int i = 0; i <= count; i++)
+        for (int i = 1; i <= count; i++)
         {
             String s = reader.readString();
             codesToStrings[i] = s;

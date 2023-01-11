@@ -937,7 +937,8 @@ public abstract class Store
         }
         catch(IOException ex)
         {
-            throw new StoreException("Error while closing file", path, ex);
+            throw new StoreException("Error while closing file (%s)"
+                .formatted(ex.getMessage()), path, ex);
         }
         finally
         {
