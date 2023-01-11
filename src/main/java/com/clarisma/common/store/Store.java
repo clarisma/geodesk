@@ -859,6 +859,9 @@ public abstract class Store
      */
     // TODO: order matters! see notes above re downloading tile: index entry
     //  must be written last, else we'll get a race condition
+    //   This issue is more pertinent for commit(): must ensure proper order
+    //   of blocks being written; the order of calls to force(), however,
+    //   should not matter
 
     private void syncSegments(IntSet affectedSegments)
     {
@@ -1031,8 +1034,13 @@ public abstract class Store
         saveJournal();
 
         // Copy the contents of all journaled blocks into their segments
-        // (each semgent is a 1-GB MappedByteBuffer); track which segments
+        // (each segment is a 1-GB MappedByteBuffer); track which segments
         // have been modified
+
+        // TODO: order matters! Possible race condition where index blocks
+        //  are written before tile contents -- make sure to write blocks
+        //  that are part of metadata *last*
+
         MutableIntSet affectedSegments = new IntHashSet();
         for(TransactionBlock block: transactionBlocks.values())
         {

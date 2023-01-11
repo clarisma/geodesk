@@ -33,8 +33,21 @@ public class FeatureStore extends BlobStore
 {
     private int minZoom;
     private int zoomSteps;
+    /**
+     * A mapping of strings to their string-table code.
+     * TODO: Currently, empty string is *not* in this map (since 0 means
+     *  "this key is not a global string"); should we revise this definition?
+     *
+     */
     private ObjectIntMap<String> stringsToCodes;
+    /**
+     * The global string table. Entry 0 is always an empty string ("")
+     */
     private String[] codesToStrings;
+    /**
+     * A mapping of indexed keys (global-string code) to their index category
+     * (1-based; range 1 to 30)
+     */
     private IntIntMap keysToCategories;
     private ExecutorService executor;
     private MatcherCompiler matchers;
@@ -65,6 +78,9 @@ public class FeatureStore extends BlobStore
 
         readStringTable();
         readIndexSchema();
+
+        // Querying is enabled explicitly by the FeatureLibrary class, which
+        // serves as the front-end of the API
         // enableQueries();
         int zoomLevels = zoomLevels();
         minZoom = ZoomLevels.minZoom(zoomLevels);
@@ -101,10 +117,16 @@ public class FeatureStore extends BlobStore
         codesToStrings = new String[count + 1];
         codesToStrings[0] = "";
 
+        // TODO: does this make sense? Doesn't the map already have a load factor?
+        //  (But higher capacity may reduce hash collisions and make lookup more efficient)
         MutableObjectIntMap<String> stringMap =
             new ObjectIntHashMap<>(count + (count >> 1));
 
-        for (int i = 1; i <= count; i++)
+        // TODO: Check if we need to have "" in this map (currently not included)
+        //  1/11/23: Changed to include "" as entry 0
+        //  (to determine if a key is not in the table, must supply -1 as default)
+
+        for (int i = 0; i <= count; i++)
         {
             String s = reader.readString();
             codesToStrings[i] = s;
@@ -145,6 +167,12 @@ public class FeatureStore extends BlobStore
         return baseMapping.getInt(TILE_INDEX_PTR_OFS) + TILE_INDEX_PTR_OFS;
     }
 
+    // TODO: this is hacky, needed for TileCatalog in GOL Tool
+    public static int tileIndexPointer(ByteBuffer buf)
+    {
+        return buf.getInt(TILE_INDEX_PTR_OFS) + TILE_INDEX_PTR_OFS;
+    }
+
     // TODO: consolidate with getIndexEntry
     public int tilePage(int tip)
     {
@@ -164,9 +192,16 @@ public class FeatureStore extends BlobStore
         }
     }
 
+    /**
+     * Returns the global string code for a given string.
+     *
+     * @param s     the string to look up in the GST
+     * @return      the string code (range 0 -  65,535 inclusive), or -1
+     *              if the string is not in the GST
+     */
     public int codeFromString(String s)
     {
-        return stringsToCodes.get(s);
+        return stringsToCodes.getIfAbsent(s, -1);
     }
 
     public GeometryFactory geometryFactory()
@@ -271,5 +306,20 @@ public class FeatureStore extends BlobStore
             indexedKeys.put(codesToStrings[k], category);
         });
         return indexedKeys;
+    }
+
+    public ObjectIntMap<String> stringsToCodes()
+    {
+        return stringsToCodes;
+    }
+
+    // TODO: Use only for build; does not use transaction
+    //  Move to Compiler?
+    public synchronized int createTile(int tip, int size)
+    {
+        int page = allocateBlob(size);
+        int p = tileIndexPointer() + tip * 4;
+        baseMapping.putInt(p, page << 1);
+        return page;
     }
 }

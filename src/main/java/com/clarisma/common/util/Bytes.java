@@ -129,14 +129,7 @@ public class Bytes
 
         byte[] chars = new byte[len];
         buf.get(p, chars);
-        try
-        {
-            return new String(chars, StandardCharsets.UTF_8);
-        }
-        catch (Exception ex)
-        {
-            throw new RuntimeException("Unable to decode string.", ex);
-        }
+        return new String(chars, StandardCharsets.UTF_8);
     }
 
     /**

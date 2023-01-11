@@ -126,6 +126,9 @@ public class BlobStore extends Store
      */
     protected boolean isEmpty()
     {
+        // TODO: Use a different definition of "empty";
+        //  better candidate: Dataset Revision == 0
+
         return baseMapping.getInt(INDEX_PTR_OFS) == 0;      // TODO
     }
 

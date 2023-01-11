@@ -16,6 +16,7 @@ public class RoleMatcher extends Matcher
     public RoleMatcher(FeatureStore store, String role)
     {
         roleCode = store.codeFromString(role);
+        // TODO: empty role should be 0
         assert roleCode != 0;
     }
 

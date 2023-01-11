@@ -1326,6 +1326,8 @@ public class MatcherCoder extends ExpressionCoder
 	 *   type), and this tag is the last, the code branches to selector_success
 	 * Otherwise, the code continues. If there are further clauses of the same
 	 * type, $pos is moved to the next key in the table.
+	 *
+	 * Required fields: clause
 	 */
 	private void matchClause()
 	{

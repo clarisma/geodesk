@@ -7,8 +7,16 @@
 
 package com.geodesk.feature.query;
 
+// TODO: get rid of this class?
 public class IndexBits
 {
+    /**
+     * Turns a category into a value that can be matched against a key-index
+     * bitset.
+     *
+     * @param category  the index category (1-based; range 1 to 30)
+     * @return an `int` with a single bit set to 1
+     */
     public static int fromCategory(int category)
     {
         return category==0 ? 0 : (1 << (category-1));

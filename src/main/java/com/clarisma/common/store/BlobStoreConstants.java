@@ -34,7 +34,7 @@ public class BlobStoreConstants
      */
     public static final int VERSION_OFS = 4;
     public static final int TIMESTAMP_OFS = 8;
-    public static final int INDEX_PTR_OFS = 44;
+    public static final int INDEX_PTR_OFS = 44; // TODO: not part of blobStore
 
     // TODO: GUID_OFS
     //  PROPERTIES_PTR_OFS

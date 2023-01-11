@@ -170,7 +170,10 @@ public abstract class StoredFeature implements Feature
 		int uncommonKeysFlag = pTags & 1;
 		pTags = ppTags + (pTags ^ uncommonKeysFlag);
 		int p = pTags;
-		if (key != 0 && key <= TagValues.MAX_COMMON_KEY)
+
+		// TODO: key could be 0 for "", use >= so we don't needlessly check
+		//  local strings
+		if (key > 0 && key <= TagValues.MAX_COMMON_KEY)
 		{
 			return getCommonKeyValue(pTags, key);
 		}
