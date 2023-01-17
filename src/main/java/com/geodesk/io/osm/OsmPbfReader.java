@@ -118,7 +118,7 @@ public class OsmPbfReader
 
     protected static void log(String s)
     {
-        Log.debug("%s: %s", Thread.currentThread().getName(), s);
+        // Log.debug("%s: %s", Thread.currentThread().getName(), s);
     }
 
     protected long fileSize()
@@ -177,13 +177,8 @@ public class OsmPbfReader
     protected void fail(Throwable ex)
     {
         /*
-        synchronized (log)
-        {
-            // TODO: remove
-            log.error("Thread {} failed: {}",
-                Thread.currentThread().getName(), ex.getMessage());
-            ex.printStackTrace();
-        }
+        Log.debug("%s: Failing with exception: %s",
+            Thread.currentThread().getName(), ex.getMessage());
          */
         error = ex;
         inputThread.interrupt();
@@ -253,6 +248,10 @@ public class OsmPbfReader
                     int headerLength = (headerLengthBuffer[0] << 24) |
                         (headerLengthBuffer[1] << 16) | (headerLengthBuffer[2] << 8) |
                         headerLengthBuffer[3];
+                    if(headerLength < 8 || headerLength > 64 * 1024)
+                    {
+                        throw new PbfException("Invalid OSM-PBF header block.");
+                    }
                     byte[] headerData = new byte[headerLength];
                     if (in.read(headerData) != headerLength)
                     {
@@ -282,7 +281,7 @@ public class OsmPbfReader
                     {
                         block.data = new byte[dataLength];
                     }
-                    catch(OutOfMemoryError ex)
+                    catch(Throwable ex)
                     {
                         throw new RuntimeException(
                             String.format("Failed to allocate block data (%d bytes)", dataLength, ex));
@@ -388,14 +387,6 @@ public class OsmPbfReader
          */
         protected void header(HeaderData hd)
         {
-            /*
-            Log.debug("Source: %s", hd.source);
-            Log.debug("Writing Program: %s", hd.writingProgram);
-            Log.debug("Required features:");
-            for(String s: hd.requiredFeatures) Log.debug("- %s", s);
-            Log.debug("Optional features:");
-            for(String s: hd.optionalFeatures) Log.debug("- %s", s);
-             */
         }
 
         /**
@@ -513,10 +504,10 @@ public class OsmPbfReader
             if(newPhase == currentPhase) return;
 
             /*
-            log(String.format("Switching phase from %s to %s...",
-                phases[currentPhase].name(),
-                newPhase == PHASE_DONE ? "DONE" : phases[newPhase].name()));
-            */
+            Log.debug("%s: Switching phase from %s to %s...",
+                Thread.currentThread().getName(), phases[currentPhase].name(),
+                newPhase == PHASE_DONE ? "DONE" : phases[newPhase].name());
+             */
 
             if(newPhase < currentPhase)
             {
@@ -569,11 +560,15 @@ public class OsmPbfReader
             }
             try
             {
-                // log("Waiting for other threads to finish phase " + phases[newPhase-1].name());
+                /*
+                Log.debug("%s: Waiting for other threads to finish phase %s",
+                    Thread.currentThread().getName(), phases[newPhase-1].name());
+                 */
                 phases[newPhase-1].await();
             }
             catch (InterruptedException ex)
             {
+                // Log.debug("%s interrupted", Thread.currentThread().getName());
                 throw ex;
             }
             currentPhase = newPhase;
@@ -591,6 +586,23 @@ public class OsmPbfReader
                 // log("Calling beginRelations...");
                 beginRelations();
                 break;
+            }
+        }
+
+        /**
+         * Marks all phases as complete, without invoking any processing (and
+         * without waiting for the other threads to complete their phases).
+         * Used to cleanly shut down in the event of an unrecoverable error.
+         */
+        private void cancelPhases()
+        {
+            while(currentPhase < PHASE_DONE)
+            {
+                /*
+                Log.debug("%s: Cancelling phase %s",
+                    Thread.currentThread().getName(), phases[currentPhase].name());
+                 */
+                phases[currentPhase++].countDown();
             }
         }
 
@@ -628,10 +640,12 @@ public class OsmPbfReader
                 }
                 catch (InterruptedException ex)
                 {
+                    cancelPhases();
                     break;  // stop processing
                 }
                 catch (Throwable ex)
                 {
+                    cancelPhases();
                     fail(ex);   // everything else is a real error
                 }
             }
