@@ -13,6 +13,10 @@ import java.nio.ByteBuffer;
 //  start with 16, next bucket 32, etc.
 //  initial benchmarks are inconclusive, change rolled back
 
+// TODO: This could be an item in a circular list, which would get rid of the
+//  `last` field (results are unsorted, so the order of `QueryResults` doesn't
+//  matter (although object size would likely remain the same because of padding)
+
 public class QueryResults
 {
 	final ByteBuffer buf;
