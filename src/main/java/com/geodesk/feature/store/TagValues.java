@@ -18,8 +18,12 @@ public class TagValues
      */
     public static final int MAX_COMMON_KEY = (1 << 13) - 2;
     // We don't allow 0x1fff, because we use 0xffff as
-        // "empty tagtable" marker; TODO: use 0x8000 as
+        // "empty tagtable" marker;
+        // TODO: use 0x8000 as
         // marker instead?
+        // TODO: revisit empty marker; empty table is 4 bytes, but has
+        //  wide-bit set; this complicates TileReader implementation
+        //  Safest: 0x0000_8000
     public static final int EMPTY_TABLE_MARKER = 0xffff_ffff;
     public static final int MIN_NUMBER = -256;
     public static final int MAX_WIDE_NUMBER = (1 << 30) - 1 + MIN_NUMBER;

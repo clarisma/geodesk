@@ -34,7 +34,11 @@ public class BlobExporter<T extends BlobStore>
         buf.putInt(TRUNK_FT_RANGE_BITS_OFS, 0);
         for (int i=0; i<512; i++) buf.putInt(TRUNK_FREE_TABLE_OFS+i, 0);
 
-        // reset the file size
+        // We reset the file size to 0, since the BlobStore into which the
+        // metadata section will be loaded may have a different page size,
+        // and therefore has to re-calculate the file size (in pages).
+        // The initial page total can be derived from the length of the metadata
+        // (which is transferred as-is since it is in bytes)
         buf.putInt(TOTAL_PAGES_OFS, 0);
     }
 

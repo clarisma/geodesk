@@ -25,4 +25,9 @@ public class Tip
     {
         return folder(root, tip).resolve(String.format("%03X%s", tip & 0xfff, suffix));
     }
+
+    public static boolean isWideTipDelta(int tipDelta)
+    {
+        return (short)(tipDelta << 1) != (tipDelta << 1);
+    }
 }

@@ -299,6 +299,11 @@ public class FeatureStore extends BlobStore
         super.close();
     }
 
+    public IntIntMap keysToCategories()
+    {
+        return keysToCategories;
+    }
+
     public Map<String,Integer> indexedKeys()
     {
         Map<String,Integer> indexedKeys  =new HashMap<>(keysToCategories.size());
