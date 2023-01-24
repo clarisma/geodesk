@@ -54,6 +54,7 @@ public class TileExporter extends BlobExporter<FeatureStore>
         this.progress = progress;
     }
 
+    /*
     @Override protected void resetMetadata(ByteBuffer buf)
     {
         super.resetMetadata(buf);
@@ -70,6 +71,7 @@ public class TileExporter extends BlobExporter<FeatureStore>
         // reset the purgatory tile
         buf.putInt(pTileIndex, 0);
     }
+     */
 
     public void exportTiles(IntList tiles) throws IOException
     {

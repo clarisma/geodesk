@@ -28,6 +28,7 @@ public class BlobExporter<T extends BlobStore>
         this.store = store;
     }
 
+    /*
     protected void resetMetadata(ByteBuffer buf)
     {
         // reset the free tables
@@ -41,6 +42,7 @@ public class BlobExporter<T extends BlobStore>
         // (which is transferred as-is since it is in bytes)
         buf.putInt(TOTAL_PAGES_OFS, 0);
     }
+     */
 
     protected void export(Path path, int id, int page) throws IOException
     {
@@ -52,7 +54,7 @@ public class BlobExporter<T extends BlobStore>
             len = store.baseMapping.getInt(METADATA_SIZE_OFS);
             buf = ByteBuffer.allocateDirect(len);
             buf.put(0, store.baseMapping, 0, len);
-            resetMetadata(buf);
+            store.resetMetadata(buf);
             p = 0;
             // for metadata, include all
         }

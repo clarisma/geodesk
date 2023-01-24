@@ -11,6 +11,7 @@ import com.clarisma.common.pbf.PbfDecoder;
 import com.clarisma.common.store.BlobStore;
 import com.clarisma.common.store.StoreException;
 import com.clarisma.common.util.Log;
+import com.geodesk.core.Box;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.MatcherCompiler;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
@@ -327,5 +328,34 @@ public class FeatureStore extends BlobStore
         int p = tileIndexPointer() + tip * 4;
         baseMapping.putInt(p, page << 1);
         return page;
+    }
+
+    /**
+     * Resets the metadata section to a blank state (so it can be copied or
+     * exported). This method is *never* applied to the FeatureStore's live
+     * metadata, but always a copy.
+     *
+     * In addition to the BlobStore base implementation (which clears the
+     * free-blob table and sets the total page count to zero), this method
+     * clears every TIP in the tile index.
+     *
+     * @param buf    the buffer containing a copy of the FeatureStore metadata
+     */
+
+    @Override protected void resetMetadata(ByteBuffer buf)
+    {
+        super.resetMetadata(buf);
+
+        // Reset each tile-index entry
+        int pTileIndex = tileIndexPointer();
+        TileIndexWalker walker = new TileIndexWalker(this);
+        walker.start(Box.ofWorld());
+        while(walker.next())
+        {
+            buf.putInt(pTileIndex + walker.tip() * 4, 0);
+        }
+
+        // reset the purgatory tile
+        buf.putInt(pTileIndex, 0);
     }
 }

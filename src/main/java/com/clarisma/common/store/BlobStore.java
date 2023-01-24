@@ -996,5 +996,32 @@ public class BlobStore extends Store
         commit();
         endTransaction();
     }
-    
+
+    /**
+     * Resets the metadata section to a blank state (so it can be copied or
+     * exported). This method is *never* applied to the BlobStore's live
+     * metadata, but always a copy.
+     *
+     * The base implementation clears the free-blob table and sets the
+     * total page count to zero (to use the metadata in a new BlobStore,
+     * this count will need to be recalculated to the number of pages
+     * occupied by the metadata section, based on the new BlobStore's
+     * page size).
+     *
+     * @param buf    the buffer containing a copy of the BlobStore's metadata
+     */
+    protected void resetMetadata(ByteBuffer buf)
+    {
+        // reset the free tables
+        buf.putInt(TRUNK_FT_RANGE_BITS_OFS, 0);
+        for (int i=0; i<512; i++) buf.putInt(TRUNK_FREE_TABLE_OFS+i, 0);
+
+        // We reset the file size to 0, since the BlobStore into which the
+        // metadata section will be loaded may have a different page size,
+        // and therefore has to re-calculate the file size (in pages).
+        // The initial page total can be derived from the length of the metadata
+        // (which is transferred as-is since it is in bytes)
+        buf.putInt(TOTAL_PAGES_OFS, 0);
+    }
+
 }
