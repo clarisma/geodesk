@@ -277,6 +277,12 @@ public class FeatureStore extends BlobStore
         return new StoredRelation(this, buf, p);
     }
 
+    public StoredWay getWay(int tip, int ptr)
+    {
+        int tilePage = fetchTile(tip);
+        return new StoredWay(this, bufferOfPage(tilePage),offsetOfPage(tilePage) + ptr);
+    }
+
     // TODO: create an awaitOperations() method
     @Override public void close()
     {
@@ -318,6 +324,11 @@ public class FeatureStore extends BlobStore
     public ObjectIntMap<String> stringsToCodes()
     {
         return stringsToCodes;
+    }
+
+    public String[] codesToStrings()
+    {
+        return codesToStrings;
     }
 
     // TODO: Use only for build; does not use transaction

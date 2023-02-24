@@ -86,7 +86,11 @@ import static com.geodesk.io.osm.OsmPbf.*;
  */
 
 // TODO: why do we need an input thread? we could simply run it off main thread!
+//  If so, make sure main thread does not deadlock if worker threads fail
+//  If an error occurs and workers shut down, the queue will fill up (because
+//  no workers are left to pick up tasks) and queue.put() will wait forever.
 // TODO: Base on Processor
+
 
 // TODO: node(), way(), and relation() could accept Node, Way, Relation?
 //  no, spec for Node requires Mercator projection

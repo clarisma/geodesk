@@ -17,6 +17,7 @@ public class TagValues
      * stored as a Local String if they are used as a tag key.
      */
     public static final int MAX_COMMON_KEY = (1 << 13) - 2;
+    public static final int MAX_COMMON_ROLE = (1 << 15) - 1;
     // We don't allow 0x1fff, because we use 0xffff as
         // "empty tagtable" marker;
         // TODO: use 0x8000 as

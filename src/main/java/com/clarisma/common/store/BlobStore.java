@@ -13,7 +13,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.channels.FileChannel;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.UUID;
 import java.util.zip.GZIPOutputStream;
 
@@ -1022,6 +1025,24 @@ public class BlobStore extends Store
         // The initial page total can be derived from the length of the metadata
         // (which is transferred as-is since it is in bytes)
         buf.putInt(TOTAL_PAGES_OFS, 0);
+    }
+
+    public void createCopy(Path newPath) throws IOException
+    {
+        int metadataSize = baseMapping.getInt(METADATA_SIZE_OFS);
+        ByteBuffer buf = ByteBuffer.allocateDirect(metadataSize);
+        buf.order(ByteOrder.LITTLE_ENDIAN);
+        buf.put(0, baseMapping, 0, metadataSize);
+        resetMetadata(buf);
+        // TODO: adjust page size page size is stored in metadata itself)
+        buf.putInt(TOTAL_PAGES_OFS, bytesToPages(metadataSize));
+
+        try (FileChannel channel = FileChannel.open(newPath,
+            StandardOpenOption.CREATE, StandardOpenOption.WRITE,
+            StandardOpenOption.SPARSE))
+        {
+            channel.write(buf);
+        }
     }
 
 }

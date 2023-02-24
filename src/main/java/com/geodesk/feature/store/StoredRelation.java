@@ -52,6 +52,12 @@ public class StoredRelation extends StoredFeature implements Relation
 		return new MemberIterator(store, buf, pMembers, TypeBits.ALL, Matcher.ALL, null);
 	}
 
+	public static int bodyPointer(ByteBuffer buf, int ptr)
+	{
+		int ppMembers = ptr + 12;
+		return ppMembers + buf.getInt(ppMembers);
+	}
+
 	public Iterator<Feature> iterator(int types, Matcher matcher)
 	{
 		int ppMembers = ptr + 12;

@@ -25,6 +25,10 @@ import java.util.Iterator;
 //    a) no attempt has yet been made to fetch the foreign tile
 //    b) tried to fetch foreign tile, but it was missing
 
+// TODO: MemberIterator may fail if foreign tile starts at segment
+//  Don't set pForeignTile = 0, because 0 is a valid start for a tile
+//  Use -1 instead?
+
 public class MemberIterator implements Iterator<Feature>
 {
     private final FeatureStore store;
@@ -103,7 +107,7 @@ public class MemberIterator implements Iterator<Feature>
                 if ((member & MF_DIFFERENT_TILE) != 0)
                 {
                     // TODO: test wide tip delta
-                    pForeignTile = 0;       // TODO: set to other value, 0 if valid tile start
+                    pForeignTile = 0;       // TODO: set to other value, 0 is valid tile start
                     int tipDelta = buf.getShort(p);
                     if ((tipDelta & 1) != 0)
                     {

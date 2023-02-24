@@ -323,6 +323,8 @@ public class Downloader
                         uncompressedSize - BLOCK_LEN, checksum);
                 }
 
+                // TODO: adjust page size
+
                 // Set total number of pages based on the metadata length
                 // (This cannot be included as part of the downloaded metadata itself,
                 // since it varies based on the BlobStore's page size)
