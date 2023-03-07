@@ -68,6 +68,19 @@ public class MercatorTest
 		lon = Mercator.lonFromX(Integer.MIN_VALUE+100);
 		System.out.format("minint+100 x -> deg lon = %.08f\n", lon);
 	}
+
+	/*
+	@Test public void testInvalidCoordinates()
+	{
+		int x = (int)Mercator.xFromLon(-180);
+		Log.debug("%d", x);
+		x = (int)Mercator.xFromLon(-200);
+		Log.debug("%d", x);
+		int y = (int)Mercator.yFromLat(100);
+		Log.debug("%d", y);
+	}
+	 */
+
 	
 	private static final String P1 = "POLYGON ((137186237 667219324, 137185189 667220565, 137187672 667222660, 137193199 667216107, 137194247 667214866, 137191764 667212771, 137186237 667219324))";
 

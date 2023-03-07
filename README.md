@@ -28,7 +28,7 @@ Include this dependency in your project's `pom.xml`:
 <dependency>
     <groupId>com.geodesk</groupId>
     <artifactId>geodesk</artifactId>
-    <version>0.1.6</version>
+    <version>0.1.7-SNAPSHOT</version>
 </dependency>
 ```
 
