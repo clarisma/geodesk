@@ -379,42 +379,68 @@ public abstract class Store
 
         synchronized (mappingsLock)
         {
+            return unmapSegments(mappings);
+        }
+    }
+
+    /**
+     * Deterministically unmaps one of more `MappedByteBuffer` objects.
+     * By default, the JVM only unmaps buffers once the `MappedByteBuffer`
+     * object is being garbage-collected. This causes problems in cases
+     * where GC never runs and we perform an action on the underlying file
+     * (such as truncating its size). This method uses `Unsafe` to explicitly
+     * release the buffer.
+     *
+     * === WARNING ===
+     *
+     * - The required methods in Unsafe may be removed without notice in future
+     *   version of the JDK.
+     * - After a buffer has been unmapped, its contents must not be accessed --
+     *   doing so will result in an abnormal process termination
+     *
+     * TODO: Move this outside of this class? Required as a stand-alone mwthod
+     *  to fix clarisma/gol-tool#100
+     *
+     * @param mappings
+     * @return  `true` if the mappings were successfully released
+     */
+    public static boolean unmapSegments(MappedByteBuffer[] mappings)
+    {
+        try
+        {
+            // See https://stackoverflow.com/a/19447758
+
+            Class unsafeClass;
             try
             {
-                // See https://stackoverflow.com/a/19447758
-
-                Class unsafeClass;
-                try
-                {
-                    unsafeClass = Class.forName("sun.misc.Unsafe");
-                }
-                catch (Exception ex)
-                {
-                    // jdk.internal.misc.Unsafe doesn't yet have an invokeCleaner() method,
-                    // but that method should be added if sun.misc.Unsafe is removed.
-                    unsafeClass = Class.forName("jdk.internal.misc.Unsafe");
-                }
-                Method clean = unsafeClass.getMethod("invokeCleaner", ByteBuffer.class);
-                clean.setAccessible(true);
-                Field theUnsafeField = unsafeClass.getDeclaredField("theUnsafe");
-                theUnsafeField.setAccessible(true);
-                Object theUnsafe = theUnsafeField.get(null);
-
-                MappedByteBuffer[] a = mappings;
-                for (int i = 0; i < a.length; i++)
-                {
-                    MappedByteBuffer buf = a[i];
-                    if(buf != null) clean.invoke(theUnsafe, buf);
-                    // TODO: set array entry to null just in case one of the
-                    //  cleaner invocations fails?
-                }
-                mappings = new MappedByteBuffer[0];
-                return true;
+                unsafeClass = Class.forName("sun.misc.Unsafe");
             }
             catch (Exception ex)
             {
-                return false;
+                // jdk.internal.misc.Unsafe doesn't yet have an invokeCleaner() method,
+                // but that method should be added if sun.misc.Unsafe is removed.
+                unsafeClass = Class.forName("jdk.internal.misc.Unsafe");
             }
+            Method clean = unsafeClass.getMethod("invokeCleaner", ByteBuffer.class);
+            clean.setAccessible(true);
+            Field theUnsafeField = unsafeClass.getDeclaredField("theUnsafe");
+            theUnsafeField.setAccessible(true);
+            Object theUnsafe = theUnsafeField.get(null);
+
+            MappedByteBuffer[] a = mappings;
+            for (int i = 0; i < a.length; i++)
+            {
+                MappedByteBuffer buf = a[i];
+                if(buf != null) clean.invoke(theUnsafe, buf);
+                // TODO: set array entry to null just in case one of the
+                //  cleaner invocations fails?
+            }
+            mappings = new MappedByteBuffer[0];
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
         }
     }
 
