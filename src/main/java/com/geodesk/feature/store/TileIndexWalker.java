@@ -61,6 +61,8 @@ public class TileIndexWalker
         {
             this.filter = filter;
             int zoom = Tile.zoom(topLeftChildTile);
+                // TODO: check this, it has not been initialized?
+                //  OK, this is set by TIW's constructor (This could be cleaner)
             int step = zoom - Tile.zoom(parentTile);
             // int extent = 1 << step;     // TODO: could take it from Level object
             int tileTop = Tile.row(parentTile) << step;

@@ -163,7 +163,7 @@ import static java.nio.file.StandardOpenOption.WRITE;
  * the open() method checks for presence of a "hot" journal (a journal
  * that contains valid instructions) and resets the store file to the
  * state after the last successful call to commit(), or its the state
- * propor to the start of the transaction if commit() was not called
+ * prior to the start of the transaction if commit() was not called
  * (or did not complete successfully).
  *
  * This ensures that users of the Store class will never find the store file
