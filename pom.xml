@@ -4,7 +4,7 @@
 
   <groupId>com.geodesk</groupId>
   <artifactId>geodesk</artifactId>
-  <version>0.1.7-SNAPSHOT</version>
+  <version>0.1.7</version>
   <packaging>jar</packaging>
 
   <name>GeoDesk</name>
