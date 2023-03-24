@@ -105,7 +105,7 @@ public class TileIndexWalker
         // initialize the root
 
         level = root;
-        level.extent >>>= 1;    // fix the root extent
+        level.extent >>>= 1;    // fix the root extent // TODO: check, needed?
         level.childTileMask = ~0;      // root tile raster is always dense
         level.pChildEntries = pTileIndex + 4;   // skip purgatory tile
     }

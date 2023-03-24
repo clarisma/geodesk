@@ -39,6 +39,9 @@ public class FeatureStore extends BlobStore
      * TODO: Currently, empty string is *not* in this map (since 0 means
      *  "this key is not a global string"); should we revise this definition?
      *
+     *  TODO: No need to index more than 8K strings; we only look up keys,
+     *   and key-codes cannot be > 8 K
+     *    No! Query Compiler needs to look up values as well
      */
     private ObjectIntMap<String> stringsToCodes;
     /**
@@ -127,6 +130,9 @@ public class FeatureStore extends BlobStore
         // TODO: Check if we need to have "" in this map (currently not included)
         //  1/11/23: Changed to include "" as entry 0
         //  (to determine if a key is not in the table, must supply -1 as default)
+
+        // TODO: only index first 8K strings
+        //  No! Query Compiler needs to look up values as well
 
         for (int i = 1; i <= count; i++)
         {
