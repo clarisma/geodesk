@@ -213,6 +213,9 @@ public class RTreeQueryTask extends QueryTask
             for(;;)
             {
                 int flags = buf.getInt(p + 8);
+
+                // TODO: perform type check for nodes as well (member node, waynode)
+
                 int x = buf.getInt(p);
                 int y = buf.getInt(p+4);
                 if(!(x > maxX || y > maxY || x < minX || y < minY))
