@@ -276,6 +276,7 @@ public class OsmPbfReader
                             dataLength = (int) headerBuffer.readVarint();
                             break;
                         }
+                        // TODO: optional bytes indexdata = 2
                     }
                     if (block.type == null)
                     {

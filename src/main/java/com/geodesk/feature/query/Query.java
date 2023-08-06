@@ -24,6 +24,8 @@ import java.util.concurrent.*;
 // TODO: Idea: Could use AtomicReference for head and use updateAndGet()
 //  No, because does not block
 
+// TODO: Rename to "Cursor"?
+
 public class Query implements Iterator<Feature>, Bounds
 {
     private final FeatureStore store;

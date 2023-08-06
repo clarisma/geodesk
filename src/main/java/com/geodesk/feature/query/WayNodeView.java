@@ -34,6 +34,13 @@ public class WayNodeView extends TableView<Node>
 
     public WayNodeView(FeatureStore store, ByteBuffer buf, int ptr, Matcher matcher)
     {
+        // TODO: If the Matcher includes only negative clauses (e.g. n[!highway]),
+        //  untagged nodes ("geometry nodes") will still match
+        //  We need a way to indicate that the Matcher can return untagged nodes
+        //  so we can set the INCLUDE_GEOMETRY_NODES flag here
+        //  No! Per spec, tag queries only return feature nodes, so current
+        //  behavior is correct.
+
         super(store, buf, ptr, matcher);
         flags = buf.get(ptr) & 0xff;
     }
