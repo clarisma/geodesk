@@ -208,7 +208,7 @@ public class PolygonBuilder
         if (outerSegments == null) return factory.createEmpty(2);
         // Ring outerRings = null; // RingBuilder.buildFast(outerSegments);
         Ring outerRings = null; // RingBuilder.buildFast(outerSegments);
-        if (outerRings == null)
+        if (outerRings == null) // TODO: useless check (Used for fast-path in the past)
         {
             // log.debug("Building outer rings slowly for {}", rel);
             outerRings = RingBuilder.build(outerSegments);
@@ -222,7 +222,7 @@ public class PolygonBuilder
         {
             // Ring innerRings = null; // RingBuilder.buildFast(innerSegments);
             Ring innerRings = null; // RingBuilder.buildFast(innerSegments);
-            if (innerRings == null)
+            if (innerRings == null) // TODO: useless check (Used for fast-path in the past)
             {
                 // log.debug("Building inner rings slowly for {}", rel);
                 innerRings = RingBuilder.build(innerSegments);
