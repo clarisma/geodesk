@@ -398,4 +398,102 @@ public class Strings
 		if(s.isEmpty()) return s;
 		return Character.toUpperCase(s.charAt(0)) + s.substring(1);
 	}
+
+	/**
+	 * Escapes a string for JSON encoding.
+	 *
+	 * @param s   The input string to be escaped.
+	 * @return    The escaped string. If no escaping was needed,
+	 *            returns the original string.
+	 */
+	public static String escapeForJson(String s)
+	{
+		// Check if any character needs escaping.
+		boolean needsEscaping = false;
+		for (int i = 0; i < s.length(); i++)
+		{
+			char c = s.charAt(i);
+			if (c == '"' || c == '\\' || c < ' ')
+			{
+				needsEscaping = true;
+				break;
+			}
+		}
+
+		// Return original string if no escaping needed
+		if (!needsEscaping) return s;
+
+		// Escape necessary characters
+		StringBuilder escaped = new StringBuilder();
+		for (int i = 0; i < s.length(); i++)
+		{
+			char c = s.charAt(i);
+			switch (c)
+			{
+				case '"':
+					escaped.append("\\\"");
+					break;
+				case '\\':
+					escaped.append("\\\\");
+					break;
+				case '/':
+					escaped.append("\\/");
+					break;
+				case '\b':
+					escaped.append("\\b");
+					break;
+				case '\f':
+					escaped.append("\\f");
+					break;
+				case '\n':
+					escaped.append("\\n");
+					break;
+				case '\r':
+					escaped.append("\\r");
+					break;
+				case '\t':
+					escaped.append("\\t");
+					break;
+				default:
+					if (c < ' ') // For other unprintable characters
+					{
+						escaped.append(String.format("\\u%04x", (int) c));
+					}
+					else
+					{
+						escaped.append(c);
+					}
+					break;
+			}
+		}
+
+		return escaped.toString();
+	}
+
+	/**
+	 * Replaces unprintable/control characters (tab, line feed, etc.)
+	 * in the input string with a space.
+	 *
+	 * @param s The input string to be processed.
+	 * @return The processed string with unprintable characters replaced by spaces.
+	 * If no unprintable characters were found, returns the original string.
+	 */
+	public static String cleanString(String s)
+	{
+		for (int i = 0; i < s.length(); i++)
+		{
+			char c = s.charAt(i);
+			if (c < ' ')
+			{
+				StringBuilder processed = new StringBuilder(s.length());
+				for (i = 0; i < s.length(); i++)
+				{
+					c = s.charAt(i);
+					processed.append(c < ' ' ? ' ' : c);
+				}
+				return processed.toString();
+			}
+		}
+		return s;
+	}
 }
