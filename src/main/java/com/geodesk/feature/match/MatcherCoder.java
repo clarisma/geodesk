@@ -113,7 +113,7 @@ import static org.objectweb.asm.Opcodes.*;
     Tables (and hence the position of a Local Key) are only guaranteed to be
     2-byte aligned, so we use a little trick: We don't base the pointer off
     the address where it is stored (as we do for all other pointers), but
-    we add it to the address of the Tab Table, with its lower 2 bits set to
+    we add it to the address of the Tag Table, with its lower 2 bits set to
     zero.
 
 	If a Tag Table contains Local-Key Tags, bit 0 of the Tag-Table Pointer
