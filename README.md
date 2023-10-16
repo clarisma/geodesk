@@ -1,4 +1,4 @@
-<img src="https://docs.geodesk.com/img/github-header.png" width="30%">
+<img src="https://docs.geodesk.com/img/github-header.png">
 
 GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data.
 
