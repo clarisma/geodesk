@@ -104,7 +104,7 @@ public class OsmPbfReader
     private Phase[] phases = new Phase[5];
     private InputStream in;
     private long fileSize;
-    private Throwable error;
+    private volatile Throwable error;
     private int threadCount = Runtime.getRuntime().availableProcessors(); // TODO
     private int queueSize = threadCount * 2; // TODO
     private InputThread inputThread;
@@ -180,10 +180,11 @@ public class OsmPbfReader
      */
     protected void fail(Throwable ex)
     {
+        if(error != null) return;
         /*
         Log.debug("%s: Failing with exception: %s",
             Thread.currentThread().getName(), ex.getMessage());
-         */
+        */
         error = ex;
         inputThread.interrupt();
         outputThread.interrupt();
@@ -338,11 +339,13 @@ public class OsmPbfReader
             catch(InterruptedException ex)
             {
                 // do nothing, we're done
+                // Log.debug("Output thread interrupted.");
             }
             catch(Throwable ex)
             {
                 fail(ex);
             }
+            // Log.debug("Output thread finished.");
         }
     }
 
@@ -1122,17 +1125,21 @@ public class OsmPbfReader
         {
             // do nothing
         }
-        outputThread.interrupt();   // TODO: move into catch?
-        // wait for threads to finish
-        for(int i=0; i<workerThreads.length; i++)
+
+        if (error == null)
         {
-            try
+            outputThread.interrupt();   // TODO: move into catch?
+            // wait for threads to finish
+            for (int i = 0; i < workerThreads.length; i++)
             {
-                workerThreads[i].switchPhase(PHASE_DONE);
-            }
-            catch(InterruptedException ex)
-            {
-                // do nothing
+                try
+                {
+                    workerThreads[i].switchPhase(PHASE_DONE);
+                }
+                catch (InterruptedException ex)
+                {
+                    // do nothing
+                }
             }
         }
         in.close(); // TODO: catch ex here
