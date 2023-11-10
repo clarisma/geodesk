@@ -1,6 +1,6 @@
-<img src="https://docs.geodesk.com/img/logo2.png" width="30%">
+<img src="https://docs.geodesk.com/img/github-header.png">
 
-GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data.
+GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data. Also available [for Python](https://github.com/clarisma/geodesk-py).
 
 ## Why GeoDesk?
 
@@ -123,3 +123,4 @@ int numberOfEntrances = building.nodes("[entrance]").size();
 - [gol-tool](http://www.github.com/clarisma/gol-tool) &mdash; command-line utility for building, maintaining and querying GOL files
 - [geodesk-examples](http://www.github.com/clarisma/geodesk-examples) &mdash; example applications
 - [geodesk-tests](http://www.github.com/clarisma/geodesk-tests) &mdash; integration tests
+- [geodesk-py](https://github.com/clarisma/geodesk-py) &mdash; GeoDesk for Python (**NEW**)
