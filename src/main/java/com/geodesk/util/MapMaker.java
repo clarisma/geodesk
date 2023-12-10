@@ -30,7 +30,8 @@ public class MapMaker
     private int maxZoom = 19;
     private String tileServerUrl =
         // "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-        "https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png";
+        // "https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png";
+        "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
     private String attribution =
         "Map data © <a href=\"http://openstreetmap.org\">OpenStreetMap</a> contributors";
     private String leafletStyleSheetUrl =

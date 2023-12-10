@@ -296,6 +296,7 @@ public class StoredWay extends StoredFeature implements Way
 					nodeBuf = buf;
 					pNode = (pCurrent & 0xffff_fffe) + ((node >> 2) << 1);
 						// TODO: simplify alignment rules!
+						// TODO: (pCurrent & 0xffff_fffe) superfluous?
 				}
 				pNext -= 4;
 				pNext &= -1 + (node & NF_LAST);		// set pNext to 0 if this is the last node
