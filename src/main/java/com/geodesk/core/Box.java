@@ -440,7 +440,7 @@ public class Box implements Bounds
 	 */
 	public static Box metersAroundLonLat(double meters, double lon, double lat)
 	{
-		return metersAroundXY(meters, (int)Mercator.xFromLon(lon), (int)Mercator.yFromLat(lon));
+		return metersAroundXY(meters, (int)Mercator.xFromLon(lon), (int)Mercator.yFromLat(lat));
 	}
 
 	/**
