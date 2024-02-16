@@ -129,6 +129,7 @@ public class MercatorTest
 		printScaleForLat(83.6608453, "Cape Morris Jesup, Greenland");
 	}
 
+
 	private static double roundDegrees(double deg)
 	{
 		final double round = 10_000_000d;	// 100-nanodegree precision
