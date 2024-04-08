@@ -9,12 +9,13 @@ package com.geodesk.feature;
 
 import com.geodesk.core.Mercator;
 import com.geodesk.core.Box;
+import com.geodesk.feature.query.EmptyView;
 import org.locationtech.jts.geom.Geometry;
 
 /**
  * A geographic feature.
  */
-public interface Feature
+public interface Feature extends Iterable<Feature>
 {
 	/**
 	 * Returns the OSM ID of the feature. For nodes that have no tags and are
@@ -31,6 +32,30 @@ public interface Feature
 	 */
 	// TODO: Drop? instanceof does the job just fine!
 	FeatureType type();
+
+    /**
+     * Checks if this Feature is an OSM node.
+     */
+    default boolean isNode()
+    {
+        return false;
+    }
+
+    /**
+     * Checks if this Feature is an OSM way.
+     */
+    default boolean isWay()
+    {
+        return false;
+    }
+
+    /**
+     * Checks if this Feature is an OSM relation.
+     */
+    default boolean isRelation()
+    {
+        return false;
+    }
 
 	// TODO: geometryType(): POINT, LINE, POLYGON, COLLECTION
 
@@ -73,6 +98,14 @@ public interface Feature
 	 */
 	// TODO: maybe call this toBox?
 	Box bounds();
+
+  	/**
+	 * Returns the way's coordinates as an array of integers. X coordinates are
+	 * stored at even index positions, Y at odd.
+	 *
+	 * @return an array of coordinate pairs
+	 */
+	int[] toXY();
 
 	/**
 	 * Returns the tags of this feature.
@@ -180,14 +213,6 @@ public interface Feature
 	boolean belongsToRelation();
 
 	/**
-	 * Returns all relations to which this Feature belongs.
-	 *
-	 * @return a collection of relations (may be empty)
-	 */
-	Features<Relation> parentRelations();
-	// Features<Relation> parentRelations(String q);
-
-	/**
 	 * Checks whether this Feature represents an area. Areas are closed ways
 	 * that have certain tags (e.g. <code>landuse</code>), or are explicitly
 	 * tagged with <code>area=yes</code>; or relations that represent (multi-)
@@ -243,4 +268,68 @@ public interface Feature
 	Geometry toGeometry();
 	// String toGeoJson();
 	// String toWkt();
+
+    /**
+	 * Returns the way's nodes.
+	 *
+	 * @return an ordered collection of {@link Feature} objects
+	 */
+	default Features nodes()
+    {
+        return EmptyView.ANY;
+    }
+
+    /**
+	 * Returns the way's nodes that match the given query.
+     *
+     *  @param  query  a query in <a href="/goql">GOQL</a> format
+     *
+     *  @return an ordered collection of {@link Feature} objects
+     *          that match the given query (may be empty)
+	 */
+	default Features nodes(String query)
+    {
+        return EmptyView.ANY;
+    }
+
+	/**
+	 * Returns the members of this `Relation`.
+	 *
+	 * @return a collection of features that belong to this relation,
+	 *   or an empty collection if this relation has no members
+	 */
+	default Features members()
+	{
+		return EmptyView.ANY;
+	}
+
+	/**
+	 * Returns the members of this `Relation` that match the given query.
+	 *
+	 * @param  query  a query in <a href="/goql">GOQL</a> format
+	 *
+	 * @return a collection of member features that match the given query
+	 *   (may be empty)
+	 */
+	default Features members(String query)
+	{
+		return EmptyView.ANY;
+	}
+
+   	/**
+	 * Returns all ways and relations to which this Feature belongs.
+	 *
+	 * @return a collection of ways and/or relations (may be empty)
+	 */
+	Features parents();
+
+    /**
+	 * Returns all ways and relations to which this Feature belongs
+     * that match the given query.
+	 *
+     * @param  query  a query in <a href="/goql">GOQL</a> format
+     *
+	 * @return a collection of ways and/or relations (may be empty)
+	 */
+	Features parents(String query);
 }

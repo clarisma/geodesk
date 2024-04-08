@@ -19,21 +19,22 @@ import com.geodesk.geom.Bounds;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
-public class ParentRelationView extends TableView<Relation>
+public class ParentRelationView extends TableView
 {
     public ParentRelationView(FeatureStore store, ByteBuffer buf, int ptr)
     {
-        super(store, buf, ptr, Matcher.ALL);
+        this(store, buf, ptr, TypeBits.RELATIONS, Matcher.ALL, null);
     }
 
-    public ParentRelationView(ParentRelationView other, Matcher matcher)
+    public ParentRelationView(FeatureStore store, ByteBuffer buf, int ptr,
+        int types, Matcher matcher, Filter filter)
     {
-        super(other, matcher);
+        super(store, buf, ptr, types, matcher, filter);
     }
 
-    public ParentRelationView(ParentRelationView other, Filter filter)
+    @Override protected Features newWith(int types, Matcher matcher, Filter filter)
     {
-        super(other, filter);
+        return new ParentRelationView(store, buf, ptr, types, matcher, filter);
     }
 
     @Override public boolean isEmpty()
@@ -42,39 +43,16 @@ public class ParentRelationView extends TableView<Relation>
         return false;
     }
 
-    @Override public Features<Relation> select(String query)
-    {
-        return relations(query);
-    }
-
-    @Override public Features<Relation> relations()
-    {
-        return this;
-    }
-
-    @Override public Features<Relation> relations(String query)
-    {
-        MatcherSet filters = store.getMatchers(query);
-        if((filters.types() & TypeBits.RELATIONS) == 0) return EmptyView.RELATIONS;
-        Matcher newFilter = filters.relations();
-        return new ParentRelationView(this, newFilter);
-    }
-
-    @Override public Features<Relation> select(Filter filter)
-    {
-        return new ParentRelationView(this, filter);
-    }
-
-    @Override public Iterator<Relation> iterator()
+    @Override public Iterator<Feature> iterator()
     {
         return new Iter();
     }
 
-    private class Iter extends TableIterator<Relation>
+    private class Iter extends TableIterator<Feature>
     {
         private int p;
         private int rel;
-        private Relation current;
+        private Feature current;
 
         public Iter()
         {
@@ -136,9 +114,9 @@ public class ParentRelationView extends TableView<Relation>
             return current != null;
         }
 
-        @Override public Relation next()
+        @Override public Feature next()
         {
-            Relation next = current;
+            Feature next = current;
             fetchNext();
             return next;
         }

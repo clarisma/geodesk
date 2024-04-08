@@ -21,7 +21,7 @@ public class MatcherCompiler extends ClassLoader
     private final MatcherParser parser;
     private final String[] codesToStrings;
     private final int valueNo;
-    private final Map<String, MatcherSet> matcherSets = new HashMap<>();
+    private final Map<String, Matcher> matchers = new HashMap<>();
     private int classCount;
 
     // TODO: take FeatureStore as argument
@@ -34,15 +34,15 @@ public class MatcherCompiler extends ClassLoader
         parser = new MatcherParser(stringsToCodes, keysToCategories);
     }
 
-    public MatcherSet getMatchers(String query)
+    public Matcher getMatcher(String query)
     {
-        MatcherSet matchers = matcherSets.get(query);
-        if(matchers == null)
+        Matcher matcher = matchers.get(query);
+        if(matcher == null)
         {
-            matchers = createMatchers(query);
-            matcherSets.put(query, matchers);
+            matcher = createMatcher(query);
+            matchers.put(query, matcher);
         }
-        return matchers;
+        return matcher;
     }
 
     private Matcher createMatcher(Selector selectors)
@@ -67,7 +67,7 @@ public class MatcherCompiler extends ClassLoader
         }
     }
 
-    private MatcherSet createMatchers(String query)
+    private Matcher createMatcher(String query)
     {
         parser.parse(query);
         Selector selectors = parser.query();
@@ -85,6 +85,8 @@ public class MatcherCompiler extends ClassLoader
             {
                 if (type != commonType)
                 {
+                    throw new QueryException("Polyform queries are not supported.");
+                    /*
                     do
                     {
                         commonType |= sel.matchTypes();
@@ -92,20 +94,13 @@ public class MatcherCompiler extends ClassLoader
                     }
                     while (sel != null);
                     return createPolyformMatchers(commonType, selectors);
+                     */
                 }
             }
             sel = sel.next();
         }
 
-        Matcher matcher = createMatcher(selectors);
-        return new MatcherSet(commonType,
-            (commonType & TypeBits.NODES) != 0 ? matcher : null,
-            (commonType & TypeBits.NONAREA_WAYS) != 0 ? matcher : null,
-            (commonType & TypeBits.AREAS) != 0 ? matcher : null,
-            (commonType & TypeBits.NONAREA_RELATIONS) != 0 ? matcher : null,
-            matcher);    // TODO: proper member filter
-            // TODO: can use simple constructor once we've fixed the
-            //  TileQueryTask
+        return createMatcher(selectors);
     }
 
     /**

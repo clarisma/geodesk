@@ -9,8 +9,15 @@ package com.geodesk.feature.match;
 
 import java.nio.ByteBuffer;
 
-public class Matcher
+public abstract class Matcher
 {
+    protected final int acceptedTypes;
+
+    protected Matcher(int types)
+    {
+        acceptedTypes = types;
+    }
+
     /**
      * Checks whether a feature meets the conditions of this Matcher.
      *
@@ -66,5 +73,10 @@ public class Matcher
         return this;
     }
 
-    public static final Matcher ALL = new Matcher() {};
+    public int acceptedTypes()
+    {
+        return acceptedTypes;
+    }
+
+    public static final Matcher ALL = new Matcher(TypeBits.ALL) {};
 }

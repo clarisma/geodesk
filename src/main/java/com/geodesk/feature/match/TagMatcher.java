@@ -13,7 +13,6 @@ import java.nio.ByteBuffer;
 
 public abstract class TagMatcher extends Matcher
 {
-    private final int acceptedTypes = TypeBits.ALL;  // TODO!
     protected final String[] globalStrings;
     protected final int keyMask;
     protected final int keyMin;
@@ -21,6 +20,7 @@ public abstract class TagMatcher extends Matcher
     // TODO: take FeatureStore, types, resources
     protected TagMatcher(String[] globalStrings, int keyMask, int keyMin)
     {
+        super(0);   // TODO !!!!!!!!
         this.globalStrings = globalStrings;
         this.keyMask = keyMask;
         this.keyMin = keyMin;

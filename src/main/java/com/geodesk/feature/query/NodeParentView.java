@@ -5,11 +5,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package com.geodesk.feature;
+package com.geodesk.feature.query;
 
 /**
- * A {@link Feature} that represents a single point.
+ * A view that contains the parent ways/relations of a specific node.
  */
-public interface Node extends Feature
+/*
+public class NodeParentView extends TableView
 {
+
 }
+
+
+ */
+

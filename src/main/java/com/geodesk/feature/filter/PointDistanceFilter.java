@@ -99,7 +99,7 @@ public class PointDistanceFilter implements Filter
             // measure distance to the ways that define shell and holes, and
             // also perform point in polygon test
             int odd = 0;
-            for(Way member: rel.memberWays())   // TODO: use role filter
+            for(Feature member: rel.members().ways())   // TODO: use role filter
             {
                 String role = member.role();
                 if(role.equals("outer") || role.equals("inner"))

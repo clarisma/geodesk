@@ -8,17 +8,30 @@
 package com.geodesk.feature.query;
 
 import com.geodesk.feature.*;
+import com.geodesk.feature.match.Matcher;
 import com.geodesk.geom.Bounds;
 
 import java.util.Collections;
 import java.util.Iterator;
 
-public class EmptyView<T extends Feature> implements Features<T>
+public class EmptyView extends View
 {
-    public static final Features<?> ANY = new EmptyView<>();
-    public static final Features<Node> NODES = (Features<Node>)ANY;
-    public static final Features<Way> WAYS = (Features<Way>)ANY;
-    public static final Features<Relation> RELATIONS = (Features<Relation>)ANY;
+    public static final Features ANY = new EmptyView();
+
+    public EmptyView()
+    {
+        super(null, 0, null, null);
+    }
+
+    @Override protected Features select(int newTypes, String query)
+    {
+        return this;
+    }
+
+    @Override protected Features newWith(int types, Matcher matcher, Filter filter)
+    {
+        return this;
+    }
 
     @Override public boolean isEmpty()
     {
@@ -35,54 +48,20 @@ public class EmptyView<T extends Feature> implements Features<T>
         return false;
     }
 
-    @Override public Features<T> select(String filter)
+    @Override public Features select(String filter)
     {
-        return (Features<T>)ANY;
+        return ANY;
     }
 
-    @Override public Features<Node> nodes()
-    {
-        return NODES;
-    }
-
-    @Override public Features<Node> nodes(String filter)
-    {
-        return NODES;
-    }
-
-    @Override public Features<Way> ways()
-    {
-        return WAYS;
-    }
-
-    @Override public Features<Way> ways(String filter)
-    {
-        return WAYS;
-    }
-
-    @Override public Features<Relation> relations()
-    {
-        return RELATIONS;
-    }
-
-    @Override public Features<Relation> relations(String filter)
-    {
-        return RELATIONS;
-    }
-
-    @Override public Features<T> in(Bounds bbox)
+    @Override public Features in(Bounds bbox)
     {
         return this;
     }
 
-    @Override public Features<T> of(Feature parent) { return (Features<T>)ANY; }
-
-    @Override public Features<T> with(Feature child) { return (Features<T>)ANY; }
-
-    @Override public Iterator<T> iterator()
+    @Override public Iterator iterator()
     {
         return Collections.emptyIterator();
     }
 
-    @Override public Features<T> select(Filter filter) { return this; }
+    @Override public Features select(Filter filter) { return this; }
 }

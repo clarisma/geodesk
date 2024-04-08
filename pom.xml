@@ -4,7 +4,7 @@
 
   <groupId>com.geodesk</groupId>
   <artifactId>geodesk</artifactId>
-  <version>0.1.10</version>
+  <version>0.2.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>GeoDesk</name>
@@ -230,8 +230,8 @@
 			<version>3.3.1</version>
 
 			<configuration>
-				<doctitle>GeoDesk (0.1 Early Access)</doctitle>
-				<windowtitle>GeoDesk (0.1 Early Access)</windowtitle>
+				<doctitle>GeoDesk (0.2 Early Access)</doctitle>
+				<windowtitle>GeoDesk (0.2 Early Access)</windowtitle>
 				<excludePackageNames>
 					benchmarks;
 					com.clarisma.*;

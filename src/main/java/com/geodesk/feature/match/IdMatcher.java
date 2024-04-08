@@ -16,6 +16,7 @@ public class IdMatcher extends Matcher
 
     public IdMatcher(int typeCode, long id)
     {
+        super(TypeBits.ALL);
         idBits = (id << 32) | ((id >> 24) & 0xffff_ff00L) | (typeCode << 3);
     }
 

@@ -12,7 +12,9 @@ import com.geodesk.feature.*;
 import com.geodesk.feature.filter.AndFilter;
 import com.geodesk.feature.filter.FalseFilter;
 import com.geodesk.feature.filter.FilterStrategy;
+import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.match.MatcherSet;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredFeature;
 import com.geodesk.geom.Bounds;
@@ -41,159 +43,35 @@ import static com.geodesk.feature.match.TypeBits.*;
  *
  * @param <T> subtype of Feature
  */
-public class WorldView<T extends Feature> implements Features<T>
+public class WorldView extends View
 {
-    protected final FeatureStore store;
-    protected final int types;
-    protected final Bounds bbox;
-    protected final MatcherSet matchers;
-    protected final Filter filter;
+    protected final Bounds bounds;
 
     protected final static Box WORLD = Box.ofWorld();
 
     public WorldView(FeatureStore store)
     {
-        this.store = store;
-        types= ALL;
-        matchers = MatcherSet.ALL;
-        bbox = WORLD;
-        filter = null;
+        super(store, TypeBits.ALL, Matcher.ALL, null);
+        this.bounds = WORLD;
     }
-
-    public WorldView(FeatureStore store, int types, Bounds bbox, MatcherSet matchers, Filter filter)
+    public WorldView(FeatureStore store, int types, Bounds bounds, Matcher matcher, Filter filter)
     {
-        this.store = store;
-        this.types= types;
-        this.bbox = bbox;
-        this.matchers = matchers;
-        this.filter = filter;
+        super(store, types, matcher, filter);
+        this.bounds = bounds;
     }
 
-    private WorldView(WorldView<?> other, Bounds bbox)
+    @Override protected Features newWith(int types, Matcher matcher, Filter filter)
     {
-        this.store = other.store;
-        this.types = other.types;
-        this.matchers = other.matchers;
-        this.bbox = bbox;           // TODO: intersect bbox
-        this.filter = other.filter; // TODO: clip bbox based on spatial filters
+        return new WorldView(store, types, bounds, matcher, filter);
     }
 
-    // TODO: decide if matchers should be merged or replaced
-    //  (Tableview merges)
-    private WorldView(WorldView<?> other, int types, MatcherSet matchers)
+    private WorldView(WorldView other, Bounds bounds)
     {
-        this.store = other.store;
-        this.bbox = other.bbox;
-        this.types = types;
-        this.matchers = matchers;
-        this.filter = other.filter;
+        super(other.store, other.types, other.matcher, other.filter);
+        this.bounds = bounds;           // TODO: intersect bbox
     }
 
-    private WorldView(WorldView<?> other, Bounds bbox, Filter filter)
-    {
-        this.store = other.store;
-        this.types = other.types;
-        this.matchers = other.matchers;
-        this.bbox = bbox;
-        this.filter = filter;
-    }
-
-    public int types()
-    {
-        return types;
-    }
-
-
-    /**
-     *
-     * - no change:          return this view
-     * - no possible result: return empty view
-     * - new view with merged filters
-     * - new view with constrained filters (e.g. only want areas that are Ways)
-     * - new view with just stricter type
-     *
-     * Optimize for common case: unconstrained type with new FilterSet
-     *
-     * TODO: possibly broken. What happens for
-     *    world.relations().features("a")?
-     *    We would need to create a TypeMatcher, to only return area-relations
-     *
-     * @param newTypes
-     * @param indexesCovered
-     * @param query
-     * @return
-     */
-    private Features<T> select(int newTypes, int indexesCovered, String query)
-    {
-        MatcherSet newMatchers;
-        if(query != null)
-        {
-            newMatchers = store.getMatchers(query);
-            newTypes &= types & newMatchers.types();
-            if(newTypes == 0) return (Features<T>)EmptyView.ANY;
-
-            if(matchers != MatcherSet.ALL)
-            {
-                newMatchers = matchers.and(newTypes, newMatchers);
-            }
-        }
-        else
-        {
-            newTypes &= types;
-            if (newTypes == types) return this;
-            if (newTypes == 0) return (Features<T>)EmptyView.ANY;
-            newMatchers = matchers;
-        }
-        if(newTypes != (newMatchers.types() & indexesCovered))
-        {
-            newMatchers = newMatchers.and(newTypes);
-        }
-        return new WorldView<>(this, newTypes, newMatchers);
-    }
-
-    @Override public long count()
-    {
-        long count = 0;
-        for(Feature f: this) count++;
-        return count;
-    }
-
-    @Override public Features<T> select(String query)
-    {
-        return select(ALL, ALL, query);
-    }
-
-    @Override public Features<Node> nodes()
-    {
-        return (Features<Node>)select(NODES, NODES, null);
-    }
-
-    @Override public Features<Node> nodes(String query)
-    {
-        return (Features<Node>)select(NODES, NODES, query);
-    }
-
-    @Override public Features<Way> ways()
-    {
-        return (Features<Way>) select(WAYS, WAYS | AREAS, null);
-    }
-
-    @Override public Features<Way> ways(String query)
-    {
-        return (Features<Way>) select(WAYS, WAYS | AREAS, query);
-    }
-
-    @Override public Features<Relation> relations()
-    {
-        return (Features<Relation>) select(RELATIONS, RELATIONS | AREAS, null);
-    }
-
-    @Override public Features<Relation> relations(String query)
-    {
-        return (Features<Relation>) select(RELATIONS, RELATIONS | AREAS, query);
-    }
-
-    @Override public Features<T> in(Bounds bbox)
+    @Override public Features in(Bounds bbox)
     {
         return new WorldView(this, bbox);
     }
@@ -211,27 +89,10 @@ public class WorldView<T extends Feature> implements Features<T>
 
             // Feature must intersect the view's bbox
             //  TODO: improve bounds(), should return immutable
-            if(!feature.bounds().intersects(bbox)) return false;
+            if(!feature.bounds().intersects(bounds)) return false;
 
-            // Feature must be accepted by one of the tag filters
-            // appropriate for its conceptual type
-            if((featureType & NODES) != 0)
-            {
-                if(!feature.matches(matchers.nodes())) return false;
-            }
-            else if((featureType & NONAREA_WAYS) != 0)
-            {
-                if(!feature.matches(matchers.ways())) return false;
-            }
-            else if((featureType & AREAS) != 0)
-            {
-                if(!feature.matches(matchers.areas())) return false;
-            }
-            else
-            {
-                assert (featureType & NONAREA_RELATIONS) != 0;
-                if(!feature.matches(matchers.relations())) return false;
-            }
+            // Feature must be accepted by matcher
+            if(!feature.matches(matcher)) return false;
 
             // If this view has a spatial filter, the feature must match
             // that one as well
@@ -241,32 +102,31 @@ public class WorldView<T extends Feature> implements Features<T>
         return false;
     }
 
-    @Override public Features<T> select(Filter filter)
+    @Override public Features select(Filter filter)
     {
+        int newTypes = types;
         if(this.filter != null)
         {
             filter = AndFilter.create(this.filter, filter);
-            if (filter == FalseFilter.INSTANCE) return (Features<T>)EmptyView.ANY;
+            if (filter == FalseFilter.INSTANCE) return EmptyView.ANY;
         }
         int strategy = filter.strategy();
         if((strategy & FilterStrategy.RESTRICTS_TYPES) != 0)
         {
-            int newTypes = types & filter.acceptedTypes();
-            if(newTypes != types)
-            {
-                if(newTypes == 0) return (Features<T>)EmptyView.ANY;
-                // TODO: restrict matchers (e.g. Filter only selects relations,
-                //  members, etc.)
-            }
+            newTypes &= filter.acceptedTypes();
+            if(newTypes == 0) return EmptyView.ANY;
         }
+
+        // TODO: review: filter type check
 
         Bounds filterBounds = filter.bounds();
         // TODO: proper combining of bboxes
-        return new WorldView<>(this, filterBounds != null ? filterBounds : bbox, filter);
+        return new WorldView(store, types, filterBounds != null ? filterBounds : bounds,
+            matcher, filter);
     }
 
-    @Override public Iterator<T> iterator()
+    @Override public Iterator<Feature> iterator()
     {
-        return (Iterator<T>)new Query(this);
+        return new Query(this);
     }
 }

@@ -10,10 +10,7 @@ package com.geodesk.feature.store;
 import com.clarisma.common.pbf.PbfDecoder;
 import com.geodesk.core.Mercator;
 import com.geodesk.core.XY;
-import com.geodesk.feature.FeatureType;
-import com.geodesk.feature.Features;
-import com.geodesk.feature.Node;
-import com.geodesk.feature.Way;
+import com.geodesk.feature.*;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.TypeBits;
@@ -35,17 +32,22 @@ public class StoredWay extends StoredFeature implements Way
 
 	@Override public FeatureType type() { return FeatureType.WAY; }
 
-	@Override public Features<Node> nodes()
+    @Override public boolean isWay()
+    {
+        return true;
+    }
+
+	@Override public Features nodes()
 	{
 		return new WayNodeView(store, buf, ptr);
 	}
 
-	@Override public Features<Node> nodes(String query)
+	@Override public Features nodes(String query)
 	{
-		if((buf.get(ptr) & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.NODES;
-		MatcherSet filters = store.getMatchers(query);
-		if((filters.types() & TypeBits.NODES) == 0) return EmptyView.NODES;
-		return new WayNodeView(store, buf, ptr, filters.nodes());
+		if((buf.get(ptr) & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.ANY;
+		Matcher matcher = store.getMatcher(query);
+		if((matcher.acceptedTypes() & TypeBits.NODES) == 0) return EmptyView.ANY;
+		return new WayNodeView(store, buf, ptr, TypeBits.NODES, matcher, null);
 	}
 
 	@Override public String toString()
@@ -116,7 +118,7 @@ public class StoredWay extends StoredFeature implements Way
 	}
 
 
-	@Override public Iterator<Node> iterator()
+	@Override public Iterator iterator()
 	{
 		int flags = buf.getInt(ptr);
 		if((flags & FeatureFlags.WAYNODE_FLAG) == 0) return Collections.emptyIterator();
@@ -126,7 +128,7 @@ public class StoredWay extends StoredFeature implements Way
 			(flags & FeatureFlags.RELATION_MEMBER_FLAG), Matcher.ALL);
 	}
 
-	Iterator<Node> fastFeatureNodeIterator(Matcher matcher)
+	Iterator<Feature> fastFeatureNodeIterator(Matcher matcher)
 	{
 		int flags = buf.getInt(ptr);
 		assert (flags & FeatureFlags.WAYNODE_FLAG) != 0;
@@ -231,13 +233,13 @@ public class StoredWay extends StoredFeature implements Way
 
 	// TODO: area, circumference
 
-	public static class Iter implements Iterator<Node>
+	public static class Iter implements Iterator<Feature>
 	{
 		private final FeatureStore store;
 		private final ByteBuffer buf;
 		private final Matcher filter;
 		private int pNext;
-		private Node featureNode;
+		private Feature featureNode;
 		private int tip = FeatureConstants.START_TIP;
 		private ByteBuffer foreignBuf;
 		private int pForeignTile;
@@ -314,9 +316,9 @@ public class StoredWay extends StoredFeature implements Way
 			return featureNode != null;
 		}
 
-		@Override public Node next()
+		@Override public Feature next()
 		{
-			Node next = featureNode;
+			Feature next = featureNode;
 			fetchNext();
 			return next;
 		}

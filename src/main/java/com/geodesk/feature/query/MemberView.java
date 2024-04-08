@@ -19,85 +19,21 @@ import com.geodesk.geom.Bounds;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
-public class MemberView<T extends Feature> extends TableView<T>
+public class MemberView extends TableView
 {
-    private final int types;
-
-    public MemberView(FeatureStore store, ByteBuffer buf, int pTable, int types, Matcher matcher)
+    public MemberView(FeatureStore store, ByteBuffer buf, int pTable,
+        int types, Matcher matcher, Filter filter)
     {
-        super(store, buf, pTable, matcher);
-        this.types = types;
+        super(store, buf, pTable, types, matcher, filter);
     }
 
-    public MemberView(MemberView other, int types, Matcher matcher)
+    @Override protected Features newWith(int types, Matcher matcher, Filter filter)
     {
-        super(other, matcher);
-        this.types = types;
+        return new MemberView(store, buf, ptr, types, matcher, filter);
     }
 
-    public MemberView(MemberView other, Filter filter)
+    @Override public Iterator<Feature> iterator()
     {
-        super(other, filter);
-        this.types = other.types;
+        return new MemberIterator(store, buf, ptr, types, matcher, filter);
     }
-
-
-    private Features<T> select(int types, String query)
-    {
-        MatcherSet matchers = store.getMatchers(query);
-        return select(types & matchers.types(), matchers.members());
-    }
-
-    private Features<T> select(int types, Matcher matcher)
-    {
-        types &= this.types;
-        if(types == 0) return (Features<T>)EmptyView.ANY;
-        return new MemberView<>(this, types, matcher);
-    }
-
-    @Override public Features<T> select(String query)
-    {
-        return select(TypeBits.ALL, query);
-    }
-
-    @Override public Features<Node> nodes()
-    {
-        return (Features<Node>)select(TypeBits.NODES, Matcher.ALL);
-    }
-
-    @Override public Features<Node> nodes(String query)
-    {
-        return (Features<Node>)select(TypeBits.NODES, query);
-    }
-
-    @Override public Features<Way> ways()
-    {
-        return (Features<Way>)select(TypeBits.WAYS, Matcher.ALL);
-    }
-
-    @Override public Features<Way> ways(String query)
-    {
-        return (Features<Way>)select(TypeBits.WAYS, query);
-    }
-
-    @Override public Features<Relation> relations()
-    {
-        return (Features<Relation>)select(TypeBits.RELATIONS, Matcher.ALL);
-    }
-
-    @Override public Features<Relation> relations(String query)
-    {
-        return (Features<Relation>)select(TypeBits.RELATIONS, query);
-    }
-
-    @Override public Iterator<T> iterator()
-    {
-        return (Iterator<T>)new MemberIterator(store, buf, ptr, types, matcher, filter);
-    }
-
-    @Override public Features<T> select(Filter filter)
-    {
-        throw new RuntimeException("todo");
-    }
-
 }

@@ -11,6 +11,7 @@ import com.clarisma.common.util.Log;
 import com.geodesk.core.Tile;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
+import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.store.*;
 import com.geodesk.geom.Bounds;
@@ -34,7 +35,7 @@ public class Query implements Iterator<Feature>, Bounds
     private int maxX;
     private final int maxY;
     private final int types;
-    private final MatcherSet matchers;
+    private final Matcher matcher;
     private ExecutorService executor;
     // private TileQueryTask head;     // access must be synchronized
         // TODO: maybe put last, so we reduce false sharing (may be in
@@ -54,13 +55,13 @@ public class Query implements Iterator<Feature>, Bounds
     //  If multiple tiles are missing, should we accumulate the tile numbers?
     //  What would the API user do differently based on this information?
 
-    public Query(WorldView<?> view)
+    public Query(WorldView view)
     {
         this.store = view.store;
         this.executor = store.executor();
         this.types = view.types;
-        this.matchers = view.matchers;
-        Bounds bbox = view.bbox;
+        this.matcher = view.matcher;
+        Bounds bbox = view.bounds;
         minX = bbox.minX();
         minY = bbox.minY();
         maxX = bbox.maxX();
@@ -81,9 +82,9 @@ public class Query implements Iterator<Feature>, Bounds
         return types;
     }
 
-    public MatcherSet matchers()
+    public Matcher matcher()
     {
-        return matchers;
+        return matcher;
     }
 
     @Override public int minX()

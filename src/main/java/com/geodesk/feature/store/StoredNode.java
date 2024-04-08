@@ -17,6 +17,8 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 
 import java.nio.ByteBuffer;
+import java.util.Collections;
+import java.util.Iterator;
 
 public class StoredNode extends StoredFeature implements Node
 {
@@ -25,10 +27,20 @@ public class StoredNode extends StoredFeature implements Node
 		super(store, buf, ptr);
 	}
 
+    @Override public Iterator iterator()
+    {
+        return Collections.emptyIterator();
+    }
+
 	@Override public FeatureType type()
 	{
 		return FeatureType.NODE;
 	}
+
+    @Override public boolean isNode()
+    {
+        return true;
+    }
 
 	@Override public int x()
 	{
@@ -62,6 +74,14 @@ public class StoredNode extends StoredFeature implements Node
 		return new Box(x, y);
 	}
 
+    @Override public int[] toXY()
+    {
+        int[] coords = new int[2];
+        coords[0] = x();
+        coords[1] = y();
+        return coords;
+    }
+
 	// TODO: create CoordinateSequence instead of Coordinate here, because
 	//  that's what GeometryFactory does anyway
 	@Override public Geometry toGeometry()
@@ -74,22 +94,13 @@ public class StoredNode extends StoredFeature implements Node
 		return "node/" + id();
 	}
 
-	@Override public boolean belongsToWay()
+	@Override public Features parents()
 	{
-		return (buf.getInt(ptr) & FeatureFlags.WAYNODE_FLAG) != 0;
-	}
+        // TODO !!!!!!!!
 
-	@Override public Features<Way> parentWays()
-	{
-		if ((buf.getInt(ptr) & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.WAYS;
+		if ((buf.getInt(ptr) & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.ANY;
 		int types = TypeBits.WAYS & TypeBits.WAYNODE_FLAGGED;
-		final Matcher matcher = new TypeMatcher(types, Matcher.ALL);
-		return new WorldView<>(store, types,
-			bounds(), new MatcherSet(types, matcher),
-			new ParentWayFilter(id()));
-
-		// TODO: This could be more efficient; we can create singleton matchers
-		//  Also don't need TypeMatcher on lineal way index
+		return new WorldView(store, types, bounds(), Matcher.ALL, new ParentWayFilter(id()));
 	}
 
 	@Override protected int getRelationTablePtr()

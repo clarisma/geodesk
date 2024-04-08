@@ -12,12 +12,11 @@ import java.nio.ByteBuffer;
 
 public class TypeMatcher extends Matcher
 {
-    private final int acceptedTypes;
     private final Matcher matcher;
 
     public TypeMatcher(int acceptedTypes, Matcher matcher)
     {
-        this.acceptedTypes = acceptedTypes;
+        super(acceptedTypes);
         this.matcher = matcher;
     }
 

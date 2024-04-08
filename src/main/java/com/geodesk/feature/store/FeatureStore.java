@@ -12,6 +12,7 @@ import com.clarisma.common.store.BlobStore;
 import com.clarisma.common.store.StoreException;
 import com.clarisma.common.util.Log;
 import com.geodesk.core.Box;
+import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.MatcherCompiler;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
@@ -217,11 +218,11 @@ public class FeatureStore extends BlobStore
         return geometryFactory;
     }
 
-    public MatcherSet getMatchers(String query)
+    public Matcher getMatcher(String query)
     {
         synchronized (matchers)
         {
-            return matchers.getMatchers(query);
+            return matchers.getMatcher(query);
         }
     }
 

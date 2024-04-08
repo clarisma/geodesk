@@ -59,7 +59,7 @@ public class ContainsPointFilter implements Filter
     private boolean isInsideRelation(StoredRelation rel)
     {
         int crossings = 0;
-        for(Way member: rel.memberWays())
+        for(Feature member: rel.members().ways())
         {
             String role = member.role();
             if(!role.equals("outer") && !role.equals("inner")) continue;

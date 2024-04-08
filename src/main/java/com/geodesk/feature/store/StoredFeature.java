@@ -14,8 +14,10 @@ import com.geodesk.core.Mercator;
 import com.geodesk.feature.*;
 import com.geodesk.core.Box;
 import com.geodesk.feature.match.Matcher;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.feature.query.ParentRelationView;
+import com.geodesk.feature.query.WayNodeView;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -450,13 +452,15 @@ public abstract class StoredFeature implements Feature
 
 	@Override public boolean belongsTo(Feature parent)
 	{
-		if(parent instanceof Relation rel)
+		if(parent.isRelation())
 		{
-			return parentRelations().contains(rel);
+			return parents().relations().contains(parent);
 		}
-
-		// TODO: parent way
-		return false;
+        else if (parent.isWay())
+        {
+        	return parents().ways().contains(parent);
+		}
+        return false;
 	}
 
 	// TODO: optimize, building Geometry is not needed
@@ -684,10 +688,24 @@ public abstract class StoredFeature implements Feature
 		return (buf.getInt(ptr) & FeatureFlags.RELATION_MEMBER_FLAG) != 0;
 	}
 
-	@Override public Features<Relation> parentRelations()
+	@Override public Features parents()
 	{
-		return belongsToRelation() ? new ParentRelationView(store, buf, getRelationTablePtr()) :
-			(Features<Relation>) EmptyView.ANY;
+		return belongsToRelation() ?
+            new ParentRelationView(store, buf, getRelationTablePtr()) : EmptyView.ANY;
+	}
+
+    @Override public Features parents(String query)
+	{
+        if(belongsToRelation())
+        {
+            Matcher matcher = store.getMatcher(query);
+            if ((matcher.acceptedTypes() & TypeBits.RELATIONS) != 0)
+            {
+                new ParentRelationView(store, buf, getRelationTablePtr(),
+                    matcher.acceptedTypes(), matcher, null);
+            }
+        }
+        return EmptyView.ANY;
 	}
 
 	/**

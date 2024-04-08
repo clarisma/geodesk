@@ -16,6 +16,7 @@ public class AndMatcher extends Matcher
 
     public AndMatcher(Matcher a, Matcher b)
     {
+        super(a.acceptedTypes() & b.acceptedTypes());
         this.a = a;
         this.b = b;
     }

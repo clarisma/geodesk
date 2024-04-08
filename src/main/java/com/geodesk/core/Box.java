@@ -17,7 +17,7 @@ import org.locationtech.jts.geom.LineSegment;
 /**
  * An axis-aligned bounding box. A `Box` represents minimum and maximum
  * X and Y coordinates in a Mercator-projected plane. It can straddle the
- * Antimeriaian (in which case `minX` is *larger* than `maxX`). A `Box` can
+ * Antimeridian (in which case `minX` is *larger* than `maxX`). A `Box` can
  * also be empty (in which case `minY` is *larger* than `maxY`)
  */
 // TODO: should this be immutable?

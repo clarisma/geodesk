@@ -111,32 +111,25 @@ public class TileQueryTask extends QueryTask
                 ((query.minX() < west) ? FeatureFlags.MULTITILE_WEST : 0);
              */
 
-            MatcherSet filters = query.matchers();
+            Matcher matcher = query.matcher();
             RTreeQueryTask task = null;
 
-            /*
-            Filter f;
-            if ((f = filters.nodes()) != null) task = searchNodeRTree(buf, pTile + 8, f, task);
-            if ((f = filters.ways()) != null) task = searchRTree(buf, pTile + 12, f, task);
-            if ((f = filters.areas()) != null) task = searchRTree(buf, pTile + 16, f, task);
-            if ((f = filters.relations()) != null) task = searchRTree(buf, pTile + 20, f, task);
-            */
             int types = query.types();
             if ((types & NODES) != 0)
             {
-                task = searchNodeRTree(pTile + 8, filters.nodes(), task);
+                task = searchNodeRTree(pTile + 8, matcher, task);
             }
             if ((types & NONAREA_WAYS) != 0)
             {
-                task = searchRTree(pTile + 12, filters.ways(), task);
+                task = searchRTree(pTile + 12, matcher, task);
             }
             if ((types & AREAS) != 0)
             {
-                task = searchRTree(pTile + 16, filters.areas(), task);
+                task = searchRTree(pTile + 16, matcher, task);
             }
             if ((types & NONAREA_RELATIONS) != 0)
             {
-                task = searchRTree(pTile + 20, filters.relations(), task);
+                task = searchRTree(pTile + 20, matcher, task);
             }
 
             QueryResults res = QueryResults.EMPTY;

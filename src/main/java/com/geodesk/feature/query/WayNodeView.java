@@ -20,7 +20,7 @@ import com.geodesk.feature.store.StoredWay;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 
-public class WayNodeView extends TableView<Node>
+public class WayNodeView extends TableView
 {
     private final int flags;
 
@@ -28,56 +28,28 @@ public class WayNodeView extends TableView<Node>
 
     public WayNodeView(FeatureStore store, ByteBuffer buf, int ptr)
     {
-        super(store, buf, ptr, Matcher.ALL);
-        flags = (buf.get(ptr) & 0xff) | INCLUDE_GEOMETRY_NODES;
+        this(store, buf, ptr, TypeBits.NODES, Matcher.ALL, null);
     }
 
-    public WayNodeView(FeatureStore store, ByteBuffer buf, int ptr, Matcher matcher)
-    {
-        // TODO: If the Matcher includes only negative clauses (e.g. n[!highway]),
-        //  untagged nodes ("geometry nodes") will still match
-        //  We need a way to indicate that the Matcher can return untagged nodes
-        //  so we can set the INCLUDE_GEOMETRY_NODES flag here
-        //  No! Per spec, tag queries only return feature nodes, so current
-        //  behavior is correct.
+    // TODO: If the Matcher includes only negative clauses (e.g. n[!highway]),
+    //  untagged nodes ("geometry nodes") will still match
+    //  We need a way to indicate that the Matcher can return untagged nodes
+    //  so we can set the INCLUDE_GEOMETRY_NODES flag here
+    //  No! Per spec, tag queries only return feature nodes, so current
+    //  behavior is correct.
 
-        super(store, buf, ptr, matcher);
-        flags = buf.get(ptr) & 0xff;
+
+    public WayNodeView(FeatureStore store, ByteBuffer buf, int ptr,
+        int types, Matcher matcher, Filter filter)
+    {
+        super(store, buf, ptr, types, matcher, filter);
+        flags = (buf.get(ptr) & 0xff) |
+            ((matcher == Matcher.ALL) ? INCLUDE_GEOMETRY_NODES : 0);
     }
 
-    public WayNodeView(WayNodeView other, Matcher matcher, int flags)
+    @Override protected Features newWith(int types, Matcher matcher, Filter filter)
     {
-        super(other, matcher);
-        this.flags = flags;
-    }
-
-    public WayNodeView(WayNodeView other, Filter filter)
-    {
-        super(other, filter);
-        this.flags = other.flags;
-    }
-
-    @Override public Features<Node> select(String query)
-    {
-        return nodes(query);
-    }
-
-    @Override public Features<Node> nodes()
-    {
-        return this;
-    }
-
-    @Override public Features<Node> nodes(String query)
-    {
-        if((flags & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.NODES;
-        MatcherSet filters = store.getMatchers(query);
-        if((filters.types() & TypeBits.NODES) == 0) return EmptyView.NODES;
-        return new WayNodeView(this, filters.nodes(), flags & ~INCLUDE_GEOMETRY_NODES);
-    }
-
-    @Override public Features<Node> select(Filter filter)
-    {
-        return new WayNodeView(this, filter);
+        return new WayNodeView(store, buf, ptr, types, matcher, filter);
     }
 
     private int bodyPtr()
@@ -86,7 +58,7 @@ public class WayNodeView extends TableView<Node>
         return buf.getInt(ppBody) + ppBody;
     }
 
-    @Override public Iterator<Node> iterator()
+    @Override public Iterator<Feature> iterator()
     {
         if((flags & INCLUDE_GEOMETRY_NODES) == 0)
         {
@@ -98,10 +70,10 @@ public class WayNodeView extends TableView<Node>
 
     // TODO: apply spatial filters to geometric nodes
     // TODO: inverse this: derive from feature iterator instead?
-    private class AllNodesIter extends StoredWay.XYIterator implements Iterator<Node>
+    private class AllNodesIter extends StoredWay.XYIterator implements Iterator<Feature>
     {
-        private Node nextFeatureNode;
-        private Iterator<Node> featureNodeIter;
+        private Feature nextFeatureNode;
+        private Iterator<Feature> featureNodeIter;
 
         public AllNodesIter(int pBody)
         {
@@ -115,7 +87,7 @@ public class WayNodeView extends TableView<Node>
             }
         }
 
-        @Override public Node next()
+        @Override public Feature next()
         {
             long xy = nextXY();
             int x = XY.x(xy);
@@ -124,7 +96,7 @@ public class WayNodeView extends TableView<Node>
             {
                 if(nextFeatureNode.x() == x && nextFeatureNode.y() == y)
                 {
-                    Node node = nextFeatureNode;
+                    Feature node = nextFeatureNode;
                     nextFeatureNode = featureNodeIter.hasNext() ? featureNodeIter.next() : null;
                     return node;
                 }

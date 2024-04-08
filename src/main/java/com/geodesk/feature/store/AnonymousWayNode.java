@@ -19,6 +19,9 @@ import com.geodesk.feature.query.WorldView;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 
+import java.util.Collections;
+import java.util.Iterator;
+
 /**
  * A Node without tags that doesn't belong to a Relation, i.e. one
  * that isn't a proper feature, but merely defines the geometry of a Way.
@@ -36,6 +39,11 @@ public class AnonymousWayNode implements Node
         this.y = y;
     }
 
+    @Override public Iterator iterator()
+    {
+        return Collections.emptyIterator();
+    }
+
     @Override public long id()
     {
         return 0;
@@ -46,6 +54,11 @@ public class AnonymousWayNode implements Node
         return FeatureType.NODE;
     }
 
+    @Override public boolean isNode()
+    {
+        return true;
+    }
+
     @Override public int x()
     {
         return x;
@@ -54,6 +67,14 @@ public class AnonymousWayNode implements Node
     @Override public int y()
     {
         return y;
+    }
+
+    @Override public int[] toXY()
+    {
+        int[] coords = new int[2];
+        coords[0] = x();
+        coords[1] = y();
+        return coords;
     }
 
     @Override public boolean isPlaceholder()
@@ -136,17 +157,6 @@ public class AnonymousWayNode implements Node
         return false;
     }
 
-    /**
-     * Returns an empty feature collection, because this type of `Node` by
-     * definition has no parent relations.
-     *
-     * @return an empty feature collection
-     */
-    @Override public Features<Relation> parentRelations()
-    {
-        return (Features<Relation>) EmptyView.ANY;
-    }
-
     @Override public boolean isArea()
     {
         return false;
@@ -155,11 +165,6 @@ public class AnonymousWayNode implements Node
     @Override public Geometry toGeometry()
     {
         return store.geometryFactory().createPoint(new Coordinate(x(), y()));
-    }
-
-    @Override public boolean belongsToWay()
-    {
-        return true;
     }
 
     @Override public boolean equals(Object other)
@@ -178,13 +183,18 @@ public class AnonymousWayNode implements Node
         return "node@" + x + "," + y;
     }
 
-    @Override public Features<Way> parentWays()
+    @Override public Features parents()
     {
-        final Matcher matcher = new TypeMatcher(TypeBits.WAYS, Matcher.ALL);
-        return new WorldView<>(store, TypeBits.WAYS,
-            bounds(), new MatcherSet(TypeBits.WAYS, null, Matcher.ALL, matcher, null, null),
-            new ParentWayFilter(x,y));
-            // TODO: these should be singletons
+        return new WorldView(store, TypeBits.WAYS,
+            bounds(), Matcher.ALL, new ParentWayFilter(x,y));
+    }
+
+    @Override public Features parents(String query)
+    {
+        Matcher matcher = store.getMatcher(query);
+        if((matcher.acceptedTypes() & TypeBits.WAYS) == 0) return EmptyView.ANY;
+        return new WorldView(store, matcher.acceptedTypes(),
+            bounds(), matcher, new ParentWayFilter(x,y));
     }
 
     private static class ParentWayFilter implements Filter
