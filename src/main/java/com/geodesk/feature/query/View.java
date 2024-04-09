@@ -11,12 +11,10 @@ import com.geodesk.feature.*;
 import com.geodesk.feature.filter.AndFilter;
 import com.geodesk.feature.filter.FalseFilter;
 import com.geodesk.feature.filter.FilterStrategy;
-import com.geodesk.feature.match.AndMatcher;
-import com.geodesk.feature.match.Matcher;
-import com.geodesk.feature.match.MatcherSet;
-import com.geodesk.feature.match.TypeBits;
-import com.geodesk.feature.store.FeatureStore;
+import com.geodesk.feature.match.*;
+import com.geodesk.feature.store.*;
 
+import java.nio.ByteBuffer;
 
 
 public abstract class View implements Features
@@ -110,5 +108,50 @@ public abstract class View implements Features
             if(newTypes == 0) return EmptyView.ANY;
         }
         return newWith(newTypes, matcher, filter);
+    }
+
+    @Override public Features parentsOf(Feature child)
+    {
+        if(child.isNode())
+        {
+            if (child instanceof AnonymousWayNode wayNode)
+            {
+                return wayNode.parents(types, matcher, filter);
+            }
+            return ((StoredNode)child).parents(types, matcher, filter);
+        }
+        else
+        {
+            if ((types & TypeBits.RELATIONS) == 0) return EmptyView.ANY;
+            StoredFeature f = (StoredFeature) child;
+            return new ParentRelationView(store, f.buffer(),
+                f.getRelationTablePtr(), types, matcher, filter);
+        }
+    }
+
+    @Override public Features membersOf(Feature parent)
+    {
+        if(parent.isRelation())
+        {
+            return ((StoredRelation) parent).members(types, matcher, filter);
+        }
+        // TODO: membersOf() for ways
+
+        return EmptyView.ANY;
+    }
+
+    @Override public Features nodesOf(Feature parent)
+    {
+        if(parent.isWay())
+        {
+            StoredWay way = (StoredWay) parent;
+            if ((types & TypeBits.NODES) == 0) return EmptyView.ANY;
+            return new WayNodeView(store, way.buffer(), way.pointer(),
+                    types, matcher, filter);
+        }
+
+        // TODO: nodesOf() for relations
+
+        return EmptyView.ANY;
     }
 }

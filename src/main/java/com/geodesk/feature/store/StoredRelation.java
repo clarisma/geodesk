@@ -168,22 +168,23 @@ public class StoredRelation extends StoredFeature implements Relation
 
 	@Override public Features members()
 	{
-		return members(TypeBits.ALL, Matcher.ALL);
+		return members(TypeBits.ALL, Matcher.ALL, null);
 	}
 
 	private Features members(int types, String query)
 	{
 		Matcher matcher = store.getMatcher(query);
-		return members(types & matcher.acceptedTypes(), matcher);
+		return members(types & matcher.acceptedTypes(), matcher, null);
 	}
 
-	private Features members(int types, Matcher matcher)
+	public Features members(int types, Matcher matcher, Filter filter)
 	{
-		if(types == 0) return EmptyView.ANY;
+		// if(types == 0) return EmptyView.ANY;
+            // not needed
 		int ppMembers = ptr + 12;
 		int pMembers = ppMembers + buf.getInt(ppMembers);
 		if(isEmpty(pMembers)) return EmptyView.ANY;
-		return new MemberView(store, buf, pMembers, types, matcher, null);
+		return new MemberView(store, buf, pMembers, types, matcher, filter);
 	}
 
 	@Override public Features members(String q)

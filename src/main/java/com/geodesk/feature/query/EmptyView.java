@@ -9,6 +9,7 @@ package com.geodesk.feature.query;
 
 import com.geodesk.feature.*;
 import com.geodesk.feature.match.Matcher;
+import com.geodesk.feature.match.QueryException;
 import com.geodesk.geom.Bounds;
 
 import java.util.Collections;
@@ -64,4 +65,19 @@ public class EmptyView extends View
     }
 
     @Override public Features select(Filter filter) { return this; }
+
+    @Override public Features nodesOf(Feature parent)
+    {
+        return this;
+    }
+
+    @Override public Features membersOf(Feature parent)
+    {
+        return this;
+    }
+
+    @Override public Features parentsOf(Feature child)
+    {
+        return this;
+    }
 }

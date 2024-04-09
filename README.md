@@ -93,7 +93,7 @@ That's it, you've created your first GeoDesk application!
 Find all movie theaters within 500 meters from a given point:
 
 ```java
-Features<?> movieTheaters = library
+Features movieTheaters = library
     .select("na[amenity=cinema]")
     .select(Filters.maxMetersFromLonLat(500, myLon, myLat));
 ```
@@ -103,7 +103,7 @@ Features<?> movieTheaters = library
 Discover the bus routes that traverse a given street:
 
 ```java
-for(Relation route: street.parentRelations("[route=bus]"))
+for(Feature route: street.parents("[route=bus]"))
 {
     System.out.format("- %s from %s to %s",
         route.stringValue("ref"),
@@ -123,4 +123,4 @@ int numberOfEntrances = building.nodes("[entrance]").size();
 - [gol-tool](http://www.github.com/clarisma/gol-tool) &mdash; command-line utility for building, maintaining and querying GOL files
 - [geodesk-examples](http://www.github.com/clarisma/geodesk-examples) &mdash; example applications
 - [geodesk-tests](http://www.github.com/clarisma/geodesk-tests) &mdash; integration tests
-- [geodesk-py](https://github.com/clarisma/geodesk-py) &mdash; GeoDesk for Python (**NEW**)
+- [geodesk-py](https://github.com/clarisma/geodesk-py) &mdash; GeoDesk for Python

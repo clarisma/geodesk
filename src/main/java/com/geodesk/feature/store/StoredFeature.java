@@ -51,9 +51,14 @@ public abstract class StoredFeature implements Feature
 		return store;
 	}
 
-	protected ByteBuffer buffer()
+	public ByteBuffer buffer()
 	{
 		return buf;
+	}
+
+    public int pointer()
+	{
+		return ptr;
 	}
 
 	@Override public long id()
@@ -714,7 +719,7 @@ public abstract class StoredFeature implements Feature
 	 *
 	 * @return a pointer to the feature's relation table
 	 */
-	protected int getRelationTablePtr()
+	public int getRelationTablePtr()
 	{
 		// Default implementation for Ways and Relations:
 		// reltable pointer is placed just ahead of the body anchor

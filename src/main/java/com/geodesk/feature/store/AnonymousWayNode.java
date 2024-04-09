@@ -7,6 +7,7 @@
 
 package com.geodesk.feature.store;
 
+import com.geodesk.feature.filter.AndFilter;
 import com.geodesk.geom.XY;
 import com.geodesk.feature.*;
 import com.geodesk.geom.Box;
@@ -179,6 +180,17 @@ public class AnonymousWayNode implements Node
     @Override public String toString()
     {
         return "node@" + x + "," + y;
+    }
+
+    public Features parents(int types, Matcher matcher, Filter filter)
+    {
+        if((types & TypeBits.WAYS) == 0) return EmptyView.ANY;
+        Filter newFilter = new ParentWayFilter(x,y);
+        if(filter != null)
+        {
+            newFilter = AndFilter.create(newFilter, filter);
+        }
+        return new WorldView(store, types, bounds(), matcher, newFilter);
     }
 
     @Override public Features parents()

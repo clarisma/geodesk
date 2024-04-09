@@ -8,6 +8,8 @@
 package com.geodesk.feature.store;
 
 import com.geodesk.feature.*;
+import com.geodesk.feature.filter.AndFilter;
+import com.geodesk.feature.query.ParentRelationView;
 import com.geodesk.geom.Box;
 import com.geodesk.feature.match.*;
 import com.geodesk.feature.query.EmptyView;
@@ -93,16 +95,45 @@ public class StoredNode extends StoredFeature implements Node
 		return "node/" + id();
 	}
 
-	@Override public Features parents()
+    public Features parents(int types, Matcher matcher, Filter filter)
 	{
-        // TODO !!!!!!!!
+        int acceptedFlags = ((types & TypeBits.RELATIONS) != 0) ?
+            FeatureFlags.RELATION_MEMBER_FLAG : 0;
+        acceptedFlags |= ((types & TypeBits.WAYS) != 0) ?
+            FeatureFlags.WAYNODE_FLAG : 0;
+        int flags = buf.getInt(ptr) & acceptedFlags;
 
-		if ((buf.getInt(ptr) & FeatureFlags.WAYNODE_FLAG) == 0) return EmptyView.ANY;
-		int types = TypeBits.WAYS & TypeBits.WAYNODE_FLAGGED;
-		return new WorldView(store, types, bounds(), Matcher.ALL, new ParentWayFilter(id()));
+        if(flags == FeatureFlags.WAYNODE_FLAG)
+        {
+            Filter newFilter = new ParentWayFilter(id());
+            if(filter != null) newFilter = AndFilter.create(newFilter, filter);
+            return new WorldView(store, types & TypeBits.WAYNODE_FLAGGED,
+                bounds(), matcher, newFilter);
+        }
+        if (flags == FeatureFlags.RELATION_MEMBER_FLAG)
+        {
+            return new ParentRelationView(store, buf, getRelationTablePtr(),
+                types, matcher, filter);
+        }
+        if (types == (FeatureFlags.WAYNODE_FLAG | FeatureFlags.RELATION_MEMBER_FLAG))
+        {
+            return null;        // TODO: combined parent view
+        }
+        return EmptyView.ANY;
 	}
 
-	@Override protected int getRelationTablePtr()
+	@Override public Features parents()
+	{
+        return parents(TypeBits.ALL, Matcher.ALL, null);
+	}
+
+    @Override public Features parents(String query)
+	{
+        Matcher matcher = store.getMatcher(query);
+        return parents(matcher.acceptedTypes(), matcher, null);
+	}
+
+	@Override public int getRelationTablePtr()
 	{
 		// A Node's body pointer is the pointer to its reltable
 		int ppBody = ptr + 12;

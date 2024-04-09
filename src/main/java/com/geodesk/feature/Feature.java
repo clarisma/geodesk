@@ -94,7 +94,7 @@ public interface Feature extends Iterable<Feature>
 	/**
 	 * Retrieves the bounding box of the feature.
 	 * 
-	 * @return a copy of the Feature's BoundingBox
+	 * @return a copy of the Feature's bounding box
 	 */
 	// TODO: maybe call this toBox?
 	Box bounds();
@@ -231,7 +231,6 @@ public interface Feature extends Iterable<Feature>
 	 */
 	boolean isPlaceholder();
 
-	// TODO: Should this return circumference for areas?
 	/**
 	 * Measures the length of a feature.
 	 *

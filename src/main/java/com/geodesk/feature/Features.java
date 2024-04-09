@@ -7,6 +7,7 @@
 
 package com.geodesk.feature;
 
+import com.geodesk.feature.match.QueryException;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.geom.Bounds;
 
@@ -89,6 +90,19 @@ public interface Features extends Iterable<Feature>
 
     /**
      * Returns a sub-view that contains only the features that are nodes of the
+     * given way.
+     *
+     * @param parent    a way or relation
+     * @return          a collection of features
+     */
+    default Features nodesOf(Feature parent)
+    {
+        throw new QueryException("Not implemented for this query.");
+    }
+
+
+    /**
+     * Returns a sub-view that contains only the features that are nodes of the
      * given way, or members of the given relation. If a node is passed as
      * `parent`, an empty view is returned (as nodes cannot have child elements).
      *
@@ -97,8 +111,8 @@ public interface Features extends Iterable<Feature>
      */
     default Features membersOf(Feature parent)
     {
-        return EmptyView.ANY;
-    };
+        throw new QueryException("Not implemented for this query.");
+    }
 
     /**
      * Returns a sub-view that contains only the features that are parent
@@ -109,9 +123,8 @@ public interface Features extends Iterable<Feature>
      */
     default Features parentsOf(Feature child)
     {
-        // TODO: placeholder only
-        return EmptyView.ANY;
-    };
+        throw new QueryException("Not implemented for this query.");
+    }
 
     /**
      * Returns a view of this collection that contains only features whose
