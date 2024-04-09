@@ -17,10 +17,10 @@ public abstract class TagMatcher extends Matcher
     protected final int keyMask;
     protected final int keyMin;
 
-    // TODO: take FeatureStore, types, resources
-    protected TagMatcher(String[] globalStrings, int keyMask, int keyMin)
+    // TODO: take FeatureStore, resources
+    protected TagMatcher(int types, String[] globalStrings, int keyMask, int keyMin)
     {
-        super(0);   // TODO !!!!!!!!
+        super(types);
         this.globalStrings = globalStrings;
         this.keyMask = keyMask;
         this.keyMin = keyMin;

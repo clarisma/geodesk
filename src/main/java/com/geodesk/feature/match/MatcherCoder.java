@@ -1716,14 +1716,15 @@ public class MatcherCoder extends ExpressionCoder
 		mv.visitLabel(selector_failed);
 	}
 
-	private void createConstructor(int keyMask, int keyMin)
+	private void createConstructor(int acceptedTypes, int keyMask, int keyMin)
 	{
 		beginConstructor("([Ljava/lang/String;)V");
+        loadIntConstant(acceptedTypes);
 		mv.visitVarInsn(ALOAD, $this);
 		mv.visitVarInsn(ALOAD, 1); // first argument: String[]
 		loadIntConstant(keyMask);
 		loadIntConstant(keyMin);
-		callBaseClassConstructor("([Ljava/lang/String;II)V");
+		callBaseClassConstructor("([ILjava/lang/String;II)V");
 		mv.visitInsn(RETURN);
 		// force auto-calculation of maxStack and maxLocals
 		mv.visitMaxs(0, 0);
@@ -1866,11 +1867,13 @@ public class MatcherCoder extends ExpressionCoder
 		// If there are multiple selectors, only a subset of keys is
 		// required in order to attempt matching
 
+        int acceptedTypes = 0;
 		int keyMask = 0;
 		int keyMin = Integer.MAX_VALUE;
 		Selector s = first;
 		while(s != null)
 		{
+            acceptedTypes |= s.matchTypes();
 			int indexBits = s.indexBits();
 			keyMask |= indexBits;
 			if(indexBits < keyMin) keyMin = indexBits;
@@ -1878,7 +1881,7 @@ public class MatcherCoder extends ExpressionCoder
 		}
 
 		beginClass(className, MATCHER_BASE_CLASS, null);
-		createConstructor(keyMask, keyMin);
+		createConstructor(acceptedTypes, keyMask, keyMin);
 		createAcceptMethod("accept", first);
 		endClass();
 		return cw.toByteArray();
