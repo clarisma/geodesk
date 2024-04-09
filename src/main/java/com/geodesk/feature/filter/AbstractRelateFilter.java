@@ -7,15 +7,11 @@
 
 package com.geodesk.feature.filter;
 
-import com.clarisma.common.util.Log;
-import com.geodesk.core.Box;
-import com.geodesk.feature.Feature;
+import com.geodesk.geom.Box;
 import com.geodesk.feature.Filter;
-import com.geodesk.feature.match.TypeBits;
 import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
-import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
 /**
  * A base class for Filter classes that implement DE9-IM predicates.

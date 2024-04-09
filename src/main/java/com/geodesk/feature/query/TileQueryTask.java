@@ -7,12 +7,8 @@
 
 package com.geodesk.feature.query;
 
-import com.clarisma.common.util.Log;
-import com.geodesk.core.Tile;
 import com.geodesk.feature.Filter;
 import com.geodesk.feature.match.Matcher;
-import com.geodesk.feature.match.MatcherSet;
-import com.geodesk.feature.store.FeatureFlags;
 import com.geodesk.feature.store.FeatureStore;
 
 import java.nio.ByteBuffer;

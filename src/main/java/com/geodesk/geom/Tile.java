@@ -5,14 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package com.geodesk.core;
+package com.geodesk.geom;
 
 import com.geodesk.feature.store.BoxCoordinateSequence;
 import com.geodesk.util.GeometryBuilder;
 import org.locationtech.jts.geom.Envelope;
 
-import com.geodesk.geom.Bounds;
-import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
 
 

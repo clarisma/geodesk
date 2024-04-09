@@ -7,7 +7,7 @@
 
 package com.geodesk.feature.filter;
 
-import com.geodesk.core.Box;
+import com.geodesk.geom.Box;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Relation;
 import com.geodesk.geom.Bounds;

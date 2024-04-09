@@ -7,9 +7,8 @@
 
 package com.geodesk.util;
 
-import com.clarisma.common.util.Log;
-import com.geodesk.core.Box;
-import com.geodesk.core.Mercator;
+import com.geodesk.geom.Box;
+import com.geodesk.geom.Mercator;
 import com.geodesk.feature.Feature;
 import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.*;

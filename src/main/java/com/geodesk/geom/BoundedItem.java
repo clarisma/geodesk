@@ -7,8 +7,6 @@
 
 package com.geodesk.geom;
 
-import com.geodesk.core.Box;
-
 public class BoundedItem<T> extends Box
 {
 	private T item;

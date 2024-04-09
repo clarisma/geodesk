@@ -8,8 +8,7 @@
 package com.geodesk.feature.polygon;
 
 import com.clarisma.common.store.StoreException;
-import com.clarisma.common.util.Log;
-import com.geodesk.core.XY;
+import com.geodesk.geom.XY;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Relation;
 import com.geodesk.feature.Way;

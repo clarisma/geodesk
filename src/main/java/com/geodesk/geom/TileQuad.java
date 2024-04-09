@@ -5,9 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package com.geodesk.core;
-
-import java.util.function.IntConsumer;
+package com.geodesk.geom;
 
 import org.eclipse.collections.api.block.procedure.primitive.IntProcedure;
 import org.eclipse.collections.api.iterator.IntIterator;

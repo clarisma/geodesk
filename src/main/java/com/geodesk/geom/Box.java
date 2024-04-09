@@ -5,10 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package com.geodesk.core;	// TODO: rename to util?
+package com.geodesk.geom;	// TODO: rename to util?
 
 import com.geodesk.feature.store.WayCoordinateSequence;
-import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -320,7 +319,7 @@ public class Box implements Bounds
 	//  (use scale closest to Equator)
 	public void bufferMeters(double m)
 	{
-		buffer((int)Mercator.deltaFromMeters(m, centerY()));
+		buffer((int) Mercator.deltaFromMeters(m, centerY()));
 	}
 
 	/**

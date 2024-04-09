@@ -7,17 +7,14 @@
 
 package com.geodesk.feature.store;
 
-import com.clarisma.common.util.Log;
-import com.geodesk.core.Heading;
-import com.geodesk.core.Tile;
+import com.geodesk.geom.Heading;
+import com.geodesk.geom.Tile;
 import com.geodesk.feature.Filter;
 import com.geodesk.feature.filter.FalseFilter;
 import com.geodesk.feature.filter.FilterStrategy;
 import com.geodesk.geom.Bounds;
-import com.geodesk.util.GeometryBuilder;
 import org.eclipse.collections.api.set.primitive.MutableIntSet;
 import org.eclipse.collections.impl.set.mutable.primitive.IntHashSet;
-import org.locationtech.jts.geom.Geometry;
 
 import java.nio.ByteBuffer;
 

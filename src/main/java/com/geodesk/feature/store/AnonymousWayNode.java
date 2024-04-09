@@ -7,13 +7,11 @@
 
 package com.geodesk.feature.store;
 
-import com.geodesk.core.XY;
+import com.geodesk.geom.XY;
 import com.geodesk.feature.*;
-import com.geodesk.core.Box;
+import com.geodesk.geom.Box;
 import com.geodesk.feature.match.Matcher;
-import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.TypeBits;
-import com.geodesk.feature.match.TypeMatcher;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.feature.query.WorldView;
 import org.locationtech.jts.geom.Coordinate;

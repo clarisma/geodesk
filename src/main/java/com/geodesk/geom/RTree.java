@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.geodesk.core.Box;
-
 /**
  * A generic r-tree. Supports querying via bounding box.
  */

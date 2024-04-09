@@ -7,7 +7,7 @@
 
 package com.geodesk.feature;
 
-import com.geodesk.core.Box;
+import com.geodesk.geom.Box;
 import com.geodesk.feature.match.TypeBits;
 import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Geometry;

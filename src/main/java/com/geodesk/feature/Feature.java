@@ -7,8 +7,8 @@
 
 package com.geodesk.feature;
 
-import com.geodesk.core.Mercator;
-import com.geodesk.core.Box;
+import com.geodesk.geom.Mercator;
+import com.geodesk.geom.Box;
 import com.geodesk.feature.query.EmptyView;
 import org.locationtech.jts.geom.Geometry;
 

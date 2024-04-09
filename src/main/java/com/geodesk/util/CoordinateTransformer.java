@@ -7,7 +7,7 @@
 
 package com.geodesk.util;
 
-import com.geodesk.core.Mercator;
+import com.geodesk.geom.Mercator;
 
 import java.io.IOException;
 

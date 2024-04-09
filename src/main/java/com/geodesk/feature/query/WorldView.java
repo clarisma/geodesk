@@ -7,20 +7,18 @@
 
 package com.geodesk.feature.query;
 
-import com.geodesk.core.Box;
+import com.geodesk.geom.Box;
 import com.geodesk.feature.*;
 import com.geodesk.feature.filter.AndFilter;
 import com.geodesk.feature.filter.FalseFilter;
 import com.geodesk.feature.filter.FilterStrategy;
 import com.geodesk.feature.match.Matcher;
-import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredFeature;
 import com.geodesk.geom.Bounds;
 
 import java.util.Iterator;
-import static com.geodesk.feature.match.TypeBits.*;
 
 // TODO: do we need to create a defensive copy of the bbox?
 //  --> need to resolve mutability of Box

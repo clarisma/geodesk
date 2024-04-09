@@ -7,10 +7,9 @@
 
 package com.geodesk.feature.query;
 
-import com.geodesk.core.XY;
+import com.geodesk.geom.XY;
 import com.geodesk.feature.*;
 import com.geodesk.feature.match.Matcher;
-import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.store.AnonymousWayNode;
 import com.geodesk.feature.store.FeatureFlags;

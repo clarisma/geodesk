@@ -8,11 +8,10 @@
 package com.geodesk.feature.store;
 
 import com.geodesk.feature.*;
-import com.geodesk.core.Box;
+import com.geodesk.geom.Box;
 import com.geodesk.feature.match.*;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.feature.query.WorldView;
-import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 

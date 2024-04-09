@@ -7,7 +7,6 @@
 
 package com.geodesk.geom;
 
-import com.geodesk.core.XY;
 import com.geodesk.feature.store.StoredWay;
 
 public class PointInPolygon

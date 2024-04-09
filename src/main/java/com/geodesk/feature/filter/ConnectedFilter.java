@@ -7,8 +7,8 @@
 
 package com.geodesk.feature.filter;
 
-import com.geodesk.core.Box;
-import com.geodesk.core.XY;
+import com.geodesk.geom.Box;
+import com.geodesk.geom.XY;
 import com.geodesk.feature.*;
 import com.geodesk.feature.store.StoredWay;
 import com.geodesk.geom.Bounds;

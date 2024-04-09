@@ -7,7 +7,7 @@
 
 package com.geodesk.feature.store;
 
-import com.geodesk.core.Tile;
+import com.geodesk.geom.Tile;
 import com.geodesk.geom.Bounds;
 
 import java.nio.ByteBuffer;

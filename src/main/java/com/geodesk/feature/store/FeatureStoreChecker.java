@@ -8,7 +8,7 @@
 package com.geodesk.feature.store;
 
 import com.clarisma.common.store.BlobStoreChecker;
-import com.geodesk.core.Box;
+import com.geodesk.geom.Box;
 import com.geodesk.feature.FeatureLibrary;
 
 import java.nio.ByteBuffer;

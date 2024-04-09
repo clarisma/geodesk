@@ -7,7 +7,7 @@
 
 package com.geodesk.feature.store;
 
-import com.geodesk.core.Box;
+import com.geodesk.geom.Box;
 import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.CoordinateSequence;

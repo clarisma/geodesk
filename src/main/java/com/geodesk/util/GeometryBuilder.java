@@ -7,10 +7,9 @@
 
 package com.geodesk.util;
 
-import com.geodesk.core.Mercator;
+import com.geodesk.geom.Mercator;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Relation;
-import com.geodesk.feature.Way;
 import com.geodesk.feature.store.WayCoordinateSequence;
 import org.locationtech.jts.geom.*;
 

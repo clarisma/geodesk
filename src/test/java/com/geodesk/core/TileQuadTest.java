@@ -3,9 +3,10 @@ package com.geodesk.core;
 import static org.junit.Assert.*;
 
 import com.clarisma.common.util.Log;
-import org.junit.Assert;
+import com.geodesk.geom.Tile;
+import com.geodesk.geom.TileQuad;
 import org.junit.Test;
-import static com.geodesk.core.TileQuad.*;
+import static com.geodesk.geom.TileQuad.*;
 
 public class TileQuadTest 
 {

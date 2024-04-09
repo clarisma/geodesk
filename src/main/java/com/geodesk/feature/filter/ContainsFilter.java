@@ -8,17 +8,13 @@
 package com.geodesk.feature.filter;
 
 import com.clarisma.common.util.Log;
-import com.geodesk.core.Box;
+import com.geodesk.geom.Box;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
-import com.geodesk.feature.Relation;
 import com.geodesk.feature.match.QueryException;
 import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Polygon;
-import org.locationtech.jts.geom.TopologyException;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
-import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 
 /**
  * A Filter that only accepts features whose geometry contains the

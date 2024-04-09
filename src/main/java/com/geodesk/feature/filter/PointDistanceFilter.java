@@ -7,17 +7,14 @@
 
 package com.geodesk.feature.filter;
 
-import com.geodesk.core.Box;
-import com.geodesk.core.Mercator;
-import com.geodesk.core.XY;
+import com.geodesk.geom.Box;
+import com.geodesk.geom.Mercator;
+import com.geodesk.geom.XY;
 import com.geodesk.feature.*;
 import com.geodesk.feature.store.FeatureFlags;
 import com.geodesk.feature.store.StoredWay;
 import com.geodesk.geom.Bounds;
 import com.geodesk.geom.PointInPolygon;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.operation.distance.DistanceOp;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;

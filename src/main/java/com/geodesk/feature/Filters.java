@@ -7,7 +7,7 @@
 
 package com.geodesk.feature;
 
-import com.geodesk.core.Mercator;
+import com.geodesk.geom.Mercator;
 import com.geodesk.feature.filter.*;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;

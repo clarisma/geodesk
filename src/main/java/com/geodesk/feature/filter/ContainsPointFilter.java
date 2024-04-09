@@ -7,7 +7,7 @@
 
 package com.geodesk.feature.filter;
 
-import com.geodesk.core.Box;
+import com.geodesk.geom.Box;
 import com.geodesk.feature.*;
 import com.geodesk.feature.store.FeatureFlags;
 import com.geodesk.feature.store.StoredRelation;

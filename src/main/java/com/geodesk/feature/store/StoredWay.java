@@ -8,11 +8,10 @@
 package com.geodesk.feature.store;
 
 import com.clarisma.common.pbf.PbfDecoder;
-import com.geodesk.core.Mercator;
-import com.geodesk.core.XY;
+import com.geodesk.geom.Mercator;
+import com.geodesk.geom.XY;
 import com.geodesk.feature.*;
 import com.geodesk.feature.match.Matcher;
-import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.feature.query.WayNodeView;

@@ -7,7 +7,6 @@
 
 package com.geodesk.geom;
 
-import com.geodesk.core.Box;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.CoordinateSequence;
 import org.locationtech.jts.geom.Envelope;

@@ -1,14 +1,14 @@
 package com.geodesk.core;
 
 import com.clarisma.common.util.Log;
+import com.geodesk.geom.Mercator;
+import com.geodesk.geom.XY;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
-import static com.geodesk.core.Mercator.*;
-
-import java.util.Random;
+import static com.geodesk.geom.Mercator.*;
 
 public class MercatorTest
 {

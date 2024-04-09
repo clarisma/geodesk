@@ -7,8 +7,7 @@
 
 package com.geodesk.feature.filter;
 
-import com.geodesk.core.Box;
-import com.geodesk.core.Tile;
+import com.geodesk.geom.Tile;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
 import com.geodesk.feature.store.FeatureFlags;

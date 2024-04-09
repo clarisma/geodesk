@@ -8,11 +8,9 @@
 package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
-import com.geodesk.core.Tile;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
 import com.geodesk.feature.match.Matcher;
-import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.store.*;
 import com.geodesk.geom.Bounds;
 import org.eclipse.collections.api.set.primitive.MutableLongSet;

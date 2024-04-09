@@ -7,7 +7,7 @@
 
 package com.geodesk.feature.polygon;
 
-import com.geodesk.core.XY;
+import com.geodesk.geom.XY;
 
 public class RingBuilder
 {

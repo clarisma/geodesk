@@ -1,7 +1,6 @@
 package com.geodesk.geom;
 
 import com.clarisma.common.util.Log;
-import com.geodesk.core.Box;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

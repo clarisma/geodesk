@@ -10,14 +10,13 @@ package com.geodesk.feature.store;
 import com.clarisma.common.math.Decimal;
 import com.clarisma.common.math.MathUtils;
 import com.clarisma.common.util.Bytes;
-import com.geodesk.core.Mercator;
+import com.geodesk.geom.Mercator;
 import com.geodesk.feature.*;
-import com.geodesk.core.Box;
+import com.geodesk.geom.Box;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.feature.query.ParentRelationView;
-import com.geodesk.feature.query.WayNodeView;
 
 import java.nio.ByteBuffer;
 import java.util.*;

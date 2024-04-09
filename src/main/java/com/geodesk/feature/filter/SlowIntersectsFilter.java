@@ -7,7 +7,7 @@
 
 package com.geodesk.feature.filter;
 
-import com.geodesk.core.Box;
+import com.geodesk.geom.Box;
 import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
