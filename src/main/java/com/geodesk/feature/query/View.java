@@ -77,22 +77,22 @@ public abstract class View implements Features
 
     @Override public Features ways()
     {
-        return select(TypeBits.NODES);
+        return select(TypeBits.WAYS);
     }
 
     @Override public Features ways(String query)
     {
-        return select(TypeBits.NODES, query);
+        return select(TypeBits.WAYS, query);
     }
 
     @Override public Features relations()
     {
-        return select(TypeBits.NODES);
+        return select(TypeBits.RELATIONS);
     }
 
     @Override public Features relations(String query)
     {
-        return select(TypeBits.NODES, query);
+        return select(TypeBits.RELATIONS, query);
     }
 
     @Override public Features select(Filter filter)
