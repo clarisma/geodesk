@@ -1719,12 +1719,12 @@ public class MatcherCoder extends ExpressionCoder
 	private void createConstructor(int acceptedTypes, int keyMask, int keyMin)
 	{
 		beginConstructor("([Ljava/lang/String;)V");
-        loadIntConstant(acceptedTypes);
-		mv.visitVarInsn(ALOAD, $this);
+        mv.visitVarInsn(ALOAD, $this);
+		loadIntConstant(acceptedTypes);
 		mv.visitVarInsn(ALOAD, 1); // first argument: String[]
 		loadIntConstant(keyMask);
 		loadIntConstant(keyMin);
-		callBaseClassConstructor("([ILjava/lang/String;II)V");
+		callBaseClassConstructor("(I[Ljava/lang/String;II)V");
 		mv.visitInsn(RETURN);
 		// force auto-calculation of maxStack and maxLocals
 		mv.visitMaxs(0, 0);
