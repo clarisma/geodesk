@@ -1,6 +1,5 @@
-package com.geodesk.core;
+package com.geodesk.geom;
 
-import com.geodesk.geom.Tile;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

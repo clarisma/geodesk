@@ -1,10 +1,8 @@
-package com.geodesk.core;
+package com.geodesk.geom;
 
 import static org.junit.Assert.*;
 
 import com.clarisma.common.util.Log;
-import com.geodesk.geom.Tile;
-import com.geodesk.geom.TileQuad;
 import org.junit.Test;
 import static com.geodesk.geom.TileQuad.*;
 

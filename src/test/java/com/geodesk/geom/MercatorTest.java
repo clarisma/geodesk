@@ -1,8 +1,6 @@
-package com.geodesk.core;
+package com.geodesk.geom;
 
 import com.clarisma.common.util.Log;
-import com.geodesk.geom.Mercator;
-import com.geodesk.geom.XY;
 import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.jts.geom.Geometry;
