@@ -79,7 +79,7 @@ public class ContainsFilter implements Filter
             for (int i = 0; i < geom.getNumGeometries(); i++)
             {
                 Geometry g = geom.getGeometryN(i);
-                if (containedBy(g)) return true;
+                if (!containedBy(g)) return false;
             }
         }
         catch(Exception ex)
@@ -87,7 +87,7 @@ public class ContainsFilter implements Filter
             Log.debug("Exception (%s) while checking containedBy(%s)", ex.getMessage(), feature);
             throw new QueryException("Query failed due to topology problem");
         }
-        return false;
+        return true;
     }
 
     @Override public Bounds bounds() { return bounds; }
