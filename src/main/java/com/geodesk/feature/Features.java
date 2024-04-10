@@ -7,9 +7,13 @@
 
 package com.geodesk.feature;
 
+import com.geodesk.feature.filter.*;
 import com.geodesk.feature.match.QueryException;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.geom.Bounds;
+import com.geodesk.geom.Mercator;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.prep.PreparedGeometry;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,6 +29,11 @@ import java.util.List;
 // TODO:
 //  Maybe create two subtypes: FeatureSet and FeatureList
 //  This way, users can write Set<Feature> and List<Node>
+
+
+// TODO: How do we distinguish "boolean contains(Object)" (part of Collection contract)
+//  and the "contains()" spatial filter?
+//  --> "containing()"
 
 /**
  * A collection of features.
@@ -102,7 +111,7 @@ public interface Features extends Iterable<Feature>
 
 
     /**
-     * Returns a sub-view that contains only the features that are nodes of the
+     * Returns the features that are nodes of the
      * given way, or members of the given relation. If a node is passed as
      * `parent`, an empty view is returned (as nodes cannot have child elements).
      *
@@ -115,7 +124,7 @@ public interface Features extends Iterable<Feature>
     }
 
     /**
-     * Returns a sub-view that contains only the features that are parent
+     * Returns the features that are parent
      * elements of the given feature (ways and/or relations).
      *
      * @param child     a way or relation
@@ -225,4 +234,258 @@ public interface Features extends Iterable<Feature>
     }
 
     Features select(Filter filter);
+
+    // Filters
+
+    /**
+     * Returns all features that have at least one common node
+     * with the given `Feature`.
+     *
+     * @param f the `Feature` whose nodes to check against
+     * @return
+     */
+    default Features connectedTo(Feature f)
+    {
+        return select(new ConnectedFilter(f));
+    }
+
+    /**
+     * Returns all features that have at least one common
+     * vertex with the given `Geometry`. Coordinates of the `Geometry` are
+     * rounded to integers.
+     *
+     * @param geom the `Geometry` whose vertexes to check against
+     * @return
+     */
+    default Features connectedTo(Geometry geom)
+    {
+        return select(new ConnectedFilter(geom));
+    }
+
+    /**
+     * Returns all features that contain the given Mercator-projected coordinate
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    default Features containingXY(int x, int y)
+    {
+        return select(new ContainsPointFilter(x, y));
+    }
+
+    /**
+     * Returns all features that contain the given coordinate expressed
+     * at longitude and latitude
+     *
+     * @param lon
+     * @param lat
+     * @return
+     */
+    default Features containingLonLat(double lon, double lat)
+    {
+        int x = (int)Mercator.xFromLon(lon);
+        int y = (int)Mercator.yFromLat(lat);
+        return select(new ContainsPointFilter(x, y));
+    }
+
+    /**
+     * Returns all features that contain the given feature.
+     *
+     * @param feature
+     * @return
+     */
+    default Features containing(Feature feature)
+    {
+        if(feature instanceof Node)
+        {
+            return select(new ContainsPointFilter(feature.x(), feature.y()));
+        }
+        return select(new ContainsFilter(feature));
+    }
+
+    /**
+     * Returns all features that contain the given `Geometry`.
+     *
+     * @param geom
+     * @return
+     */
+    default Features containing(Geometry geom)
+    {
+        return select(new ContainsFilter(geom));
+    }
+
+    /**
+     * Returns all features that contain the given `PreparedGeometry`.
+     *
+     * @param prepared
+     * @return
+     */
+    default Features containing(PreparedGeometry prepared)
+    {
+        return select(new ContainsFilter(prepared));
+    }
+
+    default Features coveredBy(Feature feature)
+    {
+        return select(new CoveredByFilter(feature));
+    }
+
+    default Features coveredBy(Geometry geom)
+    {
+        return select(new CoveredByFilter(geom));
+    }
+
+    default Features coveredBy(PreparedGeometry prepared)
+    {
+        return select(new CoveredByFilter(prepared));
+    }
+
+    default Features crossing(Feature feature)
+    {
+        return select(new CrossesFilter(feature));
+    }
+
+    default Features crossing(Geometry geom)
+    {
+        return select(new CrossesFilter(geom));
+    }
+
+    default Features crossing(PreparedGeometry prepared)
+    {
+        return select(new CrossesFilter(prepared));
+    }
+
+    default Features disjointFrom(Feature feature)
+    {
+        return select(new DisjointFilter(feature));
+    }
+
+    default Features disjointFrom(Geometry geom)
+    {
+        return select(new DisjointFilter(geom));
+    }
+
+    default Features disjointFrom(PreparedGeometry prepared)
+    {
+        return select(new DisjointFilter(prepared));
+    }
+
+    default Features intersecting(Feature feature)
+    {
+        return select(new IntersectsFilter(feature));
+    }
+
+    default Features intersecting(Geometry geom)
+    {
+        return select(new IntersectsFilter(geom));
+    }
+
+    default Features intersecting(PreparedGeometry prepared)
+    {
+        return select(new IntersectsFilter(prepared));
+    }
+
+    /**
+     * Returns all features whose closest point lies within
+     * a given radius.
+     *
+     * @param distance  the maximum distance (in meters)
+     * @param x         the X coordinate of the center point
+     * @param y         the Y coordinate of the center point
+     * @return
+     */
+    default Features maxMetersFromXY(double distance, int x, int y)
+    {
+        return select(new PointDistanceFilter(distance, x, y));
+    }
+
+    /**
+     * Returns all features whose closest point lies within
+     * a given radius.
+     *
+     * @param distance  the maximum distance (in meters)
+     * @param lon       the longitude of the center point
+     * @param lat       the latitude of the center point
+     * @return
+     */
+    default Features maxMetersFromLonLat(double distance, double lon, double lat)
+    {
+        int x = (int) Mercator.xFromLon(lon);
+        int y = (int)Mercator.yFromLat(lat);
+        return select(new PointDistanceFilter(distance, x, y));
+    }
+
+    /**
+     * Returns all features that lie within a given distance
+     * from a `Geometry`. The Filter measures the distance between the closest
+     * points of the Geometry and the candidate Feature.
+     *
+     * @param distance  the maximum distance (in meters)
+     * @param geom      the Geometry from which to measure
+     * @return
+     */
+    default Features maxMetersFrom(double distance, Geometry geom)
+    {
+        throw new RuntimeException("todo");     // TODO
+    }
+
+    /**
+     * Returns all features that lie within a given distance
+     * from another `Feature`. The Filter measures the distance between the closest
+     * points of the features.
+     *
+     * @param distance  the maximum distance (in meters)
+     * @param feature   the Feature from which to measure
+     * @return
+     */
+    default Features maxMetersFrom(double distance, Feature feature)
+    {
+        throw new RuntimeException("todo");     // TODO
+    }
+
+    default Features overlapping(Feature feature)
+    {
+        return select(new OverlapsFilter(feature));
+    }
+
+    default Features overlapping(Geometry geom)
+    {
+        return select(new OverlapsFilter(geom));
+    }
+
+    default Features overlapping(PreparedGeometry prepared)
+    {
+        return select(new OverlapsFilter(prepared));
+    }
+
+    default Features touching(Feature feature)
+    {
+        return select(new TouchesFilter(feature));
+    }
+
+    default Features touching(Geometry geom)
+    {
+        return select(new TouchesFilter(geom));
+    }
+
+    default Features touching(PreparedGeometry prepared)
+    {
+        return select(new TouchesFilter(prepared));
+    }
+
+    default Features within(Feature feature)
+    {
+        return select(new WithinFilter(feature));
+    }
+
+    default Features within(Geometry geom)
+    {
+        return select(new WithinFilter(geom));
+    }
+
+    default Features within(PreparedGeometry prepared)
+    {
+        return select(new WithinFilter(prepared));
+    }
 }

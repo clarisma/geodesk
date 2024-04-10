@@ -45,6 +45,7 @@ import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 //  This way, we let query tasks create Features
 //  post-filters act on Features
 
+@Deprecated(since="0.2")
 public class Filters
 {
     public static Filter slowWithin(Feature f)
