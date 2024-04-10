@@ -38,8 +38,6 @@ import java.util.Iterator;
 /**
  * A Feature Collection that is materialized by running a query against
  * a FeatureStore.
- *
- * @param <T> subtype of Feature
  */
 public class WorldView extends View
 {

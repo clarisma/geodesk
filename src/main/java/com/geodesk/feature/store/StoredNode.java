@@ -9,6 +9,7 @@ package com.geodesk.feature.store;
 
 import com.geodesk.feature.*;
 import com.geodesk.feature.filter.AndFilter;
+import com.geodesk.feature.query.NodeParentView;
 import com.geodesk.feature.query.ParentRelationView;
 import com.geodesk.geom.Box;
 import com.geodesk.feature.match.*;
@@ -95,6 +96,14 @@ public class StoredNode extends StoredFeature implements Node
 		return "node/" + id();
 	}
 
+    public WorldView parentWays(int types, Matcher matcher, Filter filter)
+    {
+        Filter newFilter = new ParentWayFilter(id());
+        if(filter != null) newFilter = AndFilter.create(newFilter, filter);
+        return new WorldView(store, types & TypeBits.WAYS &
+            TypeBits.WAYNODE_FLAGGED, bounds(), matcher, newFilter);
+    }
+
     public Features parents(int types, Matcher matcher, Filter filter)
 	{
         int acceptedFlags = ((types & TypeBits.RELATIONS) != 0) ?
@@ -105,19 +114,17 @@ public class StoredNode extends StoredFeature implements Node
 
         if(flags == FeatureFlags.WAYNODE_FLAG)
         {
-            Filter newFilter = new ParentWayFilter(id());
-            if(filter != null) newFilter = AndFilter.create(newFilter, filter);
-            return new WorldView(store, types & TypeBits.WAYNODE_FLAGGED,
-                bounds(), matcher, newFilter);
+            return parentWays(types, matcher, filter);
         }
         if (flags == FeatureFlags.RELATION_MEMBER_FLAG)
         {
             return new ParentRelationView(store, buf, getRelationTablePtr(),
                 types, matcher, filter);
         }
-        if (types == (FeatureFlags.WAYNODE_FLAG | FeatureFlags.RELATION_MEMBER_FLAG))
+        if (flags == (FeatureFlags.WAYNODE_FLAG | FeatureFlags.RELATION_MEMBER_FLAG))
         {
-            return null;        // TODO: combined parent view
+            return new NodeParentView(store, buf, this,
+                getRelationTablePtr(), types, matcher, filter);
         }
         return EmptyView.ANY;
 	}

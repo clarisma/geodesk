@@ -20,8 +20,6 @@ import java.nio.ByteBuffer;
 
 /**
  * A Feature Collection that is materialized by scanning a table.
- *
- * @param <T>
  */
 public abstract class TableView extends View
 {

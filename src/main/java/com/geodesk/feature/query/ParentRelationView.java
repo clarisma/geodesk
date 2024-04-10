@@ -48,7 +48,7 @@ public class ParentRelationView extends TableView
         return new Iter();
     }
 
-    private class Iter extends TableIterator<Feature>
+    protected class Iter extends TableIterator<Feature>
     {
         private int p;
         private int rel;
