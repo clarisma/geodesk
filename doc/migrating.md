@@ -12,11 +12,13 @@ Version 0.2 uses a simpler, more intuitive API. It does, however, introduce some
 
 - Change:
     
-    `Relation.memberNodes()` to `Feature.members().nodes()`
-    `Relation.memberWays()` to `Feature.members().ways()`
-    `Relation.memberRelations()` to `Feature.members().relations()`
-    `Feature.parentWays()` to `Feature.parents().ways()`
-    `Feature.parentRelations()` to `Feature.parents().relations()`
+   Old                           | New
+   ------------------------------|-----------------------------
+   `Relation.memberNodes()`      | `Feature.members().nodes()`
+   `Relation.memberWays()`       |  `Feature.members().ways()`
+   `Relation.memberRelations()`  |  `Feature.members().relations()`
+   `Feature.parentWays()`        |  `Feature.parents().ways()`
+   `Feature.parentRelations()`   | `Feature.parents().relations()`
 
   Note that in many cases, the type filter can be omitted. For example, in 
 
@@ -27,26 +29,30 @@ Version 0.2 uses a simpler, more intuitive API. It does, however, introduce some
 
 ## Recommended Steps
 
-The `Filters` class has been deprecated and may be removed in future releases. Instead of creating filters via its factory methods and passing them to `Features.select()`, you can now call filter methods directly on `Features`. So, instead of
+- The `Filters` class has been deprecated and may be removed in future releases. Instead of creating filters via its factory methods and passing them to `Features.select()`, you can now call filter methods directly on `Features`. So, instead of
 
    `hotels.select(Filters.within(berlin))`
 
-you can simply use:
+  you can simply use:
 
    `hotels.within(berlin)`
 
-Note that the names of several filter methods have changed to better reflect their purpose:
+  Note that the names of several filter methods have changed to better reflect their purpose:
 
-    contains()   -> containing()
-    crosses()    -> crossing()
-    disjoint()   -> disjointFrom()
-    intersects() -> intersecting()
-    overlaps()   -> overlapping()
-    touches()    -> touching()
+   Old            | New
+   ---------------|---------------------
+   `contains()`   | `containing()`
+   `crosses()`    | `crossing()`
+   `disjoint()`   | `disjointFrom()`
+   `intersects()` | `intersecting()`
+   `overlaps()`   | `overlapping()`
+   `touches()`    | `touching()`
 
-- Instead of `feature instanceof Node`, use `feature.isNode()`
- 
-- Instead of `feature instanceof Way`, use `feature.isWay()`
+- Use the new type-check methods instead of `instanceof`:
 
-- Instead of `feature instanceof Relation`, use `feature.isRelation()`
+   Old                           | New
+   ------------------------------|---------------------
+   `feature instanceof Node`     | `feature.isNode()`
+   `feature instanceof Way`      | `feature.isWay()`
+   `feature instanceof Relation` | `feature.isRelation()`
 

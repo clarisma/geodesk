@@ -95,7 +95,7 @@ Find all movie theaters within 500 meters from a given point:
 ```java
 Features movieTheaters = library
     .select("na[amenity=cinema]")
-    .select(Filters.maxMetersFromLonLat(500, myLon, myLat));
+    .maxMetersFromLonLat(500, myLon, myLat);
 ```
 
 *Remember, OSM uses British English for its terminology.*
