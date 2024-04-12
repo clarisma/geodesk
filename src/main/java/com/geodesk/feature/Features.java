@@ -488,4 +488,12 @@ public interface Features extends Iterable<Feature>
     {
         return select(new WithinFilter(prepared));
     }
+
+    /**
+     * Returns the features present in both this collection and `other`.
+     *
+     * @param other
+     * @return
+     */
+    Features select(Features other);
 }

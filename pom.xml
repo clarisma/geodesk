@@ -128,8 +128,22 @@
 				</execution>
 			</executions>
 			<configuration>
-				<doctitle>GeoDesk (0.1 Early Access)</doctitle>
-				<windowtitle>GeoDesk (0.1 Early Access)</windowtitle>
+				<doctitle>GeoDesk (0.2 Early Access)</doctitle>
+				<windowtitle>GeoDesk (0.2 Early Access)</windowtitle>
+                <!--
+                <sourcepath>
+                    src/main/java/com/clarisma;
+                    src/main/java/com/geodesk/feature;
+                    src/main/java/com/geodesk/geom;
+                    src/main/java/com/geodesk/io;
+                    src/main/java/com/geodesk/util;
+                </sourcepath>
+                -->
+                <excludes>
+                    <exclude>com.geodesk.geom.BoundedItem</exclude>
+                    <exclude>com.geodesk.geom.Hilbert</exclude>
+                    <exclude>com.geodesk.geom.HilbertTileTree</exclude>
+                </excludes>
 				<excludePackageNames>
 					benchmarks;
 					com.clarisma.*;
@@ -138,8 +152,6 @@
 					com.geodesk.feature.*;
 					com.geodesk.gol;
 					com.geodesk.gol.*;
-					com.geodesk.geom;
-					com.geodesk.geom.*;
 					com.geodesk.io.*;
 					com.geodesk.map;
 				</excludePackageNames>

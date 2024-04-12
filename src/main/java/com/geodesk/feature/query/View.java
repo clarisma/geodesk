@@ -154,4 +154,43 @@ public abstract class View implements Features
 
         return EmptyView.ANY;
     }
+
+    @Override public Features select(Features otherFeatures)
+    {
+        // TODO: This assumes both views are WorldViews (which is wrong)
+        //  At least one must be a WorldView
+        //  restrict the non-WorldView with types/matcher/filter of WorldView
+        // TODO: Throw exception if the Views have different stores
+
+        View other = (View)otherFeatures;
+            // TODO: For now, all Features are implemented as a View,
+            //  but this may change in the future
+        int newTypes = types & other.types;
+        if(newTypes == 0) return EmptyView.ANY;
+        Matcher newMatcher = other.matcher;
+        if (matcher != Matcher.ALL)
+        {
+            if(newMatcher != Matcher.ALL)
+            {
+                newMatcher = new AndMatcher(matcher, newMatcher);
+            }
+            else
+            {
+                newMatcher = matcher;
+            }
+        }
+        Filter newFilter = other.filter;
+        if (filter != null)
+        {
+            if(newFilter != null)
+            {
+                newFilter = AndFilter.create(filter, newFilter);
+            }
+            else
+            {
+                newFilter = filter;
+            }
+        }
+        return newWith(newTypes, newMatcher, newFilter);
+    }
 }
