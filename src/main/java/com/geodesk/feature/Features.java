@@ -356,17 +356,17 @@ public interface Features extends Iterable<Feature>
         return select(new CrossesFilter(prepared));
     }
 
-    default Features disjointFrom(Feature feature)
+    default Features disjoint(Feature feature)
     {
         return select(new DisjointFilter(feature));
     }
 
-    default Features disjointFrom(Geometry geom)
+    default Features disjoint(Geometry geom)
     {
         return select(new DisjointFilter(geom));
     }
 
-    default Features disjointFrom(PreparedGeometry prepared)
+    default Features disjoint(PreparedGeometry prepared)
     {
         return select(new DisjointFilter(prepared));
     }

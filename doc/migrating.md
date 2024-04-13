@@ -43,7 +43,6 @@ Version 0.2 uses a simpler, more intuitive API. It does, however, introduce some
    ---------------|---------------------
    `contains()`   | `containing()`
    `crosses()`    | `crossing()`
-   `disjoint()`   | `disjointFrom()`
    `intersects()` | `intersecting()`
    `overlaps()`   | `overlapping()`
    `touches()`    | `touching()`
