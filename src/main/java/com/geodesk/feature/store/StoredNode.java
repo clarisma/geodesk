@@ -121,7 +121,7 @@ public class StoredNode extends StoredFeature implements Node
         if (flags == FeatureFlags.RELATION_MEMBER_FLAG)
         {
             return new ParentRelationView(store, buf, getRelationTablePtr(),
-                types, matcher, filter);
+                types & TypeBits.RELATIONS, matcher, filter);
         }
         if (flags == (FeatureFlags.WAYNODE_FLAG | FeatureFlags.RELATION_MEMBER_FLAG))
         {
@@ -133,10 +133,6 @@ public class StoredNode extends StoredFeature implements Node
 
     @Override public Features parents()
     {
-        if(id() == 3465728159L)
-        {
-            System.out.print("!!!");
-        }
         return parents(TypeBits.RELATIONS | TypeBits.WAYS, Matcher.ALL, null);
     }
 

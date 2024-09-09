@@ -13,6 +13,7 @@ import com.geodesk.feature.Filter;
 import com.geodesk.feature.filter.AndFilter;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.match.TypeBits;
+import com.geodesk.feature.store.FeatureFlags;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredNode;
 
@@ -31,7 +32,11 @@ public class NodeParentView extends ParentRelationView
         StoredNode node, int pRelations, int types, Matcher matcher, Filter filter)
     {
         super(store, buf, pRelations, types, matcher, filter);
+        /*
         assert((types & TypeBits.WAYS) != 0 && (types & TypeBits.RELATIONS) != 0);
+        assert((node.flags() & FeatureFlags.WAYNODE_FLAG) != 0 &&
+            node.belongsToRelation());
+         */
         this.node = node;
     }
 
@@ -40,16 +45,21 @@ public class NodeParentView extends ParentRelationView
         if((types & TypeBits.RELATIONS) == 0)
         {
             // view has been restricted to ways only
-            assert((types & TypeBits.WAYS) != 0);
+            // assert((types & TypeBits.WAYS) != 0);
             return node.parentWays(types, matcher, filter);
         }
         else if ((types & TypeBits.WAYS) == 0)
         {
             // view has been restricted to relations only
-            assert((types & TypeBits.RELATIONS) != 0);
+            // assert((types & TypeBits.RELATIONS) != 0);
+            // assert(node.belongsToRelation());
             return new ParentRelationView(store, buf, ptr, types, matcher, filter);
         }
+        /*
         assert((types & TypeBits.WAYS) != 0 && (types & TypeBits.RELATIONS) != 0);
+        assert((node.flags() & FeatureFlags.WAYNODE_FLAG) != 0 &&
+            node.belongsToRelation());
+         */
         return new NodeParentView(store, buf, node, ptr, types, matcher, filter);
     }
 
