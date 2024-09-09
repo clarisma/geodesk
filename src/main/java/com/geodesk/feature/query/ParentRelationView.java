@@ -96,6 +96,7 @@ public class ParentRelationView extends TableView
                     pRel = (pCurrent & 0xffff_fffe) + ((rel >> 2) << 1);
                         // TODO: simplify alignment rules!
                         // TODO: Doesn't need rebasing; pointer is always 2-byte aligned
+                        //  But we still need to mask off the last-flag
                 }
                 if (matcher.accept(relBuf, pRel))
                 {

@@ -384,6 +384,7 @@ public class Tile
 		return box;
 	}
 
+    // TODO: only works for positive deltas, and does not wrap!
 	public static int relative(int tile, int deltaCol, int deltaRow)
 	{
 		return tile + (deltaRow << 12) + deltaCol;

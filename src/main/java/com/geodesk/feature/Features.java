@@ -16,6 +16,7 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -496,4 +497,16 @@ public interface Features extends Iterable<Feature>
      * @return
      */
     Features select(Features other);
+
+    /**
+     * Adds all features in this collection to the given collection.
+     *
+     * @param collection a general-purpose collection (such as `List`, `Set`,
+     *                   o another type derived from `java.util.Collection`)
+     */
+    default void addTo(Collection<Feature> collection)
+    {
+        for(Feature f: this) collection.add(f);
+    }
+
 }

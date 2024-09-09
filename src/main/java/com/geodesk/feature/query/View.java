@@ -116,14 +116,18 @@ public abstract class View implements Features
         {
             if (child instanceof AnonymousWayNode wayNode)
             {
+                // An anonymous nodes *always* has at least one parent way,
+                // and *never* has parent relations
                 return wayNode.parents(types, matcher, filter);
             }
             return ((StoredNode)child).parents(types, matcher, filter);
         }
         else
         {
+            // Ways and relations can only have relations as parents
             if ((types & TypeBits.RELATIONS) == 0) return EmptyView.ANY;
             StoredFeature f = (StoredFeature) child;
+            if(!f.belongsToRelation()) return EmptyView.ANY;
             return new ParentRelationView(store, f.buffer(),
                 f.getRelationTablePtr(), types, matcher, filter);
         }
@@ -142,10 +146,18 @@ public abstract class View implements Features
 
     @Override public Features nodesOf(Feature parent)
     {
+        if ((types & TypeBits.NODES) == 0) return EmptyView.ANY;
         if(parent.isWay())
         {
             StoredWay way = (StoredWay) parent;
-            if ((types & TypeBits.NODES) == 0) return EmptyView.ANY;
+            if(matcher != Matcher.ALL &&
+                (way.flags() & FeatureFlags.WAYNODE_FLAG) == 0)
+            {
+                // GOQL queries only return feature nodes; if the Way's
+                // waynode_flag is cleared, it only contains anonymous
+                // nodes, so we return an empty set
+                return EmptyView.ANY;
+            }
             return new WayNodeView(store, way.buffer(), way.pointer(),
                     types, matcher, filter);
         }

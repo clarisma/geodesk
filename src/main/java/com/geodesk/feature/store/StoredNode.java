@@ -106,6 +106,8 @@ public class StoredNode extends StoredFeature implements Node
 
     public Features parents(int types, Matcher matcher, Filter filter)
 	{
+        // types &= TypeBits.WAYS | TypeBits.RELATIONS;  // TODO: should not be needed? (added 9/9/24)
+
         int acceptedFlags = ((types & TypeBits.RELATIONS) != 0) ?
             FeatureFlags.RELATION_MEMBER_FLAG : 0;
         acceptedFlags |= ((types & TypeBits.WAYS) != 0) ?
@@ -129,10 +131,14 @@ public class StoredNode extends StoredFeature implements Node
         return EmptyView.ANY;
 	}
 
-	@Override public Features parents()
-	{
-        return parents(TypeBits.ALL, Matcher.ALL, null);
-	}
+    @Override public Features parents()
+    {
+        if(id() == 3465728159L)
+        {
+            System.out.print("!!!");
+        }
+        return parents(TypeBits.RELATIONS | TypeBits.WAYS, Matcher.ALL, null);
+    }
 
     @Override public Features parents(String query)
 	{

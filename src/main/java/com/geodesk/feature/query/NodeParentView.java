@@ -31,12 +31,26 @@ public class NodeParentView extends ParentRelationView
         StoredNode node, int pRelations, int types, Matcher matcher, Filter filter)
     {
         super(store, buf, pRelations, types, matcher, filter);
+        assert((types & TypeBits.WAYS) != 0 && (types & TypeBits.RELATIONS) != 0);
         this.node = node;
     }
 
     @Override protected Features newWith(int types, Matcher matcher, Filter filter)
     {
-        return node.parents(types, matcher, filter);
+        if((types & TypeBits.RELATIONS) == 0)
+        {
+            // view has been restricted to ways only
+            assert((types & TypeBits.WAYS) != 0);
+            return node.parentWays(types, matcher, filter);
+        }
+        else if ((types & TypeBits.WAYS) == 0)
+        {
+            // view has been restricted to relations only
+            assert((types & TypeBits.RELATIONS) != 0);
+            return new ParentRelationView(store, buf, ptr, types, matcher, filter);
+        }
+        assert((types & TypeBits.WAYS) != 0 && (types & TypeBits.RELATIONS) != 0);
+        return new NodeParentView(store, buf, node, ptr, types, matcher, filter);
     }
 
     @Override public Iterator<Feature> iterator()
@@ -52,6 +66,7 @@ public class NodeParentView extends ParentRelationView
 
         public Iter()
         {
+            assert((types & (TypeBits.RELATIONS | TypeBits.WAYS)) != 0);
             wayQuery = new Query(node.parentWays(types, matcher, filter));
             // TODO: To improve performance, we could start the query so it
             //  can fetch the parent ways in the background, while the caller
