@@ -18,7 +18,7 @@ import org.locationtech.jts.operation.distance.DistanceOp;
  * (in essence, the value range fully uses a 32-bit signed
  * int; a pair of coordinates fits into a 64-bit signed long).
  *
- * This projection is compatible with Web Mercator EPSG:3785,
+ * This projection is compatible with Web Mercator EPSG:3857,
  * except that instead of meters at the Equator, it uses a made-up
  * unit called "imp" ("integer, Mercator-projected").
  *
@@ -122,6 +122,12 @@ public class Mercator
 		return x * 360 / MAP_WIDTH;
 	}
 
+    public static double lonPrecision7fromX(double x)
+	{
+		double lon = lonFromX(x);
+        return ((double)Math.round(lon * 10000000)) / 10000000;
+	}
+
 	/**
 	 * Converts a projected latitude to WGS84.
 	 * 
@@ -132,6 +138,12 @@ public class Mercator
 	{
 		return Math.atan(Math.exp(y * Math.PI * 2 / MAP_WIDTH))
 			* 360 / Math.PI - 90;
+	}
+
+    public static double latPrecision7fromY(double y)
+	{
+		double lat = latFromY(y);
+        return ((double)Math.round(lat * 10000000)) / 10000000;
 	}
 
 	public static double metersAtY(int y)
