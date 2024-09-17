@@ -1,7 +1,5 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
 name: Java CI with Maven
+
 on:
   push:
     tags:
@@ -13,18 +11,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Maven Central Repository
       uses: actions/setup-java@v1
       with:
         java-version: 17
         server-id: ossrh
-        server-username: MAVEN_USERNAME
-        server-password: MAVEN_PASSWORD
+        server-username: ossrh    # Sonatype recommends using 'ossrh' as the username when using a token
+        server-password: ${{ secrets.OSSRH_TOKEN }}  # Use OSSRH token for authentication
         gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-        gpg-passphrase: MAVEN_GPG_PASSPHRASE
+        gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
     - name: Deploy with Maven
       run: mvn -B clean deploy -Pci-cd
       env:
-        MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-        MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+        OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}  # Token for authentication with Sonatype
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}  # GPG passphrase for signing
