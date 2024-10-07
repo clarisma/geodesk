@@ -183,8 +183,7 @@ public class Query implements Iterator<Feature>, Bounds
         currentPos = -1;
 
         // Submit initial tasks
-        int maxPendingTiles = 8;
-            // TODO: Uncap this limit, set at runtime based on core count
+        int maxPendingTiles = store.maxPendingTiles();
         while(pendingTiles < maxPendingTiles)
         {
             if(!tileWalker.next())

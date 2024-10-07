@@ -55,6 +55,7 @@ public class FeatureStore extends BlobStore
     private ExecutorService executor;
     private MatcherCompiler matchers;
     private GeometryFactory geometryFactory;
+    private int maxPendingTiles;
 
     public static final int MAGIC = 0x1CE50D6E;  // "geodesic"
     public static final int VERSION = 1_000_000;
@@ -161,6 +162,7 @@ public class FeatureStore extends BlobStore
         // TODO: guard against multiple calls
         matchers = new MatcherCompiler(stringsToCodes, codesToStrings, keysToCategories);
         executor = new ForkJoinPool();// TODO: ability to set parallelism
+        maxPendingTiles = Runtime.getRuntime().availableProcessors() * 2;
         geometryFactory = new GeometryFactory(); // TODO
     }
 
@@ -168,6 +170,8 @@ public class FeatureStore extends BlobStore
     {
         return executor;
     }
+
+    public int maxPendingTiles() { return maxPendingTiles; }
 
     public int tileIndexPointer()
     {
