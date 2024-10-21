@@ -244,11 +244,12 @@ public class Query implements Iterator<Feature>, Bounds
 
                     TileQueryTask task = take();
                     pendingTiles -= task.tilesProcessed();
-                    if(!allTilesRequested)
+                    while(!allTilesRequested)
                     {
                         if(tileWalker.next())
                         {
                             requestTile();
+                            if(pendingTiles == store.maxPendingTiles()) break;
                         }
                         else
                         {
