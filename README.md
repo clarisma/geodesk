@@ -1,6 +1,6 @@
 <img src="https://docs.geodesk.com/img/github-header.png">
 
-GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data. Also available [for Python](https://github.com/clarisma/geodesk-py).
+GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data. Also available [for C++] (https://github.com/clarisma/libgeodesk) and [for Python](https://github.com/clarisma/geodesk-py).
 
 ## Why GeoDesk?
 
