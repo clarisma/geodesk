@@ -118,6 +118,11 @@ Count the number of entrances of a building:
 int numberOfEntrances = building.nodes("[entrance]").size();
 ```
 
+## Documentation
+
+- [GeoDesk Developer's Guide](https://docs.geodesk.com/java)
+- [API Reference](https://apidoc.geodesk.com)
+
 ## Related Repositories
 
 - [gol-tool](http://www.github.com/clarisma/gol-tool) &mdash; command-line utility for building, maintaining and querying GOL files
