@@ -123,4 +123,5 @@ int numberOfEntrances = building.nodes("[entrance]").size();
 - [gol-tool](http://www.github.com/clarisma/gol-tool) &mdash; command-line utility for building, maintaining and querying GOL files
 - [geodesk-examples](http://www.github.com/clarisma/geodesk-examples) &mdash; example applications
 - [geodesk-tests](http://www.github.com/clarisma/geodesk-tests) &mdash; integration tests
+- [libgeodesk](https://github.com/clarisma/libgeodesk) &mdash; GeoDesk for C++ 
 - [geodesk-py](https://github.com/clarisma/geodesk-py) &mdash; GeoDesk for Python
