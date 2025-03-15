@@ -1,6 +1,7 @@
 <img src="https://docs.geodesk.com/img/github-header.png">
 
-GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data. Also available [for C++] (https://github.com/clarisma/libgeodesk) and [for Python](https://github.com/clarisma/geodesk-py).
+
+GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data. Also available [for C++](https://github.com/clarisma/libgeodesk) and [for Python](https://github.com/clarisma/geodesk-py).
 
 ## Why GeoDesk?
 
@@ -28,7 +29,7 @@ Include this dependency in your project's `pom.xml`:
 <dependency>
     <groupId>com.geodesk</groupId>
     <artifactId>geodesk</artifactId>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -118,9 +119,15 @@ Count the number of entrances of a building:
 int numberOfEntrances = building.nodes("[entrance]").size();
 ```
 
+## Documentation
+
+- [GeoDesk Developer's Guide](https://docs.geodesk.com/java)
+- [API Reference](https://apidocs.geodesk.com/0.2)
+
 ## Related Repositories
 
 - [gol-tool](http://www.github.com/clarisma/gol-tool) &mdash; command-line utility for building, maintaining and querying GOL files
 - [geodesk-examples](http://www.github.com/clarisma/geodesk-examples) &mdash; example applications
 - [geodesk-tests](http://www.github.com/clarisma/geodesk-tests) &mdash; integration tests
+- [libgeodesk](https://github.com/clarisma/libgeodesk) &mdash; GeoDesk for C++ 
 - [geodesk-py](https://github.com/clarisma/geodesk-py) &mdash; GeoDesk for Python
