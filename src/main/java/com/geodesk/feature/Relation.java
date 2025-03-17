@@ -10,10 +10,9 @@ package com.geodesk.feature;
 import java.util.Collection;
 import java.util.Set;
 
-/**
- * A {@link Feature} that represents a grouping of related features or a
- * complex polygon.
- */
+/// A [Feature] that represents a grouping of related features or a
+/// complex polygon.
+///
 public interface Relation extends Feature
 {
 }

@@ -13,7 +13,7 @@ import org.locationtech.jts.geom.Envelope;
 
 import org.locationtech.jts.geom.Polygon;
 
-
+/// @hidden
 public class Tile 
 {
 	public static int row(int tile)

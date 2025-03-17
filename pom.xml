@@ -103,30 +103,17 @@
 				</execution>
 			</executions>
 			<configuration>
-				<doctitle>GeoDesk (0.2 Early Access)</doctitle>
-				<windowtitle>GeoDesk (0.2 Early Access)</windowtitle>
-                <!--
-                <sourcepath>
-                    src/main/java/com/clarisma;
-                    src/main/java/com/geodesk/feature;
-                    src/main/java/com/geodesk/geom;
-                    src/main/java/com/geodesk/io;
-                    src/main/java/com/geodesk/util;
-                </sourcepath>
-                -->
-                <excludes>
-                    <exclude>com.geodesk.geom.BoundedItem</exclude>
-                    <exclude>com.geodesk.geom.Hilbert</exclude>
-                    <exclude>com.geodesk.geom.HilbertTileTree</exclude>
-                </excludes>
-				<excludePackageNames>
+				<doctitle>GeoDesk 1.0</doctitle>
+				<windowtitle>GeoDesk 1.0</windowtitle>
+                <excludePackageNames>
 					benchmarks;
 					com.clarisma.*;
 					com.geodesk.benchmark;
 					com.geodesk.examples;
 					com.geodesk.feature.*;
-					com.geodesk.gol;
+                	com.geodesk.gol;
 					com.geodesk.gol.*;
+					com.geodesk.io;
 					com.geodesk.io.*;
 					com.geodesk.map;
 				</excludePackageNames>
@@ -197,6 +184,7 @@
 	</repository>
   </distributionManagement>
 
+  <!--
   <reporting>
 	<plugins>
 		<plugin>
@@ -230,7 +218,6 @@
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-jar-plugin</artifactId>
 			<configuration>
-				<!-- DO NOT include log4j.properties file in your Jar -->
 				<excludes>
 					<exclude>**/log4j.properties</exclude>
 				</excludes>
@@ -242,5 +229,5 @@
 
 	</plugins>
 </reporting>
-
+-->
 </project>

@@ -18,9 +18,8 @@ import java.util.Map;
 //  But we could have doubleValue, intValue that return exact type
 // TODO: implement as regular Iterable as well?
 
-/**
- * A {@link Consumable} that can be used to iterate a feature's tags.
- */
+/// A [Consumable] that can be used to iterate a feature's tags.
+///
 public interface Tags extends Consumable
 {
 	boolean isEmpty();

@@ -10,6 +10,7 @@ package com.geodesk.geom;
 import java.util.List;
 
 // not used
+/// @hidden
 public class PairSort
 {
 	public static <T> void sort(int[] keys, List<T> values)

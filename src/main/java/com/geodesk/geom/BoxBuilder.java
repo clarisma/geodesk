@@ -7,6 +7,7 @@
 
 package com.geodesk.geom;
 
+/// @hidden
 public class BoxBuilder implements Bounds
 {
     private int minX;

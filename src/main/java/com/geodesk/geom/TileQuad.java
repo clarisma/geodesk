@@ -35,6 +35,8 @@ import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
  *
  *  8 --   9 X-  10 -X  11 XX  12 --  13 X-  14 -X  15 XX 
  *    -X     -X     -X     -X     XX     XX     XX     XX
+ *
+ * @hidden
  */
 public class TileQuad 
 {

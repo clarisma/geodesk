@@ -9,6 +9,7 @@ package com.geodesk.geom;
 
 import java.util.List;
 
+/// @hidden
 public interface SpatialTreeFactory<B extends Bounds>
 {
     B createLeaf(List<? extends Bounds> children, int start, int end);

@@ -10,6 +10,7 @@ package com.geodesk.geom;
 import java.util.function.IntConsumer;
 
 // used only by tile.childrenOfTileAtZoom
+/// @hidden
 public class TileBox 
 {
 	protected int topLeft;

@@ -35,14 +35,16 @@ import java.util.Iterator;
 //  the bboxes themselves must intersect
 //  (rarely used, only needed to fulfill the API contract)
 
-/**
- * A Feature Collection that is materialized by running a query against
- * a FeatureStore.
- */
+/// A Feature Collection that is materialized by running a query against
+/// a FeatureStore.
+///
+/// @hidden
 public class WorldView extends View
 {
+    /// @hidden
     protected final Bounds bounds;
 
+    /// @hidden
     protected final static Box WORLD = Box.ofWorld();
 
     public WorldView(FeatureStore store)

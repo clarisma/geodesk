@@ -32,136 +32,117 @@ import java.util.List;
 //  This way, users can write Set<Feature> and List<Node>
 
 
-// TODO: How do we distinguish "boolean contains(Object)" (part of Collection contract)
-//  and the "contains()" spatial filter?
-//  --> "containing()"
-
-/**
- * A collection of features.
- */
+/// A collection of features.
+///
 public interface Features extends Iterable<Feature>
 {
-    /**
-     * Returns a view of this collection that only contains features
-     * matching the given query.
-     *
-     * @param query a query in <a href="/goql">GOQL</a> format
-     * @return a feature collection
-     */
+    /// Returns a view of this collection that only contains features
+    /// matching the given query.
+    ///
+    /// @param query a query in [GOQL](https://docs.geodesk.com/goql) format
+    /// @return a feature collection
+    ///
     Features select(String query);
 
-    /**
-     * Returns a view of this collection that contains only nodes.
-     *
-     * @return a collection of {@link Node} objects
-     */
+    /// Returns a view of this collection that contains only nodes.
+    ///
+    /// @return a collection of [Node] objects
+    ///
     Features nodes();
 
-    /**
-     * Returns a view of this collection that contains only nodes matching
-     * the given query.
-     *
-     * @param query a query in <a href="/goql">GOQL</a> format
-     * @return a collection of {@link Node} objects
-     */
+    /// Returns a view of this collection that contains only nodes matching
+    /// the given query.
+    ///
+    /// @param query a query in [GOQL](https://docs.geodesk.com/goql) format
+    /// @return a collection of [Node] objects
+    ///
     Features nodes(String query);
 
-    /**
-     * Returns a view of this collection that contains only ways.
-     *
-     * @return a collection of {@link Way} objects
-     */
+    /// Returns a view of this collection that contains only ways.
+    ///
+    /// @return a collection of [Way] objects
+    ///
     Features ways();
 
-    /**
-     * Returns a view of this collection that contains only ways matching
-     * the given query.
-     *
-     * @param query a query in <a href="/goql">GOQL</a> format
-     * @return a collection of {@link Way} objects
-     */
+    /// Returns a view of this collection that contains only ways matching
+    /// the given query.
+    ///
+    /// @param query a query in [GOQL](https://docs.geodesk.com/goql) format
+    /// @return a collection of [Way] objects
+    ///
     Features ways(String query);
 
-    /**
-     * Returns a view of this collection that contains only relations.
-     *
-     * @return a collection of {@link Relation} objects
-     */
+    /// Returns a view of this collection that contains only relations.
+    ///
+    /// @return a collection of [Relation] objects
+    ///
     Features relations();
 
-    /**
-     * Returns a view of this collection that contains only relations matching
-     * the given query.
-     *
-     * @param query a query in <a href="/goql">GOQL</a> format
-     * @return a collection of {@link Relation} objects
-     */
+    /// Returns a view of this collection that contains only relations matching
+    /// the given query.
+    ///
+    /// @param query a query in [GOQL](https://docs.geodesk.com/goql) format
+    /// @return a collection of [Relation] objects
+    ///
     Features relations(String query);
 
-    /**
-     * Returns a sub-view that contains only the features that are nodes of the
-     * given way.
-     *
-     * @param parent    a way or relation
-     * @return          a collection of features
-     */
+    /// Returns a sub-view that contains only the features that are nodes of the
+    /// given way.
+    ///
+    /// @param parent    a way or relation
+    /// @return          a collection of features
+    ///
     default Features nodesOf(Feature parent)
     {
         throw new QueryException("Not implemented for this query.");
     }
 
-
-    /**
-     * Returns the features that are nodes of the
-     * given way, or members of the given relation. If a node is passed as
-     * `parent`, an empty view is returned (as nodes cannot have child elements).
-     *
-     * @param parent    a way or relation
-     * @return          a collection of features
-     */
+    /// Returns the features that are nodes of the
+    /// given way, or members of the given relation. If a node is passed as
+    /// `parent`, an empty view is returned (as nodes cannot have child elements).
+    ///
+    /// @param parent    a way or relation
+    /// @return          a collection of features
+    ///
     default Features membersOf(Feature parent)
     {
         throw new QueryException("Not implemented for this query.");
     }
 
-    /**
-     * Returns the features that are parent
-     * elements of the given feature (ways and/or relations).
-     *
-     * @param child     a way or relation
-     * @return          a collection of features
-     */
+    /// Returns the features that are parent
+    /// elements of the given feature (ways and/or relations).
+    ///
+    /// @param child     a way or relation
+    /// @return          a collection of features
+    ///
     default Features parentsOf(Feature child)
     {
         throw new QueryException("Not implemented for this query.");
     }
 
-    /**
-     * Returns a view of this collection that contains only features whose
-     * bounding box intersects the given {@link Bounds}.
-     *
-     * @param bbox the bounding box to use as a filter
-     * @return a collection of {@link Feature} objects
-     */
+    /// Returns a view of this collection that contains only features whose
+    /// bounding box intersects the given [Bounds].
+    ///
+    /// @param bbox the bounding box to use as a filter
+    /// @return a collection of [Feature] objects
+    ///
     Features in(Bounds bbox);
 
-    /**
-     * Returns the first feature in the collection. If the collection is unordered,
-     * this method selects one of multiple features in a non-deterministic way.
-     *
-     * @return the first feature, or `null` if the collection is empty
-     */
+    /// Returns the first feature in the collection. If the collection is unordered,
+    /// this method selects one of multiple features in a non-deterministic way.
+    ///
+    /// @return the first feature, or `null` if the collection is empty
+    ///
     default Feature first()
     {
         Iterator<Feature> iter = iterator();
         return(iter.hasNext() ? iter.next() : null);
     }
 
-    /**
-     * Returns the number of features in this collection.
-     *
-     * @return the number of features
-     */
+    /// Returns the number of features in this collection.
+    ///
+    /// @return the number of features
+    ///
     default long count()
     {
         long count = 0;
@@ -174,21 +155,19 @@ public interface Features extends Iterable<Feature>
         return count;
     }
 
-    /**
-     * Returns `true` if this collection contains no features.
-     *
-     * @return `true` if this collection contains no features
-     */
+    /// Returns `true` if this collection contains no features.
+    ///
+    /// @return `true` if this collection contains no features
+    ///
     default boolean isEmpty()
     {
         return first() == null;
     }
 
-    /**
-     * Creates a {@link List} containing all features in this collection.
-     *
-     * @return  a list containing all features
-     */
+    /// Creates a [List] containing all features in this collection.
+    ///
+    /// @return  a list containing all features
+    ///
     default List<Feature> toList()
     {
         List<Feature> list = new ArrayList<>();
@@ -196,11 +175,10 @@ public interface Features extends Iterable<Feature>
         return list;
     }
 
-    /**
-     * Creates an array containing all features in this collection.
-     *
-     * @return  an array containing all features
-     */
+    /// Creates an array containing all features in this collection.
+    ///
+    /// @return  an array containing all features
+    ///
     default Object[] toArray()
     {
         return toList().toArray();
@@ -211,13 +189,12 @@ public interface Features extends Iterable<Feature>
         return toList().toArray(a);
     }
 
-    /**
-     * Checks whether this collection contains the given object.
-     *
-     * @param f the object whose presence in this collection is to be tested
-     *
-     * @return  `true` if this collection contains the specified object
-     */
+    /// Checks whether this collection contains the given object.
+    ///
+    /// @param f the object whose presence in this collection is to be tested
+    ///
+    /// @return  `true` if this collection contains the specified object
+    ///
     // TODO: be sure to override this brute-force default implementation;
     // in mot cases, we can get a "fast false":
     // - A way's node collection can only contain nodes for which belongsToWay() is true
@@ -238,51 +215,47 @@ public interface Features extends Iterable<Feature>
 
     // Filters
 
-    /**
-     * Returns all features that have at least one common node
-     * with the given `Feature`.
-     *
-     * @param f the `Feature` whose nodes to check against
-     * @return
-     */
+    /// Returns all features that have at least one common node
+    /// with the given `Feature`.
+    ///
+    /// @param f the `Feature` whose nodes to check against
+    /// @return
+    ///
     default Features connectedTo(Feature f)
     {
         return select(new ConnectedFilter(f));
     }
 
-    /**
-     * Returns all features that have at least one common
-     * vertex with the given `Geometry`. Coordinates of the `Geometry` are
-     * rounded to integers.
-     *
-     * @param geom the `Geometry` whose vertexes to check against
-     * @return
-     */
+    /// Returns all features that have at least one common
+    /// vertex with the given `Geometry`. Coordinates of the `Geometry` are
+    /// rounded to integers.
+    ///
+    /// @param geom the `Geometry` whose vertexes to check against
+    /// @return
+    ///
     default Features connectedTo(Geometry geom)
     {
         return select(new ConnectedFilter(geom));
     }
 
-    /**
-     * Returns all features that contain the given Mercator-projected coordinate
-     *
-     * @param x
-     * @param y
-     * @return
-     */
+    /// Returns all features that contain the given Mercator-projected coordinate
+    ///
+    /// @param x
+    /// @param y
+    /// @return
+    ///
     default Features containingXY(int x, int y)
     {
         return select(new ContainsPointFilter(x, y));
     }
 
-    /**
-     * Returns all features that contain the given coordinate expressed
-     * at longitude and latitude
-     *
-     * @param lon
-     * @param lat
-     * @return
-     */
+    /// Returns all features that contain the given coordinate expressed
+    /// at longitude and latitude
+    ///
+    /// @param lon
+    /// @param lat
+    /// @return
+    ///
     default Features containingLonLat(double lon, double lat)
     {
         int x = (int)Mercator.xFromLon(lon);
@@ -290,12 +263,11 @@ public interface Features extends Iterable<Feature>
         return select(new ContainsPointFilter(x, y));
     }
 
-    /**
-     * Returns all features that contain the given feature.
-     *
-     * @param feature
-     * @return
-     */
+    /// Returns all features that contain the given feature.
+    ///
+    /// @param feature
+    /// @return
+    ///
     default Features containing(Feature feature)
     {
         if(feature instanceof Node)
@@ -305,23 +277,21 @@ public interface Features extends Iterable<Feature>
         return select(new ContainsFilter(feature));
     }
 
-    /**
-     * Returns all features that contain the given `Geometry`.
-     *
-     * @param geom
-     * @return
-     */
+    /// Returns all features that contain the given `Geometry`.
+    ///
+    /// @param geom
+    /// @return
+    ///
     default Features containing(Geometry geom)
     {
         return select(new ContainsFilter(geom));
     }
 
-    /**
-     * Returns all features that contain the given `PreparedGeometry`.
-     *
-     * @param prepared
-     * @return
-     */
+    /// Returns all features that contain the given `PreparedGeometry`.
+    ///
+    /// @param prepared
+    /// @return
+    ///
     default Features containing(PreparedGeometry prepared)
     {
         return select(new ContainsFilter(prepared));
@@ -387,29 +357,27 @@ public interface Features extends Iterable<Feature>
         return select(new IntersectsFilter(prepared));
     }
 
-    /**
-     * Returns all features whose closest point lies within
-     * a given radius.
-     *
-     * @param distance  the maximum distance (in meters)
-     * @param x         the X coordinate of the center point
-     * @param y         the Y coordinate of the center point
-     * @return
-     */
+    /// Returns all features whose closest point lies within
+    /// a given radius.
+    ///
+    /// @param distance  the maximum distance (in meters)
+    /// @param x         the X coordinate of the center point
+    /// @param y         the Y coordinate of the center point
+    /// @return
+    ///
     default Features maxMetersFromXY(double distance, int x, int y)
     {
         return select(new PointDistanceFilter(distance, x, y));
     }
 
-    /**
-     * Returns all features whose closest point lies within
-     * a given radius.
-     *
-     * @param distance  the maximum distance (in meters)
-     * @param lon       the longitude of the center point
-     * @param lat       the latitude of the center point
-     * @return
-     */
+    /// Returns all features whose closest point lies within
+    /// a given radius.
+    ///
+    /// @param distance  the maximum distance (in meters)
+    /// @param lon       the longitude of the center point
+    /// @param lat       the latitude of the center point
+    /// @return
+    ///
     default Features maxMetersFromLonLat(double distance, double lon, double lat)
     {
         int x = (int) Mercator.xFromLon(lon);
@@ -417,15 +385,14 @@ public interface Features extends Iterable<Feature>
         return select(new PointDistanceFilter(distance, x, y));
     }
 
-    /**
-     * Returns all features that lie within a given distance
-     * from a `Geometry`. The Filter measures the distance between the closest
-     * points of the Geometry and the candidate Feature.
-     *
-     * @param distance  the maximum distance (in meters)
-     * @param geom      the Geometry from which to measure
-     * @return
-     */
+    /// Returns all features that lie within a given distance
+    /// from a `Geometry`. The Filter measures the distance between the closest
+    /// points of the Geometry and the candidate Feature.
+    ///
+    /// @param distance  the maximum distance (in meters)
+    /// @param geom      the Geometry from which to measure
+    /// @return
+    ///
     default Features maxMetersFrom(double distance, Geometry geom)
     {
         throw new RuntimeException("todo");     // TODO
@@ -490,23 +457,20 @@ public interface Features extends Iterable<Feature>
         return select(new WithinFilter(prepared));
     }
 
-    /**
-     * Returns the features present in both this collection and `other`.
-     *
-     * @param other
-     * @return
-     */
+    /// Returns the features present in both this collection and `other`.
+    ///
+    /// @param other
+    /// @return
+    ///
     Features select(Features other);
 
-    /**
-     * Adds all features in this collection to the given collection.
-     *
-     * @param collection a general-purpose collection (such as `List`, `Set`,
-     *                   o another type derived from `java.util.Collection`)
-     */
+    /// Adds all features in this collection to the given collection.
+    ///
+    /// @param collection a general-purpose collection (such as `List`, `Set`,
+    ///                   o another type derived from `java.util.Collection`)
+    ///
     default void addTo(Collection<Feature> collection)
     {
         for(Feature f: this) collection.add(f);
     }
-
 }

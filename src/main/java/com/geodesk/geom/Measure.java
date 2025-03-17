@@ -9,6 +9,7 @@ package com.geodesk.geom;
 
 import com.geodesk.feature.Feature;
 
+/// @hidden
 public class Measure
 {
     public static double length(Feature f)

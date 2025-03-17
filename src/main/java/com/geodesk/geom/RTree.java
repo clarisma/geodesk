@@ -13,11 +13,13 @@ import java.util.function.Consumer;
 
 /**
  * A generic r-tree. Supports querying via bounding box.
+ * @hidden
  */
 public abstract class RTree
 {
 	protected Node root;
 
+    /// @hidden
 	public static class Node extends Box
 	{
 		private List<Bounds> children;

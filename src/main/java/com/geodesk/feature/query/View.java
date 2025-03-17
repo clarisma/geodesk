@@ -16,12 +16,16 @@ import com.geodesk.feature.store.*;
 
 import java.nio.ByteBuffer;
 
-
+/// @hidden
 public abstract class View implements Features
 {
+    /// @hidden
     protected final FeatureStore store;
+    /// @hidden
     protected final int types;
+    /// @hidden
     protected final Matcher matcher;
+    /// @hidden
     protected final Filter filter;
 
     protected View(FeatureStore store, int types, Matcher matcher, Filter filter)

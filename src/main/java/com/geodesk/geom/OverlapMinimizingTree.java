@@ -44,6 +44,7 @@ import java.util.List;
 // TODO: eliminate "stragglers": single item in one node, consolidate, especially
 // if bounding box does not increase
 
+/// @hidden
 public class OverlapMinimizingTree extends RTree 
 {
 	public OverlapMinimizingTree(List<Bounds> items, int maxEntries)

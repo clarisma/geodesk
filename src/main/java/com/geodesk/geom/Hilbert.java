@@ -34,6 +34,7 @@
 
 package com.geodesk.geom;
 
+/// @hidden
 public class Hilbert
 {
 	/**

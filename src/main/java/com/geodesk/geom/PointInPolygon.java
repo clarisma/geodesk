@@ -9,6 +9,7 @@ package com.geodesk.geom;
 
 import com.geodesk.feature.store.StoredWay;
 
+/// @hidden
 public class PointInPolygon
 {
     /*

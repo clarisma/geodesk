@@ -13,9 +13,8 @@ import com.geodesk.geom.Bounds;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
 
-/**
- * An interface for classes that select the features to be returned by a query.
- */
+/// An interface for classes that select the features to be returned by a query.
+///
 public interface Filter
 {
     /**

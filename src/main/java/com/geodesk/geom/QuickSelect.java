@@ -35,6 +35,7 @@ import java.util.List;
 
 import org.eclipse.collections.impl.stack.mutable.primitive.IntArrayStack;
 
+/// @hidden
 public class QuickSelect
 {
 

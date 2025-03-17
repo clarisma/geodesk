@@ -45,6 +45,7 @@ import java.util.List;
 // TODO: eliminate "stragglers": single item in one node, consolidate, especially
 // if bounding box does not increase
 
+/// @hidden
 public class OmtTreeBuilder<B extends Bounds> implements SpatialTreeBuilder<B>
 {
 	private final int maxEntries;

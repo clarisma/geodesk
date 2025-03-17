@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/// @hidden
 public class HilbertTileTree extends RTree
 {
 	private static class Pair implements Comparable<Pair>

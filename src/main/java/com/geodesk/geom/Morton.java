@@ -7,6 +7,7 @@
 
 package com.geodesk.geom;
 
+/// @hidden
 public class Morton 
 {
 	public static int mortonFromXY(int x, int y)

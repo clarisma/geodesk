@@ -7,10 +7,9 @@
 
 package com.geodesk.feature;
 
-/**
- * A {@link Feature} that represents a linestring, linear ring, or a simple
- * polygon.
- */
+/// A [Feature] that represents a linestring, linear ring, or a simple
+/// polygon.
+///
 public interface Way extends Feature
 {
 }

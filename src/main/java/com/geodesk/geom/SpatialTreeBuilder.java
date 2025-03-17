@@ -9,6 +9,7 @@ package com.geodesk.geom;
 
 import java.util.ArrayList;
 
+/// @hidden
 public interface SpatialTreeBuilder<B extends Bounds>
 {
     B build(ArrayList<? extends Bounds> items);

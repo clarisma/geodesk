@@ -7,6 +7,7 @@
 
 package com.geodesk.geom;
 
+/// @hidden
 public class BoundedItem<T> extends Box
 {
 	private T item;

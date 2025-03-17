@@ -13,9 +13,8 @@ import java.util.Arrays;
 
 // TODO: rename to TypedId?
 
-/**
- * Methods for creating IDs that are unique across feature types.
- */
+/// Methods for creating IDs that are unique across feature types.
+///
 public class FeatureId
 {
 	public static long of(FeatureType type, long id)

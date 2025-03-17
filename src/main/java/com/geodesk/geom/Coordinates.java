@@ -11,6 +11,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.CoordinateSequence;
 import org.locationtech.jts.geom.Envelope;
 
+/// @hidden
 public class Coordinates 
 {
 	public static Envelope envelope(int[] coords)
