@@ -18,9 +18,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A class for generating a Leaflet-based interactive map.
- */
+/// A class for generating a Leaflet-based interactive map.
+///
 public class MapMaker
 {
     private String id = "map";
@@ -38,22 +37,20 @@ public class MapMaker
     private String leafletScriptUrl =
         "https://unpkg.com/leaflet@1.8.0/dist/leaflet.js";
 
-    /**
-     * Sets the URL template for the source of map tiles.
-     *
-     * @param url  the URL template
-     */
+    /// Sets the URL template for the source of map tiles.
+    ///
+    /// @param url  the URL template
+    ///
     // TODO: rename basemap?
     public void tiles(String url)
     {
         this.tileServerUrl = url;
     }
 
-    /**
-     * Sets the attribution displayed on the map.
-     *
-     * @param attribution   the attribution text
-     */
+    /// Sets the attribution displayed on the map.
+    ///
+    /// @param attribution   the attribution text
+    ///
     public void attribution(String attribution)
     {
         this.attribution = attribution;
@@ -225,34 +222,31 @@ public class MapMaker
         return marker;
     }
 
-    /**
-     * Adds a marker for the given JTS Geometry.
-     *
-     * @param geom  the Geometry (any type)
-     * @return the marker
-     */
+    /// Adds a [Marker] for the given JTS [Geometry].
+    ///
+    /// @param geom  the [Geometry] (any type)
+    /// @return the [Marker]
+    ///
     public Marker add(Geometry geom)
     {
         return add(geom.isEmpty() ? new EmptyMarker() : new GeometryMarker(geom));
     }
 
-    /**
-     * Adds a marker for the given bounding box.
-     *
-     * @param box  the bounding box
-     * @return the marker
-     */
+    /// Adds a [Marker] for the given bounding box.
+    ///
+    /// @param box  the bounding box
+    /// @return the [Marker]
+    ///
     public Marker add(Bounds box)
     {
         return add(new BoxMarker(box));
     }
 
-    /**
-     * Adds a marker for the given feature.
-     *
-     * @param feature  the feature
-     * @return the marker
-     */
+    /// Adds a [Marker] for the given [Feature].
+    ///
+    /// @param feature  the [Feature]
+    /// @return the [Marker]
+    ///
     public Marker add(Feature feature)
     {
         // TODO: could optimize for node & way, read coordinates directly
@@ -269,13 +263,12 @@ public class MapMaker
         for(Feature f: features) add(f);
     }
 
-    /**
-     * Generates a self-contained HTML file that displays the interactive map
-     * and all its markers.
-     *
-     * @param path  name of the file to generate
-     * @throws IOException
-     */
+    /// Generates a self-contained HTML file that displays the interactive map
+    /// and all its markers.
+    ///
+    /// @param path  name of the file to generate
+    /// @throws IOException
+    ///
     public void save(String path) throws IOException
     {
         PrintWriter out = new PrintWriter(path);

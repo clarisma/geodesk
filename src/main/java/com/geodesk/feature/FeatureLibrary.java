@@ -81,6 +81,7 @@ public class FeatureLibrary extends WorldView implements AutoCloseable
     }
 
     // TODO: remove from public API
+    /// @hidden
     public FeatureStore store()
     {
         return store;

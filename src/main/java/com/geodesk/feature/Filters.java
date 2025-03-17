@@ -45,6 +45,7 @@ import org.locationtech.jts.geom.prep.PreparedGeometryFactory;
 //  This way, we let query tasks create Features
 //  post-filters act on Features
 
+/// @hidden
 @Deprecated(since="0.2")
 public class Filters
 {

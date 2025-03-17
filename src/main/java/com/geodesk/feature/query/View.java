@@ -43,6 +43,7 @@ public abstract class View implements Features
         return types;
     }
 
+    /// @hidden
     protected Features select(int newTypes)
     {
         newTypes &= types;
@@ -50,6 +51,7 @@ public abstract class View implements Features
         return newWith(newTypes, matcher, filter);
     }
 
+    /// @hidden
     protected Features select(int newTypes, String query)
     {
         Matcher newMatcher = store.getMatcher(query);

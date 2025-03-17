@@ -58,6 +58,7 @@ public class WorldView extends View
         this.bounds = bounds;
     }
 
+    /// @hidden
     @Override protected Features newWith(int types, Matcher matcher, Filter filter)
     {
         return new WorldView(store, types, bounds, matcher, filter);

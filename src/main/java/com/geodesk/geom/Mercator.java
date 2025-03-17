@@ -10,21 +10,16 @@ package com.geodesk.geom;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.operation.distance.DistanceOp;
 
-/**
- * Methods for working with Mercator-projected coordinates.
- *
- * GeoDesk uses a Pseudo-Mercator projection that projects
- * coordinates onto a square Cartesian plane 2^32 units wide/tall
- * (in essence, the value range fully uses a 32-bit signed
- * int; a pair of coordinates fits into a 64-bit signed long).
- *
- * This projection is compatible with Web Mercator EPSG:3857,
- * except that instead of meters at the Equator, it uses a made-up
- * unit called "imp" ("integer, Mercator-projected").
- *
- * See <a href="http://docs.geodesk.com/core-concepts#coordinate-system">Coordinate System</a>
- */
-
+/// Methods for working with Mercator-projected coordinates.
+/// GeoDesk uses a Pseudo-Mercator projection that projects
+/// coordinates onto a square Cartesian plane 2^32 units wide/tall
+/// (in essence, the value range fully uses a 32-bit signed
+/// int; a pair of coordinates fits into a 64-bit signed long).
+/// This projection is compatible with Web Mercator EPSG:3857,
+/// except that instead of meters at the Equator, it uses a made-up
+/// unit called "imp" ("integer, Mercator-projected").
+/// See <a href="http://docs.geodesk.com/core-concepts#coordinate-system">Coordinate System</a>
+///
 //  TODO -- decide on unit name:
 //  Mercator-projected Integer Coordinate (MICs)
 //  Integer, Mercator-Projected (imps)
@@ -45,7 +40,7 @@ import org.locationtech.jts.operation.distance.DistanceOp;
 
 // TODO Naming: "from" vs "of"
 
-public class Mercator 
+public final class Mercator
 {
 	private static final double MAP_WIDTH = 4_294_967_294.9999d;
 	// original: 4_294_967_296d
@@ -55,7 +50,9 @@ public class Mercator
 	// the width and height of the coordinate space (1 << 32)
 	private static final double EARTH_CIRCUMFERENCE = 40_075_016.68558;
 		// in meters, at the equator
-	
+
+    private Mercator() {} // not meant to be instantiated
+
 	/**
 	 * Converts a longitude to imps.
 	 * 

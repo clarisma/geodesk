@@ -440,6 +440,7 @@ public class Box implements Bounds
 			other.maxX()+b, trimmedAdd(other.maxY(), b));
 	}
 
+    // TODO: rename of()?
 	public static Box fromEnvelope(Envelope env)
 	{
 		return new Box(
@@ -449,11 +450,15 @@ public class Box implements Bounds
 			(int) Math.round(env.getMaxY()));	// TODO: why not ceil?
 	}
 
+    /// Creates the tightest `Box` that encloses the given JTS [Geometry].
+    ///
 	public static Box of(Geometry geom)
 	{
 		return fromEnvelope(geom.getEnvelopeInternal());
 	}
 
+	/// Creates the tightest `Box` that encloses the given [LineSegment].
+    ///
 	public static Box of(LineSegment seg)
 	{
 		double x1 = seg.p0.x;

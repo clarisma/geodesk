@@ -12,12 +12,11 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineSegment;
 import org.locationtech.jts.geom.LineString;
 
-/**
- * Compass headings.
- *
- * Keep in mind that unlike screen coordinates, planar coordinate values
- * *increase* as one moves "up" (north).
- */
+/// Compass headings.
+///
+/// Keep in mind that unlike screen coordinates, planar coordinate values
+/// *increase* as one moves "up" (north).
+///
 public enum Heading
 {
 	NORTH("N",1,0,0),
@@ -62,21 +61,19 @@ public enum Heading
 		return eastFactor;
 	}
 
-	/**
-	 * Heading in degrees.
-	 * 
-	 * @return 0 = north, 90 = east, etc.
-	 */
+	/// `Heading` in degrees.
+	///
+	/// @return 0 = north, 90 = east, etc.
+    ///
 	public int toDegrees()
 	{
 		return degrees;
 	}
 
-	/**
-	 * Returns the opposite heading.
-	 * 
-	 * @return the heading that lies 180 degrees opposite.
-	 */
+	/// Returns the opposite `Heading`.
+	///
+	/// @return the heading that lies 180 degrees opposite.
+    ///
 	public Heading reversed()
 	{
 		return values()[(ordinal() + 4) % 8];
@@ -87,13 +84,12 @@ public enum Heading
 		return fromDegrees((degrees + (double)this.degrees) % 360);
 	}
 	
-	/**
-	 * Returns the Heading closest to the given compass heading
-	 * in degrees (0 = north, 90 = east, etc.)
-	 * 
-	 * @param degrees (must be 0 <= degrees < 360)
-	 * @return
-	 */
+	/// Returns the Heading closest to the given compass heading
+	/// in degrees (0 = north, 90 = east, etc.)
+	///
+	/// @param degrees (must be 0 <= degrees < 360)
+	/// @return
+    ///
 	public static Heading fromDegrees(double degrees)
 	{
 		return values()[(int)(((degrees % 360) + 22.5) / 45)];
@@ -114,14 +110,13 @@ public enum Heading
 	*/
 
 	
-	/**
-	 * Determines the coordinate that lies a given distance from
-	 * the center of the plane, in a given heading
-	 * 
-	 * @param angle		heading in degrees (0 = north, 90 = east)
-	 * @param distance	distance
-	 * @return			the coordinate
-	 */
+	/// Determines the [Coordinate] that lies a given distance from
+	/// the center of the plane, in a given `Heading`
+	///
+	/// @param angle	heading in degrees (0 = north, 90 = east)
+	/// @param distance	distance
+	/// @return			the JTS [Coordinate]
+    ///
 	public static Coordinate project(double angle, double distance)
 	{
 		double radians = Math.toRadians(angle);

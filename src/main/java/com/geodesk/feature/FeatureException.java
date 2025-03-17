@@ -8,6 +8,7 @@
 package com.geodesk.feature;
 
 // TODO: needed?
+/// @hidden
 public class FeatureException extends RuntimeException
 {
 	public FeatureException(String msg)
