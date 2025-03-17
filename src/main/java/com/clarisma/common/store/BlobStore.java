@@ -117,6 +117,11 @@ public class BlobStore extends Store
         {
             throw new StoreException("Not a BlobStore file", path());
         }
+        if (buf.getInt(VERSION_OFS) != VERSION)
+        {
+            throw new StoreException(
+                "Wrong BlobStore version (Requires 1.0)", path());
+        }
         // TODO: page size
         // debugCheckRootFT();
     }
