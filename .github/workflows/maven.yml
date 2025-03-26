@@ -20,7 +20,7 @@ jobs:
         java-version: 17
         server-id: ossrh
         server-username: ossrh    # Sonatype recommends using 'ossrh' as the username when using a token
-        server-password: ${{ secrets.OSSRH_TOKEN }}  # Use OSSRH token for authentication
+        server-password: OSSRH_TOKEN  # Use OSSRH token for authentication
         gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
