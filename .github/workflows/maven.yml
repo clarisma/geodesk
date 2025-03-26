@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Set up Maven Central Repository
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v3
       with:
         java-version: 17
         server-id: ossrh
@@ -21,6 +21,14 @@ jobs:
         server-password: ${{ secrets.OSSRH_TOKEN }}  # Use OSSRH token for authentication
         gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+    - name: Debug Maven Settings
+      run: |
+        echo "Effective settings.xml:"
+        cat ~/.m2/settings.xml || echo "(none)"
+        echo "---"
+        echo "GPG version:"
+        gpg --version
 
     - name: Deploy with Maven
       run: mvn -B clean deploy -Pci-cd
