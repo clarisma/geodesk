@@ -158,6 +158,7 @@
 								<goal>sign</goal>
 							</goals>
 							<configuration>
+                                <useAgent>false</useAgent>
 								<!-- Prevent gpg from using pinentry programs. Fixes: gpg: signing
 									failed: Inappropriate ioctl for device -->
 								<gpgArguments>
