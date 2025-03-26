@@ -39,3 +39,9 @@ jobs:
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN_PW }}
         OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}  # Token for authentication with Sonatype
         MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}  # GPG passphrase for signing
+
+    - name: Release Staged Repository
+      run: mvn nexus-staging:release
+      env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_TOKEN_USER }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN_PW }}
