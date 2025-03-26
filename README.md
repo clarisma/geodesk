@@ -41,51 +41,44 @@ cd geodesk
 mvn install
 ```
 
-*If you get weird exceptions during `mvn install`, you should [upgrade Maven](https://maven.apache.org/download.cgi) to version **3.8.5** or above.*
-
 ### Example Application
 
 ```java
 import com.geodesk.feature.*;
-import com.geodesk.util.*;
+import com.geodesk.geom.*;
 
 public class PubsExample
 {
     public static void main(String[] args)
     {
-        FeatureLibrary library = new FeatureLibrary(     // 1    
-            "example.gol",                               // 2
-            "https://data.geodesk.com/switzerland");     // 3
+        FeatureLibrary library = new FeatureLibrary(
+            "switzerland.gol");                          // 1
         
-        for(Feature pub: library                         // 4
-            .select("na[amenity=pub]")                   // 5
-            .in(Box.ofWSEN(8.53,47.36,8.55,47.38)))      // 6
+        for(Feature pub: library                         // 2
+            .select("na[amenity=pub]")                   // 3
+            .in(Box.ofWSEN(8.53,47.36,8.55,47.38)))      // 4
         {
-            System.out.println(pub.stringValue("name")); // 7
+            System.out.println(pub.stringValue("name")); // 5
         }
         
-        library.close();                                 // 8
+        library.close();                                 // 6
     }
 }
 ```
 
 What's going on here?
 
-1. We're opening a feature library ...
+1. We're opening a feature library (`switzerland.gol`)
 
-2. ... with the file name `example.gol` (If it doesn't exist, a blank one is created)
+2. We iterate through all the features ...
 
-3. ... and a URL from which [data tiles](https://docs.geodesk.com/libraries) will be downloaded.
+3. ... that are pubs ([GeoDesk query language](https://docs.geodesk.com/goql) &mdash; *similar to MapCSS*)
 
-4. We iterate through all the features ...
+4. ... in downtown Zurich (*bounding box with West/South/East/North coordinates*).
 
-5. ... that are pubs ([GeoDesk query language](https://docs.geodesk.com/goql) &mdash; *similar to MapCSS*)
+5. We print the name of each pub.
 
-6. ... in downtown Zurich (*bounding box with West/South/East/North coordinates*).
-
-7. We print the name of each pub.
-
-8. We close the library.
+6. We close the library.
 
 That's it, you've created your first GeoDesk application! 
 

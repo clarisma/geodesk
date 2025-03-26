@@ -398,15 +398,14 @@ public interface Features extends Iterable<Feature>
         throw new RuntimeException("todo");     // TODO
     }
 
-    /**
-     * Returns all features that lie within a given distance
-     * from another `Feature`. The Filter measures the distance between the closest
-     * points of the features.
-     *
-     * @param distance  the maximum distance (in meters)
-     * @param feature   the Feature from which to measure
-     * @return
-     */
+    /// Returns all features that lie within a given distance
+    /// from another `Feature`. The Filter measures the distance
+    /// between the closest points of the features.
+    ///
+    /// @param distance  the maximum distance (in meters)
+    /// @param feature   the Feature from which to measure
+    /// @return
+    ///
     default Features maxMetersFrom(double distance, Feature feature)
     {
         throw new RuntimeException("todo");     // TODO

@@ -9,7 +9,7 @@ package com.geodesk.geom;
 
 import org.locationtech.jts.geom.Coordinate;
 
-/// Methods for working with coordinates that are represented as a single `long``
+/// Methods for working with coordinates that are represented as a single `long`
 /// value. Y coordinate is stored in the upper 32 bits, X in the lower.
 ///
 public final class XY
@@ -129,8 +129,7 @@ public final class XY
     }
 
     /// Fast but non-robust method to check how many times a line from a point
-    /// intersects the given segments, using the ray-casting algorithm
-    /// (https://en.wikipedia.org/wiki/Point_in_polygon#Ray_casting_algorithm).
+    /// intersects the given segments, using the [ray-casting algorithm](https://en.wikipedia.org/wiki/Point_in_polygon#Ray_casting_algorithm).
     /// This is suitable for a point-in-polygon test, but be aware that points
     /// that are vertexes or are located on the edge (or very close to it)
     /// may or may not be considered "inside."
