@@ -16,6 +16,7 @@ jobs:
     - name: Set up Maven Central Repository
       uses: actions/setup-java@v3
       with:
+        distribution: 'temurin'
         java-version: 17
         server-id: ossrh
         server-username: ossrh    # Sonatype recommends using 'ossrh' as the username when using a token
