@@ -19,7 +19,7 @@ jobs:
         distribution: 'temurin'
         java-version: 17
         server-id: ossrh
-        server-username: ossrh    # Sonatype recommends using 'ossrh' as the username when using a token
+        server-username: ${{ secrets.OSSRH_USERNAME }} # ossrh    # Sonatype recommends using 'ossrh' as the username when using a token
         server-password: ${{ secrets.OSSRH_TOKEN }}  # Use OSSRH token for authentication
         gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         gpg-passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
