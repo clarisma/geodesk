@@ -115,7 +115,7 @@ int numberOfEntrances = building.nodes("[entrance]").size();
 ## Documentation
 
 - [GeoDesk Developer's Guide](https://docs.geodesk.com/java)
-- [API Reference](https://apidocs.geodesk.com/0.2)
+- [API Reference](https://apidocs.geodesk.com/v1)
 
 ## Related Repositories
 
