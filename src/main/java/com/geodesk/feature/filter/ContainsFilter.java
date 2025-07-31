@@ -60,6 +60,8 @@ public class ContainsFilter implements Filter
             FilterStrategy.RESTRICTS_TYPES;
     }
 
+    // TODO: needs acceptedTypes() ???
+
     private boolean containedBy(Geometry g)
     {
         return g.contains(testGeom);

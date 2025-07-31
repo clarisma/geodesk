@@ -9,6 +9,7 @@ package com.geodesk.feature;
 
 import com.geodesk.feature.filter.*;
 import com.geodesk.feature.match.QueryException;
+import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.query.EmptyView;
 import com.geodesk.geom.Bounds;
 import com.geodesk.geom.Mercator;
@@ -471,5 +472,29 @@ public interface Features extends Iterable<Feature>
     default void addTo(Collection<Feature> collection)
     {
         for(Feature f: this) collection.add(f);
+    }
+
+    /// Returns the node with the given ID (or `null`).
+    ///
+    /// @since 1.1
+    default Node node(long id)
+    {
+        return (Node)select(new IdFilter(TypeBits.NODES, id)).first();
+    }
+
+    /// Returns the way with the given ID (or `null`).
+    ///
+    /// @since 1.1
+    default Way way(long id)
+    {
+        return (Way)select(new IdFilter(TypeBits.WAYS, id)).first();
+    }
+
+    /// Returns the relation with the given ID (or `null`).
+    ///
+    /// @since 1.1
+    default Relation relation(long id)
+    {
+        return (Relation)select(new IdFilter(TypeBits.RELATIONS, id)).first();
     }
 }
