@@ -18,8 +18,69 @@ public class DecimalTest extends TestCase
 		System.out.format("%s double  -> %f\n", s, Decimal.toDouble(d));
 		System.out.format("%s normal  -> %s\n", s, Decimal.toString(Decimal.normalized(d)));
 	}
+
+    private static void test(String original,
+        boolean strict, double expected, String expectedStr)
+    {
+        long d = Decimal.parse(original, strict);
+        Assert.assertEquals(expected, Decimal.toDouble(d), 0.0000001);
+        Assert.assertEquals(expectedStr, Decimal.toString(d));
+    }
+
+    @Test public void testDecimal()
+    {
+        test(".5", false, 0.5, "0.5");
+        test(".5", true, Double.NaN, "invalid");
+
+        test("", false, Double.NaN, "invalid");
+        test("", true, Double.NaN, "invalid");
+
+        test("0", false, 0.0, "0");
+        test("0", true, 0.0, "0");
+
+        test("007", false, 7, "7");
+        test("007", true, Double.NaN, "invalid");
+
+        test("08135", false, 8135, "8135");
+        test("08135", true, Double.NaN, "invalid");
+
+        test("3.5 t", false, 3.5, "3.5");
+        test("3.5 t", true, Double.NaN, "invalid");
+
+        test("50", false, 50.0, "50");
+        test("50", true, 50.0, "50");
+
+        test("01", false, 1.0, "1");
+        test("01", true, Double.NaN, "invalid");
+
+        test("0.0", true, Double.NaN, "invalid");
+        test("0.00", true, Double.NaN, "invalid");
+
+        test("0.500", false, 0.5, "0.500");
+        test("0.500", true, Double.NaN, "invalid");
+
+        test("00.500", false, 0.5, "0.500");
+        test("00.500", true, Double.NaN, "invalid");
+
+        test("0.", false, 0.0, "0");
+        test("0.", true, Double.NaN, "invalid");
+
+        test(".25", false, 0.25, "0.25");
+        test(".25", true, Double.NaN, "invalid");
+
+        test("-0.0000", false, 0.0, "0.0000");
+        test("-0.0000", true, Double.NaN, "invalid");
+
+        test("4.25.", false, 4.25, "4.25");
+        test("4.25.", true, Double.NaN, "invalid");
+
+        test("1000000000000000000000000000", false, Double.NaN, "invalid");
+        test("1000000000000000000000000000", true, Double.NaN, "invalid");
+    }
+
 	
-	
+
+    /*
 	@Test public void testParse()
 	{
 		test("1234.567");
@@ -43,6 +104,7 @@ public class DecimalTest extends TestCase
 		test("-0.1234567890123");
 		test("0.123456789012345678");
 	}
+	*/
 
 	@Test public void testToString()
 	{

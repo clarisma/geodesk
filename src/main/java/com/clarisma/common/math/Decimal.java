@@ -22,61 +22,94 @@ public class Decimal extends Number
 	{
 		return new Decimal(parse(s, false));
 	}
-	
-	public static long parse(String s, boolean strict)
-	{
-		long value = 0;
-		int scale = 0;
-		boolean seenDigit = false;
-		boolean seenNonZeroDigit = false;
-		boolean seenDot = false;
-		boolean negative = false;
-		int len = s.length();
-		for(int i=0; i<len; i++)
-		{
-			char ch = s.charAt(i);
-			if(ch=='-')
-			{
-				if(i != 0) return INVALID;
-				negative = true;
-				continue;
-			}
-			if(ch=='0') 
-			{
-				if(len==1) return 0;
-				if(strict && seenDigit && !seenNonZeroDigit) return INVALID;
-				value *= 10;
-				seenDigit = true;
-				if(seenDot) scale++;
-				continue;
-			}
-			if(ch=='.')
-			{
-				if(seenDot) return INVALID;
-				if(strict && !seenDigit) return INVALID;
-				seenDot = true;
-				continue;
-			}
-			if(ch < '0' || ch > '9') return INVALID;
-			seenDigit = true;
-			seenNonZeroDigit = true;
-			value = value * 10 + (ch-'0');
-			if((value & 0xf800_0000_0000_0000l) != 0) return INVALID; 
-			if(seenDot) scale++;
-		}
-		if(value==0)
-		{
-			if(seenDot && !seenDigit) return INVALID;
-			if(strict)
-			{
-				if(negative || scale==0) return INVALID;
-			}
-		}
-		if(strict && seenDot && scale==0) return INVALID; 
-		if(scale > 15) return INVALID;
-		return ((negative ? -value : value) << 4) | scale;
-	}
-	
+
+    public static long parse(String s, boolean strict)
+    {
+        long value = 0;
+        int scale = 0;
+        boolean seenZero = false;
+        boolean seenNonZero = false;
+        boolean leadingZeroes = false;
+        boolean trailingNonNumeric = false;
+        boolean seenDot = false;
+        boolean negative = false;
+
+        int len = s.length();
+        if (len == 0) return INVALID;
+
+        int i = 0;
+        char first = s.charAt(i);
+        if (first == '-')
+        {
+            negative = true;
+            i++;
+            if (i == len) return INVALID;
+        }
+        else if (first == '+')
+        {
+            if (strict) return INVALID;
+            i++;
+            if (i == len) return INVALID;
+        }
+
+        char ch = 0;
+        while (i < len)
+        {
+            ch = s.charAt(i++);
+            if (ch == '0')
+            {
+                leadingZeroes |= seenZero && !seenNonZero;
+                seenZero = true;
+                value *= 10;
+                if ((value & 0xf800_0000_0000_0000L) != 0) return INVALID;
+                continue;
+            }
+            if (ch == '.')
+            {
+                seenDot = true;
+                while (i < len)
+                {
+                    ch = s.charAt(i++);
+                    if (ch < '0' || ch > '9')
+                    {
+                        trailingNonNumeric = true;
+                        break;
+                    }
+                    value = value * 10 + (ch - '0');
+                    if ((value & 0xf800_0000_0000_0000L) != 0) return INVALID;
+                    scale++;
+                }
+                break;
+            }
+            if (ch < '0' || ch > '9')
+            {
+                trailingNonNumeric = true;
+                break;
+            }
+            leadingZeroes |= seenZero && !seenNonZero;
+            seenNonZero = true;
+            value = value * 10 + (ch - '0');
+            if ((value & 0xf800_0000_0000_0000L) != 0) return INVALID;
+        }
+
+        if (strict)
+        {
+            if (trailingNonNumeric) return INVALID;
+            if (seenDot && (scale == 0 || (!seenZero && !seenNonZero) || ch=='0'))
+            {
+                return INVALID;
+            }
+            if (leadingZeroes) return INVALID;
+            if (value == 0 && negative) return INVALID;
+        }
+
+        if (scale > 15) return INVALID;
+
+        long result = (negative ? -value : value) << 4;
+        return result | scale;
+    }
+
+
 	public static int scale(long d)
 	{
 		return (int)d & 15;
