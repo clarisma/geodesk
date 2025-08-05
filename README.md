@@ -29,7 +29,7 @@ Include this dependency in your project's `pom.xml`:
 <dependency>
     <groupId>com.geodesk</groupId>
     <artifactId>geodesk</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
