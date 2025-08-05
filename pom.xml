@@ -18,7 +18,6 @@
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <gpg.executable>gpg</gpg.executable>
-    <gpg.passphrase>${gpg.passphrase}</gpg.passphrase>
     <gpg.batch>true</gpg.batch>
   </properties>
 
