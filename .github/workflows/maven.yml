@@ -19,10 +19,25 @@ jobs:
         distribution: 'temurin'
         java-version: 17
         server-id: ossrh
-        server-username: MAVEN_USERNAME    # Sonatype recommends using 'ossrh' as the username when using a token
-        server-password: MAVEN_PASSWORD  # Use OSSRH token for authentication
+        # server-username: MAVEN_USERNAME    # Sonatype recommends using 'ossrh' as the username when using a token
+        # server-password: MAVEN_PASSWORD  # Use OSSRH token for authentication
         gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+    - name: Generate Maven settings.xml
+      run: |
+        mkdir -p ~/.m2
+        cat > ~/.m2/settings.xml <<EOF
+        <settings>
+          <servers>
+            <server>
+              <id>central</id>
+              <username>${{ secrets.CENTRAL_USER }}</username>
+              <password>${{ secrets.CENTRAL_PW }}</password>
+            </server>
+          </servers>
+        </settings>
+        EOF
 
     - name: Debug Maven Settings
       run: |
