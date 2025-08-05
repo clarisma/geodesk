@@ -52,10 +52,9 @@ public class Decimal extends Number
             if (i == len) return INVALID;
         }
 
-        char ch = 0;
         while (i < len)
         {
-            ch = s.charAt(i++);
+            char ch = s.charAt(i++);
             if (ch == '0')
             {
                 leadingZeroes |= seenZero && !seenNonZero;
@@ -95,7 +94,7 @@ public class Decimal extends Number
         if (strict)
         {
             if (trailingNonNumeric) return INVALID;
-            if (seenDot && (scale == 0 || (!seenZero && !seenNonZero) || ch=='0'))
+            if (seenDot && (scale == 0 || (!seenZero && !seenNonZero)))
             {
                 return INVALID;
             }

@@ -53,11 +53,13 @@ public class DecimalTest extends TestCase
         test("01", false, 1.0, "1");
         test("01", true, Double.NaN, "invalid");
 
-        test("0.0", true, Double.NaN, "invalid");
-        test("0.00", true, Double.NaN, "invalid");
+        test("0.0", false, 0, "0.0");
+        test("0.0", true, 0, "0.0");
+        test("0.00", false, 0, "0.00");
+        test("0.00", true, 0, "0.00");
 
         test("0.500", false, 0.5, "0.500");
-        test("0.500", true, Double.NaN, "invalid");
+        test("0.500", true, 0.5, "0.500");
 
         test("00.500", false, 0.5, "0.500");
         test("00.500", true, Double.NaN, "invalid");
