@@ -47,8 +47,18 @@ jobs:
         echo "GPG version:"
         gpg --version
 
+    - name: Import GPG private key
+      run: |
+        echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+        echo "use-agent" >> ~/.gnupg/gpg.conf
+        echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+        echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+        echo RELOADAGENT | gpg-connect-agent
+      env:
+        GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+
     - name: Deploy with Maven
-      run: mvn -B clean deploy -Pci-cd
+      run: mvn -B clean deploy -Pci-cd -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_TOKEN_USER }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN_PW }}
