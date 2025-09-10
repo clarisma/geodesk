@@ -4,7 +4,7 @@
 
   <groupId>com.geodesk</groupId>
   <artifactId>geodesk</artifactId>
-  <version>1.1.2</version>
+  <version>2.0.0</version>
   <packaging>jar</packaging>
 
   <name>GeoDesk</name>
@@ -30,8 +30,7 @@
 
   <developers>
 	<developer>
-	  <name>Martin Desmond</name>
-	  <email>martindesmond@gmail.com</email>
+	  <name>Clarisma</name>
 	  <organization>GeoDesk</organization>
 	  <organizationUrl>http://www.geodesk.com</organizationUrl>
 	</developer>
@@ -108,8 +107,8 @@
 				</execution>
 			</executions>
 			<configuration>
-				<doctitle>GeoDesk 1.0</doctitle>
-				<windowtitle>GeoDesk 1.0</windowtitle>
+				<doctitle>GeoDesk 2.0</doctitle>
+				<windowtitle>GeoDesk 2.0</windowtitle>
                 <excludePackageNames>
 					benchmarks;
 					com.clarisma.*;
