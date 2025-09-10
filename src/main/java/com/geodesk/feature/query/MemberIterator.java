@@ -160,6 +160,7 @@ public class MemberIterator implements Iterator<Feature>
             {
                 if (pForeignTile == 0)  // TODO: Tile could start at segment start!
                 {
+                    // TODO
                     int tilePage = store.fetchTile(tip);
                     foreignBuf = store.bufferOfPage(tilePage);
                     pForeignTile = store.offsetOfPage(tilePage);

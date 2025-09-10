@@ -109,7 +109,7 @@ public class TileIndexWalker
 
     public TileIndexWalker(FeatureStore store)
     {
-        this(store.baseMapping(), store.tileIndexPointer(), store.zoomLevels());
+        this(store.tileIndexBuf(), store.tileIndexOfs(), store.zoomLevels());
     }
 
     public void start(Bounds bounds)

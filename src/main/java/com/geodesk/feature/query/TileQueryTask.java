@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 
 import static com.geodesk.feature.match.TypeBits.*;
 
+// TODO: Maybe give task the tile page instead of TIP
 public class TileQueryTask extends QueryTask
 {
     // private final int tile;     // TODO: not needed, drop
@@ -94,7 +95,7 @@ public class TileQueryTask extends QueryTask
         try
         {
             FeatureStore store = query.store();
-            int tilePage = store.fetchTile(tip);
+            int tilePage = store.tilePage(tip);
             buf = store.bufferOfPage(tilePage);
             int pTile = store.offsetOfPage(tilePage);
 

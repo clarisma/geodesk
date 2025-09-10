@@ -44,13 +44,16 @@
   </scm>
 
   <dependencies>
-  
+
+
   	<!-- primitive collections -->
+    <!--
   	<dependency>
 		<groupId>org.eclipse.collections</groupId>
   		<artifactId>eclipse-collections</artifactId>
   		<version>RELEASE</version>
 	</dependency>
+	-->
 
 	<!-- geometry -->
 	<dependency>

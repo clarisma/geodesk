@@ -83,7 +83,11 @@ public class ParentRelationView extends TableView
                         tipDelta >>= 1;     // signed
                         tip += tipDelta;
                         p += 2;
-                        int tilePage = store.fetchTile(tip);
+                        if(!store.isTileReady(tip))
+                        {
+                            throw new MissingTileException(tip);
+                        }
+                        int tilePage = store.tilePage(tip);
                         foreignBuf = store.bufferOfPage(tilePage);
                         pForeignTile = store.offsetOfPage(tilePage);
                     }

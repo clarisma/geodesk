@@ -285,7 +285,11 @@ public class StoredWay extends StoredFeature implements Way
 							tipDelta >>= 1;     // signed
 						}
 						tip += tipDelta;
-						int tilePage = store.fetchTile(tip);
+                        if(store.isTileReady(tip))
+                        {
+                            throw new MissingTileException(tip);
+                        }
+						int tilePage = store.tilePage(tip);
 						foreignBuf = store.bufferOfPage(tilePage);
 						pForeignTile = store.offsetOfPage(tilePage);
 					}

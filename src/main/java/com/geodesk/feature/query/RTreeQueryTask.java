@@ -45,17 +45,7 @@ public class RTreeQueryTask extends QueryTask
         {
             results = new QueryResults(buf);
             int ptr = buf.getInt(ppTree);
-            if (ptr != 0)
-            {
-                if ((ptr & 2) != 0)
-                {
-                    searchLeaf(ppTree + (ptr & 0xffff_fffc));
-                }
-                else
-                {
-                    searchTrunk(ppTree + (ptr & 0xffff_fffc));
-                }
-            }
+            searchTrunk(ppTree + (ptr & 0xffff_fffc));
         }
         catch(Throwable ex)
         {
@@ -111,55 +101,8 @@ public class RTreeQueryTask extends QueryTask
         for(;;)
         {
             int flags = buf.getInt(p + 16);
-
-            int multiTileFlags = flags & FeatureFlags.MULTITILE_FLAGS;
-            for(;;)
+            if((flags & bboxFlags) == 0)
             {
-                // Check for acceptable type (way, relation, member, way-node, etc.)
-                // (No need for AND with 0x1f, as int-shift only considers lower 5 bits)
-                if(((1 << (flags >> 1)) & acceptedTypes) == 0) break;
-
-                // TODO: we could use masks and save the coordinate comparison step!
-                // we only have to make one check
-
-                // TODO
-                //  Careful: If both multi-tile flags are set for the feature
-                //  (which means it lives in more than 2 tiles), we must always
-                //  treat it as a potential dupe, even if bbox extends only into
-                //  one neighbouring tile
-                // But we can check (multiTileFlags & bboxFlags) == 0, if so,
-                //  no checks needed at all
-
-                int dupeFlag = 0;
-                if(multiTileFlags != 0)
-                {
-                    if (multiTileFlags == FeatureFlags.MULTITILE_WEST)
-                    {
-                        // If the feature has a second copy in the tile
-                        // to the west, and the query's bounding box
-                        // extends into that tile, we skip the feature
-
-                        // TODO: use masking instead
-                        if ((bboxFlags & FeatureFlags.MULTITILE_WEST) != 0) break;
-                    }
-                    else if (multiTileFlags == FeatureFlags.MULTITILE_NORTH)
-                    {
-                        // If the feature has a second copy in the tile
-                        // to the north, and the query's bounding box
-                        // extends into that tile, we skip the feature
-
-                        // TODO: use masking instead
-                        if ((bboxFlags & FeatureFlags.MULTITILE_NORTH) != 0) break;
-                    }
-                    else
-                    {
-                        // If both flags are set, this means we'll have
-                        // to add the feature to the deduplication set
-                        // TODO: if query does not extend beyond the
-                        // tile boundaries, we don't have to do this
-                        dupeFlag = 0x8000_0000;
-                    }
-                }
                 if (!(buf.getInt(p) > maxX ||
                     buf.getInt(p + 4) > maxY ||
                     buf.getInt(p + 8) < minX ||
@@ -167,24 +110,24 @@ public class RTreeQueryTask extends QueryTask
                 {
                     // TODO: replace this branching code with arithmetic?
                     // Useful? https://stackoverflow.com/a/62852710
-
                     // log.debug("Feature bbox matched");
-                    int pFeature = p + 16;
-                    if (matcher.accept(buf, pFeature))
+
+                    // Check for acceptable type (way, relation, member, way-node, etc.)
+                    // (No need for AND with 0x1f, as int-shift only considers lower 5 bits)
+                    if(((1 << (flags >> 1)) & acceptedTypes) != 0)
                     {
-                        // TODO: We should return results as Features rather than pointers,
-                        //  since we are creating a Feature anyway in order to apply a filter
-                        if(filter == null || filter.accept(query.store().getFeature(buf, pFeature)))
+                        int pFeature = p + 16;
+                        if (matcher.accept(buf, pFeature))
                         {
-                            results.add(pFeature | ((flags >>> 3) & 3) | dupeFlag);
+                            // TODO: We should return results as Features rather than pointers,
+                            //  since we are creating a Feature anyway in order to apply a filter
+                            if (filter == null || filter.accept(query.store().getFeature(buf, pFeature)))
+                            {
+                                results.add(pFeature | ((flags >>> 3) & 3));
+                            }
                         }
                     }
                 }
-                else
-                {
-                    // log.debug("Feature rejected");
-                }
-                break;
             }
             if((flags & 1) != 0) break;
             p += 32;
