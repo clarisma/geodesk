@@ -168,7 +168,8 @@ public class FeatureStore extends FreeStore
 
     private void enableQueries()
     {
-        // TODO: guard against multiple calls
+        // TODO: guard against multiple calls?
+        //  But no longer called outside this class
         matchers = new MatcherCompiler(stringsToCodes, codesToStrings, keysToCategories);
         executor = new ForkJoinPool();// TODO: ability to set parallelism
         maxPendingTiles = Runtime.getRuntime().availableProcessors() * 2;

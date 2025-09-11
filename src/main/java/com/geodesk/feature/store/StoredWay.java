@@ -232,6 +232,7 @@ public class StoredWay extends StoredFeature implements Way
 
 	// TODO: area, circumference
 
+    // TODO: tex decoding
 	public static class Iter implements Iterator<Feature>
 	{
 		private final FeatureStore store;
@@ -240,13 +241,15 @@ public class StoredWay extends StoredFeature implements Way
 		private int pNext;
 		private Feature featureNode;
 		private int tip = FeatureConstants.START_TIP;
+		private int tex = FeatureConstants.WAYNODES_START_TEX;
 		private ByteBuffer foreignBuf;
-		private int pForeignTile;
+		private int pExports;
 
 		// TODO: consolidate these flags
 		private static final int NF_LAST = 1;
 		private static final int NF_FOREIGN = 2;
-		private static final int NF_DIFFERENT_TILE = 8;
+		private static final int NF_DIFFERENT_TILE = 4;
+        private static final int NF_WIDE_TEX = 8;
 
 
 		public Iter(FeatureStore store, ByteBuffer buf, int pFirst, Matcher filter)
@@ -291,10 +294,12 @@ public class StoredWay extends StoredFeature implements Way
                         }
 						int tilePage = store.tilePage(tip);
 						foreignBuf = store.bufferOfPage(tilePage);
-						pForeignTile = store.offsetOfPage(tilePage);
+                        int ppExports = store.offsetOfPage(tilePage) + 24;
+                        pExports = ppExports + foreignBuf.getInt(ppExports);
 					}
 					nodeBuf = foreignBuf;
-					pNode = pForeignTile + ((node >>> 4) << 2);
+                    int ppExported = pExports + (tex << 2);
+                    pNode = ppExported + foreignBuf.getInt(ppExported);
 				}
 				else
 				{

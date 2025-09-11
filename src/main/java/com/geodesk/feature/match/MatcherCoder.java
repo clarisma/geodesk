@@ -140,6 +140,8 @@ import static org.objectweb.asm.Opcodes.*;
 
  */
 
+// TODO: valueno no longer needed
+
 public class MatcherCoder extends ExpressionCoder
 {
 	private static final String
