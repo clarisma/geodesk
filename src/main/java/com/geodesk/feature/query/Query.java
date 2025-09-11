@@ -173,6 +173,8 @@ public class Query implements Iterator<Feature>, Bounds
         int entry = store.tileIndexEntry(tileWalker.tip());
         if((entry & 2) != 0)
         {
+            // System.out.format("Requesting tile %06X at page %d\n",
+            //    tileWalker.tip(), entry >>> 2);
             pool.submit(new TileQueryTask(this, entry >>> 2,
                 tileWalker.northwestFlags(), tileWalker.filter()));
             pendingTiles++;

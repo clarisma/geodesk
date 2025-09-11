@@ -154,7 +154,7 @@ public class FeatureStore extends FreeStore
 
     private void readIndexSchema()
     {
-        int p = baseMapping.getInt(INDEX_SCHEMA_PTR_OFS) + INDEX_SCHEMA_PTR_OFS;
+        int p = baseMapping.getInt(INDEX_SCHEMA_PTR_OFS);
         int count = baseMapping.getInt(p);
         MutableIntIntMap map = new IntIntHashMap(count);
         for (int i = 0; i < count; i++)

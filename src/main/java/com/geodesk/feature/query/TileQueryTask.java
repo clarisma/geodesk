@@ -10,6 +10,7 @@ package com.geodesk.feature.query;
 import com.geodesk.feature.Filter;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureStore;
+import com.geodesk.geom.Tile;
 
 import java.nio.ByteBuffer;
 
@@ -37,14 +38,7 @@ public class TileQueryTask extends QueryTask
     {
         int p = buf.getInt(ppTree);
         if(p == 0) return task;
-        if((p & 1) == 0)
-        {
-            task = new RTreeQueryTask(this, ppTree, matcher, task);
-            task.fork();
-            return task;
-        }
-        assert (p & 2) == 0;
-        p = ppTree + (p ^ 1);
+        p = ppTree + p;
         for(;;)
         {
             int last = buf.getInt(p) & 1;
@@ -64,13 +58,7 @@ public class TileQueryTask extends QueryTask
     {
         int p = buf.getInt(ppTree);
         if(p == 0) return task;
-        if((p & 1) == 0)
-        {
-            task = new RTreeQueryTask.Nodes(this, ppTree, matcher, task);
-            task.fork();
-            return task;
-        }
-        p = ppTree + (p ^ 1);
+        p = ppTree + p;
         for(;;)
         {
             int last = buf.getInt(p) & 1;
@@ -88,7 +76,7 @@ public class TileQueryTask extends QueryTask
 
     @Override protected boolean exec()
     {
-        // log.debug("Searching tile {} ({})", Tile.toString(tile), Tip.toString(tip));
+        // System.out.format("Searching tile at page %d\n", tilePage);
 
         try
         {
