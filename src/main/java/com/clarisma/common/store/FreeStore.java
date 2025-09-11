@@ -224,4 +224,9 @@ public class FreeStore
     {
         return (page << pageSizeShift) & 0x3fff_ffff;
     }
+
+    public int activeSnapshot()
+    {
+        return baseMapping.get(ACTIVE_SNAPSHOT_OFS);
+    }
 }

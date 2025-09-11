@@ -55,7 +55,7 @@ public class TileIndexWalker
         int currentRow;
         Filter filter;
 
-        void init(int parentTile, Bounds bounds, Filter filter)
+        void init(ByteBuffer buf, int pEntry, int parentTile, Bounds bounds, Filter filter)
         {
             this.filter = filter;
             int zoom = Tile.zoom(topLeftChildTile);
@@ -76,6 +76,8 @@ public class TileIndexWalker
             endRow = Math.min(bottom-tileTop, extent-1);
             currentCol = startCol - 1;
             currentRow = startRow;
+            childTileMask = buf.getLong(pEntry + 4);
+            pChildEntries = pEntry + (extent==8 ? 12 : 8);
         }
     }
 
@@ -118,7 +120,7 @@ public class TileIndexWalker
         this.bounds = bounds;
         this.filter = filter;
         currentTip = 1;
-        root.init(0, bounds, filter);
+        root.init(buf,pTileIndex + 4, 0, bounds, filter);
         current = root;
         acceptedTiles = null;
         if(filter != null)
@@ -164,8 +166,8 @@ public class TileIndexWalker
     {
         int p = tileIndexPointer() + currentTip * 4;
         int entry = buf.getInt(p);
-        assert (entry & 1) == 0;
-        return entry == 0? 0 : (entry >>> 1);
+        assert (entry & 3) != 1;
+        return entry >>> 2;
     }
 
     public boolean next()
@@ -292,10 +294,8 @@ public class TileIndexWalker
                     // next level in the tile tree
 
                     current = level = level.child;
-                    pEntry += pageOrPtr >> 2;
-                    level.init(currentTile, bounds, filter);
-                    level.childTileMask = buf.getLong(pEntry + 4);
-                    level.pChildEntries = pEntry + (level.extent==8 ? 12 : 8);
+                    pEntry += pageOrPtr ^ 1;
+                    level.init(buf, pEntry, currentTile, bounds, filter);
                 }
                 currentTip = (pEntry - tileIndexPointer()) / 4;
                 return true;

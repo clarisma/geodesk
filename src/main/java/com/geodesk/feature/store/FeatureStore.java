@@ -73,10 +73,10 @@ public class FeatureStore extends FreeStore
     private static final int MAGIC_CODE_OFS = 0;
     public static final int SNAPSHOT_TILE_COUNT_OFS = 24;
     public static final int SNAPSHOT_TILE_INDEX_OFS = 28;
-    private static final int STRING_TABLE_PTR_OFS = 74;
-    private static final int INDEX_SCHEMA_PTR_OFS = 78;
-    private static final int PROPERTIES_PTR_OFS = 82;
-    public static final int ZOOM_LEVELS_OFS = 86;
+    private static final int STRING_TABLE_PTR_OFS = 84;
+    private static final int INDEX_SCHEMA_PTR_OFS = 88;
+    private static final int PROPERTIES_PTR_OFS = 92;
+    public static final int ZOOM_LEVELS_OFS = 96;
 
     @Override protected void initialize() // throws IOException
     {
@@ -84,6 +84,12 @@ public class FeatureStore extends FreeStore
 
         readStringTable();
         readIndexSchema();
+
+        int pSnapshot = 128 + activeSnapshot() * 64;
+        int tileIndexPage = baseMapping.getInt(pSnapshot + SNAPSHOT_TILE_INDEX_OFS);
+        tileIndexBuf = bufferOfPage(tileIndexPage);
+        tileIndexOfs = offsetOfPage(tileIndexPage);
+
         enableQueries();
         int zoomLevels = zoomLevels();
         minZoom = ZoomLevels.minZoom(zoomLevels);
@@ -125,25 +131,19 @@ public class FeatureStore extends FreeStore
     private void readStringTable()
     {
         int p = baseMapping.getInt(STRING_TABLE_PTR_OFS);
-        PbfDecoder reader = new PbfDecoder(baseMapping, p);
-        int count = (int) reader.readVarint();
-        codesToStrings = new String[count + 1];
-        codesToStrings[0] = "";
+        int count = baseMapping.getInt(p) & 0xffff;
+        PbfDecoder reader = new PbfDecoder(baseMapping, p+2);
+        codesToStrings = new String[count];
 
         // TODO: does this make sense? Doesn't the map already have a load factor?
         //  (But higher capacity may reduce hash collisions and make lookup more efficient)
         MutableObjectIntMap<String> stringMap =
             new ObjectIntHashMap<>(count + (count >> 1));
-        stringMap.put("", 0);
-
-        // TODO: Check if we need to have "" in this map (currently not included)
-        //  1/11/23: Changed to include "" as entry 0
-        //  (to determine if a key is not in the table, must supply -1 as default)
 
         // TODO: only index first 8K strings
         //  No! Query Compiler needs to look up values as well
 
-        for (int i = 1; i <= count; i++)
+        for (int i = 0; i < count; i++)
         {
             String s = reader.readString();
             codesToStrings[i] = s;
