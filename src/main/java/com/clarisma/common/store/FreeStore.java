@@ -30,7 +30,7 @@ public class FreeStore
     private static final int ACTIVE_SNAPSHOT_OFS = 16;
     private static final int LOCK_OFS = 512;
 
-    public void open(Path path)
+    public FreeStore(Path path)
     {
         // TODO: What if store is already open?
 

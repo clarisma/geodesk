@@ -24,6 +24,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -36,6 +37,11 @@ public class FeatureStore extends FreeStore
     private int zoomSteps;
     private ByteBuffer tileIndexBuf;
     private int tileIndexOfs;
+
+    public FeatureStore(Path path)
+    {
+        super(path);
+    }
 
     /**
      * A mapping of strings to their string-table code.
@@ -78,10 +84,7 @@ public class FeatureStore extends FreeStore
 
         readStringTable();
         readIndexSchema();
-
-        // Querying is enabled explicitly by the FeatureLibrary class, which
-        // serves as the front-end of the API
-        // enableQueries();
+        enableQueries();
         int zoomLevels = zoomLevels();
         minZoom = ZoomLevels.minZoom(zoomLevels);
         zoomSteps = ZoomLevels.zoomSteps(zoomLevels);
@@ -121,7 +124,7 @@ public class FeatureStore extends FreeStore
 
     private void readStringTable()
     {
-        int p = baseMapping.getInt(STRING_TABLE_PTR_OFS) + STRING_TABLE_PTR_OFS;
+        int p = baseMapping.getInt(STRING_TABLE_PTR_OFS);
         PbfDecoder reader = new PbfDecoder(baseMapping, p);
         int count = (int) reader.readVarint();
         codesToStrings = new String[count + 1];
@@ -163,7 +166,7 @@ public class FeatureStore extends FreeStore
         keysToCategories = map;
     }
 
-    public void enableQueries()
+    private void enableQueries()
     {
         // TODO: guard against multiple calls
         matchers = new MatcherCompiler(stringsToCodes, codesToStrings, keysToCategories);
@@ -178,6 +181,22 @@ public class FeatureStore extends FreeStore
     }
 
     public int maxPendingTiles() { return maxPendingTiles; }
+
+    public int tileIndexEntry(int tip)
+    {
+        return tileIndexBuf.getInt(tileIndexOfs + tip * 4);
+    }
+
+    static public int pageFromEntry(int entry)
+    {
+        return entry >>> 2;
+    }
+
+    static public boolean isTileLoadedAndcurrent(int entry)
+    {
+        return (entry & 2) != 0;
+    }
+
 
     public int tilePage(int tip)
     {

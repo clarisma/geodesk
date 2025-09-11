@@ -24,18 +24,16 @@ public class FeatureLibrary extends WorldView implements AutoCloseable
     ///
     public FeatureLibrary(String path)
     {
-        this(Paths.get(path), null);
+        this(Paths.get(path));
     }
 
     /// Creates a `FeatureLibrary` instance associated with an existing GOL file.
     ///
     /// @param path the path of the GOL file.
     ///
-    public FeatureLibrary(Path path, String url)
+    public FeatureLibrary(Path path)
     {
-        super(new FeatureStore());
-        store.open(path);
-        store.enableQueries();
+        super(new FeatureStore(path));
     }
 
     public GeometryFactory geometryFactory()

@@ -18,18 +18,16 @@ import static com.geodesk.feature.match.TypeBits.*;
 // TODO: Maybe give task the tile page instead of TIP
 public class TileQueryTask extends QueryTask
 {
-    // private final int tile;     // TODO: not needed, drop
-    private final int tip;
+    private final int tilePage;
     protected int bboxFlags;
     private int tilesProcessed;
     protected ByteBuffer buf;
     protected Filter filter;
 
-    public TileQueryTask(Query query, /* int tile, */ int tip, int northwestFlags, Filter filter)
+    public TileQueryTask(Query query, int tilePage, int northwestFlags, Filter filter)
     {
         super(query);
-        // this.tile = tile;
-        this.tip = tip;
+        this.tilePage = tilePage;
         this.bboxFlags = northwestFlags;
         this.filter = filter;
         // Log.debug("Tile %s with filter %s", Tile.toString(tile), filter);
@@ -95,7 +93,6 @@ public class TileQueryTask extends QueryTask
         try
         {
             FeatureStore store = query.store();
-            int tilePage = store.tilePage(tip);
             buf = store.bufferOfPage(tilePage);
             int pTile = store.offsetOfPage(tilePage);
 

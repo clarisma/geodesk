@@ -151,13 +151,13 @@ public class Query implements Iterator<Feature>, Bounds
         int maxPendingTiles = store.maxPendingTiles();
         while(pendingTiles < maxPendingTiles)
         {
+            requestTile();
             if(!tileWalker.next())
             {
                 // We've traversed all tiles
                 allTilesRequested = true;
                 break;
             }
-            requestTile();
         }
         fetchNext();
     }
@@ -170,10 +170,18 @@ public class Query implements Iterator<Feature>, Bounds
             Tile.toString(tileWalker.tile()),
             Tip.toString(tileWalker.tip()));
          */
-        pool.submit(new TileQueryTask(this, /* tileWalker.tile(), */
-            tileWalker.tip(), tileWalker.northwestFlags(), tileWalker.filter()));
-        pendingTiles++;
-        // if(pendingTiles > 10) log.debug("Requesting tile, {} pending", pendingTiles);
+        int entry = store.tileIndexEntry(tileWalker.tip());
+        if((entry & 2) != 0)
+        {
+            pool.submit(new TileQueryTask(this, entry >>> 2,
+                tileWalker.northwestFlags(), tileWalker.filter()));
+            pendingTiles++;
+            // if(pendingTiles > 10) log.debug("Requesting tile, {} pending", pendingTiles);
+        }
+        else
+        {
+            tileWalker.skipChildren();
+        }
     }
 
     private void fetchNext()
@@ -211,9 +219,9 @@ public class Query implements Iterator<Feature>, Bounds
                     pendingTiles -= task.tilesProcessed();
                     while(!allTilesRequested)
                     {
+                        requestTile();
                         if(tileWalker.next())
                         {
-                            requestTile();
                             if(pendingTiles == store.maxPendingTiles()) break;
                         }
                         else

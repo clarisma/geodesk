@@ -46,13 +46,11 @@
 
 
   	<!-- primitive collections -->
-    <!--
-  	<dependency>
+    <dependency>
 		<groupId>org.eclipse.collections</groupId>
   		<artifactId>eclipse-collections</artifactId>
   		<version>RELEASE</version>
 	</dependency>
-	-->
 
 	<!-- geometry -->
 	<dependency>

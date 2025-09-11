@@ -11,6 +11,7 @@ import com.clarisma.common.util.Bytes;
 import com.clarisma.common.util.Log;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
+import com.geodesk.feature.MissingTileException;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureConstants;
 import com.geodesk.feature.store.FeatureStore;
@@ -107,7 +108,7 @@ public class MemberIterator implements Iterator<Feature>
                 if ((member & MF_DIFFERENT_TILE) != 0)
                 {
                     // TODO: test wide tip delta
-                    pForeignTile = 0;       // TODO: set to other value, 0 is valid tile start
+                    pForeignTile = -1;
                     int tipDelta = buf.getShort(p);
                     if ((tipDelta & 1) != 0)
                     {
@@ -158,10 +159,14 @@ public class MemberIterator implements Iterator<Feature>
             int pFeature;
             if ((member & MF_FOREIGN) != 0)
             {
-                if (pForeignTile == 0)  // TODO: Tile could start at segment start!
+                if (pForeignTile < 0)
                 {
-                    // TODO
-                    int tilePage = store.fetchTile(tip);
+                    int entry = store.tileIndexEntry(tip);
+                    if(!FeatureStore.isTileLoadedAndcurrent(entry))
+                    {
+                        throw new MissingTileException(tip);
+                    }
+                    int tilePage = FeatureStore.pageFromEntry(entry);
                     foreignBuf = store.bufferOfPage(tilePage);
                     pForeignTile = store.offsetOfPage(tilePage);
                 }
