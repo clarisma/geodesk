@@ -12,6 +12,7 @@ import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.match.AndMatcher;
 import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.TypeBits;
+import com.geodesk.feature.store.FeatureConstants;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredRelation;
 import com.geodesk.geom.Bounds;
@@ -48,11 +49,20 @@ public class ParentRelationView extends TableView
         return new Iter();
     }
 
-    protected class Iter extends TableIterator<Feature>
+    protected class Iter implements Iterator<Feature>
     {
+        protected int tip = FeatureConstants.START_TIP;
+        protected int tex = FeatureConstants.RELATIONS_START_TEX;
+        protected ByteBuffer foreignBuf;
+        private int pExports;
         private int p;
         private int rel;
         private Feature current;
+
+        private static final int LAST_FLAG = 1;
+		private static final int FOREIGN_FLAG = 2;
+		private static final int DIFFERENT_TILE_FLAG = 4;
+        private static final int WIDE_TEX_FLAG = 8;
 
         public Iter()
         {
@@ -76,6 +86,12 @@ public class ParentRelationView extends TableView
                 p += 4;
                 if ((rel & FOREIGN_FLAG) != 0)
                 {
+                    if((rel & WIDE_TEX_FLAG) == 0)
+                    {
+                        rel = (short)rel;
+                        p -= 2;
+                    }
+                    tex += rel >> 4;
                     if ((rel & DIFFERENT_TILE_FLAG) != 0)
                     {
                         // TODO: wide tip delta
@@ -83,16 +99,19 @@ public class ParentRelationView extends TableView
                         tipDelta >>= 1;     // signed
                         tip += tipDelta;
                         p += 2;
-                        if(!store.isTileReady(tip))
+                        int entry = store.tileIndexEntry(tip);
+                        if(!FeatureStore.isTileLoadedAndcurrent(entry))
                         {
                             throw new MissingTileException(tip);
                         }
-                        int tilePage = store.tilePage(tip);
+                        int tilePage = FeatureStore.pageFromEntry(entry);
                         foreignBuf = store.bufferOfPage(tilePage);
-                        pForeignTile = store.offsetOfPage(tilePage);
+                        int ppExports = store.offsetOfPage(tilePage) + 24;
+                        pExports = ppExports + foreignBuf.getInt(ppExports);
                     }
                     relBuf = foreignBuf;
-                    pRel = pForeignTile + ((rel >>> 4) << 2);
+                    int ppExported = pExports + (tex << 2);
+                    pRel = ppExported + foreignBuf.getInt(ppExported);
                 }
                 else
                 {

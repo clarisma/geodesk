@@ -30,6 +30,8 @@ import java.util.Iterator;
 //  Don't set pForeignTile = 0, because 0 is a valid start for a tile
 //  Use -1 instead?
 
+// TODO: Apply filter
+
 public class MemberIterator implements Iterator<Feature>
 {
     private final FeatureStore store;

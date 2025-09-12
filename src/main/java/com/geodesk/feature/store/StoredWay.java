@@ -232,8 +232,8 @@ public class StoredWay extends StoredFeature implements Way
 
 	// TODO: area, circumference
 
-    // TODO: tex decoding
-	public static class Iter implements Iterator<Feature>
+    // TODO: matcher vs filter!
+    public static class Iter implements Iterator<Feature>
 	{
 		private final FeatureStore store;
 		private final ByteBuffer buf;
@@ -267,10 +267,20 @@ public class StoredWay extends StoredFeature implements Way
 			{
 				ByteBuffer nodeBuf;
 				int pNode;
-				int pCurrent = pNext;
-				int node = buf.getInt(pCurrent);
-				if((node & NF_FOREIGN) != 0)
+				// int pCurrent = pNext;
+				int node = buf.getInt(pNext);
+				if((node & (NF_FOREIGN << 16)) != 0)
 				{
+                    if ((node & (NF_WIDE_TEX << 16)) == 0)
+                    {
+                        node >>= 16;    // signed
+                        pNext += 2;
+                    }
+                    else
+                    {
+                        node = Integer.rotateLeft(node, 16);
+                    }
+                    tex += (node >> 4);
 					if ((node & NF_DIFFERENT_TILE) != 0)
 					{
 						// TODO: test wide tip delta
@@ -288,11 +298,12 @@ public class StoredWay extends StoredFeature implements Way
 							tipDelta >>= 1;     // signed
 						}
 						tip += tipDelta;
-                        if(store.isTileReady(tip))
+                        int entry = store.tileIndexEntry(tip);
+                        if(!FeatureStore.isTileLoadedAndcurrent(entry))
                         {
                             throw new MissingTileException(tip);
                         }
-						int tilePage = store.tilePage(tip);
+						int tilePage = FeatureStore.pageFromEntry(entry);
 						foreignBuf = store.bufferOfPage(tilePage);
                         int ppExports = store.offsetOfPage(tilePage) + 24;
                         pExports = ppExports + foreignBuf.getInt(ppExports);
@@ -303,10 +314,14 @@ public class StoredWay extends StoredFeature implements Way
 				}
 				else
 				{
+                    node = Integer.rotateLeft(node, 16);
 					nodeBuf = buf;
-					pNode = (pCurrent & 0xffff_fffe) + ((node >> 2) << 1);
+                    /*
+					pNode = (pNext & 0xffff_fffe) + ((node >> 2) << 1);
 						// TODO: simplify alignment rules!
 						// TODO: (pCurrent & 0xffff_fffe) superfluous?
+                     */
+                    pNode = pNext + (node >> 1) + 2;
 				}
 				pNext -= 4;
 				pNext &= -1 + (node & NF_LAST);		// set pNext to 0 if this is the last node
