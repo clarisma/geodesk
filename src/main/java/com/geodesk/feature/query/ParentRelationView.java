@@ -94,8 +94,13 @@ public class ParentRelationView extends TableView
                     tex += rel >> 4;
                     if ((rel & DIFFERENT_TILE_FLAG) != 0)
                     {
-                        // TODO: wide tip delta
                         int tipDelta = buf.getShort(p);
+                        if ((tipDelta & 1) != 0)
+                        {
+                            // wide TIP delta
+                            tipDelta = buf.getInt(p);
+                            p += 2;
+                        }
                         tipDelta >>= 1;     // signed
                         tip += tipDelta;
                         p += 2;
