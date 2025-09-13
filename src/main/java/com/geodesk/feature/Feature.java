@@ -200,14 +200,6 @@ public interface Feature extends Iterable<Feature>
 	 */
 	boolean isArea();
 
-	/// Checks whether this feature is a *placeholder*. A placeholder is a
-	/// feature that is referenced by a relation, but is not actually
-	/// present in a dataset.
-	///
-	/// @return
-    ///
-	boolean isPlaceholder();
-
 	/// Measures the length of this feature.
 	///
 	/// @return length (in meters), or `0` if the feature is not lineal.

@@ -56,11 +56,6 @@ public class StoredNode extends StoredFeature implements Node
 
 	@Override public int minY() { return y(); }
 
-	@Override public boolean isPlaceholder()
-	{
-		return (x() | y()) == 0;
-	}
-
 	@Override public Box bounds()
 	{
 		int x = x();
