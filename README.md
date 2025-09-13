@@ -51,8 +51,7 @@ public class PubsExample
 {
     public static void main(String[] args)
     {
-        FeatureLibrary library = new FeatureLibrary(
-            "switzerland.gol");                          // 1
+        var library = Features.open("switzerland.gol");  // 1
         
         for(Feature pub: library                         // 2
             .select("na[amenity=pub]")                   // 3

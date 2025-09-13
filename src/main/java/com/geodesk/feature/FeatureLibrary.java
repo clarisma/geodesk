@@ -20,8 +20,11 @@ public class FeatureLibrary extends WorldView implements AutoCloseable
 {
     /// Creates a `FeatureLibrary` instance associated with an existing GOL file.
     ///
-    /// @param path the path of the GOL file.
+    /// @param path the path of the GOL file
     ///
+    /// @deprecated Use {@link Features#open(String)} instead.
+    ///
+    @Deprecated(since = "2.0")
     public FeatureLibrary(String path)
     {
         this(Paths.get(path));
@@ -29,8 +32,11 @@ public class FeatureLibrary extends WorldView implements AutoCloseable
 
     /// Creates a `FeatureLibrary` instance associated with an existing GOL file.
     ///
-    /// @param path the path of the GOL file.
+    /// @param path the path of the GOL file
     ///
+    /// @deprecated Use {@link Features#open(Path)} instead.
+    ///
+    @Deprecated(since = "2.0")
     public FeatureLibrary(Path path)
     {
         super(new FeatureStore(path));
