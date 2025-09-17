@@ -69,21 +69,13 @@ public abstract class StoredFeature implements Feature
 
 	public static long id(ByteBuffer buf, int ptr)
 	{
-		return ((long) (buf.getInt(ptr) >>> 8) << 32) |
-			((long) (buf.getInt(ptr + 4)) & 0xffff_ffffL);
+		return buf.getLong(ptr) >>> 12;
 	}
 
 	public static int typeCode(ByteBuffer buf, int ptr)
 	{
 		return (buf.getInt(ptr) >> 3) & 3;
 	}
-
-	/*
-	public static int type(ByteBuffer buf, int ptr)
-	{
-		return (buf.getInt(ptr) >> 3) & 3;
-	}
-	 */
 
 	public int flags()
 	{
@@ -482,18 +474,6 @@ public abstract class StoredFeature implements Feature
 	}
 	*/
 	
-
-	/*
-	public static FeatureHandle of(FeatureFile file, ByteBuffer buf, int p)
-	{
-		int type = (buf.getInt(p) >>> 3) & 3;
-		if(type==0) return new NodeHandle(file, buf, p);
-		if(type==1) return new WayHandle(file, buf, p);
-		if(type==2) return new RelationHandle(file, buf, p);
-		assert false;
-		return null;
-	}
-	*/
 
 	@Override
 	public Tags tags()
