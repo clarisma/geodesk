@@ -105,8 +105,8 @@
 				</execution>
 			</executions>
 			<configuration>
-				<doctitle>GeoDesk 1.0</doctitle>
-				<windowtitle>GeoDesk 1.0</windowtitle>
+				<doctitle>GeoDesk 1.1</doctitle>
+				<windowtitle>GeoDesk 1.1</windowtitle>
                 <excludePackageNames>
 					benchmarks;
 					com.clarisma.*;
