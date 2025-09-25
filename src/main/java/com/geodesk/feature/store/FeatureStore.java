@@ -71,8 +71,8 @@ public class FeatureStore extends FreeStore
     public static final int VERSION = 1_000_000;
 
     private static final int MAGIC_CODE_OFS = 0;
-    public static final int SNAPSHOT_TILE_COUNT_OFS = 24;
-    public static final int SNAPSHOT_TILE_INDEX_OFS = 28;
+    public static final int SNAPSHOT_TILE_INDEX_OFS = 24;
+    public static final int SNAPSHOT_TILE_COUNT_OFS = 28;
     private static final int STRING_TABLE_PTR_OFS = 84;
     private static final int INDEX_SCHEMA_PTR_OFS = 88;
     private static final int PROPERTIES_PTR_OFS = 92;
