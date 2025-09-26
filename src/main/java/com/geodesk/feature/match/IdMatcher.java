@@ -12,12 +12,13 @@ import java.nio.ByteBuffer;
 public class IdMatcher extends Matcher
 {
     private final long idBits;
-    private static final long TYPE_ID_MASK = 0xffff_ffff_ffff_ff18l;
+    private static final long TYPE_ID_MASK = 0xffff_ffff_ffff_f018l;
 
     public IdMatcher(int typeCode, long id)
     {
         super(TypeBits.ALL);
-        idBits = (id << 32) | ((id >> 24) & 0xffff_ff00L) | (typeCode << 3);
+        idBits = (id << 12) | ((long)typeCode << 3);
+        // TODO: change if FeatureFlags change
     }
 
     @Override public boolean accept(ByteBuffer buf, int pos)
