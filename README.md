@@ -3,7 +3,7 @@
 GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data. Also available [for C++](https://github.com/clarisma/libgeodesk) and [for Python](https://github.com/clarisma/geodesk-py).
 
 > [!IMPORTANT]
-> For version 2.0, you will need to build GOLs with [GOL Tool 2.0](https://github.com/clarisma/geodesk-gol). 
+> For Version 2.0, you will need to build GOLs with [GOL Tool 2.0](https://github.com/clarisma/geodesk-gol). 
 > 
 > To read GOLs built with [GOL Tool 1.x](https://github.com/clarisma/gol-tool), use [Version 1.1.0](https://github.com/clarisma/geodesk/releases/tag/1.1.0) of this toolkit. 
 
@@ -123,8 +123,9 @@ int numberOfEntrances = building.nodes("[entrance]").size();
 
 ## Related Repositories
 
-- [gol-tool](http://www.github.com/clarisma/gol-tool) &mdash; command-line utility for building, maintaining and querying GOL files
+- [geodesk-gol](http://www.github.com/clarisma/geodesk-gol) &mdash; command-line utility for building, maintaining and querying GOL files
 - [geodesk-examples](http://www.github.com/clarisma/geodesk-examples) &mdash; example applications
 - [geodesk-tests](http://www.github.com/clarisma/geodesk-tests) &mdash; integration tests
 - [libgeodesk](https://github.com/clarisma/libgeodesk) &mdash; GeoDesk for C++ 
 - [geodesk-py](https://github.com/clarisma/geodesk-py) &mdash; GeoDesk for Python
+- [gol-tool](http://www.github.com/clarisma/gol-tool) &mdash; legacy GOL Tool (supports GOL 1.0 files) 
