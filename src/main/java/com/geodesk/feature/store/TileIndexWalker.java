@@ -77,6 +77,7 @@ public class TileIndexWalker
             currentCol = startCol - 1;
             currentRow = startRow;
             childTileMask = buf.getLong(pEntry + 4);
+                // TODO: This fails before gol-tool#7 is fixed
             pChildEntries = pEntry + (extent==8 ? 12 : 8);
         }
     }

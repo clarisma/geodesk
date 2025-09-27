@@ -25,7 +25,7 @@ public class TagValues
         // TODO: revisit empty marker; empty table is 4 bytes, but has
         //  wide-bit set; this complicates TileReader implementation
         //  Safest: 0x0000_8000
-    public static final int EMPTY_TABLE_MARKER = 0xffff_ffff;
+    public static final int EMPTY_TABLE_MARKER = 0x8001;
     public static final int MIN_NUMBER = -256;
     public static final int MAX_WIDE_NUMBER = (1 << 30) - 1 + MIN_NUMBER;
     public static final int MAX_NARROW_NUMBER = (1 << 16) - 1 + MIN_NUMBER;

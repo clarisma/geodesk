@@ -79,7 +79,9 @@ public abstract class StoredFeature implements Feature
 
 	public int flags()
 	{
-		return buf.get(ptr);	// get single byte
+		return buf.getInt(ptr);
+        // TODO: If v1, this returned a single byte
+        //  v2 uses 12 bits, should they be masked off?
 	}
 
 	@Override public int x()
