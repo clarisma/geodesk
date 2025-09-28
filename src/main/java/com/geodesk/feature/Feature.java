@@ -162,6 +162,14 @@ public interface Feature extends Iterable<Feature>
     ///
 	int intValue(String key);
 
+    /// Returns the value of a tag as a `long`.
+	///
+	/// @param key	the key of the tag
+	/// @return		the tag's value, or `0` if the tag does not exist
+	/// 			or has a value that cannot be converted to an integer
+    ///
+	long longValue(String key);
+
 	/// Returns the value of the given key as a `double`.
 	///
 	/// @param key

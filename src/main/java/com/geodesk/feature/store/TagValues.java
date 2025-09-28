@@ -8,6 +8,7 @@
 package com.geodesk.feature.store;
 
 import com.clarisma.common.math.Decimal;
+import com.clarisma.common.math.MathUtils;
 
 public class TagValues
 {
@@ -75,6 +76,8 @@ public class TagValues
 
     public static int toInt(String s)
     {
+        return (int) MathUtils.doubleFromString(s);
+        /*
         try
         {
             return Integer.parseInt(s);
@@ -85,5 +88,16 @@ public class TagValues
         {
             return 0;
         }
+         */
+    }
+
+    public static long toLong(String s)
+    {
+        return (long) MathUtils.doubleFromString(s);
+    }
+
+    public static double toDouble(String s)
+    {
+        return MathUtils.doubleFromString(s);
     }
 }

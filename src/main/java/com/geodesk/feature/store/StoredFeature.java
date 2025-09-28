@@ -251,14 +251,19 @@ public abstract class StoredFeature implements Feature
 		return Decimal.toString(Decimal.of(mantissa, scale));
 	}
 
-	private int valueAsInt(long value)
+    private int valueAsInt(long value)
+    {
+        return (int)valueAsLong(value);
+    }
+
+	private long valueAsLong(long value)
 	{
 		if (value == 0) return 0;
 		int typeAndSize = (int) value & 3;
 		if (typeAndSize == 0)
 		{
 			// narrow number
-			return (int) ((char) (value >> 16)) + TagValues.MIN_NUMBER;
+			return (long) ((char) (value >> 16)) + TagValues.MIN_NUMBER;
 		}
 		if (typeAndSize == 2)
 		{
@@ -266,7 +271,7 @@ public abstract class StoredFeature implements Feature
 			int number = buf.getInt((int) (value >> 32));    // preserve sign? (TODO: should be absolute ptr)
 			int mantissa = (number >>> 2) + TagValues.MIN_NUMBER;
 			int scale = number & 3;
-			return Decimal.toInt(Decimal.of(mantissa, scale));
+			return Decimal.toLong(Decimal.of(mantissa, scale));
 		}
 		if (typeAndSize == 3)
 		{
@@ -274,13 +279,11 @@ public abstract class StoredFeature implements Feature
 			int ppValue = (int) (value >> 32);    // preserve sign? (TODO: should be absolute ptr)
 			int pValueString = buf.getInt(ppValue) + ppValue;
 			String s = Bytes.readString(buf, pValueString);
-			// TODO: should be: return MathUtils.doubleFromString(s); // (Issue #64)
-			return TagValues.toInt(s);
+			return TagValues.toLong(s);
 		}
 		// narrow string
 		String s = store.stringFromCode((char) (value >> 16));
-		// TODO: should be: return MathUtils.doubleFromString(s); // (Issue #64)
-		return TagValues.toInt(s);
+		return TagValues.toLong(s);
 	}
 
 	private double valueAsDouble(long value)
@@ -370,6 +373,19 @@ public abstract class StoredFeature implements Feature
 	{
 		long value = getKeyValue(key);
 		return valueAsInt(value);
+	}
+
+    /**
+	 * Returns the value of the given key as a long.
+	 *
+	 * @param key
+	 * @return the key's value, or 0 if the key does not
+	 * exist, or its value is not a valid number
+	 */
+	@Override public long longValue(String key)
+	{
+		long value = getKeyValue(key);
+		return valueAsLong(value);
 	}
 
 	/**
@@ -590,6 +606,16 @@ public abstract class StoredFeature implements Feature
 		@Override public int intValue()
 		{
 			return valueAsInt(value);
+		}
+
+        @Override public long longValue()
+		{
+			return valueAsLong(value);
+		}
+
+        @Override public double doubleValue()
+		{
+			return valueAsDouble(value);
 		}
 
 		@Override public Map<String, Object> toMap()

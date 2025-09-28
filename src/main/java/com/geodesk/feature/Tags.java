@@ -29,6 +29,8 @@ public interface Tags extends Consumable
 	Object value();
 	String stringValue();
 	default int intValue() { return TagValues.toInt(stringValue()); }
+    default long longValue() { return TagValues.toLong(stringValue()); }
+    default double doubleValue() { return TagValues.toDouble(stringValue()); }
 
 	// TODO: Decide if to... methods must preserve current iterator pos
 	//  no, they consume all remaining elements

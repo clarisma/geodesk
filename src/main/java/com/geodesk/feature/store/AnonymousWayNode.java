@@ -130,6 +130,11 @@ public class AnonymousWayNode implements Node
         return 0;
     }
 
+    @Override public long longValue(String key)
+    {
+        return 0;
+    }
+
     @Override public double doubleValue(String key)
     {
         return 0;
