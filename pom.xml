@@ -107,7 +107,7 @@
 			<configuration>
 				<doctitle>GeoDesk 2.0</doctitle>
 				<windowtitle>GeoDesk 2.0</windowtitle>
-                <excludePackageNames>
+        <excludePackageNames>
 					benchmarks;
 					com.clarisma.*;
 					com.geodesk.benchmark;
