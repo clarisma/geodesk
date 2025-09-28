@@ -51,8 +51,8 @@ public final class Mercator
 	private static final double EARTH_CIRCUMFERENCE = 40_075_016.68558;
 		// in meters, at the equator
 
-    public static final double MIN_LAT = -85.0511288;
-    public static final double MAX_LAT =  85.0511287;
+    public static final double MIN_LAT = -85.05112878;
+    public static final double MAX_LAT =  85.051128776;
 
     private Mercator() {} // not meant to be instantiated
 
