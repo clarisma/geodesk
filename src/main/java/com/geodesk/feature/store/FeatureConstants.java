@@ -20,4 +20,7 @@ public class FeatureConstants
      * wide-value flag).
      */
     public static final int START_TIP = 0x4000;  // 16,384
+    public static final int MEMBERS_START_TEX = 0x400;
+    public static final int RELATIONS_START_TEX = 0x800;
+    public static final int WAYNODES_START_TEX = 0x800;
 }

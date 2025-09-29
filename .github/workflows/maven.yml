@@ -3,7 +3,7 @@ name: Java CI with Maven
 on:
   push:
     tags:
-      - "*"
+      - "v*"
   workflow_dispatch:
 
 jobs:
@@ -19,10 +19,25 @@ jobs:
         distribution: 'temurin'
         java-version: 17
         server-id: ossrh
-        server-username: MAVEN_USERNAME    # Sonatype recommends using 'ossrh' as the username when using a token
-        server-password: MAVEN_PASSWORD  # Use OSSRH token for authentication
+        # server-username: MAVEN_USERNAME    # Sonatype recommends using 'ossrh' as the username when using a token
+        # server-password: MAVEN_PASSWORD  # Use OSSRH token for authentication
         gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+    - name: Generate Maven settings.xml
+      run: |
+        mkdir -p ~/.m2
+        cat > ~/.m2/settings.xml <<EOF
+        <settings>
+          <servers>
+            <server>
+              <id>central</id>
+              <username>${{ secrets.CENTRAL_USER }}</username>
+              <password>${{ secrets.CENTRAL_PW }}</password>
+            </server>
+          </servers>
+        </settings>
+        EOF
 
     - name: Debug Maven Settings
       run: |
@@ -32,8 +47,18 @@ jobs:
         echo "GPG version:"
         gpg --version
 
+    - name: Import GPG private key
+      run: |
+        echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+        echo "use-agent" >> ~/.gnupg/gpg.conf
+        echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+        echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+        echo RELOADAGENT | gpg-connect-agent
+      env:
+        GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+
     - name: Deploy with Maven
-      run: mvn -B clean deploy -Pci-cd
+      run: mvn -B clean deploy -Pci-cd -Dgpg.passphrase=${{ secrets.MAVEN_GPG_PASSPHRASE }}
       env:
         MAVEN_USERNAME: ${{ secrets.OSSRH_TOKEN_USER }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN_PW }}

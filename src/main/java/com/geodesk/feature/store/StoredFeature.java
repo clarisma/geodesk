@@ -69,8 +69,7 @@ public abstract class StoredFeature implements Feature
 
 	public static long id(ByteBuffer buf, int ptr)
 	{
-		return ((long) (buf.getInt(ptr) >>> 8) << 32) |
-			((long) (buf.getInt(ptr + 4)) & 0xffff_ffffL);
+		return buf.getLong(ptr) >>> 12;
 	}
 
 	public static int typeCode(ByteBuffer buf, int ptr)
@@ -78,16 +77,11 @@ public abstract class StoredFeature implements Feature
 		return (buf.getInt(ptr) >> 3) & 3;
 	}
 
-	/*
-	public static int type(ByteBuffer buf, int ptr)
-	{
-		return (buf.getInt(ptr) >> 3) & 3;
-	}
-	 */
-
 	public int flags()
 	{
-		return buf.get(ptr);	// get single byte
+		return buf.getInt(ptr);
+        // TODO: If v1, this returned a single byte
+        //  v2 uses 12 bits, should they be masked off?
 	}
 
 	@Override public int x()
@@ -257,14 +251,19 @@ public abstract class StoredFeature implements Feature
 		return Decimal.toString(Decimal.of(mantissa, scale));
 	}
 
-	private int valueAsInt(long value)
+    private int valueAsInt(long value)
+    {
+        return (int)valueAsLong(value);
+    }
+
+	private long valueAsLong(long value)
 	{
 		if (value == 0) return 0;
 		int typeAndSize = (int) value & 3;
 		if (typeAndSize == 0)
 		{
 			// narrow number
-			return (int) ((char) (value >> 16)) + TagValues.MIN_NUMBER;
+			return (long) ((char) (value >> 16)) + TagValues.MIN_NUMBER;
 		}
 		if (typeAndSize == 2)
 		{
@@ -272,7 +271,7 @@ public abstract class StoredFeature implements Feature
 			int number = buf.getInt((int) (value >> 32));    // preserve sign? (TODO: should be absolute ptr)
 			int mantissa = (number >>> 2) + TagValues.MIN_NUMBER;
 			int scale = number & 3;
-			return Decimal.toInt(Decimal.of(mantissa, scale));
+			return Decimal.toLong(Decimal.of(mantissa, scale));
 		}
 		if (typeAndSize == 3)
 		{
@@ -280,13 +279,11 @@ public abstract class StoredFeature implements Feature
 			int ppValue = (int) (value >> 32);    // preserve sign? (TODO: should be absolute ptr)
 			int pValueString = buf.getInt(ppValue) + ppValue;
 			String s = Bytes.readString(buf, pValueString);
-			// TODO: should be: return MathUtils.doubleFromString(s); // (Issue #64)
-			return TagValues.toInt(s);
+			return TagValues.toLong(s);
 		}
 		// narrow string
 		String s = store.stringFromCode((char) (value >> 16));
-		// TODO: should be: return MathUtils.doubleFromString(s); // (Issue #64)
-		return TagValues.toInt(s);
+		return TagValues.toLong(s);
 	}
 
 	private double valueAsDouble(long value)
@@ -378,6 +375,19 @@ public abstract class StoredFeature implements Feature
 		return valueAsInt(value);
 	}
 
+    /**
+	 * Returns the value of the given key as a long.
+	 *
+	 * @param key
+	 * @return the key's value, or 0 if the key does not
+	 * exist, or its value is not a valid number
+	 */
+	@Override public long longValue(String key)
+	{
+		long value = getKeyValue(key);
+		return valueAsLong(value);
+	}
+
 	/**
 	 * Returns the value of the given key as a double.
 	 *
@@ -426,14 +436,6 @@ public abstract class StoredFeature implements Feature
 	@Override public boolean isArea()
 	{
 		return (buf.getInt(ptr) & FeatureFlags.AREA_FLAG) != 0;
-	}
-
-	@Override public boolean isPlaceholder()
-	{
-		// bbox height for Way/Relation is negative
-		int minY = buf.getInt(ptr-12);
-		int maxY = buf.getInt(ptr-4);
-		return maxY < minY;
 	}
 
 	@Override public Box bounds()
@@ -490,18 +492,6 @@ public abstract class StoredFeature implements Feature
 	}
 	*/
 	
-
-	/*
-	public static FeatureHandle of(FeatureFile file, ByteBuffer buf, int p)
-	{
-		int type = (buf.getInt(p) >>> 3) & 3;
-		if(type==0) return new NodeHandle(file, buf, p);
-		if(type==1) return new WayHandle(file, buf, p);
-		if(type==2) return new RelationHandle(file, buf, p);
-		assert false;
-		return null;
-	}
-	*/
 
 	@Override
 	public Tags tags()
@@ -616,6 +606,16 @@ public abstract class StoredFeature implements Feature
 		@Override public int intValue()
 		{
 			return valueAsInt(value);
+		}
+
+        @Override public long longValue()
+		{
+			return valueAsLong(value);
+		}
+
+        @Override public double doubleValue()
+		{
+			return valueAsDouble(value);
 		}
 
 		@Override public Map<String, Object> toMap()

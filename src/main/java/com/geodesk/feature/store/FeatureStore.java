@@ -9,6 +9,7 @@ package com.geodesk.feature.store;
 
 import com.clarisma.common.pbf.PbfDecoder;
 import com.clarisma.common.store.BlobStore;
+import com.clarisma.common.store.FreeStore;
 import com.clarisma.common.store.StoreException;
 import com.geodesk.geom.Box;
 import com.geodesk.feature.match.Matcher;
@@ -23,16 +24,25 @@ import org.locationtech.jts.geom.GeometryFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
-public class FeatureStore extends BlobStore
+public class FeatureStore extends FreeStore
 {
     private int minZoom;
     private int zoomSteps;
+    private ByteBuffer tileIndexBuf;
+    private int tileIndexOfs;
+
+    public FeatureStore(Path path)
+    {
+        super(path);
+    }
+
     /**
      * A mapping of strings to their string-table code.
      * TODO: Currently, empty string is *not* in this map (since 0 means
@@ -60,35 +70,40 @@ public class FeatureStore extends BlobStore
     public static final int MAGIC = 0x1CE50D6E;  // "geodesic"
     public static final int VERSION = 1_000_000;
 
-    private static final int MAGIC_CODE_OFS = 32;
-    public static final int ZOOM_LEVELS_OFS = 40;
-    public static final int TILE_INDEX_PTR_OFS = 44;
-    private static final int PROPERTIES_PTR_OFS = 48;
-    private static final int STRING_TABLE_PTR_OFS = 52;
-    private static final int INDEX_SCHEMA_PTR_OFS = 56;
+    private static final int MAGIC_CODE_OFS = 0;
+    public static final int SNAPSHOT_TILE_INDEX_OFS = 24;
+    public static final int SNAPSHOT_TILE_COUNT_OFS = 28;
+    private static final int STRING_TABLE_PTR_OFS = 84;
+    private static final int INDEX_SCHEMA_PTR_OFS = 88;
+    private static final int PROPERTIES_PTR_OFS = 92;
+    public static final int ZOOM_LEVELS_OFS = 96;
 
-    // TODO: move to subclass, don't need full functionality
-    //  for the GolTool
-    @Override protected void initialize() throws IOException
+    @Override protected void initialize() // throws IOException
     {
         super.initialize();
-
-        // TODO: when should this check be done?
-        if(isEmpty() && downloader == null)
-        {
-            throw new StoreException("Empty library; " +
-                "specify a URL from which its data can be downloaded.", path());
-        }
 
         readStringTable();
         readIndexSchema();
 
-        // Querying is enabled explicitly by the FeatureLibrary class, which
-        // serves as the front-end of the API
-        // enableQueries();
+        int pSnapshot = 128 + activeSnapshot() * 64;
+        int tileIndexPage = baseMapping.getInt(pSnapshot + SNAPSHOT_TILE_INDEX_OFS);
+        tileIndexBuf = bufferOfPage(tileIndexPage);
+        tileIndexOfs = offsetOfPage(tileIndexPage);
+
+        enableQueries();
         int zoomLevels = zoomLevels();
         minZoom = ZoomLevels.minZoom(zoomLevels);
         zoomSteps = ZoomLevels.zoomSteps(zoomLevels);
+    }
+
+    public ByteBuffer tileIndexBuf()
+    {
+        return tileIndexBuf;
+    }
+
+    public int tileIndexOfs()
+    {
+        return tileIndexOfs;
     }
 
     /*
@@ -115,26 +130,20 @@ public class FeatureStore extends BlobStore
 
     private void readStringTable()
     {
-        int p = baseMapping.getInt(STRING_TABLE_PTR_OFS) + STRING_TABLE_PTR_OFS;
-        PbfDecoder reader = new PbfDecoder(baseMapping, p);
-        int count = (int) reader.readVarint();
-        codesToStrings = new String[count + 1];
-        codesToStrings[0] = "";
+        int p = baseMapping.getInt(STRING_TABLE_PTR_OFS);
+        int count = baseMapping.getInt(p) & 0xffff;
+        PbfDecoder reader = new PbfDecoder(baseMapping, p+2);
+        codesToStrings = new String[count];
 
         // TODO: does this make sense? Doesn't the map already have a load factor?
         //  (But higher capacity may reduce hash collisions and make lookup more efficient)
         MutableObjectIntMap<String> stringMap =
             new ObjectIntHashMap<>(count + (count >> 1));
-        stringMap.put("", 0);
-
-        // TODO: Check if we need to have "" in this map (currently not included)
-        //  1/11/23: Changed to include "" as entry 0
-        //  (to determine if a key is not in the table, must supply -1 as default)
 
         // TODO: only index first 8K strings
         //  No! Query Compiler needs to look up values as well
 
-        for (int i = 1; i <= count; i++)
+        for (int i = 0; i < count; i++)
         {
             String s = reader.readString();
             codesToStrings[i] = s;
@@ -145,7 +154,7 @@ public class FeatureStore extends BlobStore
 
     private void readIndexSchema()
     {
-        int p = baseMapping.getInt(INDEX_SCHEMA_PTR_OFS) + INDEX_SCHEMA_PTR_OFS;
+        int p = baseMapping.getInt(INDEX_SCHEMA_PTR_OFS);
         int count = baseMapping.getInt(p);
         MutableIntIntMap map = new IntIntHashMap(count);
         for (int i = 0; i < count; i++)
@@ -157,9 +166,10 @@ public class FeatureStore extends BlobStore
         keysToCategories = map;
     }
 
-    public void enableQueries()
+    private void enableQueries()
     {
-        // TODO: guard against multiple calls
+        // TODO: guard against multiple calls?
+        //  But no longer called outside this class
         matchers = new MatcherCompiler(stringsToCodes, codesToStrings, keysToCategories);
         executor = new ForkJoinPool();// TODO: ability to set parallelism
         maxPendingTiles = Runtime.getRuntime().availableProcessors() * 2;
@@ -173,21 +183,30 @@ public class FeatureStore extends BlobStore
 
     public int maxPendingTiles() { return maxPendingTiles; }
 
-    public int tileIndexPointer()
+    public int tileIndexEntry(int tip)
     {
-        return baseMapping.getInt(TILE_INDEX_PTR_OFS) + TILE_INDEX_PTR_OFS;
+        return tileIndexBuf.getInt(tileIndexOfs + tip * 4);
     }
 
-    // TODO: this is hacky, needed for TileCatalog in GOL Tool
-    public static int tileIndexPointer(ByteBuffer buf)
+    static public int pageFromEntry(int entry)
     {
-        return buf.getInt(TILE_INDEX_PTR_OFS) + TILE_INDEX_PTR_OFS;
+        return entry >>> 2;
     }
 
-    // TODO: consolidate with getIndexEntry
+    static public boolean isTileLoadedAndcurrent(int entry)
+    {
+        return (entry & 2) != 0;
+    }
+
+
     public int tilePage(int tip)
     {
-        return baseMapping.getInt(tileIndexPointer() + tip * 4) >>> 1;
+        return tileIndexBuf.getInt(tileIndexOfs + tip * 4) >>> 2;
+    }
+
+    public boolean isTileReady(int tip)
+    {
+        return (tileIndexBuf.getInt(tileIndexOfs + tip * 4) & 2) != 0;
     }
 
     public String stringFromCode(int code)
@@ -228,20 +247,12 @@ public class FeatureStore extends BlobStore
         }
     }
 
-    @Override protected int getIndexEntry(int id)
-    {
-        return super.getIndexEntry(id) >>> 1;
-    }
-
-    @Override protected void setIndexEntry(int id, int page)
-    {
-        super.setIndexEntry(id, page << 1);
-    }
-
+    /*
     public int fetchTile(int tip)
     {
         return fetchBlob(tip);
     }
+     */
 
     /*
     public int fetchTile(int tip)
@@ -286,11 +297,13 @@ public class FeatureStore extends BlobStore
         return new StoredRelation(this, buf, p);
     }
 
+    /*
     public StoredWay getWay(int tip, int ptr)
     {
         int tilePage = fetchTile(tip);
         return new StoredWay(this, bufferOfPage(tilePage),offsetOfPage(tilePage) + ptr);
     }
+     */
 
     // TODO: create an awaitOperations() method
     @Override public void close()
@@ -338,44 +351,5 @@ public class FeatureStore extends BlobStore
     public String[] codesToStrings()
     {
         return codesToStrings;
-    }
-
-    // TODO: Use only for build; does not use transaction
-    //  Move to Compiler?
-    public synchronized int createTile(int tip, int size)
-    {
-        int page = allocateBlob(size);
-        int p = tileIndexPointer() + tip * 4;
-        baseMapping.putInt(p, page << 1);
-        return page;
-    }
-
-    /**
-     * Resets the metadata section to a blank state (so it can be copied or
-     * exported). This method is *never* applied to the FeatureStore's live
-     * metadata, but always a copy.
-     *
-     * In addition to the BlobStore base implementation (which clears the
-     * free-blob table and sets the total page count to zero), this method
-     * clears every TIP in the tile index.
-     *
-     * @param buf    the buffer containing a copy of the FeatureStore metadata
-     */
-
-    @Override protected void resetMetadata(ByteBuffer buf)
-    {
-        super.resetMetadata(buf);
-
-        // Reset each tile-index entry
-        int pTileIndex = tileIndexPointer();
-        TileIndexWalker walker = new TileIndexWalker(this);
-        walker.start(Box.ofWorld());
-        while(walker.next())
-        {
-            buf.putInt(pTileIndex + walker.tip() * 4, 0);
-        }
-
-        // reset the purgatory tile
-        buf.putInt(pTileIndex, 0);
     }
 }

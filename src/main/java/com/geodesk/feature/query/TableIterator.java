@@ -22,5 +22,5 @@ public abstract class TableIterator<Feature> implements Iterator<Feature>
     // TODO: consolidate these
     protected static final int LAST_FLAG = 1;
     protected static final int FOREIGN_FLAG = 2;
-    protected static final int DIFFERENT_TILE_FLAG = 8;
+    protected static final int DIFFERENT_TILE_FLAG = 4;
 }

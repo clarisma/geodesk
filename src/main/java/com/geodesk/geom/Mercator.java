@@ -51,56 +51,78 @@ public final class Mercator
 	private static final double EARTH_CIRCUMFERENCE = 40_075_016.68558;
 		// in meters, at the equator
 
+    public static final double MIN_LAT = -85.05112878;
+    public static final double MAX_LAT =  85.051128776;
+
     private Mercator() {} // not meant to be instantiated
 
-	/**
-	 * Converts a longitude to imps.
-	 * 
-	 * @param lon longitude (in degrees)
-	 * @return equivalent imps
-	 */
-	// TODO: must be rounded prior to conversion to int
-	// TODO: change return type to int?
-	public static double xFromLon(double lon)
+	/// Converts a longitude to Mercator imps.
+	///
+	/// @param lon longitude (in degrees)
+    /// @return equivalent imps
+    ///
+    /// @throws IllegalArgumentException if lon is < -180 or > 180
+	///
+	public static int xFromLon(double lon)
 	{
-		return MAP_WIDTH * lon / 360;
+        if (lon < -180 || lon > 180)
+        {
+            throw new IllegalArgumentException("Longitude must be in range -180 to 180");
+        }
+		return (int)Math.round(MAP_WIDTH * lon / 360);
 	}
 
-	/**
-	 * Converts a longitude to imps.
-	 * 
-	 * @param lon longitude (in 100-nanodegree increments)
-	 * @return equivalent imps
-	 */
-
+    /// Converts a longitude to Mercator imps.
+	///
+	/// @param lon longitude (in 100-nanodegree increments)
+    /// @return equivalent imps
+    ///
+    /// @throws IllegalArgumentException if lon is < -180 or > 180
+	///
 	public static int xFromLon100nd(int lon)
 	{
-		return (int)Math.round(xFromLon((double)lon / 10_000_000));
+		return xFromLon((double)lon / 10_000_000);
 	}
 
-	/**
-	 * Converts a latitude to imps.
-	 * 
-	 * @param lat latitude (in degrees)
-	 * @return equivalent imps
-	 */
-	// TODO: must be rounded prior to conversion to int
-	// TODO: change return type to int?
-	public static double yFromLat(double lat)
+    /// Converts a latitude to Mercator imps.
+    ///
+	/// @param lat latitude (in degrees)
+    /// @return equivalent imps
+    ///
+    /// @throws IllegalArgumentException if lat is < -90 or > 90
+	///
+	public static int yFromLat(double lat)
 	{
-		return Math.log(Math.tan((lat+90)*Math.PI/360)) *
-			(MAP_WIDTH / 2 / Math.PI);
+        if (lat < MIN_LAT)
+        {
+            if (lat < -90)
+            {
+                throw new IllegalArgumentException("Latitude must be in range -90 to 90");
+            }
+            lat = MIN_LAT;
+        }
+        if (lat > MAX_LAT)
+        {
+            if (lat > 90)
+            {
+                throw new IllegalArgumentException("Latitude must be in range -90 to 90");
+            }
+            lat = MAX_LAT;
+        }
+		return (int)Math.round(Math.log(Math.tan((lat+90)*Math.PI/360)) *
+			(MAP_WIDTH / 2 / Math.PI));
 	}
-	
-	/**
-	 * Converts a latitude to imps.
-	 * 
-	 * @param lat latitude (in 100-nanodegree increments)
-	 * @return equivalent imps
-	 */
+
+    /// Converts a latitude to Mercator imps.
+    ///
+	/// @param lat latitude (in 100-nanodegree increments)
+    /// @return equivalent imps
+    ///
+    /// @throws IllegalArgumentException if lat is < -90 or > 90
+	///
 	public static int yFromLat100nd(int lat)
 	{
-		return (int)Math.round(yFromLat((double)lat / 10_000_000));
+		return yFromLat((double)lat / 10_000_000);
 	}
 
 	public static double scale(double y)
@@ -108,36 +130,44 @@ public final class Mercator
 		return Math.cosh(y *2 * Math.PI / MAP_WIDTH);
 	}
 	
-	/**
-	 * Converts a projected longitude to WGS84.
-	 * 
-	 * @param x projected latitude (in imps)
-	 * @return equivalent WSG-84 longitude in degrees
-	 */
+	/// Converts a projected longitude to WGS84.
+	///
+	/// @param x projected longitude (in imps)
+	/// @return equivalent WGS-84 longitude in degrees
+	///
 	public static double lonFromX(double x)
 	{
 		return x * 360 / MAP_WIDTH;
 	}
 
+    /// Converts a projected longitude to WGS84, rounded to 7 decimal points.
+	///
+	/// @param x projected longitude (in imps)
+	/// @return equivalent WGS-84 longitude in degrees
+	///
     public static double lonPrecision7fromX(double x)
 	{
 		double lon = lonFromX(x);
         return ((double)Math.round(lon * 10000000)) / 10000000;
 	}
 
-	/**
-	 * Converts a projected latitude to WGS84.
-	 * 
-	 * @param y projected latitude (in imps)
-	 * @return equivalent WSG-84 latitude in degrees
-	 */
+	/// Converts a projected latitude to WGS84.
+    ///
+	/// @param y projected latitude (in imps)
+	/// @return equivalent WGS-84 latitude in degrees
+	///
 	public static double latFromY(double y)
 	{
 		return Math.atan(Math.exp(y * Math.PI * 2 / MAP_WIDTH))
 			* 360 / Math.PI - 90;
 	}
 
-    public static double latPrecision7fromY(double y)
+    /// Converts a projected latitude to WGS84, rounded to 7 decimal points.
+    ///
+	/// @param y projected latitude (in imps)
+	/// @return equivalent WGS-84 latitude in degrees
+	///
+	public static double latPrecision7fromY(double y)
 	{
 		double lat = latFromY(y);
         return ((double)Math.round(lat * 10000000)) / 10000000;
@@ -169,12 +199,30 @@ public final class Mercator
 		return d * EARTH_CIRCUMFERENCE / MAP_WIDTH / scale(
 			(y1 + y2) / 2);
 	}
-	
+
+    /**
+	 * Calculates the Euclidean distance between two projected
+	 * points. A simple method that is sufficiently accurate only
+	 * for short distances.
+	 *
+	 * @param c1 (in imps)
+	 * @param c2 (in imps)
+	 * @return distance in meters
+	 */
 	public static double distance(Coordinate c1, Coordinate c2)
 	{
 		return distance(c1.x, c1.y, c2.x, c2.y);
 	}
 	
+	/**
+	 * Calculates the Euclidean distance between two Geometry objects
+     * (with Mercator-projected coordinates). A simple method that is
+     * sufficiently accurate only for short distances.
+	 *
+	 * @param a Mercator-projected Geometry
+	 * @param b Mercator-projected Geometry
+	 * @return distance in meters
+	 */
 	public static double distance(Geometry a, Geometry b)
 	{
 		Coordinate[] nearestPoints = DistanceOp.nearestPoints(a,b);

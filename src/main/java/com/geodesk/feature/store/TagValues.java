@@ -8,6 +8,7 @@
 package com.geodesk.feature.store;
 
 import com.clarisma.common.math.Decimal;
+import com.clarisma.common.math.MathUtils;
 
 public class TagValues
 {
@@ -25,7 +26,7 @@ public class TagValues
         // TODO: revisit empty marker; empty table is 4 bytes, but has
         //  wide-bit set; this complicates TileReader implementation
         //  Safest: 0x0000_8000
-    public static final int EMPTY_TABLE_MARKER = 0xffff_ffff;
+    public static final int EMPTY_TABLE_MARKER = 0x8001;
     public static final int MIN_NUMBER = -256;
     public static final int MAX_WIDE_NUMBER = (1 << 30) - 1 + MIN_NUMBER;
     public static final int MAX_NARROW_NUMBER = (1 << 16) - 1 + MIN_NUMBER;
@@ -75,6 +76,8 @@ public class TagValues
 
     public static int toInt(String s)
     {
+        return (int) MathUtils.doubleFromString(s);
+        /*
         try
         {
             return Integer.parseInt(s);
@@ -85,5 +88,16 @@ public class TagValues
         {
             return 0;
         }
+         */
+    }
+
+    public static long toLong(String s)
+    {
+        return (long) MathUtils.doubleFromString(s);
+    }
+
+    public static double toDouble(String s)
+    {
+        return MathUtils.doubleFromString(s);
     }
 }

@@ -46,6 +46,21 @@ public class EmptyTags implements Tags
         return null;
     }
 
+    @Override public int intValue()
+    {
+        return 0;
+    }
+
+    @Override public long longValue()
+    {
+        return 0;
+    }
+
+    @Override public double doubleValue()
+    {
+        return 0;
+    }
+
     @Override public Map<String, Object> toMap()
     {
         return Collections.emptyMap();

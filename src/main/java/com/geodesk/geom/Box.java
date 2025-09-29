@@ -340,23 +340,35 @@ public class Box implements Bounds
 		return isNull() ? "[empty]" : String.format("[%d,%d -> %d,%d]", minX, minY, maxX, maxY);
 	}
 
-	// TODO: rounding before (int)
+    /// Creates a `Box` with the given bounds
+    ///
+    /// @param west     the minimum longitude
+    /// @param south    the minimum latitude
+    /// @param east     the maximum longitude
+    /// @param north    the maximum latitude
+    ///
+    /// @throws IllegalArgumentException if a longitude is < -180 or > 180,
+    ///   or a latitude is < -90 or > 90
+    ///
 	public static Box ofWSEN(double west, double south, double east, double north)
 	{
-		return new Box((int) Mercator.xFromLon(west), (int) Mercator.yFromLat(south),
-			(int) Mercator.xFromLon(east), (int) Mercator.yFromLat(north));
+		return new Box(Mercator.xFromLon(west), Mercator.yFromLat(south),
+			Mercator.xFromLon(east), Mercator.yFromLat(north));
 	}
 
 	/// Creates a `Box` that covers a single point.
 	///
 	/// @param lon  the longitude of the point
 	/// @param lat  the latitude of the point
+    ///
 	/// @return a `Box` that is 1 imp wide and 1 imp tall
     ///
+    /// @throws IllegalArgumentException if lon is < -180 or > 180,
+    ///     or a lat is < -90 or > 90
 	public static Box atLonLat(double lon, double lat)
 	{
-		int x = (int) Mercator.xFromLon(lon);
-		int y = (int) Mercator.yFromLat(lat);
+		int x = Mercator.xFromLon(lon);
+		int y = Mercator.yFromLat(lat);
 		return new Box(x,y,x,y);
 	}
 
@@ -418,11 +430,15 @@ public class Box implements Bounds
 	///                  bounds are buffered
 	/// @param lon       longitude of the center point
 	/// @param lat		latitude of the center point
+    ///
 	/// @return			a new bounding box
+    ///
+	/// @throws IllegalArgumentException if lon is < -180 or > 180,
+    ///     or a lat is < -90 or > 90
     ///
 	public static Box metersAroundLonLat(double meters, double lon, double lat)
 	{
-		return metersAroundXY(meters, (int)Mercator.xFromLon(lon), (int)Mercator.yFromLat(lat));
+		return metersAroundXY(meters, Mercator.xFromLon(lon), Mercator.yFromLat(lat));
 	}
 
 	/// Creates a bounding box whose sides are extended by a specific distance relative
