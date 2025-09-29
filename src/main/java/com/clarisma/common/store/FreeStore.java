@@ -154,24 +154,51 @@ public class FreeStore
      * By default, the JVM only unmaps buffers once the `MappedByteBuffer`
      * object is being garbage-collected. This causes problems in cases
      * where GC never runs and we perform an action on the underlying file
-     * (such as truncating its size). This method uses `Unsafe` to explicitly
-     * release the buffer.
+     * (such as truncating its size). This method uses the private
+     * `FileChannelImpl.unmap` method. To make it available, option
+     * `--add-opens=java.base/sun.nio.ch=ALL-UNNAMED` must be passed
+     * to the JVM.
      *
      * === WARNING ===
      *
-     * - The required methods in Unsafe may be removed without notice in future
-     *   version of the JDK.
      * - After a buffer has been unmapped, its contents must not be accessed --
      *   doing so will result in an abnormal process termination
-     *
-     * TODO: Move this outside of this class? Required as a stand-alone mwthod
-     *  to fix clarisma/gol-tool#100
      *
      * @param mappings
      * @return  `true` if the mappings were successfully released
      */
     public static boolean unmapSegments(MappedByteBuffer[] mappings)
     {
+        try
+        {
+            // Reflectively access the internal unmap method
+            Class<?> fcImpl = Class.forName("sun.nio.ch.FileChannelImpl");
+            var unmap = fcImpl.getDeclaredMethod("unmap", MappedByteBuffer.class);
+            unmap.setAccessible(true);
+
+            for (int i = 0; i < mappings.length; i++)
+            {
+                MappedByteBuffer buf = mappings[i];
+                if (buf != null)
+                {
+                    unmap.invoke(null, buf); // static method
+                    mappings[i] = null;      // drop strong ref
+                }
+            }
+            return true;
+        }
+        catch (java.lang.reflect.InaccessibleObjectException ex)
+        {
+            // Module system blocked reflective access
+            return false;
+        }
+        catch (ReflectiveOperationException ex)
+        {
+            // Reflection failed (likely missing --add-opens), fall back
+            return false;
+        }
+
+        /*
         try
         {
             // See https://stackoverflow.com/a/19447758
@@ -207,6 +234,7 @@ public class FreeStore
         {
             return false;
         }
+         */
     }
 
     protected void initialize()
