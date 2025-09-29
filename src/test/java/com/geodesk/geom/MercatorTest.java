@@ -257,9 +257,9 @@ public class MercatorTest
 	{
 		double lon = (double)lon100nd / 10_000_000;
 		double lat = (double)lat100nd / 10_000_000;
-		int x = (int) Math.round(Mercator.xFromLon(lon));
-		int y = (int) Math.round(Mercator.yFromLat(lat));
-		Assert.assertEquals(lon100nd, Math.round(Mercator.lonFromX(x) * 10_000_000));
+		int x = Mercator.xFromLon(lon);
+		int y = Mercator.yFromLat(lat);
+        Assert.assertEquals(lon100nd, Math.round(Mercator.lonFromX(x) * 10_000_000));
 		Assert.assertEquals(lat100nd, Math.round(Mercator.latFromY(y) * 10_000_000));
 
 		Log.debug("lon, lat %f,%f -> x,y %d,%d", lon, lat, x, y);
