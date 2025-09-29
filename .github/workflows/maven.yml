@@ -3,7 +3,7 @@ name: Java CI with Maven
 on:
   push:
     tags:
-      - "*"
+      - "v*"
   workflow_dispatch:
 
 jobs:

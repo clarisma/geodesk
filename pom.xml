@@ -141,10 +141,12 @@
                 <plugin>
                   <groupId>org.sonatype.central</groupId>
                   <artifactId>central-publishing-maven-plugin</artifactId>
-                  <version>0.8.0</version>
+                  <version>0.9.0</version>
                   <extensions>true</extensions>
                   <configuration>
                     <publishingServerId>central</publishingServerId>
+                    <autoPublish>true</autoPublish>
+                    <waitUntil>published</waitUntil>
                   </configuration>
                 </plugin>
 				<plugin>
@@ -174,62 +176,4 @@
 		</build>
 	</profile>
 </profiles>
-
-  <distributionManagement>
-	<snapshotRepository>
-		<id>ossrh</id>
-		<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-	</snapshotRepository>
-	<repository>
-		<id>ossrh</id>
-		<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-	</repository>
-  </distributionManagement>
-
-  <!--
-  <reporting>
-	<plugins>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-javadoc-plugin</artifactId>
-			<version>3.3.1</version>
-
-			<configuration>
-				<doctitle>GeoDesk (0.2 Early Access)</doctitle>
-				<windowtitle>GeoDesk (0.2 Early Access)</windowtitle>
-				<excludePackageNames>
-					benchmarks;
-					com.clarisma.*;
-					com.geodesk.benchmark;
-					com.geodesk.examples;
-					com.geodesk.feature.*;
-					com.geodesk.gol;
-					com.geodesk.gol.*;
-					com.geodesk.geom;
-					com.geodesk.geom.*;
-					com.geodesk.io.*;
-					com.geodesk.map;
-				</excludePackageNames>
-				<links>
-					<link>https://locationtech.github.io/jts/javadoc/</link>
-				</links>
-			</configuration>
-		</plugin>
-
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-jar-plugin</artifactId>
-			<configuration>
-				<excludes>
-					<exclude>**/log4j.properties</exclude>
-				</excludes>
-				<archive>
-
-				</archive>
-			</configuration>
-		</plugin>
-
-	</plugins>
-</reporting>
--->
 </project>
