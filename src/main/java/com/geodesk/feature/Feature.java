@@ -162,6 +162,14 @@ public interface Feature extends Iterable<Feature>
     ///
 	int intValue(String key);
 
+    /// Returns the value of a tag as a `long`.
+	///
+	/// @param key	the key of the tag
+	/// @return		the tag's value, or `0` if the tag does not exist
+	/// 			or has a value that cannot be converted to an integer
+    ///
+	long longValue(String key);
+
 	/// Returns the value of the given key as a `double`.
 	///
 	/// @param key
@@ -199,14 +207,6 @@ public interface Feature extends Iterable<Feature>
 	 * @return true if this feature is an area, otherwise false
 	 */
 	boolean isArea();
-
-	/// Checks whether this feature is a *placeholder*. A placeholder is a
-	/// feature that is referenced by a relation, but is not actually
-	/// present in a dataset.
-	///
-	/// @return
-    ///
-	boolean isPlaceholder();
 
 	/// Measures the length of this feature.
 	///

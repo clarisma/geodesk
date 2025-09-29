@@ -232,7 +232,8 @@ public class StoredWay extends StoredFeature implements Way
 
 	// TODO: area, circumference
 
-	public static class Iter implements Iterator<Feature>
+    // TODO: matcher vs filter!
+    public static class Iter implements Iterator<Feature>
 	{
 		private final FeatureStore store;
 		private final ByteBuffer buf;
@@ -240,13 +241,15 @@ public class StoredWay extends StoredFeature implements Way
 		private int pNext;
 		private Feature featureNode;
 		private int tip = FeatureConstants.START_TIP;
+		private int tex = FeatureConstants.WAYNODES_START_TEX;
 		private ByteBuffer foreignBuf;
-		private int pForeignTile;
+		private int pExports;
 
 		// TODO: consolidate these flags
 		private static final int NF_LAST = 1;
 		private static final int NF_FOREIGN = 2;
-		private static final int NF_DIFFERENT_TILE = 8;
+		private static final int NF_DIFFERENT_TILE = 4;
+        private static final int NF_WIDE_TEX = 8;
 
 
 		public Iter(FeatureStore store, ByteBuffer buf, int pFirst, Matcher filter)
@@ -264,10 +267,20 @@ public class StoredWay extends StoredFeature implements Way
 			{
 				ByteBuffer nodeBuf;
 				int pNode;
-				int pCurrent = pNext;
-				int node = buf.getInt(pCurrent);
-				if((node & NF_FOREIGN) != 0)
+				// int pCurrent = pNext;
+				int node = buf.getInt(pNext);
+				if((node & (NF_FOREIGN << 16)) != 0)
 				{
+                    if ((node & (NF_WIDE_TEX << 16)) == 0)
+                    {
+                        node >>= 16;    // signed
+                        pNext += 2;
+                    }
+                    else
+                    {
+                        node = Integer.rotateLeft(node, 16);
+                    }
+                    tex += (node >> 4);
 					if ((node & NF_DIFFERENT_TILE) != 0)
 					{
 						// TODO: test wide tip delta
@@ -285,19 +298,30 @@ public class StoredWay extends StoredFeature implements Way
 							tipDelta >>= 1;     // signed
 						}
 						tip += tipDelta;
-						int tilePage = store.fetchTile(tip);
+                        int entry = store.tileIndexEntry(tip);
+                        if(!FeatureStore.isTileLoadedAndcurrent(entry))
+                        {
+                            throw new MissingTileException(tip);
+                        }
+						int tilePage = FeatureStore.pageFromEntry(entry);
 						foreignBuf = store.bufferOfPage(tilePage);
-						pForeignTile = store.offsetOfPage(tilePage);
+                        int ppExports = store.offsetOfPage(tilePage) + 24;
+                        pExports = ppExports + foreignBuf.getInt(ppExports);
 					}
 					nodeBuf = foreignBuf;
-					pNode = pForeignTile + ((node >>> 4) << 2);
+                    int ppExported = pExports + (tex << 2);
+                    pNode = ppExported + foreignBuf.getInt(ppExported);
 				}
 				else
 				{
+                    node = Integer.rotateLeft(node, 16);
 					nodeBuf = buf;
-					pNode = (pCurrent & 0xffff_fffe) + ((node >> 2) << 1);
+                    /*
+					pNode = (pNext & 0xffff_fffe) + ((node >> 2) << 1);
 						// TODO: simplify alignment rules!
 						// TODO: (pCurrent & 0xffff_fffe) superfluous?
+                     */
+                    pNode = pNext + (node >> 1) + 2;
 				}
 				pNext -= 4;
 				pNext &= -1 + (node & NF_LAST);		// set pNext to 0 if this is the last node

@@ -10,25 +10,25 @@ package com.geodesk.feature.query;
 import com.geodesk.feature.Filter;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureStore;
+import com.geodesk.geom.Tile;
 
 import java.nio.ByteBuffer;
 
 import static com.geodesk.feature.match.TypeBits.*;
 
+// TODO: Maybe give task the tile page instead of TIP
 public class TileQueryTask extends QueryTask
 {
-    // private final int tile;     // TODO: not needed, drop
-    private final int tip;
+    private final int tilePage;
     protected int bboxFlags;
     private int tilesProcessed;
     protected ByteBuffer buf;
     protected Filter filter;
 
-    public TileQueryTask(Query query, /* int tile, */ int tip, int northwestFlags, Filter filter)
+    public TileQueryTask(Query query, int tilePage, int northwestFlags, Filter filter)
     {
         super(query);
-        // this.tile = tile;
-        this.tip = tip;
+        this.tilePage = tilePage;
         this.bboxFlags = northwestFlags;
         this.filter = filter;
         // Log.debug("Tile %s with filter %s", Tile.toString(tile), filter);
@@ -38,14 +38,7 @@ public class TileQueryTask extends QueryTask
     {
         int p = buf.getInt(ppTree);
         if(p == 0) return task;
-        if((p & 1) == 0)
-        {
-            task = new RTreeQueryTask(this, ppTree, matcher, task);
-            task.fork();
-            return task;
-        }
-        assert (p & 2) == 0;
-        p = ppTree + (p ^ 1);
+        p = ppTree + p;
         for(;;)
         {
             int last = buf.getInt(p) & 1;
@@ -65,13 +58,7 @@ public class TileQueryTask extends QueryTask
     {
         int p = buf.getInt(ppTree);
         if(p == 0) return task;
-        if((p & 1) == 0)
-        {
-            task = new RTreeQueryTask.Nodes(this, ppTree, matcher, task);
-            task.fork();
-            return task;
-        }
-        p = ppTree + (p ^ 1);
+        p = ppTree + p;
         for(;;)
         {
             int last = buf.getInt(p) & 1;
@@ -89,12 +76,11 @@ public class TileQueryTask extends QueryTask
 
     @Override protected boolean exec()
     {
-        // log.debug("Searching tile {} ({})", Tile.toString(tile), Tip.toString(tip));
+        // System.out.format("Searching tile at page %d\n", tilePage);
 
         try
         {
             FeatureStore store = query.store();
-            int tilePage = store.fetchTile(tip);
             buf = store.bufferOfPage(tilePage);
             int pTile = store.offsetOfPage(tilePage);
 

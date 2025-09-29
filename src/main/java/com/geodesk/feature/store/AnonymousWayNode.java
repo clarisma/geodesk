@@ -76,11 +76,6 @@ public class AnonymousWayNode implements Node
         return coords;
     }
 
-    @Override public boolean isPlaceholder()
-    {
-        return false;
-    }
-
     @Override public Box bounds()
     {
         return new Box(x,y);
@@ -131,6 +126,11 @@ public class AnonymousWayNode implements Node
     }
 
     @Override public int intValue(String key)
+    {
+        return 0;
+    }
+
+    @Override public long longValue(String key)
     {
         return 0;
     }

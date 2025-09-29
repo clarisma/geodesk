@@ -11,6 +11,7 @@ import com.clarisma.common.util.Bytes;
 import com.clarisma.common.util.Log;
 import com.geodesk.feature.Feature;
 import com.geodesk.feature.Filter;
+import com.geodesk.feature.MissingTileException;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.store.FeatureConstants;
 import com.geodesk.feature.store.FeatureStore;
@@ -29,6 +30,8 @@ import java.util.Iterator;
 //  Don't set pForeignTile = 0, because 0 is a valid start for a tile
 //  Use -1 instead?
 
+// TODO: Apply filter
+
 public class MemberIterator implements Iterator<Feature>
 {
     private final FeatureStore store;
@@ -41,8 +44,9 @@ public class MemberIterator implements Iterator<Feature>
     private int role;
     private String roleString;
     private int tip = FeatureConstants.START_TIP;
+    private int tex = FeatureConstants.MEMBERS_START_TEX;
     private ByteBuffer foreignBuf;
-    private int pForeignTile;
+    private int pExports;
     private int member;
     private Feature memberFeature;
 
@@ -51,6 +55,7 @@ public class MemberIterator implements Iterator<Feature>
     private static final int MF_FOREIGN = 2;
     private static final int MF_DIFFERENT_ROLE = 4;
     private static final int MF_DIFFERENT_TILE = 8;
+    private static final int MF_WIDE_TEX = 16;
 
     public MemberIterator(FeatureStore store, ByteBuffer buf, int pTable,
         int types, Matcher matcher, Filter filter)
@@ -104,10 +109,15 @@ public class MemberIterator implements Iterator<Feature>
             p += 4;
             if ((member & MF_FOREIGN) != 0)
             {
+                if((member & MF_WIDE_TEX) == 0)
+                {
+                    member = (short)member;
+                    p -= 2;
+                }
                 if ((member & MF_DIFFERENT_TILE) != 0)
                 {
                     // TODO: test wide tip delta
-                    pForeignTile = 0;       // TODO: set to other value, 0 is valid tile start
+                    pExports = -1;
                     int tipDelta = buf.getShort(p);
                     if ((tipDelta & 1) != 0)
                     {
@@ -119,6 +129,7 @@ public class MemberIterator implements Iterator<Feature>
                     p += 2;
                     tip += tipDelta;
                 }
+                tex += member >> 5;
             }
             if ((member & MF_DIFFERENT_ROLE) != 0)
             {
@@ -158,14 +169,21 @@ public class MemberIterator implements Iterator<Feature>
             int pFeature;
             if ((member & MF_FOREIGN) != 0)
             {
-                if (pForeignTile == 0)  // TODO: Tile could start at segment start!
+                if (pExports < 0)
                 {
-                    int tilePage = store.fetchTile(tip);
+                    int entry = store.tileIndexEntry(tip);
+                    if(!FeatureStore.isTileLoadedAndcurrent(entry))
+                    {
+                        throw new MissingTileException(tip);
+                    }
+                    int tilePage = FeatureStore.pageFromEntry(entry);
                     foreignBuf = store.bufferOfPage(tilePage);
-                    pForeignTile = store.offsetOfPage(tilePage);
+                    int ppExports = store.offsetOfPage(tilePage) + 24;
+                    pExports = ppExports + foreignBuf.getInt(ppExports);
                 }
                 featureBuf = foreignBuf;
-                pFeature = pForeignTile + ((member >>> 4) << 2);
+                int ppExported = pExports + (tex << 2);
+                pFeature = ppExported + foreignBuf.getInt(ppExported);
             }
             else
             {

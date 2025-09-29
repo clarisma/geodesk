@@ -16,6 +16,8 @@ import com.geodesk.geom.Mercator;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.prep.PreparedGeometry;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -496,5 +498,27 @@ public interface Features extends Iterable<Feature>
     default Relation relation(long id)
     {
         return (Relation)select(new IdFilter(TypeBits.RELATIONS, id)).first();
+    }
+
+    /// Opens the given Geographic Object Library and returns
+    /// all of its features.
+    ///
+    /// @param path     the path of the GOL file
+    /// @return
+    ///
+    static FeatureLibrary open(String path)
+    {
+        return open(Paths.get(path));
+    }
+
+    /// Opens the given Geographic Object Library and returns
+    /// all of its features.
+    ///
+    /// @param path     the path of the GOL file
+    /// @return
+    ///
+    static FeatureLibrary open(Path path)
+    {
+        return new FeatureLibrary(path);
     }
 }

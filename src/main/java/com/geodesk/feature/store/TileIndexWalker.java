@@ -36,6 +36,7 @@ public class TileIndexWalker
     private int northwestFlags;
     private MutableIntSet acceptedTiles;
     private boolean tileBasedAcceleration;
+    private int pTileIndex;
 
     // TODO: could the col/rows be shorts? Performance impact?
     private static class Level
@@ -54,7 +55,7 @@ public class TileIndexWalker
         int currentRow;
         Filter filter;
 
-        void init(int parentTile, Bounds bounds, Filter filter)
+        void init(ByteBuffer buf, int pEntry, int parentTile, Bounds bounds, Filter filter)
         {
             this.filter = filter;
             int zoom = Tile.zoom(topLeftChildTile);
@@ -75,16 +76,21 @@ public class TileIndexWalker
             endRow = Math.min(bottom-tileTop, extent-1);
             currentCol = startCol - 1;
             currentRow = startRow;
+            childTileMask = buf.getLong(pEntry + 4);
+                // TODO: This fails before gol-tool#7 is fixed
+            pChildEntries = pEntry + (extent==8 ? 12 : 8);
         }
     }
 
     public TileIndexWalker(ByteBuffer buf, int pTileIndex, int zoomLevels)
     {
         this.buf = buf;
+        this.pTileIndex = pTileIndex;
 
         current = root = new Level();
         Level level = root;
-        int zoom = -1;
+        zoomLevels >>= 1;
+        int zoom = 0;
         for(;;)
         {
             int step = Integer.numberOfTrailingZeros(zoomLevels) + 1;
@@ -98,18 +104,11 @@ public class TileIndexWalker
             child.parent = level;
             level = child;
         }
-
-        // initialize the root
-
-        level = root;
-        level.extent >>>= 1;    // fix the root extent // TODO: check, needed?
-        level.childTileMask = ~0;      // root tile raster is always dense
-        level.pChildEntries = pTileIndex + 4;   // skip purgatory tile
     }
 
     public TileIndexWalker(FeatureStore store)
     {
-        this(store.baseMapping(), store.tileIndexPointer(), store.zoomLevels());
+        this(store.tileIndexBuf(), store.tileIndexOfs(), store.zoomLevels());
     }
 
     public void start(Bounds bounds)
@@ -121,7 +120,8 @@ public class TileIndexWalker
     {
         this.bounds = bounds;
         this.filter = filter;
-        root.init(0, bounds, filter);
+        currentTip = 1;
+        root.init(buf,pTileIndex + 4, 0, bounds, filter);
         current = root;
         acceptedTiles = null;
         if(filter != null)
@@ -140,7 +140,7 @@ public class TileIndexWalker
 
     protected int tileIndexPointer()
     {
-        return root.pChildEntries - 4;      // TODO: maybe set ptr one word ahead?
+        return pTileIndex;
     }
 
     public int tile()
@@ -167,8 +167,8 @@ public class TileIndexWalker
     {
         int p = tileIndexPointer() + currentTip * 4;
         int entry = buf.getInt(p);
-        assert (entry & 1) == 0;
-        return entry == 0? 0 : (entry >>> 1);
+        assert (entry & 3) != 1;
+        return entry >>> 2;
     }
 
     public boolean next()
@@ -190,13 +190,11 @@ public class TileIndexWalker
                         // We've completed the root; we are done
                         return false;
                     }
+                    // continue with parent level
                     childTileMask = level.childTileMask;
                     continue;
                 }
-                else
-                {
-                    level.currentCol = level.startCol;
-                }
+                level.currentCol = level.startCol;
             }
             int childNumber = level.currentRow * level.extent + level.currentCol;
             if ((childTileMask & (1L << childNumber)) != 0)
@@ -287,20 +285,27 @@ public class TileIndexWalker
                 }
                 int pEntry = level.pChildEntries + childEntry * 4;
                 int pageOrPtr = buf.getInt(pEntry);
-                if((pageOrPtr & 1) != 0)
+                if((pageOrPtr & 3) == 1)
                 {
+                    // Changed for v2: The lowest 2 bits
+                    //  are flags. A value of 01 indicates a pointer
+                    //  to a child level
+
                     // current tile has children: prepare to move up to the
                     // next level in the tile tree
 
                     current = level = level.child;
-                    pEntry += (pageOrPtr ^ 1);
-                    level.init(currentTile, bounds, filter);
-                    level.childTileMask = buf.getLong(pEntry + 4);
-                    level.pChildEntries = pEntry + (level.extent==8 ? 12 : 8);
+                    pEntry += pageOrPtr ^ 1;
+                    level.init(buf, pEntry, currentTile, bounds, filter);
                 }
                 currentTip = (pEntry - tileIndexPointer()) / 4;
                 return true;
             }
         }
+    }
+
+    public void skipChildren()
+    {
+        current = current.parent != null ? current.parent : current;
     }
 }

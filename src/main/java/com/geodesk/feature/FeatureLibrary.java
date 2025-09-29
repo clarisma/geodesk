@@ -20,46 +20,26 @@ public class FeatureLibrary extends WorldView implements AutoCloseable
 {
     /// Creates a `FeatureLibrary` instance associated with an existing GOL file.
     ///
-    /// @param path the path of the GOL file.
+    /// @param path the path of the GOL file
     ///
+    /// @deprecated Use {@link Features#open(String)} instead.
+    ///
+    @Deprecated(since = "2.0")
     public FeatureLibrary(String path)
     {
-        this(Paths.get(path), null);
+        this(Paths.get(path));
     }
 
     /// Creates a `FeatureLibrary` instance associated with an existing GOL file.
     ///
-    /// @param path the path of the GOL file.
+    /// @param path the path of the GOL file
     ///
+    /// @deprecated Use {@link Features#open(Path)} instead.
+    ///
+    @Deprecated(since = "2.0")
     public FeatureLibrary(Path path)
     {
-        this(path, null);
-    }
-
-    /// Creates a `FeatureLibrary` instance associated with the given GOL file;
-    /// if the file does not exist, an empty library will be created.
-    ///
-    /// @param path the path of the GOL file
-    /// @param url  the URL from which missing tiles are downloaded into the library
-    ///
-    public FeatureLibrary(String path, String url)
-    {
-        this(Paths.get(path), url);
-    }
-
-    /// Creates a `FeatureLibrary` instance associated with the given GOL file;
-    /// if the file does not exist, an empty library will be created.
-    ///
-    /// @param path the path of the GOL file
-    /// @param url  the URL from which missing tiles are downloaded into the library
-    ///
-    public FeatureLibrary(Path path, String url)
-    {
-        super(new FeatureStore());
-        store.setPath(path);
-        if(url != null) store.setRepository(url);
-        store.open();
-        store.enableQueries();
+        super(new FeatureStore(path));
     }
 
     public GeometryFactory geometryFactory()

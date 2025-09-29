@@ -1,7 +1,12 @@
 <img src="https://docs.geodesk.com/img/github-header.png">
 
-
 GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data. Also available [for C++](https://github.com/clarisma/libgeodesk) and [for Python](https://github.com/clarisma/geodesk-py).
+
+> [!IMPORTANT]
+> For Version 2.0, you will need to build GOLs with [GOL Tool 2.0](https://github.com/clarisma/geodesk-gol). 
+> 
+> To read GOLs built with [GOL Tool 1.x](https://github.com/clarisma/gol-tool), use [Version 1.1.0](https://github.com/clarisma/geodesk/releases/tag/1.1.0) of this toolkit. 
+
 
 ## Why GeoDesk?
 
@@ -29,7 +34,7 @@ Include this dependency in your project's `pom.xml`:
 <dependency>
     <groupId>com.geodesk</groupId>
     <artifactId>geodesk</artifactId>
-    <version>1.1.0</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
@@ -51,8 +56,7 @@ public class PubsExample
 {
     public static void main(String[] args)
     {
-        FeatureLibrary library = new FeatureLibrary(
-            "switzerland.gol");                          // 1
+        var library = Features.open("switzerland.gol");  // 1
         
         for(Feature pub: library                         // 2
             .select("na[amenity=pub]")                   // 3
@@ -115,12 +119,13 @@ int numberOfEntrances = building.nodes("[entrance]").size();
 ## Documentation
 
 - [GeoDesk Developer's Guide](https://docs.geodesk.com/java)
-- [API Reference](https://apidocs.geodesk.com/v1)
+- [API Reference](https://apidocs.geodesk.com/v2)
 
 ## Related Repositories
 
-- [gol-tool](http://www.github.com/clarisma/gol-tool) &mdash; command-line utility for building, maintaining and querying GOL files
+- [geodesk-gol](http://www.github.com/clarisma/geodesk-gol) &mdash; command-line utility for building, maintaining and querying GOL files
 - [geodesk-examples](http://www.github.com/clarisma/geodesk-examples) &mdash; example applications
 - [geodesk-tests](http://www.github.com/clarisma/geodesk-tests) &mdash; integration tests
 - [libgeodesk](https://github.com/clarisma/libgeodesk) &mdash; GeoDesk for C++ 
 - [geodesk-py](https://github.com/clarisma/geodesk-py) &mdash; GeoDesk for Python
+- [gol-tool](http://www.github.com/clarisma/gol-tool) &mdash; legacy GOL Tool (supports GOL 1.0 files) 

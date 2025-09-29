@@ -16,11 +16,14 @@ public interface FeatureFlags
     int RELATION_MEMBER_FLAG = 1 << 2;
     int FEATURE_TYPE_BITS = 3;              // Bit 3 & 4
     int WAYNODE_FLAG = 1 << 5;
-    // int FEATURE_NODES_FLAG = 1 << 5;
     int MULTITILE_BITS = 6;
     int MULTITILE_WEST_BIT = 6;
     int MULTITILE_NORTH_BIT = 7;
     int MULTITILE_WEST = 1 << MULTITILE_WEST_BIT;
     int MULTITILE_NORTH = 1 << MULTITILE_NORTH_BIT;
     int MULTITILE_FLAGS = MULTITILE_WEST | MULTITILE_NORTH;
+    int SHARED_LOCATION_FLAG = 1 << 8;
+    int EXCEPTION_NODE_FLAG = 1 << 9;
+    int UNMODIFIED_FLAG = 1 << 10;
+    int DELETED_FLAG = 1 << 11;
 }

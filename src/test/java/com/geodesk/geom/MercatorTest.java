@@ -7,9 +7,45 @@ import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 import static com.geodesk.geom.Mercator.*;
+import static org.junit.Assert.assertThrows;
 
 public class MercatorTest
 {
+    @Test public void testProjection()
+	{
+        int x,y;
+
+        x = Mercator.xFromLon(-180);
+        Assert.assertEquals(Integer.MIN_VALUE + 1, x);
+        x = Mercator.xFromLon(180);
+        Assert.assertEquals(Integer.MAX_VALUE, x);
+        y = Mercator.yFromLat(-90);
+        Assert.assertEquals(Integer.MIN_VALUE, y);
+        y = Mercator.yFromLat(90);
+        Assert.assertEquals(Integer.MAX_VALUE, y);
+
+        y = Mercator.yFromLat(MIN_LAT);
+        Assert.assertEquals(Integer.MIN_VALUE, y);
+        y = Mercator.yFromLat(MAX_LAT);
+        Assert.assertEquals(Integer.MAX_VALUE, y);
+
+        double lon, lat;
+        final double DELTA = 1e-8;
+
+        double minLat = ((double)Math.round(MIN_LAT * 10000000)) / 10000000;
+        double maxLat = ((double)Math.round(MAX_LAT * 10000000)) / 10000000;
+
+
+        lon = Mercator.lonPrecision7fromX(Integer.MIN_VALUE+1);
+        Assert.assertEquals(-180, lon, DELTA);
+        lon = Mercator.lonPrecision7fromX(Integer.MAX_VALUE);
+        Assert.assertEquals(180, lon, DELTA);
+        lat = Mercator.latPrecision7fromY(Integer.MIN_VALUE);
+        Assert.assertEquals(minLat, lat, DELTA);
+        lat = Mercator.latPrecision7fromY(Integer.MAX_VALUE);
+        Assert.assertEquals(maxLat, lat, DELTA);
+    }
+
 	@Test public void testExtremeCoordinates()
 	{
 		long min = Long.MIN_VALUE;
@@ -31,9 +67,9 @@ public class MercatorTest
 		x = Mercator.xFromLon100nd(-1_800_000_000);
 		System.out.format("-180 deg lon = %d\n", x);
 
-		x = (int)Math.round(Mercator.xFromLon(180));
+		x = Mercator.xFromLon(180);
 		System.out.format("180 deg lon (double) = %d\n", x);
-		x = (int)Math.round(Mercator.xFromLon(-180));
+		x = Mercator.xFromLon(-180);
 		System.out.format("-180 deg lon (double) = %d\n", x);
 
 		int y = Mercator.yFromLat100nd(900_000_000);
@@ -41,11 +77,23 @@ public class MercatorTest
 		y = Mercator.yFromLat100nd(-900_000_000);
 		System.out.format("-90 deg lat = %d\n", y);
 
-		y = (int)Mercator.yFromLat(999999);
-		System.out.format("999999 deg lat = %d\n", y);
-		y = (int)Mercator.yFromLat(-999999);
-		System.out.format("-999999 deg lat = %d\n", y);
-		
+         y = Mercator.yFromLat(80);
+		System.out.format("80 deg lat = %d\n", y);
+		y = Mercator.yFromLat(-80);
+		System.out.format("-80 deg lat = %d\n", y);
+
+        y = Mercator.yFromLat(Mercator.MAX_LAT);
+		System.out.format("MAX_LAT deg lat = %d\n", y);
+		y = Mercator.yFromLat(-Mercator.MAX_LAT);
+		System.out.format("MIN_LAT deg lat = %d\n", y);
+
+        IllegalArgumentException ex = assertThrows(
+            IllegalArgumentException.class,
+            () -> Mercator.yFromLat(999999));
+        ex = assertThrows(
+            IllegalArgumentException.class,
+            () -> Mercator.yFromLat(-999999));
+
 		y = Mercator.yFromLat100nd(850_511_290);
 		System.out.format("85.051129 deg lat = %d\n", y);
 		y = Mercator.yFromLat100nd(-850_511_290);
@@ -65,6 +113,11 @@ public class MercatorTest
 		System.out.format("minint+4 x -> deg lon = %.08f\n", lon);
 		lon = Mercator.lonFromX(Integer.MIN_VALUE+100);
 		System.out.format("minint+100 x -> deg lon = %.08f\n", lon);
+
+        lat = Mercator.latFromY(Integer.MAX_VALUE);
+		System.out.format("maxint y -> deg lat = %.08f\n", lat);
+        lat = Mercator.latFromY(Integer.MIN_VALUE);
+		System.out.format("minint y -> deg lat = %.08f\n", lat);
 	}
 
 	/*
@@ -175,6 +228,30 @@ public class MercatorTest
 		}
 	}
 	 */
+
+    void testReverse(double lon, double lat)
+    {
+        int x = Mercator.xFromLon(lon);
+        int y = Mercator.yFromLat(lat);
+        double lon2 = Mercator.lonPrecision7fromX(x);
+        double lat2 = Mercator.latPrecision7fromY(y);
+        System.out.format("Lon: %.8f --> %d --> %.8f\n", lon, x, lon2);
+        System.out.format("Lat: %.8f --> %d --> %.8f\n", lat, y, lat2);
+        // System.out.format("Max_int diff = %d\n", Integer.MAX_VALUE - 2147483636);
+        Assert.assertEquals(lon2, lon, 1e-7);
+        Assert.assertEquals(lat2, lat, 1e-7);
+    }
+
+    @Test public void testReverse()
+	{
+		testReverse(0,0);
+        testReverse(-180,80);
+        testReverse(180,-80);
+        testReverse(0,Mercator.MAX_LAT);
+        testReverse(0,Mercator.MIN_LAT);
+        testReverse(0,85);
+        testReverse(0,-85);
+	}
 
 	private void testMercatorConversion(int lon100nd, int lat100nd)
 	{
