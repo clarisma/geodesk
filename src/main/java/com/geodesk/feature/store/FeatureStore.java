@@ -8,10 +8,7 @@
 package com.geodesk.feature.store;
 
 import com.clarisma.common.pbf.PbfDecoder;
-import com.clarisma.common.store.BlobStore;
 import com.clarisma.common.store.FreeStore;
-import com.clarisma.common.store.StoreException;
-import com.geodesk.geom.Box;
 import com.geodesk.feature.match.Matcher;
 import com.geodesk.feature.match.MatcherCompiler;
 import org.eclipse.collections.api.map.primitive.IntIntMap;
@@ -22,7 +19,6 @@ import org.eclipse.collections.impl.map.mutable.primitive.IntIntHashMap;
 import org.eclipse.collections.impl.map.mutable.primitive.ObjectIntHashMap;
 import org.locationtech.jts.geom.GeometryFactory;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.util.HashMap;
