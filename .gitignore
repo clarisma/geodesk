@@ -52,5 +52,6 @@ Temporary Items
 /out/
 core/.idea/workspace.xml
 /.idea/
+*.iml
 target
 hs_err_pid*.log
