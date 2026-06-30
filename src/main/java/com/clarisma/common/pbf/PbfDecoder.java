@@ -24,13 +24,6 @@ public class PbfDecoder
 	private final ByteBuffer buf;
 	private int pos;
 
-	/*
-	public PbfDecoder()
-	{
-		// TODO: this makes no sense
-	}
-	 */
-	
 	public PbfDecoder(ByteBuffer buf, int pos)
 	{
 		this.buf = buf;
