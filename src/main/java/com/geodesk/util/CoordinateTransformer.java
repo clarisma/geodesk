@@ -16,6 +16,7 @@ import java.io.IOException;
 
 // TODO: rename class to CoordinateConverter?
 // TODO: rename write to format?
+/// @hidden
 public class CoordinateTransformer
 {
     private final double scale;

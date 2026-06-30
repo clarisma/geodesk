@@ -16,6 +16,7 @@ import org.locationtech.jts.geom.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/// @hidden
 public class GeometryBuilder extends GeometryFactory
 {
     public static final GeometryBuilder instance = new GeometryBuilder();

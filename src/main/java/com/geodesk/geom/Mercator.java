@@ -294,9 +294,9 @@ public final class Mercator
 	 */
 
 	/**
-	 * Converts the WGS84 (longitude/latitude) coordinates of a
-	 * {@link Geometry} into Mercator projection. The Geometry is
-	 * modified in-place.
+	 * Converts the WGS84 (degrees longitude/latitude) coordinates
+     * of a {@link Geometry} into Mercator projection. The Geometry
+     * is modified in-place.
 	 *
 	 * @param geom the `Geometry` whose coordinates to project
 	 */
@@ -308,6 +308,35 @@ public final class Mercator
 			{
 				seq.setOrdinate(i,0,xFromLon(seq.getX(i)));
 				seq.setOrdinate(i,1,yFromLat(seq.getY(i)));
+			}
+
+			@Override public boolean isDone()
+			{
+				return false;
+			}
+
+			@Override public boolean isGeometryChanged()
+			{
+				return true;
+			}
+		});
+	}
+
+    /**
+	 * Converts the Mercator-projected coordinates of a
+     * {@link Geometry} to WGS84 (degrees longitude/latitude).
+     * The Geometry is modified in-place.
+	 *
+	 * @param geom the `Geometry` whose coordinates to project
+	 */
+	public static void unproject(Geometry geom)
+	{
+		geom.apply(new CoordinateSequenceFilter()
+		{
+			@Override public void filter(CoordinateSequence seq, int i)
+			{
+				seq.setOrdinate(i,0, lonFromX(seq.getX(i)));
+				seq.setOrdinate(i,1, latFromY(seq.getY(i)));
 			}
 
 			@Override public boolean isDone()

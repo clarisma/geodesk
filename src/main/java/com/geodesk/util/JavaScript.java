@@ -15,6 +15,8 @@ import java.util.Map;
 
 /**
  * Methods to generate JavaScript.
+ *
+ * @hidden
  */
 public class JavaScript 
 {
