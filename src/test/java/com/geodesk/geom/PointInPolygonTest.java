@@ -81,20 +81,6 @@ public class PointInPolygonTest
     };
 
 
-
-    private void testVertices(String s, int[] p)
-    {
-        Log.debug(s);
-        for(int i=0; i<p.length; i+=2)
-        {
-            int x = p[i];
-            int y = p[i+1];
-            Log.debug("%d, %d: %s", x,y, isInside(p,x,y));
-            // assertTrue(isInside(P,x,y));
-        }
-    }
-
-
     private void testVerticesFast(int[] p)
     {
         for(int i=0; i<p.length; i+=2)
@@ -134,51 +120,5 @@ public class PointInPolygonTest
     public void testPointsFast()
     {
         testPointsFast(P, points);
-    }
-
-    /*
-    @Test
-    public void testPointsFastPerformance()
-    {
-        Stopwatch timer = new Stopwatch();
-        for(int run=0; run<10; run++)
-        {
-            timer.start();
-            for (int i = 0; i < 1_000_000; i++)
-            {
-                testPointsFast(P, points);
-            }
-            Log.debug("Run %d: %d ms", run, timer.stop());
-            timer.reset();
-        }
-
-    }
-     */
-
-
-    private void testPoints(int[] polygon, int[] points)
-    {
-        for(int i=0; i<points.length; i+=3)
-        {
-            int x = points[i];
-            int y = points[i+1];
-            int inside = points[i+2];
-            Log.debug("%d, %d: %s", x,y, isInside(polygon,x,y));
-            // assertEquals(inside != 0, isInside(polygon, x,y));
-        }
-    }
-
-    @Test
-    public void testPoints()
-    {
-        testPoints(R, rpoints);
-    }
-
-
-    @Test public void testIsInside()
-    {
-        testVertices("P1", P);
-        testVertices("P2", P2);
-        testVertices("P3", P3);
     }
 }

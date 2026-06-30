@@ -370,19 +370,6 @@ public class Tile
 		return topLeft==bottomRight ? topLeft : -1;
 	}
 
-	// not used
-	public static TileBox childrenOfTileAtZoom(int tile, int zoom)
-	{
-		int levels = zoom - Tile.zoom(tile);
-		assert levels >= 0;
-		int top = Tile.row(tile) << levels;
-		int left = Tile.column(tile) << levels;
-		int size = 1 << levels;
-		TileBox box = new TileBox();
-		box.expandToInclude(Tile.fromColumnRowZoom(left, top, zoom));
-		box.expandToInclude(Tile.fromColumnRowZoom(left+size-1, top+size-1, zoom));
-		return box;
-	}
 
     // TODO: only works for positive deltas, and does not wrap!
 	public static int relative(int tile, int deltaCol, int deltaRow)
