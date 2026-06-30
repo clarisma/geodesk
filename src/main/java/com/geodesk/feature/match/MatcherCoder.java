@@ -1768,7 +1768,7 @@ public class MatcherCoder extends ExpressionCoder
             int groupType = sel.matchTypes();
             Label next_group = new Label();
             mv.visitVarInsn(ILOAD, $type);
-            loadIntConstant(sel.clauseTypes());
+            loadIntConstant(groupType);
             mv.visitInsn(IAND);
             mv.visitJumpInsn(IFEQ, next_group);
             for(;;)
