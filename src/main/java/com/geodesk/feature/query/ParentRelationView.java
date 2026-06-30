@@ -9,13 +9,10 @@ package com.geodesk.feature.query;
 
 import com.geodesk.feature.*;
 import com.geodesk.feature.match.Matcher;
-import com.geodesk.feature.match.AndMatcher;
-import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.store.FeatureConstants;
 import com.geodesk.feature.store.FeatureStore;
 import com.geodesk.feature.store.StoredRelation;
-import com.geodesk.geom.Bounds;
 
 import java.nio.ByteBuffer;
 import java.util.Iterator;

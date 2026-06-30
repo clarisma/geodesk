@@ -9,7 +9,6 @@ package com.geodesk.feature.store;
 
 import com.geodesk.feature.*;
 import com.geodesk.feature.match.Matcher;
-import com.geodesk.feature.match.MatcherSet;
 import com.geodesk.feature.match.TypeBits;
 import com.geodesk.feature.polygon.PolygonBuilder;
 import com.geodesk.feature.query.EmptyView;

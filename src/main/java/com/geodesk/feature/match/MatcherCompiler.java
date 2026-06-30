@@ -49,7 +49,7 @@ public class MatcherCompiler extends ClassLoader
     {
         MatcherCoder coder = new MatcherCoder(valueNo);
         classCount++;
-        String className = "Filter_" + classCount;
+        String className = "Matcher_" + classCount;
         byte[] code = coder.createMatcherClass(className, selectors);
         Class<?> matcherClass = defineClass(className, code, 0, code.length);
         try
@@ -71,128 +71,6 @@ public class MatcherCompiler extends ClassLoader
     {
         parser.parse(query);
         Selector selectors = parser.query();
-
-        Selector sel = selectors;
-        int commonType=0;
-        while(sel != null)
-        {
-            int type = sel.matchTypes();
-            if (commonType == 0)
-            {
-                commonType = type;
-            }
-            else
-            {
-                if (type != commonType)
-                {
-                    throw new QueryException("Polyform queries are not supported.");
-                    /*
-                    do
-                    {
-                        commonType |= sel.matchTypes();
-                        sel = sel.next();
-                    }
-                    while (sel != null);
-                    return createPolyformMatchers(commonType, selectors);
-                     */
-                }
-            }
-            sel = sel.next();
-        }
-
         return createMatcher(selectors);
-    }
-
-    /**
-     * Extracts a chain of selectors that match the given type from
-     * a source chain. The source chain must have a "dummy" head element.
-     * If a Selector that matches the given type targets multiple types,
-     * a shallow copy is created.
-     *
-     * @param selectors     a chain of Selectors with a dummy head
-     * @param type          a bit field of types
-     * @return  a chain of Selectors that target the given type
-     */
-    private Selector extractSelectors(Selector selectors, int type)
-    {
-        Selector firstExtracted = null;
-        Selector lastExtracted = null;
-        Selector prev = selectors;
-        Selector next = prev.next();
-        for(;;)
-        {
-            Selector sel = next;
-            if(sel == null) break;
-            next = sel.next();
-            int selectorTypes = sel.matchTypes();
-            if((selectorTypes & type) == type)
-            {
-                Selector extracted;
-                if(selectorTypes == type)
-                {
-                    // If the Selector matches only the selected type,
-                    // take it from the chain
-                    prev.setNext(next);
-                    sel.setNext(null);
-                    extracted = sel;
-                    // Log.debug("took %s", sel);
-                }
-                else
-                {
-                    // Otherwise, split off a copy
-                    extracted = sel.split(type);
-                    // Log.debug("made a copy of %s", sel);
-                }
-                if(firstExtracted == null)
-                {
-                    firstExtracted = extracted;
-                }
-                else
-                {
-                    lastExtracted.setNext(extracted);
-                }
-                lastExtracted = extracted;
-            }
-            prev = sel;
-        }
-        return firstExtracted;
-    }
-
-    private MatcherSet createPolyformMatchers(int types, Selector selectors)
-    {
-        // Create a "dummy" head to simplify the removal of elements
-        // from the linked list of Selectors
-        Selector head = new Selector(0);
-        head.setNext(selectors);
-
-        // Log.debug("extracting selectors...");
-        Selector selNodes     = extractSelectors(head, TypeBits.NODES);
-        assert selNodes == null || selNodes.matchTypes() == TypeBits.NODES;
-        Selector selWays      = extractSelectors(head, TypeBits.NONAREA_WAYS);
-        assert selWays == null || selWays.matchTypes() == TypeBits.NONAREA_WAYS;
-        Selector selAreas     = extractSelectors(head, TypeBits.AREAS);
-        assert selAreas == null || selAreas.matchTypes() == TypeBits.AREAS;
-        Selector selRelations = extractSelectors(head, TypeBits.NONAREA_RELATIONS);
-        assert selRelations == null || selRelations.matchTypes() == TypeBits.NONAREA_RELATIONS;
-
-        /*
-        int testTypes = 0;
-        if(selNodes != null) testTypes |= TypeBits.NODES;
-        if(selWays != null) testTypes |= TypeBits.NONAREA_WAYS;
-        if(selAreas != null) testTypes |= TypeBits.AREAS;
-        if(selRelations != null) testTypes |= TypeBits.NONAREA_RELATIONS;
-        assert types == testTypes;
-         */
-
-        // It's possible to leave the original selectors behind; it's easier
-        // to make a type-specific copy -- so no assert
-        // assert head.next() == null: "All selectors must be extracted";
-
-        return new MatcherSet(types,
-            selNodes     != null ? createMatcher(selNodes)     : null,
-            selWays      != null ? createMatcher(selWays)      : null,
-            selAreas     != null ? createMatcher(selAreas)     : null,
-            selRelations != null ? createMatcher(selRelations) : null,
-            null);      // TODO: member filter
     }
 }

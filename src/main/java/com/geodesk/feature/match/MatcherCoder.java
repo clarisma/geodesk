@@ -213,6 +213,11 @@ public class MatcherCoder extends ExpressionCoder
 	 * a match will be attempted.
 	 */
 	private static final int $last_match_ptr = 14;
+	/**
+	 * The feature's type (used only for polyform matchers);
+     * this is a single bit that corresponds to {@link TypeBits}.
+	 */
+	private static final int $type = 14;
 
 	private static final int NONE = 0;
 	private static final int REQUIRED = 1;
@@ -1733,6 +1738,55 @@ public class MatcherCoder extends ExpressionCoder
 		mv.visitEnd();
 	}
 
+    /**
+     * Emits code to store the feature's type bit in $type.
+     *
+     * $pos must point to the feature's anchor (ID/flags).
+     */
+    private void saveFeatureType()
+    {
+        mv.visitInsn(ICONST_1);
+        getInt();
+        mv.visitInsn(ICONST_1);
+        mv.visitInsn(IUSHR);
+        mv.visitInsn(ISHL);
+        mv.visitIntInsn(ISTORE, $type);
+    }
+
+    /**
+     * Emit code to evaluate polyform selectors, conditionally checking
+     * each group based on the feature's type bit.
+     *
+     * @param first
+     * @param checkLocalKeyFlag
+     */
+    private void polyformSelectors(Selector first, boolean checkLocalKeyFlag)
+    {
+        Selector sel = first;
+		do
+		{
+            int groupType = sel.matchTypes();
+            Label next_group = new Label();
+            mv.visitIntInsn(ILOAD, $type);
+            loadIntConstant(sel.clauseTypes());
+            mv.visitInsn(IAND);
+            mv.visitJumpInsn(IFEQ, next_group);
+            for(;;)
+            {
+                selector(sel, checkLocalKeyFlag);
+                sel = sel.next();
+                if (sel == null) break;
+
+                // If there are more selectors, reset pos to start of tagtable
+                mv.visitVarInsn(ILOAD, $tagtable_ptr);
+                mv.visitVarInsn(ISTORE, $pos);
+                if (sel.matchTypes() != groupType) break;
+            }
+            mv.visitLabel(next_group);
+		}
+        while(sel != null);
+    }
+
 	private void createAcceptMethod(String methodName, Selector first)
 	{
 		Selector sel;
@@ -1761,6 +1815,9 @@ public class MatcherCoder extends ExpressionCoder
 		boolean queryTrueIfNoLocals = true;
 		boolean queryFalseIfNoLocals = true;
 
+        boolean isPolyform = false;
+        int firstType = first.matchTypes();
+
 		sel = first;
 		while (sel != null)
 		{
@@ -1779,10 +1836,19 @@ public class MatcherCoder extends ExpressionCoder
 			{
 				queryFalseIfNoLocals = false;
 			}
-			sel = sel.next();
+            isPolyform |= sel.matchTypes() != firstType;
+
+            sel = sel.next();
 		}
 
 		mv = cw.visitMethod(ACC_PUBLIC, methodName, "(Ljava/nio/ByteBuffer;I)Z", null, null);
+
+        if(isPolyform)
+        {
+            saveFeatureType();
+            first.groupByMatchTypes();
+        }
+
 		// Advance the feature pointer to the tagtable pointer
 		mv.visitIincInsn($pos, 8);
 		// Load the relative tag-table pointer
@@ -1841,16 +1907,23 @@ public class MatcherCoder extends ExpressionCoder
 		}
 		mv.visitVarInsn(ISTORE, $pos);
 
-		sel = first;
-		for (; ; )
-		{
-			selector(sel, mustCheckLocalsFlag);
-			sel = sel.next();
-			if (sel == null) break;
-			// If there are more selectors, reset pos to start of tagtable
-			mv.visitVarInsn(ILOAD, $tagtable_ptr);
-			mv.visitVarInsn(ISTORE, $pos);
-		}
+        if(isPolyform)
+        {
+            polyformSelectors(first, mustCheckLocalsFlag);
+        }
+        else
+        {
+            sel = first;
+            for (; ; )
+            {
+                selector(sel, mustCheckLocalsFlag);
+                sel = sel.next();
+                if (sel == null) break;
+                // If there are more selectors, reset pos to start of tagtable
+                mv.visitVarInsn(ILOAD, $tagtable_ptr);
+                mv.visitVarInsn(ISTORE, $pos);
+            }
+        }
 
 		// None of the selectors matched: return false
 		mv.visitInsn(ICONST_0);

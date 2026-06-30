@@ -1,7 +1,5 @@
 package com.geodesk.io;
 
-import com.clarisma.common.store.BlobStoreTest;
-import com.clarisma.common.util.Log;
 import com.geodesk.util.CoordinateTransformer;
 import org.junit.After;
 import org.junit.Assert;

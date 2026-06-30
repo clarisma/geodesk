@@ -164,4 +164,50 @@ public class Selector extends Expression
 		visitor.visitExpression(this);
 		return null;
 	}
+
+    /**
+     * Rearranges a chain of Selectors so that Selectors with
+     * the same matchTypes value are adjacent.
+     */
+    public void groupByMatchTypes()
+    {
+        Selector last = this;
+        Selector remaining = next;
+
+        while(remaining != null)
+        {
+            int type = last.matchTypes();
+            Selector sel = remaining;
+            Selector prev = null;
+            do
+            {
+                Selector next = sel.next;
+                if (sel.matchTypes() == type)
+                {
+                    if(remaining == sel)
+                    {
+                        remaining = next;
+                    }
+                    else
+                    {
+                        prev.next = next;
+                    }
+                    last.next = sel;
+                    last = sel;
+                }
+                else
+                {
+                    prev = sel;
+                }
+                sel = next;
+            }
+            while (sel != null);
+            last.next = remaining;
+            last = remaining;
+            if(remaining != null)
+            {
+                remaining = remaining.next;
+            }
+        }
+    }
 }

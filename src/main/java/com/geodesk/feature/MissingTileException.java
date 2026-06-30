@@ -9,10 +9,16 @@ package com.geodesk.feature;
 
 public class MissingTileException extends RuntimeException
 {
-    private int tip;
+    private final int tip;
 
 	public MissingTileException(int tip)
 	{
 		super(String.format("Missing tile: %06X", tip));
+        this.tip = tip;
 	}
+
+    public int tip()
+    {
+        return tip;
+    }
 }

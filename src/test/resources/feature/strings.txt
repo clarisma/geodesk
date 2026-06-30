@@ -1,3 +1,7 @@
+no
+yes
+outer
+inner
 building
 source
 addr:housenumber
@@ -8,7 +12,6 @@ addr:city
 name
 addr:country
 wall
-yes
 surface
 natural
 landuse
@@ -20,7 +23,6 @@ tracktype
 maxspeed
 service
 addr:suburb
-outer
 power
 access
 oneway
@@ -29,7 +31,6 @@ barrier
 start_date
 waterway
 operator
-no
 bicycle
 foot
 ref:bag
@@ -51,7 +52,6 @@ wheelchair
 place
 roof:shape
 public_transport
-inner
 cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2012
 at_bev:addr_date
 entrance
