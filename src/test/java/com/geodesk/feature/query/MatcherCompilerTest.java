@@ -1,6 +1,7 @@
 package com.geodesk.feature.query;
 
 import com.clarisma.common.util.Log;
+import com.geodesk.feature.FeatureType;
 import com.geodesk.feature.match.Matcher;
 import com.clarisma.common.fab.FabException;
 import com.clarisma.common.fab.FabReader;
@@ -107,7 +108,6 @@ public class MatcherCompilerTest
 		public Matcher loadMatcherClass(String className, byte[] code, String[] globalStrings)
 		{
 			Class<?> matcherClass = defineClass(className, code, 0, code.length);
-			Matcher filter;
 			try
 			{
 				Constructor<?> constructor = matcherClass.getDeclaredConstructor(
@@ -172,7 +172,9 @@ public class MatcherCompilerTest
 		{
 			String name = e.getKey();
 			boolean expectedResult = e.getValue();
-			ByteBuffer tags = tagTableTester.makeCase(name, 0, null);
+			ByteBuffer tags = tagTableTester.makeCase(name,
+                0, null);
+
 			boolean result = filter.accept(tags, 0);
 			if(result != expectedResult)
 			{

@@ -976,4 +976,20 @@ query:  *[!jarbour]
 //  Polyform
 //
 
-query:
+query: wn[emergency=fire_hydrant], wa[highway]
+    highway3: true
+    highway3_uncommon: true
+    hydrant: true
+    restaurant4: false
+
+query: wa[highway], wn[emergency=fire_hydrant]
+    highway3: true
+    highway3_uncommon: true
+    hydrant: true
+    restaurant4: false
+
+query: wa[highway], wn[amenity=restaurant], r[route=bicycle]
+    highway3: true
+    highway3_uncommon: true
+    hydrant: false
+    restaurant4: true

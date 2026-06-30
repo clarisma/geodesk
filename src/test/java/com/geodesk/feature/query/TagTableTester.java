@@ -4,6 +4,7 @@ import com.clarisma.common.soar.Archive;
 import com.clarisma.common.soar.SString;
 import com.clarisma.common.soar.Struct;
 import com.clarisma.common.soar.StructOutputStream;
+import com.geodesk.feature.FeatureType;
 import com.geodesk.gol.compiler.STagTable;
 import com.clarisma.common.fab.FabException;
 import com.clarisma.common.fab.FabReader;
@@ -135,17 +136,18 @@ public class TagTableTester
 	{
 		Map<String,Object> tags = getTags(name);
 		assert tags != null: String.format("TagTable case \"%s\" not found", name);
-		TagTestArchive archive = new TagTestArchive(tagsAsStringArray(tags));
+        FeatureType type = FeatureType.WAY; // TODO
+		TagTestArchive archive = new TagTestArchive(type, tagsAsStringArray(tags));
 		return archive.create(name);
 	}
 
 	private class TagTestArchive extends Archive
 	{
-		public TagTestArchive(String[] tags)
+		public TagTestArchive(FeatureType type, String[] tags)
 		{
 			Map<String, SString> localStrings = new HashMap<>();
 			STagTable tagTable = new STagTable(tags, stringTable, localStrings);
-			STestFeature feature = new STestFeature(tagTable);
+			STestFeature feature = new STestFeature(type, tagTable);
 			setHeader(feature);
 			place(tagTable);
 			for(SString str: localStrings.values())
@@ -185,17 +187,19 @@ public class TagTableTester
 
 	private static class STestFeature extends Struct
 	{
+        FeatureType type;
 		STagTable tagTable;
 
-		public STestFeature(STagTable tagTable)
+		public STestFeature(FeatureType type, STagTable tagTable)
 		{
+            this.type = type;
 			this.tagTable = tagTable;
 			setSize(16);
 		}
 
 		@Override public void writeTo(StructOutputStream out) throws IOException
 		{
-			out.writeLong(0);
+			out.writeLong(type.ordinal() << 3);
 			out.writePointer(tagTable, tagTable.uncommonKeyCount() > 0 ? 1 : 0);
 			out.writeInt(0);
 		}

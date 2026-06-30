@@ -325,3 +325,6 @@ jarbour:
     name="Java Harbor"
     natural=water
     jarbour=yes
+
+hydrant:
+    emergency=fire_hydrant
