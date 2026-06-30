@@ -217,7 +217,7 @@ public class MatcherCoder extends ExpressionCoder
 	 * The feature's type (used only for polyform matchers);
      * this is a single bit that corresponds to {@link TypeBits}.
 	 */
-	private static final int $type = 14;
+	private static final int $type = 15;
 
 	private static final int NONE = 0;
 	private static final int REQUIRED = 1;
@@ -1750,7 +1750,7 @@ public class MatcherCoder extends ExpressionCoder
         mv.visitInsn(ICONST_1);
         mv.visitInsn(IUSHR);
         mv.visitInsn(ISHL);
-        mv.visitIntInsn(ISTORE, $type);
+        mv.visitVarInsn(ISTORE, $type);
     }
 
     /**
@@ -1767,7 +1767,7 @@ public class MatcherCoder extends ExpressionCoder
 		{
             int groupType = sel.matchTypes();
             Label next_group = new Label();
-            mv.visitIntInsn(ILOAD, $type);
+            mv.visitVarInsn(ILOAD, $type);
             loadIntConstant(sel.clauseTypes());
             mv.visitInsn(IAND);
             mv.visitJumpInsn(IFEQ, next_group);
@@ -1887,7 +1887,7 @@ public class MatcherCoder extends ExpressionCoder
 		{
 			// If we must check the local-key flag before evaluating
 			// each Selector, we must store the flag
-			mv.visitIntInsn(ISTORE, $local_key_flag);
+			mv.visitVarInsn(ISTORE, $local_key_flag);
 		}
 
 		// At this point, the tagged tag-table pointer is on the stack
