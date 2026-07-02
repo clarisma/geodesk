@@ -120,7 +120,7 @@ public class WorldView extends View
 
         Bounds filterBounds = filter.bounds();
         // TODO: proper combining of bboxes
-        return new WorldView(store, types, filterBounds != null ? filterBounds : bounds,
+        return new WorldView(store, newTypes, filterBounds != null ? filterBounds : bounds,
             matcher, filter);
     }
 
