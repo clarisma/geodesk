@@ -705,7 +705,7 @@ public abstract class StoredFeature implements Feature
             Matcher matcher = store.getMatcher(query);
             if ((matcher.acceptedTypes() & TypeBits.RELATIONS) != 0)
             {
-                new ParentRelationView(store, buf, getRelationTablePtr(),
+                return new ParentRelationView(store, buf, getRelationTablePtr(),
                     matcher.acceptedTypes(), matcher, null);
             }
         }
