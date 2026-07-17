@@ -1,5 +1,7 @@
 <img src="https://docs.geodesk.com/img/github-header.png">
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.geodesk/geodesk.svg)](https://central.sonatype.com/artifact/com.geodesk/geodesk)
+
 GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap data. Also available [for C++](https://github.com/clarisma/libgeodesk) and [for Python](https://github.com/clarisma/geodesk-py).
 
 > [!IMPORTANT]
