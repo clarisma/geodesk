@@ -86,12 +86,12 @@ public abstract class StoredFeature implements Feature
 
 	@Override public int x()
 	{
-		return (buf.getInt(ptr - 16) + buf.getInt(ptr - 8)) / 2;
+		return (int)((long)buf.getInt(ptr - 16) + (long)buf.getInt(ptr - 8)) / 2;
 	}
 
 	@Override public int y()
 	{
-		return (buf.getInt(ptr - 12) + buf.getInt(ptr - 4)) / 2;
+		return (int)((long)buf.getInt(ptr - 12) + (long)buf.getInt(ptr - 4)) / 2;
 	}
 
 	public int maxX() { return buf.getInt(ptr - 8); }

@@ -55,3 +55,4 @@ core/.idea/workspace.xml
 *.iml
 target
 hs_err_pid*.log
+*.iml
