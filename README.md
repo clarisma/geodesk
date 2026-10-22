@@ -18,6 +18,8 @@ GeoDesk is a fast and storage-efficient geospatial database for OpenStreetMap da
 
 - **Fast to get started** &mdash; Converting `.osm.pbf` data to a GOL is 20 times faster than an import into an SQL database. Alternatively, download pre-made data tiles for just the regions you need and automatically assemble them into a GOL.
 
+- **Incremental updates** &mdash; Keep GOLs up to date with daily, hourly, or minute-by-minute OpenStreetMap changes.
+
 - **Intuitive API** &mdash; No need for object-relational mapping; GeoDesk queries return `Node`, `Way` and `Relation` objects. Quickly discover tags, way-nodes and relation members. Get a feature's `Geometry`, measure its length/area. 
  
 - **Proper handling of relations** &mdash; (Traditional geospatial databases deal with geometric shapes and require workarounds to support this unique and powerful aspect of OSM data.)
